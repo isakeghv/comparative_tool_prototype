@@ -81,7 +81,7 @@ Relative: "public/style/components/header/dashboard-header.scss".
 
 ---
 
-## Dashboard-main-aside component
+## Dashboard-main-aside component - NO LONGER A COMPONENT - WRITE DIRECTLY IN DASHBOARD PAGE
 Aside component to include in dashboard page. 
 
 ### props
