@@ -1,1 +1,1 @@
-{"version":3,"sources":["dashboard-header.scss","../../variables/_variables.scss","dashboard-header.css"],"names":[],"mappings":"AAEA;EACI,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,2BAAA;EACA,gCCLU;ACId","file":"dashboard-header.css"}
+{"version":3,"sources":["dashboard-header.scss","../../variables/_variables.scss","dashboard-header.css"],"names":[],"mappings":"AAEA;EACI,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,6BAAA;EACA,gCCLU;ACId","file":"dashboard-header.css"}
