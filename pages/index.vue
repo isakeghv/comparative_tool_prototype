@@ -1,5 +1,5 @@
 <template>
-
+    <Dashboard-Header id="" name="Lefty"/>
 </template>
 
 <script setup>
@@ -8,5 +8,5 @@
 </script>
 
 <style scoped>
-
+    @import url('public/style/pages/dashboard/dashboard.css');
 </style>
