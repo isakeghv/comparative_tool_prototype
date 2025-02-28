@@ -1,0 +1,80 @@
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: clamp(20rem, 17vw, 70rem);
+  height: 100%;
+  padding: 3vw 3vw 6.5vw;
+  background-color: #FFFEFA;
+  border: 4px solid #cccccc;
+  border-radius: 15px;
+}
+
+label {
+  color: #A4A4A4;
+  margin-top: 1rem;
+}
+
+input[type=email], input[type=password] {
+  background: none;
+  border: none;
+  border-bottom: 2px solid #cccccc;
+  outline: none;
+  width: calc(100% - 2.5rem);
+  padding-right: 2.5rem;
+}
+
+input[type=submit] {
+  display: flex;
+  align-items: center;
+  background-color: #6062D6;
+  width: 100%;
+  color: #FFFEFA;
+  padding: 0.8rem;
+  margin-top: 2rem;
+  border-radius: 15px;
+  border: none;
+}
+input[type=submit]:hover {
+  background-color: #6D6ED6;
+}
+input[type=submit]:active {
+  background-color: #5355C2;
+}
+
+span {
+  margin: 1.5rem;
+}
+
+.btn-cont {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-cont {
+  position: relative;
+  width: 100%;
+}
+
+svg {
+  position: absolute;
+  right: 0;
+  height: 2rem;
+  width: 2rem;
+  fill: #cccccc;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+a {
+  text-decoration: none;
+  color: #4C68F0;
+}
+a:hover {
+  color: #576FE4;
+}
+a:active {
+  color: #4059D1;
+}/*# sourceMappingURL=loginForm.css.map */
