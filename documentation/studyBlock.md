@@ -9,6 +9,7 @@ The study-block component is the component displayed in the dashboard for each o
 - title
 - startDate
 - id
+- status
 
 ### Functionalities
 
@@ -28,7 +29,7 @@ The study-block component is the component displayed in the dashboard for each o
 
 #### Selecting a study
 
-Event: selectedStudy
+Event: select
 Payload: study-id
 Data-type: String
 
@@ -36,8 +37,26 @@ To be used in order to select and display a study from the dash-board page
 
 #### Deleting a study
 
-Event: deleteStudy
+Event: delete
 Payload: study-id
+Data-type: String
+
+#### Edit a study
+
+Event: edit
+Payload: study-id
+Data-type: String
+
+#### Duplicate a study
+
+Event: duplicate
+Payload: study-id
+Data-type: String
+
+#### Export a study
+
+Event: export
+Payload: study-id, file-format
 Data-type: String
 
 Used to locate study to delete, and trigger the "are you sure" deletion-component.
