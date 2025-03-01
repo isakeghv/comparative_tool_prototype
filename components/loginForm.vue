@@ -27,5 +27,5 @@ const pwd = ref("");
 </script>
 
 <style scoped>
-    @import url('public/style/components/loginForm/loginForm.css');
+    @import url('public/style/components/login/login.css');
 </style>

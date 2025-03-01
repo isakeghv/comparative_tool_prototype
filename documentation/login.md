@@ -32,12 +32,12 @@ Include in page file with `<LoginForm/>`.
 
 ### Styling
 Styling should be done in:
-File: `loginForm.scss`
-Relative: `public/style/components/loginForm/loginForm.scss`
+File: `login.scss`
+Relative: `public/style/components/login/login.scss`
 
 ```
 <style scoped>
-    @import url('public/style/components/loginForm/loginForm.css');
+    @import url('public/style/components/login/login.css');
 </style>
 ```
 
@@ -60,11 +60,11 @@ Include in page file with `<RegisterForm/>`.
 
 ### Styling
 Styling should be done in:
-File: `registerForm.scss`
-Relative: `public/style/components/registerForm/registerForm.scss`
+File: `login.scss`
+Relative: `public/style/components/login/login.scss`
 
 ```
 <style scoped>
-    @import url('public/style/components/registerForm/registerForm.css');
+    @import url('public/style/components/login/login.css');
 </style>
 ```
