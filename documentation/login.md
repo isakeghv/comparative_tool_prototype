@@ -17,17 +17,17 @@ The data sent to the database server when user logs in successfully.
 A login form for users to log into their account. If they don't have an account, they can follow the hyperlink at the bottom of the form that sends them to the register form with the `registerForm` component.  
 
 ### Props
-    - email
+N/A
 
 ### Functionalities
-    1. Allow researcher to log into their account using their email and password
-    2. After the form is sent, log in users who's account is verified
+1. Allow researcher to log into their account using their email and password
+2. After the form is submitted, log in users who's account is verified
 
 ### Emits
-    - working on it ty
+- working on it ty
 
 ### Usage
-Include in page file with `<LoginForm/>`. To send its props (e-mail), do `<LoginForm email="some-email"/>`.
+Include in page file with `<LoginForm/>`.
 
 
 ### Styling
@@ -42,3 +42,29 @@ Relative: `public/style/components/loginForm/loginForm.scss`
 ```
 
 ## registerForm (component)
+A register form for users to create an account. If they alread have an account, they can follow the hyperlink at the bottom of the form that sends them to the login form with the `loginForm` component.  
+
+### Props
+N/A
+
+### Functionalities
+1. Allow researcher to create an account using a name, a unique email, and a strong password. 
+2. After the form is submitted, create an account that the researcher can log in with.
+
+### Emits
+- working on it ty
+
+### Usage
+Include in page file with `<RegisterForm/>`.
+
+
+### Styling
+Styling should be done in:
+File: `registerForm.scss`
+Relative: `public/style/components/registerForm/registerForm.scss`
+
+```
+<style scoped>
+    @import url('public/style/components/registerForm/registerForm.css');
+</style>
+```

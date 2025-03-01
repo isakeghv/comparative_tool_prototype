@@ -1,6 +1,5 @@
 <template>
-    <!-- <Dashboard-Header id="" name="Lefty"/> -->
-<LoginForm/>
+    <Dashboard-Header id="" name="Lefty"/>
 </template>
 
 <script setup>
