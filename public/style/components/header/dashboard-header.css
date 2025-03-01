@@ -4,4 +4,7 @@
   justify-content: space-between;
   padding: 0.5rem 1.5rem 0.5rem;
   border-bottom: solid #A4A4A4 1px;
+}
+.header__headline, .header__paragraph {
+  color: #6062D6;
 }/*# sourceMappingURL=dashboard-header.css.map */

@@ -19,4 +19,6 @@ const filterView =(filter) =>{
 
 </script>
 
-<style scoped></style>
+<style scoped>
+    @import url('public/style/components/aside/dashboard-main-aside.css');
+</style>
