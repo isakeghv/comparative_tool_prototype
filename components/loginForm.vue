@@ -19,8 +19,8 @@
     </div>
     <div class="form__cont">
       <input type="submit" value="Login" class="form__submit font-normal font-semi">
-      <span class="form__span">Don't have an account?
-        <button class="form__button" @click="toggleSignup($event)">
+      <span class="form__span font-small">Don't have an account?
+        <button class="form__button font-small" @click="toggleSignup($event)">
           Sign up
         </button>
       </span>

@@ -79,22 +79,24 @@
 .container__headline {
   line-height: 3rem;
   flex: 1 0 100%;
-  color: #6062D6;
+  color: #4C68F0;
 }
 .container__paragraph {
   flex: 1 0 100%;
 }
 .container__button {
+  cursor: pointer;
   margin: 1rem 0 0 0;
   color: white;
-  background-color: #6062D6;
-  padding: 1rem;
+  background: linear-gradient(90deg, rgb(76, 104, 240) 17%, rgb(84, 192, 209) 100%);
+  transition: background 0.3s ease;
+  padding: 1rem 1.5rem;
   border-radius: 0.5rem;
   border: none;
 }
 .container__button:hover {
-  background-color: #6D6ED6;
+  background: linear-gradient(90deg, rgba(76, 104, 240, 0.8) 17%, rgba(84, 192, 209, 0.8) 100%);
 }
 .container__button:active {
-  background-color: #5355C2;
+  background: linear-gradient(90deg, rgb(76, 104, 240) 17%, rgb(84, 192, 209) 100%); /* Darker */
 }/*# sourceMappingURL=index.css.map */

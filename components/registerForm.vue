@@ -53,8 +53,8 @@
         </div>
         <div class="form__cont">
             <input type="submit" value="Sign up" class="form__submit font-normal font-semi">
-            <span class="form__span">Already have an account?
-                <button class="form__button" @click="toggleSignin($event)">
+            <span class="form__span font-small">Already have an account?
+                <button class="form__button font-small" @click="toggleSignin($event)">
                     Sign in
                 </button>
             </span>
