@@ -24,7 +24,13 @@ N/A
 2. After the form is submitted, log in users who's account is verified
 
 ### Emits
-- working on it ty
+
+#### toggle to signup form
+Event: toggle
+payload: none
+Data-type: -
+
+Used to toggle to "sign-up"/register form is displayed instead of login-form
 
 ### Usage
 Include in page file with `<LoginForm/>`.
@@ -52,7 +58,20 @@ N/A
 2. After the form is submitted, create an account that the researcher can log in with.
 
 ### Emits
-- working on it ty
+
+#### toggle to sign-in form
+Event: toggle
+payload: none
+Data-type: -
+
+Used to toggle the "sign-in" form instead of register form
+
+#### Created user success
+Event: userCreated
+payload: status, message
+Data-type: Boolean, String
+
+Use to either redirect user to their new user-dashboard, or present prompt that email has already been used
 
 ### Usage
 Include in page file with `<RegisterForm/>`.
