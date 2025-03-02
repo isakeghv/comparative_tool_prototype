@@ -1,0 +1,23 @@
+.study__plus {
+  height: 1.4rem;
+  width: 1.4rem;
+}
+.study__new {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.study__filter {
+  display: flex;
+  align-items: center;
+}
+.study__new, .study__filter {
+  width: clamp(14rem, 10rem + 6vw, 18rem);
+  padding: 0.8rem 2rem;
+  background-color: transparent;
+  border: none;
+}
+.study__new:hover, .study__filter:hover {
+  background: #F6F6F6;
+}/*# sourceMappingURL=dashboard-main-aside.css.map */
