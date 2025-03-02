@@ -1,0 +1,15 @@
+{
+  "userCollection": [
+    {
+      "id": 1,
+      "name": "Lefty",
+      "email": "lefty@email.com",
+      "password": "83h22j2j2kknsh#coolHash"
+    },
+    {
+      "name": "bananas",
+      "email": "tropica@soup.com",
+      "password": "yellowisgreen"
+    }
+  ]
+}
