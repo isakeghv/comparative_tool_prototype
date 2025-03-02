@@ -231,7 +231,7 @@ Buttons to use to toggle filter
 
 
 ### Functionalities
-1. use to toggle which study-blocks to display - "completed", "ongoing", "draft", "all"
+1. use to toggle which study-blocks to display - "completed", "ongoing", "drafts", "all"
 
 ### Emits
 

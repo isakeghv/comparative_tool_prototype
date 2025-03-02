@@ -9,7 +9,8 @@ The study-block component is the component displayed in the dashboard for each o
 - title
 - startDate
 - id
-- status
+- status    - "completed", "ongoing", "drafts", "all",
+- filter    - Passing "filter" that is set, to sort which studies to display
 
 ### Functionalities
 
