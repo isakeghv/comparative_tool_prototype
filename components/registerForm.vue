@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent>
+    <form @submit.prevent="registerUser">
         <h1 class="font-h4">Create account</h1>
             <label for="name" class="font-semi">Name</label><br>
         <div class="input__cont">
@@ -30,6 +30,21 @@ const name = ref("");
 const email = ref("");
 const pwd = ref("");
 
+const registerUser = async () => {
+  const response = await fetch('/api/register', {
+    method: 'POST',
+    body: JSON.stringify({
+      name: name.value,
+      email: email.value,
+      password: pwd.value
+    }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  const result = await response.json();
+  console.log(result);
+}
 </script>
 
 <style scoped>

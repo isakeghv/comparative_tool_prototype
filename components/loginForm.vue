@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent>
+    <form @submit.prevent="createUser">
         <h1 class="font-h4">Sign in</h1>
             <label for="email" class="font-semi">Email</label><br>
         <div class="input__cont">
@@ -24,6 +24,20 @@ import { ref } from "vue";
 const email = ref("");
 const pwd = ref("");
 
+const registerUser = async () => {
+  const response = await fetch('/api/users', {
+    method: 'POST',
+    body: JSON.stringify({
+      email: email.value,
+      password: pwd.value
+    }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  const result = await response.json();
+  console.log(result);
+}
 </script>
 
 <style scoped>
