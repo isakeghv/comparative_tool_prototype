@@ -63,4 +63,38 @@
   padding: 2rem 4rem;
   background: rgb(155, 199, 206);
   background: linear-gradient(0deg, rgb(155, 199, 206) 0%, rgb(255, 254, 250) 100%);
+}
+.container--welcome {
+  justify-content: center;
+  gap: 2rem;
+  text-align: right;
+}
+.container__section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: flex-end;
+  width: clamp(300px, 65%, 40rem);
+}
+.container__headline {
+  line-height: 3rem;
+  flex: 1 0 100%;
+  color: #6062D6;
+}
+.container__paragraph {
+  flex: 1 0 100%;
+}
+.container__button {
+  margin: 1rem 0 0 0;
+  color: white;
+  background-color: #6062D6;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+}
+.container__button:hover {
+  background-color: #6D6ED6;
+}
+.container__button:active {
+  background-color: #5355C2;
 }/*# sourceMappingURL=index.css.map */
