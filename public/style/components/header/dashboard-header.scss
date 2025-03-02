@@ -1,9 +1,15 @@
+@use '../../variables/_colors.scss' as c;
 @use '../../variables/_variables.scss' as v;
 
-.header{
+.header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem 1.5rem 0.5rem;
     border-bottom: v.$borderSolid;
+
+    &__headline, &__paragraph {
+        color: c.$bluePrimary;
+    }
 }
+

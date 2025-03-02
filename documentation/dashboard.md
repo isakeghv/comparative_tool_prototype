@@ -81,7 +81,7 @@ Relative: "public/style/components/header/dashboard-header.scss".
 
 ---
 
-## Dashboard-main-aside component - NO LONGER A COMPONENT - WRITE DIRECTLY IN DASHBOARD PAGE
+## Dashboard-main-aside component - NO LONGER ITS OWN COMPONENT - NOW A PART OF DASHBOARD-MAIN
 Aside component to include in dashboard page. 
 
 ### props
@@ -168,6 +168,81 @@ Data-type: String
 
 ### Usage
 include in page file with "<Dashboard-main studies="Array-place-holder"/>"
+
+
+### Styling
+Styling should be done in:
+File: dashboard.scss.
+Relative: "public/style/pages/dashboard/dashboard.scss".
+
+<style scoped>
+    @import url('public/style/pages/dashboard/dashboard.css');
+</style>
+
+---
+
+---
+
+---
+
+## Dashboard-newstudy component
+button and logic for creating new study
+
+### props
+- none atm
+
+### Functionalities
+1. Emit event to create new study
+2. Emit Date.now() as payload to use as temp-id
+
+### Emits
+
+#### New study
+
+Event: newStudy
+Payload: temp-study-id
+Data-type: String
+
+### Usage
+include in page file with "<Dashboard-newstudy />"
+
+
+### Styling
+Styling should be done in:
+File: dashboard.scss.
+Relative: "public/style/pages/dashboard/dashboard.scss".
+
+<style scoped>
+    @import url('public/style/pages/dashboard/dashboard.css');
+</style>
+
+
+---
+
+---
+
+---
+
+## Dashboard-filter component
+Buttons to use to toggle filter
+
+### props
+- filter        
+
+
+### Functionalities
+1. use to toggle which study-blocks to display - "completed", "ongoing", "drafts", "all"
+
+### Emits
+
+#### New study
+
+Event: filter
+Payload: filter-type : - "completed", "ongoing", "draft", "all"
+Data-type: String
+
+### Usage
+include in page file with "<Dashboard-filter />"
 
 
 ### Styling
