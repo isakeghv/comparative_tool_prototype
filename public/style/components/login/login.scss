@@ -1,46 +1,31 @@
-@use '../../variables/_colors.scss' as c;
-@use '../../variables/_variables.scss' as v;
+@use "../../variables/_colors.scss" as c;
+@use "../../variables/_variables.scss" as v;
 
 $loginGrey: #cccccc;
 
-h1 {
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: clamp(25rem, 100%, 30rem);
+  height: 100%;
+  padding: 4rem 3rem 10rem;
+  background-color: c.$white;
+  border: 1px solid $loginGrey;
+  border-radius: 15px;
+  gap: 0;
+
+  &__headline {
     color: c.$black;
     padding-bottom: 1rem;
-}
+  }
 
-a {
-    text-decoration: none;
-    color: c.$blueSecondary;
-
-    &:hover {
-        color: c.$blueSecondary-hover;
-    }
-
-    &:active {
-        color: c.$blueSecondary-active;
-    }
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: clamp(20rem, 25vw, 70rem);
-    height: 100%;
-    padding: 4rem 3rem 10rem;
-    background-color: c.$white;
-    border: 4px solid $loginGrey;
-    border-radius: 15px;
-    gap: 0;
-}
-
-label {
+  &__label {
     color: c.$gray;
     margin-top: 2rem;
     line-height: 0;
-}
-
-.input__field {
+  }
+  &__input {
     background: none;
     border: none;
     border-bottom: 2px solid $loginGrey;
@@ -49,11 +34,10 @@ label {
     padding: 0.8rem 2.5rem 0.2rem 0;
 
     &:focus {
-        border-bottom: 2px solid c.$cyan;
+      border-bottom: 2px solid c.$cyan;
     }
-}
-
-input[type="submit"] {
+  }
+  &__submit {
     display: flex;
     align-items: center;
     background-color: c.$bluePrimary;
@@ -65,27 +49,14 @@ input[type="submit"] {
     border: none;
 
     &:hover {
-        background-color: c.$bluePrimary-hover;
+      background-color: c.$bluePrimary-hover;
     }
 
     &:active {
-        background-color: c.$bluePrimary-active;
+      background-color: c.$bluePrimary-active;
     }
-}
-
-// input:invalid:required {
-//     border-bottom: 2px solid c.$red;
-// }
-
-// .valid:valid {
-//     border-color: #28a745;
-//   }
-  
-// .invalid:invalid {
-// border-color: #dc3545;
-// }
-
-svg {
+  }
+  &__svg {
     position: absolute;
     right: 0;
     height: 2rem;
@@ -93,18 +64,30 @@ svg {
     fill: $loginGrey;
     top: 50%;
     transform: translateY(-50%);
-}
-
-.btn__cont {
+  }
+  &__cont {
+    position: relative;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
+  }
+  &__button {
+    border: none;
+    background-color: transparent;
+    text-decoration: none;
+    cursor: pointer;
+    color: c.$blueSecondary;
 
-.input__cont {
-    position: relative;
-    width: 100%;
+    &:hover {
+      color: c.$blueSecondary-hover;
+    }
+
+    &:active {
+      color: c.$blueSecondary-active;
+    }
+  }
 }
 
 .msg {
