@@ -9,6 +9,9 @@
 .font-heavy {
   font-weight: 800;
 }
+.font-semi {
+  font-weight: 600;
+}
 .font-medium {
   font-weight: 500;
 }
@@ -17,27 +20,27 @@
 }
 .font-h1 {
   font-size: clamp(2rem, 1.6781rem + 1.3734vw, 3rem);
-  font-weight: "Kumbh Sans", Tahoma, sans-serif;
+  font-family: "Kumbh Sans", Tahoma, sans-serif;
 }
 .font-h2 {
   font-size: clamp(1.75rem, 1.5086rem + 1.03vw, 2.5rem);
-  font-weight: "Kumbh Sans", Tahoma, sans-serif;
+  font-family: "Kumbh Sans", Tahoma, sans-serif;
 }
 .font-h3 {
   font-size: clamp(1.5rem, 1.2586rem + 1.03vw, 2.25rem);
-  font-weight: "Kumbh Sans", Tahoma, sans-serif;
+  font-family: "Kumbh Sans", Tahoma, sans-serif;
 }
 .font-h4 {
   font-size: clamp(1.25rem, 1.0891rem + 0.6867vw, 1.75rem);
-  font-weight: "Kumbh Sans", Tahoma, sans-serif;
+  font-family: "Kumbh Sans", Tahoma, sans-serif;
 }
 .font-h5 {
   font-size: clamp(1.125rem, 1.0043rem + 0.515vw, 1.5rem);
-  font-weight: "Kumbh Sans", Tahoma, sans-serif;
+  font-family: "Kumbh Sans", Tahoma, sans-serif;
 }
 .font-h6 {
   font-size: clamp(1.063rem, 1.0028rem + 0.2568vw, 1.25rem);
-  font-weight: "Kumbh Sans", Tahoma, sans-serif;
+  font-family: "Kumbh Sans", Tahoma, sans-serif;
 }
 .font-normal {
   font-size: clamp(0.875rem, 0.7666rem + 0.4624vw, 1.125rem);

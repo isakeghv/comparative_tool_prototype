@@ -1,6 +1,8 @@
 <template>
     <Dashboard-Header id="" name="Lefty"/>
-    <Dashboard-main/>
+    <div class="container">
+        <Dashboard-main/>
+    </div>
 </template>
 
 <script setup>
