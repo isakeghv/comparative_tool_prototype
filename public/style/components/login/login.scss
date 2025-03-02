@@ -89,3 +89,23 @@ $loginGrey: #cccccc;
     }
   }
 }
+
+.msg {
+    display: flex;
+    align-items: center;
+    height: 2rem;
+    border-radius: 5px;
+
+    &__text {
+        margin-left: 0.5rem;
+    }
+    &__success {
+        background-color: c.$lightGreen;
+        color: c.$green;
+    }
+
+    &__error {
+        background-color: c.$lightRed;
+        color: c.$red;
+    }
+}

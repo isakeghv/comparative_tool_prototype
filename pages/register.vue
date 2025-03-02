@@ -28,5 +28,3 @@ watch(
   ()=> props.formType,
   (type)=> toggleRegister(type)
 )
-
-</script>
