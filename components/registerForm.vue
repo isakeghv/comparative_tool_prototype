@@ -1,6 +1,12 @@
 <template>
     <form @submit.prevent="registerUser" class="form">
         <h2 class="form__headline font-h4">Create account</h2>
+            <div v-if="registerStatus === 'success'" class="msg msg__success">
+                <span class="msg__text font-small font-semi">Registration successful!</span>
+            </div>
+            <div v-else-if="registerStatus === 'error'" class="msg msg__error">
+                <span class="msg__text font-small font-semi">Sorry, we could not create your Compara account.</span>
+            </div>
         <label for="register_nameFirst_inp" class="form__label font-semi">
             First name
         </label>
@@ -63,6 +69,8 @@ const lastName = ref("");
 const firstName = ref('')
 const email = ref("");
 const pwd = ref("");
+// for the message modal
+const registerStatus = ref("");
 
 const emit = defineEmits(['toggle', 'userCreated'])
 
@@ -95,6 +103,13 @@ const registerUser = async () => {
     //collecting response from backend
     const success = await response.json();
 
+    // show status message that varies depending on the bool of success.created
+    if (success.created) {
+        registerStatus.value = 'success';
+    } else {
+        registerStatus.value = 'error';
+    }
+    
     //returns from function to emit event which informs user with status and message
     return profileCreate(success.created, success.message);
 }

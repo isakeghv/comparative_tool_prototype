@@ -64,28 +64,6 @@
   justify-content: center;
   align-items: center;
 }
-.input__cont {
-  position: relative;
-  width: 100%;
-}
-
-.msg {
-  display: flex;
-  align-items: center;
-  height: 2rem;
-  border-radius: 5px;
-}
-.msg__text {
-  margin-left: 0.5rem;
-}
-.msg__success {
-  background-color: #d1e9da;
-  color: #219F5A;
-}
-.msg__error {
-  background-color: #F8AFAF;
-  color: #E61046;
-
 .form__button {
   border: none;
   background-color: transparent;
@@ -98,4 +76,26 @@
 }
 .form__button:active {
   color: #4059D1;
+}
+
+.msg {
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  border-radius: 5px;
+}
+.msg__text {
+  margin-left: 0.6rem;
+}
+.msg__success {
+  background-color: #d1e9da;
+  color: #219F5A;
+}
+.msg__error {
+  background-color: #f8cece;
+  color: #E61046;
+}
+
+input:-webkit-autofill {
+  -webkit-background-clip: text;
 }/*# sourceMappingURL=login.css.map */

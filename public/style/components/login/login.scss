@@ -93,11 +93,11 @@ $loginGrey: #cccccc;
 .msg {
     display: flex;
     align-items: center;
-    height: 2rem;
+    height: 3rem;
     border-radius: 5px;
 
     &__text {
-        margin-left: 0.5rem;
+        margin-left: 0.6rem;
     }
     &__success {
         background-color: c.$lightGreen;
@@ -108,4 +108,9 @@ $loginGrey: #cccccc;
         background-color: c.$lightRed;
         color: c.$red;
     }
+}
+
+// remove auto-fill color from Chrome browser: https://stackoverflow.com/questions/2781549/removing-input-background-colour-for-chrome-autocomplete
+input:-webkit-autofill { 
+  -webkit-background-clip: text;
 }
