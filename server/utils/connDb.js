@@ -10,9 +10,9 @@ export const connDb = async () => {
     }
 
     try {
-    const config = useRuntimeConfig();
+    // const config = useRuntimeConfig();
     // use the env variable defined in the nuxt config file
-    const uri = config.mongoURI;
+    // const uri = config.mongoURI;
 
     // use template from MongoDB with pre-defined client options
     await mongoose.connect(process.env.MONGO_URI, clientOptions);

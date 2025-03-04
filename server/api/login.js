@@ -7,20 +7,18 @@ const checkPassword = async (email, pwd) => {
     try {
         // retrieve the user by its email; if it doesn't exist, return a message indicating error
         const user = await userCredential.findOne({ email });
-        const errMsg = 'Incorrent email or password.';
 
         if (!user) {
-            // https://stackoverflow.com/questions/7939137/what-http-status-code-should-be-used-for-wrong-input
-            // "The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity, but was unable to process the contained instructions"
-            setResponseStatus(422)
-            return { isValid: false, message: errMsg };
+            setResponseStatus(404)
+            return { isValid: false, message: 'Incorrent email or password.' };
         } else {
             // check if password matches the found user using bcrypt in-built compare method
             const validPwd = await bcrypt.compare(pwd, user.password);
 
             if (!validPwd) {
+                // 422 error code for email was found, but password wasn't correct (wrong input)
                 setResponseStatus(422)
-                return { isValid: false, message: errMsg };
+                return { isValid: false, message: 'Incorrent email or password.' };
               }
         }
 
@@ -28,11 +26,10 @@ const checkPassword = async (email, pwd) => {
         setResponseStatus(200);
         return { isValid: true, message: "Login successfully." };
     } catch (err) {
-        console.log(err);
         setResponseStatus(500);
 
-        //return false status and message that there was issue creating the account
-        return { created: false, message: "Issue while trying to login. Please try again." };
+        // return false status and message that there was issue logging in
+        return { isValid: false, message: "Issue while trying to login. Please try again." };
     }
 }
 

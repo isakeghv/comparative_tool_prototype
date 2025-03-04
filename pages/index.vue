@@ -37,19 +37,19 @@
 
         </div>
         <div class="container" v-if="selectedFormType">
-            <register :formType="formType" v-if="selectedFormType" />
+            <register v-if="selectedFormType" />
         </div>
     </div>
 </template>
 
 <script setup>
 import register from './pages/register.vue';
+import { form } from 'public/script/reactive';
 
 const selectedFormType = ref(false);
-const formType = ref('');
 
 const selectForm = (type) => {
-    formType.value = type;
+    form.type = type;
     selectedFormType.value = true;
 }
 

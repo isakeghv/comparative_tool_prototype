@@ -7,7 +7,8 @@ const checkEmail = async (email) => {
 	const existingUser = await userCredential.findOne({ email });
 
 	if (existingUser) {
-		setResponseStatus(400);
+		// setting response to 200 to confirm that email was found
+		setResponseStatus(200);
 		return { created: false, message: "User with this email already exists." };
 	}
 
@@ -58,10 +59,15 @@ export default defineEventHandler(async (e) => {
 	const { firstname, lastname, email, password } = body;
 
 	// if checkEmail returns a value, return and don't continue executing the rest of the code
-	const emailCheckResult = await checkEmail(email);
-	if (emailCheckResult) {
-		return emailCheckResult;
+	const emailExist = await checkEmail(email);
+
+	console.log(emailExist);	
+	if (emailExist) {
+		console.log('exists');			
+		return emailExist;
 	}
+
+	console.log('dead');			
 
 	return await createUser(firstname, lastname, email, password);
 });
