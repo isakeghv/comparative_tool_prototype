@@ -5,6 +5,7 @@
 </template>
 
 <script setup>
+import { user } from "~/public/script/reactive";
 
 const logout = async () => {
     //calling api to remove cookie and log user out
@@ -15,8 +16,12 @@ const logout = async () => {
 
     //checking if cookie is deleted correctly. If true, reload, if false, use alternative solution..
     if (data.value?.success) {
+        user.info = null;
+        user.studies = null;
         location.reload();
     } else {
+        user.info = null;
+        user.studies = null;
         //alternative solution
         return alert('Unable to log out. Please destroy your computer instead');
     }
