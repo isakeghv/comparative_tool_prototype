@@ -26,9 +26,9 @@ const checkPassword = async (email, pwd, e) => {
               }
         }
 
-        // have user_id as payload that will be stored in JWT token, and let the token expire after 1 hour
-        const token = jwt.sign({ userId: user._id }, config.private.secretJWT, { expiresIn: '1h'})
-        
+        // have user_id as payload that will be stored in JWT token, and let the token expire after 5 hour
+        const token = jwt.sign({ userId: user._id }, config.private.secretJWT, { expiresIn: '5h'})
+
         // set token in response header
         setHeaders(e, {
             'token': token
