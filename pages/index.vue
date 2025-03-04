@@ -21,10 +21,11 @@
                     A web-based analyzing tool to enable researchers
                     to set up experiments comparing different artifacts
                 </p>
-                <button class="container__button font-semi font-normal" @click="selectForm('register')">Get started</button>
+                <button class="container__button font-semi font-normal" @click="selectForm('register')">Get
+                    started</button>
             </div>
-            <svg class="container__svg" width="496" height="496" viewBox="0 0 496 496" fill="none" xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink">
+            <svg class="container__svg" width="496" height="496" viewBox="0 0 496 496" fill="none"
+                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <rect width="496" height="496" fill="url(#pattern0_37_14)" />
                 <defs>
                     <pattern id="pattern0_37_14" patternContentUnits="objectBoundingBox" width="1" height="1">

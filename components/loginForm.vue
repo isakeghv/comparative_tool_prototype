@@ -52,10 +52,6 @@ const toggleSignup = (event) => {
 	emit('toggle');
 }
 
-const loginUser = (successState, message) => {
-	emit('userCreated', { success: successState, message: message })
-}
-
 const login = async () => {
 	//calling backend function to login user
 	const response = await fetch('/api/login', {
@@ -71,25 +67,15 @@ const login = async () => {
 
 	//collecting response from backend
 	const success = await response.json();
-	console.log(success);
 
 	if (success.isValid) {
 		loginStatus.value = 'success';
 		statusMsg.value = success.message;
+		location.reload();
 	} else {
 		loginStatus.value = 'error';
 		statusMsg.value = success.message
 	}
-	
-	// get token from header, and store the value in localStorage
-	const token = response.headers.get('Token');
-	if (token) {
-		localStorage.setItem('token', token);
-		console.log('set token plz');
-	}
-						
-	//returns from function to emit event which informs user with status and message
-	return loginUser(success.isValid, success.message);
 }
 </script>
 

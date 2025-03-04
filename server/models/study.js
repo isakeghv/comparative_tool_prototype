@@ -49,7 +49,8 @@ const studySchema = new mongoose.Schema({
     type: Date,
     default: null, // will set when study has been published
   },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "userprofile" },
 });
 
 export const Question = mongoose.model("Question", studySchema);
-export const Study = mongoose.model("Study", studySchema);
+export const Study = mongoose.model("studycollection", studySchema);

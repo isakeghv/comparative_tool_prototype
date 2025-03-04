@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
-import { useRuntimeConfig } from '#imports';
+import { useRuntimeConfig, setCookie } from '#imports';
 import { connDb } from "../utils/connDb.js";
 import { userCredential } from '../models/userCredential.js';
 
@@ -26,17 +26,33 @@ const checkPassword = async (email, pwd, e) => {
               }
         }
 
-        // have user_id as payload that will be stored in JWT token, and let the token expire after 5 hour
-        const token = jwt.sign({ userId: user._id }, config.private.secretJWT, { expiresIn: '5h'})
+        const userId = user._id.toString();
 
+        // have user_id as payload that will be stored in JWT token, and let the token expire after 5 hour (currently using 30s for test-purpose)
+        const token = jwt.sign({ userId: userId }, config.private.secretJWT, { expiresIn: '30s'})
+
+        //setting token when logging in instead of setting to header. including jwt token in cookie for secure cookie.
+        setCookie(e, 'token', token, {
+            //make sure it uses http
+            httpOnly: true,
+
+            //make sure it uses https when in production (launched), e.g. only on secured transfer protocol
+            secure: process.env.NODE_ENV === 'production',
+
+            //make sure it can only be used when interracting directly with this site, and cannot be sent with cross-site-requests
+            sameSite: 'strict',
+
+            //cookie is accessible to all pages
+            path: '/',
+        })
         // set token in response header
-        setHeaders(e, {
+        /*setHeaders(e, {
             'token': token
-        });
+        });*/
 
         // set status to OK; return status and message that login operation was successful
         setResponseStatus(200);
-        return { isValid: true, message: "Login successfully." };
+        return { isValid: true, message: "Login successfully.", token: token };
 
     } catch (err) {
         setResponseStatus(500);

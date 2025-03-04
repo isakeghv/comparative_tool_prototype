@@ -23,6 +23,8 @@ const toggleRegister = (formtype) =>{
   return showRegisterForm.value = false;
 }
 
+toggleRegister(form.type)
+
 //watching "formType" prop to update boolean if changing
 watch(
   ()=> form.type,

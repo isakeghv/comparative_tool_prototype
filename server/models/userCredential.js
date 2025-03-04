@@ -11,5 +11,13 @@ const userCredentialSchema = new mongoose.Schema({
     } 
 });
 
+const UserSchema = new mongoose.Schema({
+    firstName: String,
+    lastName: String,
+    //link to usercredentials id
+    userCredential: { type: mongoose.Schema.Types.ObjectId, ref: "UserCredential" },
+  });
+
 export const userCredential = mongoose.model('UserCredential', userCredentialSchema);
+export const userProf = mongoose.model('userprofile', UserSchema)
 

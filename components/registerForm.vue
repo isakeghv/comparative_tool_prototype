@@ -108,6 +108,26 @@ const registerUser = async () => {
     if (success.created) {
         registerStatus.value = 'success';
         statusMsg.value = success.message;
+
+
+        //if account was succesfully created, it logs the user in automatically
+        const loginRes = await fetch('/api/login', {
+            method: 'POST',
+            body: JSON.stringify({
+                email: email.value,
+                password: pwd.value
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        // get token from header, and store the value in localStorage
+        const token = loginRes.headers.get('Token');
+
+        if (token) localStorage.setItem('token', token);
+        if (token) console.log('Token has been set');
+
     } else {
         registerStatus.value = 'error';
         statusMsg.value = success.message

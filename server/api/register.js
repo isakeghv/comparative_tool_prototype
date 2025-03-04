@@ -60,14 +60,10 @@ export default defineEventHandler(async (e) => {
 
 	// if checkEmail returns a value, return and don't continue executing the rest of the code
 	const emailExist = await checkEmail(email);
-
-	console.log(emailExist);	
-	if (emailExist) {
-		console.log('exists');			
+	
+	if (emailExist) {		
 		return emailExist;
-	}
-
-	console.log('dead');			
+	}	
 
 	return await createUser(firstname, lastname, email, password);
 });
