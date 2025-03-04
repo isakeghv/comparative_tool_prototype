@@ -10,12 +10,10 @@ export const connDb = async () => {
     }
 
     try {
-    // const config = useRuntimeConfig();
-    // use the env variable defined in the nuxt config file
-    // const uri = config.mongoURI;
+    const config = useRuntimeConfig();
 
-    // use template from MongoDB with pre-defined client options
-    await mongoose.connect(process.env.MONGO_URI, clientOptions);
+    // use template from MongoDB with pre-defined client options and env variable defined in the nuxt config file
+    await mongoose.connect(config.private.mongoURI, clientOptions);
     await mongoose.connection.db.admin().command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } catch (err) {

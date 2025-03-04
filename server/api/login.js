@@ -1,10 +1,14 @@
 import bcrypt from "bcryptjs";
+import jwt from 'jsonwebtoken';
+import { useRuntimeConfig } from '#imports';
 import { connDb } from "../utils/connDb.js";
 import { userCredential } from '../models/userCredential.js';
 
 // need to add functionality for token-checking, prevent brute-forcing etc. so this is temporary
-const checkPassword = async (email, pwd) => {
+const checkPassword = async (email, pwd, e) => {
     try {
+        // access runtime config variables
+        const config = useRuntimeConfig();
         // retrieve the user by its email; if it doesn't exist, return a message indicating error
         const user = await userCredential.findOne({ email });
 
@@ -22,9 +26,18 @@ const checkPassword = async (email, pwd) => {
               }
         }
 
+        // have user_id as payload that will be stored in JWT token, and let the token expire after 1 hour
+        const token = jwt.sign({ userId: user._id }, config.private.secretJWT, { expiresIn: '1h'})
+        
+        // set token in response header
+        setHeaders(e, {
+            'token': token
+        });
+
         // set status to OK; return status and message that login operation was successful
         setResponseStatus(200);
         return { isValid: true, message: "Login successfully." };
+
     } catch (err) {
         setResponseStatus(500);
 
@@ -38,5 +51,5 @@ export default defineEventHandler(async (e) => {
     const body = await readBody(e);
     const { email, password } = body;
 
-    return await checkPassword(email, password);
+    return await checkPassword(email, password, e);
 });

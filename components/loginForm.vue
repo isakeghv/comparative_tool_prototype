@@ -80,7 +80,14 @@ const login = async () => {
 		loginStatus.value = 'error';
 		statusMsg.value = success.message
 	}
-
+	
+	// get token from header, and store the value in localStorage
+	const token = response.headers.get('Token');
+	if (token) {
+		localStorage.setItem('token', token);
+		console.log('set token plz');
+	}
+						
 	//returns from function to emit event which informs user with status and message
 	return loginUser(success.isValid, success.message);
 }

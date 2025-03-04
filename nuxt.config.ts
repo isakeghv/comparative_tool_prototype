@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     private: {
       mongoURI: process.env.MONGO_URI,
+      secretJWT: process.env.SECRET_JWT
     }
   },
   compatibilityDate: '2024-11-01',
