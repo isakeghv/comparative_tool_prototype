@@ -2,10 +2,10 @@
     <form @submit.prevent="registerUser" class="form">
         <h2 class="form__headline font-h4">Create account</h2>
             <div v-if="registerStatus === 'success'" class="msg msg__success">
-                <span class="msg__text font-small font-semi">Registration successful!</span>
+                <span class="msg__text font-small font-semi">{{ statusMsg }}</span>
             </div>
             <div v-else-if="registerStatus === 'error'" class="msg msg__error">
-                <span class="msg__text font-small font-semi">Sorry, we could not create your Compara account.</span>
+                <span class="msg__text font-small font-semi">{{ statusMsg }}</span>
             </div>
         <label for="register_nameFirst_inp" class="form__label font-semi">
             First name
@@ -66,11 +66,12 @@
 import { ref } from "vue";
 
 const lastName = ref("");
-const firstName = ref('')
+const firstName = ref("")
 const email = ref("");
 const pwd = ref("");
 // for the message modal
 const registerStatus = ref("");
+const statusMsg = ref("")
 
 const emit = defineEmits(['toggle', 'userCreated'])
 
@@ -106,8 +107,10 @@ const registerUser = async () => {
     // show status message that varies depending on the bool of success.created
     if (success.created) {
         registerStatus.value = 'success';
+        statusMsg.value = success.message;
     } else {
         registerStatus.value = 'error';
+        statusMsg.value = success.message
     }
     
     //returns from function to emit event which informs user with status and message

@@ -51,7 +51,5 @@ const studySchema = new mongoose.Schema({
   },
 });
 
-const Question = mongoose.model("Question", studySchema);
-const Study = mongoose.model("Study", studySchema);
-
-module.exports = { Question, Study }
+export const Question = mongoose.model("Question", studySchema);
+export const Study = mongoose.model("Study", studySchema);
