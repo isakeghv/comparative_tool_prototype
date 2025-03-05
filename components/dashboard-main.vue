@@ -1,7 +1,7 @@
 <template>
     <aside class="aside">
         <div class="aside__container">
-            <Dashboard-newstudy @newstudy="(data) => console.log(data)" />
+            <Dashboard-newStudy @newStudy="(data) => console.log(data)" />
             <Dashboard-filter @filter="(data) => filter = data" />
         </div>
         <div class="aside__container aside__container--small">

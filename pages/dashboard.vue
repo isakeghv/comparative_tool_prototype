@@ -1,15 +1,15 @@
 <template>
-    <Dashboard-Header :name="displayName"/>
-    <div class="container" v-if="showMain">
-        <Dashboard-main/>
-		
-    </div>
+	<Dashboard-Header :name="displayName" />
+	<div class="container" v-if="showMain">
+		<Dashboard-main />
+
+	</div>
 	<!--Display message if issues fetting user-info-->
 	<div class="container" v-else>
 		<h2 class="container__headline">Oh oh!</h2>
 		<p class="container__paragraph">Issues retrieving information. Please try to reload</p>
-    </div>
-	
+	</div>
+
 </template>
 
 <script setup>
@@ -18,25 +18,33 @@ import { user } from '~/public/script/reactive';
 const showMain = ref(true);
 const displayName = ref('')
 
-const getUserInfo = async () =>{
-	//getting the user-information
-	const { data, error } = await useFetch("/api/users", { credentials: "include" });
+const getUserInfo = async () => {
+	try {
+        //getting the user-information; include any cookies included in the request
+        const { data, error } = await useFetch("/api/users", { credentials: "include" });
 
-	//confirming that data was fetched
-	if (data.value) {
+        if (error.value) {
+            throw new Error(error.value);
+        }
 
-		//inserting user-info into reactive variable
-		user.info = data.value?.user;
+        //confirming that data was fetched
+        if (data.value) {
+            //inserting user-info into reactive variable
+            user.info = data.value.userProfileData;
 
-		//inserting studies into reactive variable (client-side only)
-		user.studies = data.value?.studies;
+            //inserting studies into reactive variable (client-side only)
+            user.studies = data.value.studies;
 
-		//setting name to display into variable, to be passed to header-component
-		displayName.value = user.info.firstName
-	} else{
-		//setting to false in case information was not fetched, to display error message to user in UI
-		showMain.value = false
-	}
+            //setting name to display into variable, to be passed to header-component
+            displayName.value = user.info.firstName;
+        } else {
+            //setting to false in case information was not fetched, to display error message to user in UI
+            showMain.value = false;
+        }
+    } catch (err) {
+        console.error('Error fetching user info:', err);
+        showMain.value = false;
+    }
 }
 
 await getUserInfo();
@@ -44,5 +52,5 @@ await getUserInfo();
 </script>
 
 <style scoped>
-    @import url('public/style/pages/dashboard/dashboard.css');
+@import url('public/style/pages/dashboard/dashboard.css');
 </style>

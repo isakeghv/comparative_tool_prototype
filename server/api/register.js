@@ -1,7 +1,6 @@
 import bcrypt from "bcryptjs";
 import { connDb } from "../utils/connDb.js";
-import { userCredential } from '../models/userCredential.js';
-import { userProfile } from '../models/userProfile.js';
+import { userCredential, userProfile } from '../models/user.js';
 
 const checkEmail = async (email) => {
 	const existingUser = await userCredential.findOne({ email });
@@ -19,18 +18,18 @@ const createUser = async (fname, lname, email, pwd) => {
 	//hashing password so that it is secure. "12" is for the salt rounds it will do: 12-14= safer
 	const hashedPassword = await bcrypt.hash(pwd, 12);
 
-	// create new user credentials using its schema
-	const newUserC = new userCredential({
-		email: email,
-		password: hashedPassword,
-	});
-
 	// split the user credentials and profile data from each other
 	const newUserP = new userProfile({
 		firstName: fname,
 		lastName: lname,
-		userCredential: newUserC._id
 	})
+
+	// create new user credentials using its schema
+	const newUserC = new userCredential({
+		email: email,
+		password: hashedPassword,
+		userProfile: newUserP._id
+	});
 
 	try {
 		// both operations have to succeed together

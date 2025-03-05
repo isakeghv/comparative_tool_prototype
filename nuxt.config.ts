@@ -1,5 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  // https://nuxt.com/docs/guide/concepts/rendering
+  ssr: false,
   runtimeConfig: {
     private: {
       mongoURI: process.env.MONGO_URI,

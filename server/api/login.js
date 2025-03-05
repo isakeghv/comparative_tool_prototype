@@ -2,15 +2,18 @@ import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import { useRuntimeConfig, setCookie } from '#imports';
 import { connDb } from "../utils/connDb.js";
-import { userCredential } from '../models/userCredential.js';
+import { userCredential } from '../models/user.js';
 
 // need to add functionality for token-checking, prevent brute-forcing etc. so this is temporary
 const checkPassword = async (email, pwd, e) => {
     try {
         // access runtime config variables
         const config = useRuntimeConfig();
+
         // retrieve the user by its email; if it doesn't exist, return a message indicating error
-        const user = await userCredential.findOne({ email });
+        const user = await userCredential
+                    .findOne({ email })
+                    .lean();
 
         if (!user) {
             setResponseStatus(404)

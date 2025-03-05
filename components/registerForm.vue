@@ -123,10 +123,10 @@ const registerUser = async () => {
         });
 
         // get token from header, and store the value in localStorage
-        const token = loginRes.headers.get('Token');
+        // const token = loginRes.headers.get('Token');
 
-        if (token) localStorage.setItem('token', token);
-        if (token) console.log('Token has been set');
+        // if (token) localStorage.setItem('token', token);
+        // if (token) console.log('Token has been set');
 
     } else {
         registerStatus.value = 'error';
