@@ -1,8 +1,8 @@
 # Documentation and guidelines
 
-## studyBlock component
+## study-card component
 
-The study-block component is the component displayed in the dashboard for each of the studies.
+The study-card component is the component displayed in the dashboard for each of the studies.
 
 ### Props
 

@@ -1,7 +1,7 @@
 <template>
   <aside class="aside">
     <div class="aside__container">
-      <Dashboard-newStudy @newStudy="(study) => console.log(study)" />
+      <Dashboard-newStudy @newStudy="(id) => emitNewStudy(id)" />
       <Dashboard-filter @filter="(study) => (filter = study)" />
     </div>
     <div class="aside__container aside__container--small">
@@ -14,7 +14,7 @@
     <div class="main__grid">
 
     <!-- showing the create date instead of start date is temporary -->
-    <StudyBlock v-for="study in studies" :key="study._id"
+    <Study-card v-for="study in studies" :key="study._id"
         @select="(study) => console.log(study)"
         @edit="(study) => console.log(study)"
         @delete="(study) => console.log(study)"
@@ -36,6 +36,12 @@ import { user } from "~/public/script/reactive";
 //Setting variable to store which filter to use for which studies to display. Setting default to 'all' so all
 //studies are displayed as default. This is passed to "StudyBlock" with the :filter attr
 const filter = ref("all");
+
+const emit = defineEmits(['newStudy'])
+
+const emitNewStudy = (id) =>{
+  emit('newStudy', id)
+}
 
 //computed property being automatically update to display the correct title relative to the selected filter
 const mainTitle = computed(() => {

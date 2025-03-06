@@ -1,19 +1,24 @@
 <template>
-	<Dashboard-Header :name="displayName" />
-	<div class="container" v-if="showMain">
-		<Dashboard-main />
-
+	<Dashboard-Header :name="displayName"/>
+	<div class="container" v-if="showMain && !study.id">
+		<Dashboard-main @newStudy="(id) => study.id = id"/>
 	</div>
+    <Study-create v-if="study.id"/>
+
 	<!--Display message if issues fetting user-info-->
-	<div class="container" v-else>
+	<div class="container" v-if="!showMain && !study.id">
 		<h2 class="container__headline">Oh oh!</h2>
 		<p class="container__paragraph">Issues retrieving information. Please try to reload</p>
+        <button class="container__button">Reload</button>
+        <span class="container__span">or</span>
+        <button class="container__button">sign out</button>
 	</div>
 
 </template>
 
 <script setup>
 import { user } from '~/public/script/reactive';
+import { study } from '~/public/script/reactive';
 
 const showMain = ref(true);
 const displayName = ref('')

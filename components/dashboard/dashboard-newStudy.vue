@@ -24,12 +24,13 @@ const emit = defineEmits(['newStudy'])
 const router = useRouter();
 
 const createNewStudy = async () => {
-    const studyId = user.studies
+    //creating random id for study
+    const studyId = crypto.randomUUID();
 
     emit('newStudy', studyId);
 
     // create study with a POST request with a empty body
-    const response = await fetch('/api/study', {
+    /*const response = await fetch('/api/study', {
         method: 'POST',
         body: JSON.stringify({
             'userId': user.info._id
@@ -47,7 +48,7 @@ const createNewStudy = async () => {
         await router.push(`/study/${studyId}/edit`);
     } else {
         console.log('Failed to create study');
-    }
+    }*/
 }
 </script>
 

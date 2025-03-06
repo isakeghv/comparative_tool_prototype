@@ -85,14 +85,25 @@ const profileCreate = (successState, message)=>{
     emit('userCreated', {success: successState, message: message})
 }
 
+//function makes sure that the name has capital first letter
+const nameToCapital = (input) =>{
+    return input.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+
+}
+
+
+
 const registerUser = async () => {
+
+    const firstname = nameToCapital(firstName.value);
+    const lastname = nameToCapital(lastName.value);
 
     //calling backend function to create user
     const response = await fetch('/api/register', {
         method: 'POST',
         body: JSON.stringify({
-            firstname: firstName.value,
-            lastname: lastName.value,
+            firstname: firstname,
+            lastname: lastname,
             email: email.value,
             password: pwd.value
         }),
@@ -121,6 +132,10 @@ const registerUser = async () => {
                 'Content-Type': 'application/json'
             }
         });
+
+        const login = await loginRes.json()
+
+        if (login.isValid) location.reload();
 
         // get token from header, and store the value in localStorage
         // const token = loginRes.headers.get('Token');
