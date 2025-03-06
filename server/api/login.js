@@ -31,8 +31,8 @@ const checkPassword = async (email, pwd, e) => {
 
         const userId = user._id.toString();
 
-        // have user_id as payload that will be stored in JWT token, and let the token expire after 5 hour (currently using 30s for test-purpose)
-        const token = jwt.sign({ userId: userId }, config.private.secretJWT, { expiresIn: '30s'})
+        // have user_id as payload that will be stored in JWT token, and let the token expire after 5 hour (currently using 1h for test-purpose rn)
+        const token = jwt.sign({ userId: userId }, config.private.secretJWT, { expiresIn: '1h'})
 
         //setting token when logging in instead of setting to header. including jwt token in cookie for secure cookie.
         setCookie(e, 'token', token, {

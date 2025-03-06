@@ -1,4 +1,4 @@
-.<template>
+<template>
     <form @submit.prevent="newStudy">
         <label for="title">Title</label><br>
         <input type="text" name="title" v-model="title" id="title"
@@ -11,13 +11,17 @@
 
 <script setup>
 import { user } from '~/public/script/reactive';
+// import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const studyId = route.params.studyId 
 
 const title = ref('');
 
 // create a empty study when user click on the 'New study' button
 const newStudy = async () => {
     const response = await fetch('/api/study', {
-        method: 'POST',
+        method: 'PUT',
         body: JSON.stringify({
             userId: user.info._id
         }),
