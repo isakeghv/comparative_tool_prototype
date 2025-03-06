@@ -7,10 +7,8 @@
         <button class="aside__button" @click="changeDisplay('demographics')">
             Demographics
         </button>
-        <Study-questions />
+        <Study-list @select="(data)=>changeDisplay(data.query, data.number, data.id)"/>
     </aside>
-
-
 </template>
 
 <script setup>
@@ -26,11 +24,11 @@ const currentConfig = computed(()=>{
     }
 })
 
-const emit = defineEmits(['swapComponent'])
+const emit = defineEmits(['swapDisplay'])
 
 //emitting, so the correct component is displayed in "study-create"
-const changeDisplay = (component, number = null) => {
-    emit('swapComponent', { component, number })
+const changeDisplay = (component, number = null, id=null) => {
+    emit('swapDisplay', { component, number, id })
 }
 
 
