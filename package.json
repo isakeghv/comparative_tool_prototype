@@ -10,7 +10,11 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.12.0",
     "nuxt": "^3.6.0",
+    "save": "^2.9.0",
     "vue": "latest",
     "vue-router": "latest"
   }

@@ -2,6 +2,7 @@
 @use '../../variables/_variables.scss' as v;
 
 .header {
+    height: 4rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -10,6 +11,53 @@
 
     &__headline, &__paragraph {
         color: c.$bluePrimary;
+    }
+    &__container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        gap: 0.5rem;
+        padding: 0.25rem 0;
+    }
+    &__publish{
+        height: 100%;
+        border: none;
+        background-color: c.$bluePrimary;
+        transition: background-color 0.1s ease-in-out;
+        color: white;
+        padding: 0 2rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+
+        &:hover{
+            background-color: c.$bluePrimary-hover;
+        }
+        &:active{
+            background-color: c.$bluePrimary-active;
+        }
+
+    }
+    &__button{
+        padding: 0.675rem;
+        height: 100%;
+        aspect-ratio: 1 / 1;
+        background-color: transparent;
+        border: none;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        transition: background-color 0.1s ease-in-out;
+
+        &:hover{
+            background-color: c.$white-active;
+        }
+        &:active{
+            background-color: c.$gray;
+        }
+
+    }
+    &__icon{
+        height: 100%;
     }
 }
 

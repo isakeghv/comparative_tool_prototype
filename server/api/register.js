@@ -1,34 +1,68 @@
-import * as path from 'node:path'
-import * as fsp from 'node:fs/promises'
+import bcrypt from "bcryptjs";
+import { connDb } from "../utils/connDb.js";
+import { userCredential, userProfile } from '../models/user.js';
+
+const checkEmail = async (email) => {
+	const existingUser = await userCredential.findOne({ email });
+
+	if (existingUser) {
+		// setting response to 200 to confirm that email was found
+		setResponseStatus(200);
+		return { created: false, message: "User with this email already exists." };
+	}
+
+	return null;
+}
+
+const createUser = async (fname, lname, email, pwd) => {
+	//hashing password so that it is secure. "12" is for the salt rounds it will do: 12-14= safer
+	const hashedPassword = await bcrypt.hash(pwd, 12);
+
+	// split the user credentials and profile data from each other
+	const newUserP = new userProfile({
+		firstName: fname,
+		lastName: lname,
+	})
+
+	// create new user credentials using its schema
+	const newUserC = new userCredential({
+		email: email,
+		password: hashedPassword,
+		userProfile: newUserP._id
+	});
+
+	try {
+		// both operations have to succeed together
+		await Promise.all([
+			newUserC.save(),
+			newUserP.save()
+		]);
+
+		setResponseStatus(201);
+		
+		//return status and message that account has been created
+		return { created: true, message: "Account successfully created." };
+	} catch (err) {
+		console.log(err);
+		setResponseStatus(500);
+
+		//return false status and message that there was issue creating the account
+		return { created: false, message: "Issue occured while creating account." };
+	}
+}
 
 export default defineEventHandler(async (e) => {
-    const { name, email, password } = await readBody(e);
+	// connect to db
+	await connDb();
+	const body = await readBody(e);
+	const { firstname, lastname, email, password } = body;
 
-    // read file in Nuxt 3: https://stackoverflow.com/questions/76453100/how-to-read-txt-file-in-nuxt-3-in-a-folder
-    const currentDir = process.cwd();
-    const filePath = path.resolve(currentDir, 'database', 'dummyDb.json');
-    
-    try {
-        const data = await fsp.readFile(filePath, 'utf-8');
-        const db = JSON.parse(data);
+	// if checkEmail returns a value, return and don't continue executing the rest of the code
+	const emailExist = await checkEmail(email);
+	
+	if (emailExist) {		
+		return emailExist;
+	}	
 
-        const newUser = { name, email, password };
-        db.userCollection = db.userCollection || [];
-        db.userCollection.push(newUser);
-    
-        await fsp.writeFile(filePath, JSON.stringify(db, null, 2), 'utf-8');
-    } catch {
-        console.error('Not able to add account to dummy');
-    }
-
-    // validate on the backend as well (shouldn't trust client-side checking fully)
-    // check if passwords meet certain conditions
-    const validatePwd = (pwd) => {
-        if (pwd.length <= 8) {
-        
-        }
-    }
-
-    // just returning account data for now; shouldn't really return password but just testing
-    return { name: name, email: email, password: password };
-})
+	return await createUser(firstname, lastname, email, password);
+});

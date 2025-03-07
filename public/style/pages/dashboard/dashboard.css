@@ -23,9 +23,24 @@
 
 .aside {
   flex: 0 0 15%;
+  border-right: solid #A4A4A4 1px;
 }
 .aside__container {
   display: flex;
   flex-flow: column;
   justify-content: center;
+}
+.aside__container--small {
+  border-top: solid #A4A4A4 1px;
+}
+.aside__button {
+  display: flex;
+  align-items: center;
+  width: clamp(14rem, 10rem + 6vw, 18rem);
+  padding: 0.8rem 2rem;
+  background-color: transparent;
+  border: none;
+}
+.aside__button:hover {
+  background: #F6F6F6;
 }/*# sourceMappingURL=dashboard.css.map */

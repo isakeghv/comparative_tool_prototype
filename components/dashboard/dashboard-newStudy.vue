@@ -14,20 +14,42 @@
                 </linearGradient>
             </defs>
         </svg>
-
     </button>
 </template>
 
 <script setup>
+import { user } from '~/public/script/reactive';
 
-const emit = defineEmits(['newstudy'])
+const emit = defineEmits(['newStudy'])
+const router = useRouter();
 
-const createNewStudy = () => {
-    const id = JSON.stringify(Date.now())
-    emit('newstudy', id);
+const createNewStudy = async () => {
+    //creating random id for study
+    const studyId = crypto.randomUUID();
+
+    emit('newStudy', studyId);
+
+    // create study with a POST request with a empty body
+    /*const response = await fetch('/api/study', {
+        method: 'POST',
+        body: JSON.stringify({
+            'userId': user.info._id
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+  const result = await response.json();
+
+    // redirect without reloading to the newly created study page using the study id
+    if (result.created) {
+        const studyId = result.studyId;
+        await router.push(`/study/${studyId}/edit`);
+    } else {
+        console.log('Failed to create study');
+    }*/
 }
-
-
 </script>
 
 <style scoped>

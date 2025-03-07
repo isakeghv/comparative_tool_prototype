@@ -7,12 +7,12 @@
 <script setup>
 
 //the possible filters to use and emit
-const filters = [ 'all', 'completed', 'ongoing', 'drafts']
+const filters = [ 'all', 'completed', 'ongoing', 'draft']
 
 const emit = defineEmits(['filter'])
 
 //Emits the filter to dashboard-main for which studies to display
-const filterView =(filter) =>{
+const filterView = (filter) =>{
     emit('filter', filter);
 }
 
