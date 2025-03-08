@@ -1,10 +1,10 @@
 <template>
-    <aside class="aside">
-        <Study-back :current="currentConfig" :initial="initialStudy"/>
-        <button class="aside__button" @click="changeDisplay('details')">
+    <aside class="sidebar">
+        <Study-return :current="currentConfig" :initial="initialStudy"/>
+        <button class="sidebar__button font-normal" @click="changeDisplay('details')">
             Study details
         </button>
-        <button class="aside__button" @click="changeDisplay('demographics')">
+        <button class="sidebar__button font-normal" @click="changeDisplay('demographics')">
             Demographics
         </button>
         <Study-list @select="(data)=>changeDisplay(data.query, data.number, data.id)"/>
@@ -34,4 +34,6 @@ const changeDisplay = (component, number = null, id=null) => {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+    @import url('public/style/components/study/study-sidebar.scss');
+</style>

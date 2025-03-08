@@ -1,21 +1,22 @@
 @use '../../variables/_colors.scss' as c;
 @use '../../variables/variables' as v;
 
-.container{
+.container {
     display: flex;
 }
 
-.main{
+.main {
     display: flex;
     flex: 1 0 50%;
     flex-wrap: wrap;
     padding: 1rem;
     gap: 1rem;
 
-    &__headline{
+    &__headline {
         flex: 1 0 100%;
     }
-    &__grid{
+
+    &__grid {
         box-sizing: border-box;
         flex: 1 0 80%;
         display: grid;
@@ -26,7 +27,8 @@
 }
 
 .aside {
-    flex: 0 0 15%;
+    // let it reach the bottom of the size using the full view height - height of header
+    height: calc(100vh - 4rem);
     border-right: v.$borderSolid;
 
     &__container {
@@ -34,20 +36,29 @@
         flex-flow: column;
         justify-content: center;
 
-        &--small{
+        &--small {
             border-top: v.$borderSolid;
         }
+
+        &:first-child {
+            padding-bottom: 1rem;
+        }
+
+        &:last-child {
+            padding-top: 1rem;
+        }
     }
+
     &__button {
         display: flex;
         align-items: center;
         width: clamp(14rem, calc(10rem + 6vw), 18rem);
-        padding: 0.8rem 2rem;
+        padding: 1.2rem 2rem;
         background-color: transparent;
         border: none;
 
         &:hover {
-            background: c.$white-active;
+            background-color: c.$white-active;
         }
     }
 }

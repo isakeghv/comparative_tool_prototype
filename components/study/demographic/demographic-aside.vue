@@ -1,14 +1,14 @@
 <template>
     <aside class="aside" v-if="id">
         <div class="aside__container">
-            <label for="demographic_question_textarea" class="aside__label aside__label--headline">
+            <label for="demographic_question" class="aside__label aside__label--headline font-normal font-semi">
                 Question
             </label>
             <textarea id="demographic_question_textarea" class="aside__textarea" v-model="questionModel" @input="updateQuestion()"></textarea>
         </div>
         <div class="aside__container">
-            <label for="demographic_required_textarea" class="aside__label aside__label--headline">
-                Make question required
+            <label for="demographic_required" class="aside__label aside__label--headline font-normal font-semi">
+                Required
             </label>
             <input type="checkbox" id="demographic_required_textarea" class="aside__checkbox" v-model="requiredModel" @change="updateRequired()">
         </div>
@@ -53,7 +53,6 @@
             </button>
         </div>
     </aside>
-
 </template>
 
 <script setup>
@@ -149,5 +148,5 @@ watch(
 </script>
 
 <style scoped>
-
+    @import url('public/style/components/demographics/demographics-aside.scss');
 </style>

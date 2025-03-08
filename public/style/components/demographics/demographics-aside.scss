@@ -1,0 +1,21 @@
+@use '../../variables/_colors.scss' as c;
+@use '../../variables/variables' as v;
+
+.aside {
+    @include v.right-area;
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0.8rem;
+    }
+
+    &__label--headline {
+        margin-bottom: 0.8rem;
+    }
+
+    &__testarea {
+        border: v.$borderSolid;
+    }
+}
+

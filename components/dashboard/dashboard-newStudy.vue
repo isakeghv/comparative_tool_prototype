@@ -1,6 +1,6 @@
 <template>
     <button class="study__new" @click="createNewStudy()">
-        <span class="font-semi">New study</span>
+        <span class="font-normal font-semi">New study</span>
         <svg class="study__plus" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="16" cy="16" r="16" fill="url(#paint0_linear_172_144)" />
             <path
@@ -53,5 +53,5 @@ const createNewStudy = async () => {
 </script>
 
 <style scoped>
-    @import url('public/style/components/aside/dashboard-main-aside.css');
+    @import url('public/style/components/dashboard/dashboard-main-aside.scss');
 </style>

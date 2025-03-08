@@ -3,7 +3,7 @@
 	<div class="container" v-if="showMain && !study.id">
 		<Dashboard-main @newStudy="(id) => study.id = id"/>
 	</div>
-    <Study-create v-if="study.id"/>
+    <Study-editor v-if="study.id"/>
 
 	<!--Display message if issues fetting user-info-->
 	<div class="container" v-if="!showMain && !study.id">
@@ -57,5 +57,5 @@ await getUserInfo();
 </script>
 
 <style scoped>
-@import url('public/style/pages/dashboard/dashboard.css');
+@import url('public/style/pages/dashboard/dashboard.scss');
 </style>

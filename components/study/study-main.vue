@@ -1,9 +1,10 @@
 <template>
+    <div class="study-main__container">
     <h1>Replace this content!</h1>
     <p>This is the main area for where the question itself is made/edited etc</p>
 
     {{ config }}
-
+    </div>
 </template>
 
 <script setup>
@@ -67,5 +68,5 @@ const config = computed(()=>{
 </script>
 
 <style scoped>
-
+    @import url('public/style/components/study/study-main.scss');
 </style>

@@ -19,7 +19,7 @@
                 </h1>
                 <p class="container__paragraph font-normal">
                     A web-based analyzing tool to enable researchers
-                    to set up experiments comparing different artifacts
+                    to set up experiments comparing different artifacts.
                 </p>
                 <button class="container__button font-semi font-normal" @click="selectForm('register')">Get
                     started</button>
@@ -57,5 +57,5 @@ const selectForm = (type) => {
 </script>
 
 <style scoped>
-@import url('public/style/pages/index/index.css');
+    @import url('public/style/pages/index/index.scss');
 </style>

@@ -1,0 +1,8 @@
+@use '../../variables/_colors.scss' as c;
+@use '../../variables/variables' as v;
+
+.details {
+    &__container {
+        @include v.main-area;
+    }
+}

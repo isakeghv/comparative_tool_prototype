@@ -35,5 +35,5 @@ initiateContent();
 </script>
 
 <style scoped>
-
+    @import url('public/style/components/details/details.scss');
 </style>

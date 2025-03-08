@@ -1,9 +1,9 @@
 <template>
-    <div class="demographic">
-        <h2 class="demographic__headline">Demographics</h2>
+    <div class="demographic demographic__main">
+        <h2 class="demographic__headline font-h5 font-semi">Demographics</h2>
         <div class="demographic__row">
             <label for="demographiq_request_checkbox" class="demographic__label">
-                <span class="demographic__span">Request demographics</span>
+                <span class="demographic__span  font-normal">Request demographics</span>
                 <span class="demographic__slider" :class="{'demographic__slider--active':requestModel}">
                     <span class="demographic__thumbnail" :class="{'demographic__thumbnail--active':requestModel}"></span>
                 </span>
@@ -12,7 +12,7 @@
         </div>
         <Demographic-row v-if="requestModel" @edit="(id) =>selectedId = id" :index="i" :config="config" v-for="(config, i) in configs"/>
         <Demographic-add @newQuestion="(id) =>selectedId = id"/>
-    </div>
+        </div>
     <Demographic-aside :id="selectedId" v-if="requestModel"/>
 </template>
 
@@ -47,11 +47,8 @@ const configs = computed(()=>{
     if (!study.demographicReq) return [];
     return study.demographic;
 })
-
-
-
 </script>
 
 <style scoped>
-@import url('public/style/components/demographics/demographics.css');
+    @import url('public/style/components/demographics/demographics.scss');
 </style>

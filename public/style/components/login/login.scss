@@ -56,6 +56,7 @@ $loginGrey: #cccccc;
       background-color: c.$bluePrimary-active;
     }
   }
+
   &__svg {
     position: absolute;
     right: 0;
@@ -65,6 +66,7 @@ $loginGrey: #cccccc;
     top: 50%;
     transform: translateY(-50%);
   }
+
   &__cont {
     position: relative;
     width: 100%;
@@ -73,6 +75,7 @@ $loginGrey: #cccccc;
     justify-content: center;
     align-items: center;
   }
+
   &__button {
     border: none;
     background-color: transparent;
@@ -98,15 +101,22 @@ $loginGrey: #cccccc;
 
     &__text {
         margin-left: 0.6rem;
+
+        &--success {
+          color: c.$green;
+        }
+
+        &--error {
+          color: c.$red;
+        }
     }
+
     &__success {
         background-color: c.$lightGreen;
-        color: c.$green;
     }
 
     &__error {
         background-color: c.$lightRed;
-        color: c.$red;
     }
 }
 

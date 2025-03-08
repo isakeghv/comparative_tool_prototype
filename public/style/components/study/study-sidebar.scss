@@ -1,0 +1,110 @@
+@use '../../variables/_colors.scss' as c;
+@use '../../variables/variables' as v;
+
+@mixin sidebar-btn {
+    width: clamp(10rem, 7rem + 8vw, 14rem);
+    height: 2.4rem;
+    padding-left: 1rem;
+    border-radius: 10px;
+    border: solid #A4A4A4 1px;
+    background-color: transparent;
+    // https://getcssscan.com/css-box-shadow-examples
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 0px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    margin-bottom: 0.8rem;
+  }
+
+.sidebar {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    width: clamp(14rem, 10rem + 8vw, 18rem);
+    height: calc(100vh - 4rem);
+    border-right: v.$borderSolid;
+
+    &__return, &__button {
+        text-align: left;
+    }
+
+    &__return {
+        position: relative;
+        width: 100%;
+        padding: 1.2rem 2rem;
+        margin: 0.5rem 0;
+        background-color: transparent;
+        border: none;
+
+        :hover {
+            color: gray;
+        }
+    }
+
+    &__arrow {
+        height: 0.6rem;
+        width: 0.6rem;
+        margin-right: 0.6rem;
+    }
+
+    &__button {
+        @include sidebar-btn();
+    }
+}
+
+.question {
+    width: 100%;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.8rem 2rem;
+    }
+
+    &__add {
+        border: none;
+        background-color: transparent;
+
+        &:hover {
+            opacity: 0.8;
+        }
+
+        &:active {
+            opacity: 1;
+        }
+    }
+
+    &__plus {
+        width: 1.4rem;
+        height: 1.4rem;
+    }
+
+    &__list {
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+    }
+
+    &__item {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 0.5rem;
+    }
+
+    &__button {
+        @include sidebar-btn;
+        margin-bottom: 0;
+        text-align: left;
+    }
+
+    &__drag {
+        display: flex;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    &__svg {
+        height: 1.6rem;
+    }
+}

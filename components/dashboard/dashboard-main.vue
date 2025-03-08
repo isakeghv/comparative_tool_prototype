@@ -5,16 +5,17 @@
       <Dashboard-filter @filter="(study) => (filter = study)" />
     </div>
     <div class="aside__container aside__container--small">
-      <button class="aside__button">Settings</button>
+      <button class="aside__button font-normal">Settings</button>
       <Dashboard-logout />
     </div>
   </aside>
   <main class="main">
-    <h2 class="main__headline">{{ mainTitle }}</h2>
+    <h2 class="main__headline font-h5 font-semi">{{ mainTitle }}</h2>
     <div class="main__grid">
-
-    <!-- showing the create date instead of start date is temporary -->
-    <Study-card v-for="study in studies" :key="study._id"
+      <!-- showing the create date instead of start date is temporary -->
+      <Study-card
+        v-for="study in studies"
+        :key="study._id"
         @select="(study) => console.log(study)"
         @edit="(study) => console.log(study)"
         @delete="(study) => console.log(study)"
@@ -25,7 +26,7 @@
         :id="study._id"
         :title="study.title"
         :startDate="study.created"
-    />
+      />
     </div>
   </main>
 </template>
@@ -37,11 +38,11 @@ import { user } from "~/public/script/reactive";
 //studies are displayed as default. This is passed to "StudyBlock" with the :filter attr
 const filter = ref("all");
 
-const emit = defineEmits(['newStudy'])
+const emit = defineEmits(["newStudy"]);
 
-const emitNewStudy = (id) =>{
-  emit('newStudy', id)
-}
+const emitNewStudy = (id) => {
+  emit("newStudy", id);
+};
 
 //computed property being automatically update to display the correct title relative to the selected filter
 const mainTitle = computed(() => {
@@ -57,5 +58,5 @@ const studies = computed(() => {
 </script>
 
 <style scoped>
-@import url("public/style/pages/dashboard/dashboard.css");
+	@import url("public/style/pages/dashboard/dashboard.scss");
 </style>

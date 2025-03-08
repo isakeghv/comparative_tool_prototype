@@ -1,3 +1,30 @@
 @use './colors' as c;
 
+@mixin main-area {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 60%;
+    padding: $areaPadding;
+}
+
+@mixin left-area {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 20%;
+    padding: $areaPadding;
+    border-right: $borderSolid;
+}
+
+@mixin right-area {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 25%;
+    padding: $areaPadding;
+    border-left: $borderSolid;
+}
+  
 $borderSolid: solid c.$gray 1px;
+$areaPadding: 2.4rem 2.2rem;
+
+
+
