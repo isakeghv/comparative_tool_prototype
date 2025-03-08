@@ -1,10 +1,12 @@
 <template>
     <div class="details__container">
-        <label for="study_title_input" class="details__label hide">Title</label>
-        <input type="text" id="study_title_input" class="details__input font-h1" v-model="titleModel" @input="updateTitle(titleModel)">
+        <div class="details__main">
+        <label for="details__title_input" class="details__label hide">Title</label>
+        <input type="text" id="details__title_input" class="details__input font-h4 font-medium" placeholder="Title" v-model="titleModel" @input="updateTitle(titleModel)">
 
-        <label for="study_details_textarea" class="details__label hide">Description</label>
-        <textarea id="study_details_textarea" class="details__textarea font-normal"  v-model="descrModel" @input="updateDesc(descrModel)"></textarea>
+        <label for="details__textarea" class="details__label font-h6 font-medium">Description</label>
+        <textarea id="details__textarea" class="details__textarea font-normal"  v-model="descrModel" @input="updateDesc(descrModel)"></textarea>
+    </div>
     </div>
 </template>
 

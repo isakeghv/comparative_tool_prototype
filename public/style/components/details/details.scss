@@ -1,8 +1,41 @@
 @use '../../variables/_colors.scss' as c;
 @use '../../variables/variables' as v;
 
+.hide {
+    display: none;
+}
+
+#details__title_input {
+    border: none;
+    border-bottom: c.$lightGray solid 2px;
+    outline: none;
+    padding-bottom: 0.8rem;
+    margin-bottom: 1.4rem;
+    transition: v.$easeAnimation;
+
+    &:focus {
+        border-bottom: c.$cyan solid 2px;
+    }
+}
+
 .details {
     &__container {
         @include v.main-area;
+        width: v.$mainAreaWidth;
+    }
+
+    &__main {
+        display: flex;
+        flex-direction: column;
+        width: v.$mainAreaWidth;
+    }
+
+    &__label {
+        margin-bottom: 0.8rem;
+    }
+
+    &__textarea {
+        @include v.textArea(10rem);
     }
 }
+

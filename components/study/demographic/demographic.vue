@@ -1,5 +1,6 @@
 <template>
-    <div class="demographic demographic__main">
+    <div class="demographic demographic__container">
+        <div class="demographic__main">
         <h2 class="demographic__headline font-h5 font-semi">Demographics</h2>
         <div class="demographic__row">
             <label for="demographiq_request_checkbox" class="demographic__label">
@@ -8,11 +9,12 @@
                     <span class="demographic__thumbnail" :class="{'demographic__thumbnail--active':requestModel}"></span>
                 </span>
             </label>
-            <input type="checkbox" v-model="requestModel" name="" id="demographiq_request_checkbox" class="demographic__checkbox" @change="update()">
+            <input type="checkbox" v-model="requestModel" name="" id="demographic__request_checkbox" class="demographic__checkbox" @change="update()">
         </div>
         <Demographic-row v-if="requestModel" @edit="(id) =>selectedId = id" :index="i" :config="config" v-for="(config, i) in configs"/>
         <Demographic-add @newQuestion="(id) =>selectedId = id"/>
         </div>
+    </div>
     <Demographic-aside :id="selectedId" v-if="requestModel"/>
 </template>
 

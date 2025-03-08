@@ -4,48 +4,56 @@
             <label for="demographic_question" class="aside__label aside__label--headline font-normal font-semi">
                 Question
             </label>
-            <textarea id="demographic_question_textarea" class="aside__textarea" v-model="questionModel" @input="updateQuestion()"></textarea>
+            <textarea id="demographic_question_textarea" class="aside__textarea font-small" v-model="questionModel" @input="updateQuestion()"></textarea>
         </div>
-        <div class="aside__container">
-            <label for="demographic_required" class="aside__label aside__label--headline font-normal font-semi">
+        <div class="aside__container aside__selection">
+            <label for="demographic_required" class="aside__label aside__label--headline font-normal font-medium">
                 Required
             </label>
             <input type="checkbox" id="demographic_required_textarea" class="aside__checkbox" v-model="requiredModel" @change="updateRequired()">
         </div>
         <div class="aside__container">
-            <p class="aside__paragraph">Response format</p>
+            <p class="aside__paragraph font-normal font-semi">Response format</p>
         </div>
         <div class="aside__container">
-            <input type="radio" value="text" name="demographic__radio" id="demographic_text_radio" class="demographic__radio" v-model="responseModel">
-            <label for="demographic_text_radio" class="aside__label">
-                Text
-            </label>
-        </div>
-        <div class="aside__container">
-            <input type="radio" value="radio" name="demographic__radio" id="demographic_multiple_radio" class="demographic__radio" v-model="responseModel">
-            <label for="demographic_multiple_radio" class="aside__label">
-                Multiple choise
-            </label>
-            <div class="aside__options" v-if="showOptions">
-                <div class="aside__option" v-for="(option, i) in optionsModel" :key="i">
-                    <label :for="`option_${option}_${i}_txt`" class="aside__label">{{ i + 1 }}</label>
-                    <input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="optionsModel[i]">
-                    <button class="aside__button aside__button--option" @click="deleteOption(i)">Delete</button>
-                </div>
-                <button class="aside__button aside__button--add" @click="addOption()">Add option</button>
+            <div class="aside__selection">
+                <label for="demographic_text_radio" class="aside__label">
+                    Text
+                </label>
+                <input type="radio" value="text" name="demographic__radio" id="demographic_text_radio" class="demographic__radio" v-model="responseModel">
             </div>
         </div>
         <div class="aside__container">
-            <input type="radio" value="number" name="demographic__radio" id="demographic_number_radio" class="demographic__radio" v-model="responseModel">
-            <label for="demographic_number_radio" class="aside__label">
-                Number - dropdown
-            </label>
+            <div class="aside__selection">
+                <label for="demographic_multiple_radio" class="aside__label">
+                    Multiple choice
+                </label>
+                <input type="radio" value="radio" name="demographic__radio" id="demographic_multiple_radio" class="demographic__radio" v-model="responseModel">
+            </div>
+                <div class="aside__options" v-if="showOptions">
+                    <div class="aside__option" v-for="(option, i) in optionsModel" :key="i">
+                        <label :for="`option_${option}_${i}_txt`" class="aside__label">{{ i + 1 }}</label>
+                        <input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="optionsModel[i]">
+                        <button class="aside__button aside__button--option" @click="deleteOption(i)">Delete</button>
+                    </div>
+                    <button class="aside__button aside__button--add" @click="addOption()">Add option</button>
+                </div>
         </div>
         <div class="aside__container">
-            <input type="radio" value="date" name="demographic__radio" id="demographic_date_radio" class="demographic__radio" v-model="responseModel">
-            <label for="demographic_date_radio" class="aside__label">
-                Date
-            </label>
+            <div class="aside__selection">
+                <label for="demographic_number_radio" class="aside__label">
+                    Number - dropdown
+                </label>
+                <input type="radio" value="number" name="demographic__radio" id="demographic_number_radio" class="demographic__radio" v-model="responseModel">
+            </div>
+        </div>
+        <div class="aside__container">
+            <div class="aside__selection">
+                <label for="demographic_date_radio" class="aside__label">
+                    Date
+                </label>
+                <input type="radio" value="date" name="demographic__radio" id="demographic_date_radio" class="demographic__radio" v-model="responseModel">
+            </div>
         </div>
         <div class="aside__container">
             <button class="aside__button aside__button--delete" @click="deleteQuestion()">

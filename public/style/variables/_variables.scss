@@ -22,9 +22,25 @@
     padding: $areaPadding;
     border-left: $borderSolid;
 }
-  
-$borderSolid: solid c.$gray 1px;
+
+@mixin textArea($height) {
+    resize: none;
+    outline: none;
+    height: $height;
+    border: $borderSolid;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    
+    &:hover {
+        border: c.$gray 1px solid;
+    }
+}
+
+$mainAreaWidth: clamp(20rem, -4rem + 48vw, 50rem);
+$borderSolid: solid c.$lightGray 1px;
 $areaPadding: 2.4rem 2.2rem;
+$easeAnimation: all 0.3s ease-out;
+
 
 
 

@@ -18,8 +18,15 @@
     flex-flow: column;
     align-items: center;
     width: clamp(14rem, 10rem + 8vw, 18rem);
-    height: calc(100vh - 4rem);
+    min-height: calc(100vh - 4rem);
+    height: 100%;
     border-right: v.$borderSolid;
+
+    &__top {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+    }
 
     &__return, &__button {
         text-align: left;
@@ -51,6 +58,7 @@
 
 .question {
     width: 100%;
+    padding-bottom: 1.4rem;
 
     &__header {
         display: flex;

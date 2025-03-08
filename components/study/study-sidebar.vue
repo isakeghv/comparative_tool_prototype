@@ -1,12 +1,14 @@
 <template>
     <aside class="sidebar">
         <Study-return :current="currentConfig" :initial="initialStudy"/>
+        <div class="sidebar__top">
         <button class="sidebar__button font-normal" @click="changeDisplay('details')">
             Study details
         </button>
         <button class="sidebar__button font-normal" @click="changeDisplay('demographics')">
             Demographics
         </button>
+        </div>
         <Study-list @select="(data)=>changeDisplay(data.query, data.number, data.id)"/>
     </aside>
 </template>

@@ -2,8 +2,12 @@
 @use '../../variables/variables' as v;
 
 .demographic {
-    &__main {
+    &__container {
         @include v.main-area;
+    }
+
+    &__main {
+        width: v.$mainAreaWidth;
     }
 
     &__headline {
@@ -12,7 +16,7 @@
         &::after {
             content: '';
             border-bottom: v.$borderSolid;
-            width: 40rem;
+            width: 100%;
             display: block;
             margin-top: 0.8rem;
         }
@@ -22,9 +26,9 @@
         position: relative;
         display: flex;
         justify-content: space-between;
-        height: 2rem;
-        width: 40rem;
+        align-items: center;
         padding-right: 1rem;
+        margin: 1.4rem 0;
     }
     
     &__checkbox {
@@ -45,13 +49,22 @@
 
     &__button {
         padding: 0.5rem 1rem;
-        width: 9rem;
-        height: 2rem;
+        width: 10rem;
         border-radius: 0.5rem;
         cursor: pointer;
-        border: none;
-        background-color: c.$blueSecondary;
-        color: c.$white;
+        border: c.$bluePrimary 2px solid;
+        background-color: transparent;
+        color: c.$bluePrimary;
         transition: background-color 0.1s ease-in-out;
+
+        &:hover {
+            border: c.$bluePrimary-hover 2px solid;
+            color: c.$bluePrimary-hover;
+          }
+      
+          &:active {
+            border: c.$bluePrimary-active 2px solid;
+            color: c.$bluePrimary-active;
+          }
     }
 }

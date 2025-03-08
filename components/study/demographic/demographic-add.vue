@@ -1,5 +1,5 @@
 <template>
-    <button class="demographic__button" @click="newDemogrQuestion()">
+    <button class="demographic__button font-small font-semi" @click="newDemogrQuestion()">
         Add new question
     </button>
 </template>

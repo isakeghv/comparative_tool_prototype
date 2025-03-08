@@ -28,7 +28,8 @@
 
 .aside {
     // let it reach the bottom of the size using the full view height - height of header
-    height: calc(100vh - 4rem);
+    min-height: calc(100vh - 4rem);
+    height: 100%;
     border-right: v.$borderSolid;
 
     &__container {
