@@ -41,7 +41,7 @@ const displayQuestion = () => {
 
 const questionText = computed(() => {
     if (props.config && props.config.question) return props.config.question;
-    return 'Question'
+    return 'Empty'
 })
 
 //logic below handles so the items are draggable by dragging the "question__drag", to change order of the questions
@@ -75,5 +75,5 @@ const drop = (event) => {
 </script>
 
 <style scoped>
-    @import url('public/style/components/study/study-sidebar.scss');
+    @import url('public/style/components/study/_study-sidebar.scss');
 </style>

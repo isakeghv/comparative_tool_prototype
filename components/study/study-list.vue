@@ -48,7 +48,7 @@ const addQuestion = () => {
     //blueprint for how the question-object is arranged
     const questionBp = {
         id: crypto.randomUUID(),
-        question: 'Write a new question',
+        question: '',
         required: true,
         type: null,
         range: {
@@ -71,5 +71,5 @@ const addQuestion = () => {
 </script>
 
 <style scoped>
-    @import url('public/style/components/study/study-sidebar.scss');
+    @import url('public/style/components/study/_study-sidebar.scss');
 </style>

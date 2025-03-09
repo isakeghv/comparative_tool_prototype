@@ -1,15 +1,12 @@
 @use '../../variables/_colors.scss' as c;
 @use '../../variables/variables' as v;
 
-@mixin sidebar-btn {
-    width: clamp(10rem, 7rem + 8vw, 14rem);
+@mixin sidebar-slab {
     height: 2.4rem;
-    padding-left: 1rem;
     border-radius: 10px;
     border: solid #A4A4A4 1px;
     background-color: transparent;
-    // https://getcssscan.com/css-box-shadow-examples
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 0px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    box-shadow: 0 2px 1px 1px rgba(50, 50, 93, 0.25);
     margin-bottom: 0.8rem;
   }
 
@@ -52,7 +49,9 @@
     }
 
     &__button {
-        @include sidebar-btn();
+        width: clamp(10rem, 7rem + 8vw, 14rem);
+        padding-left: 1rem;
+        @include sidebar-slab();
     }
 }
 
@@ -89,27 +88,44 @@
         flex-flow: column wrap;
         justify-content: center;
         align-items: center;
+        padding: 0 calc((100% - clamp(10rem, 7rem + 8vw, 14rem)) / 2);
         text-decoration: none;
     }
 
     &__item {
         position: relative;
-        display: inline-block;
+        display: inline-flex;
         margin-bottom: 0.5rem;
+        width: 100%;
+        @include sidebar-slab;
     }
+    &__text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
 
     &__button {
-        @include sidebar-btn;
+        height: 100%;
+        background-color: transparent;
+        border: none;
         margin-bottom: 0;
-        text-align: left;
+        align-items: center;
+        justify-content: flex-start;
+        display: flex;
+        gap: 2px;
+        padding-left: 1rem;
+        flex: 1 0 50%;
+        width: calc(100% - 2rem);
+        cursor: pointer;
     }
 
     &__drag {
+        flex: 0 0 1.5rem;
+        align-items: center;
         display: flex;
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translate(-50%, -50%);
+        cursor: grab;
+
     }
 
     &__svg {

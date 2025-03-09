@@ -5,7 +5,7 @@
     "questions": [
         {
             "title": "Which artifact do you prefer?",
-            "responseType": "multipleChoice",
+            "responseType": "radio",
             "answer": [
                 "artifact1"
             ],
@@ -29,14 +29,6 @@
             ]
         },
         {
-            "title": "Do you like it?",
-            "responseType": "trueFalse",
-            "answer": false,
-            "artifacts": [
-                "artifact1"
-            ]
-        },
-        {
             "title": "How would you rate the quality of this artifact?",
             "responseType": "range",
             "answer": {
@@ -50,7 +42,7 @@
         },
         {
             "title": "Sort these artifacts by preference",
-            "responseType": "linearSorting",
+            "responseType": "linear",
             "answer": [
                 "artifact3",
                 "artifact1",
@@ -64,7 +56,7 @@
         },
         {
             "title": "Drag the artifacts into categories",
-            "responseType": "dragAndDrop",
+            "responseType": "drop",
             "answer": {
                 "not_chosen": "artifact1",
                 "modern": "artifact2",
