@@ -26,39 +26,24 @@ const QuestionSchema = new Schema({
   },
   multipleChoice: {
     options: [{ type: String }],
-    required: function () {
-      return this.responseType === "multipleChoice";
-    },
   },
   checkbox: {
     options: [{ type: String }],
     selectionMin: { type: Number },
-    selectionMax: { type: Number },
-    required: function () {
-      return this.responseType === "checkbox";
-    },
+    selectionMax: { type: Number }
   },
   range: {
     min: { type: Number },
     max: { type: Number },
     startLabel: { type: String },
-    endLabel: { type: String },
-    required: function () {
-      return this.responseType === "range";
-    },
+    endLabel: { type: String }
   },
   dragAndDrop: {
-    dropBox: [{ type: String }],
-    required: function () {
-      return this.responseType === "dragAndDrop";
-    },
+    dropBox: [{ type: String }]
   },
   linearSorting: {
     startLabel: { type: String },
-    endLabel: { type: String },
-    required: function () {
-      return this.responseType === "linearSorting";
-    },
+    endLabel: { type: String }
   },
   artifacts: [ArtifactSchema],
 });
