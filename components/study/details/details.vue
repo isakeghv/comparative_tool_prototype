@@ -19,19 +19,19 @@ const titleModel = ref('');
 const descrModel = ref('');
 
 //updating content of reactive variable "study.title"
-const updateTitle = (vmodel) =>{
-    study.title = vmodel;
+const updateTitle = (input) =>{
+    study.title = input;
 } 
 
 //updating content of reactive variable "study.description"
-const updateDesc = (vmodel) =>{
-    study.description = vmodel;
+const updateDesc = (input) =>{
+    study.description = input;
 } 
 
 //initiating content, so title and description has correct content when component is opened
 const initiateContent = ()=>{
-    if (study.title) title.value = study.title;
-    if (study.description) description.value = study.description;
+    if (study.title) titleModel.value = study.title;
+    if (study.description) descrModel.value = study.description;
 }
 
 //calling function when component is displayed

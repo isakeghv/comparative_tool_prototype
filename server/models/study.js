@@ -25,7 +25,7 @@ const QuestionSchema = new Schema({
     required: true,
   },
   multipleChoice: {
-    options: [{ type: String }],
+    options: [{ type: String }]
   },
   checkbox: {
     options: [{ type: String }],
@@ -63,6 +63,8 @@ const DemographicSchema = new Schema({
 
 // saving study schema with relevant questions, settings, and participant/study information
 const StudySchema = new Schema({
+  // new data-generated id
+  id: { type: String, required: true },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserProfile",
@@ -71,21 +73,21 @@ const StudySchema = new Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   currentReplies: { type: Number, default: 0 },
-  closingMethod: { type: String, required: true },
+  /* closingMethod: { type: String, required: true }, */
   status: {
     type: String,
     enum: ["ongoing", "completed", "draft"],
     required: true,
-    default: draft,
+    default: "draft",
   },
   closingLimit: {
     date: { type: Date },
     duration: { type: String },
     replies: { type: Number },
   },
-  questions: [QuestionSchema],
+  /* questions: [QuestionSchema],
   demographicReq: { type: Boolean, required: true },
-  demographic: [DemographicSchema],
+  demographic: [DemographicSchema], */
   created: {
     type: Date,
     immutable: true,
