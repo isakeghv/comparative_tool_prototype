@@ -8,6 +8,8 @@
         <textarea id="details__textarea" class="details__textarea font-normal"  v-model="descrModel" @input="updateDesc(descrModel)"></textarea>
     </div>
     </div>
+    <Details-aside/>
+    <!-- :id="selectedId" v-if="requestModel" -->
 </template>
 
 <script setup>

@@ -1,7 +1,7 @@
 <template>
     <aside class="aside" v-if="id">
-        <div class="aside__container">
-            <label for="demographic_question" class="aside__label aside__label--headline font-normal font-semi">
+        <div class="aside__container aside__container--question">
+            <label for="demographic_question" class="aside__label aside__headline font-large font-semi">
                 Question
             </label>
             <textarea id="demographic_question_textarea" class="aside__textarea font-small" v-model="questionModel" @input="updateQuestion()"></textarea>
@@ -10,25 +10,25 @@
             <label for="demographic_required" class="aside__label aside__label--headline font-normal font-medium">
                 Required
             </label>
-            <input type="checkbox" id="demographic_required_textarea" class="aside__checkbox" v-model="requiredModel" @change="updateRequired()">
+            <input type="checkbox" id="demographic_required_checkbox" class="aside__checkbox" v-model="requiredModel" @change="updateRequired()">
         </div>
         <div class="aside__container">
-            <p class="aside__paragraph font-normal font-semi">Response format</p>
+            <p class="aside__headline font-large font-semi">Response format</p>
         </div>
         <div class="aside__container">
             <div class="aside__selection">
+                <input type="radio" value="text" name="aside__radio" id="demographic_text_radio" class="aside__radio" v-model="responseModel">
                 <label for="demographic_text_radio" class="aside__label">
                     Text
                 </label>
-                <input type="radio" value="text" name="demographic__radio" id="demographic_text_radio" class="demographic__radio" v-model="responseModel">
             </div>
         </div>
         <div class="aside__container">
             <div class="aside__selection">
+                <input type="radio" value="radio" name="aside__radio" id="demographic_multiple_radio" class="aside__radio" v-model="responseModel">
                 <label for="demographic_multiple_radio" class="aside__label">
                     Multiple choice
                 </label>
-                <input type="radio" value="radio" name="demographic__radio" id="demographic_multiple_radio" class="demographic__radio" v-model="responseModel">
             </div>
                 <div class="aside__options" v-if="showOptions">
                     <div class="aside__option" v-for="(option, i) in optionsModel" :key="i">
@@ -41,18 +41,18 @@
         </div>
         <div class="aside__container">
             <div class="aside__selection">
+                <input type="radio" value="number" name="aside__radio" id="demographic_number_radio" class="aside__radio" v-model="responseModel">
                 <label for="demographic_number_radio" class="aside__label">
                     Number - dropdown
                 </label>
-                <input type="radio" value="number" name="demographic__radio" id="demographic_number_radio" class="demographic__radio" v-model="responseModel">
             </div>
         </div>
         <div class="aside__container">
             <div class="aside__selection">
+                <input type="radio" value="date" name="aside__radio" id="demographic_date_radio" class="aside__radio" v-model="responseModel">
                 <label for="demographic_date_radio" class="aside__label">
                     Date
                 </label>
-                <input type="radio" value="date" name="demographic__radio" id="demographic_date_radio" class="demographic__radio" v-model="responseModel">
             </div>
         </div>
         <div class="aside__container">

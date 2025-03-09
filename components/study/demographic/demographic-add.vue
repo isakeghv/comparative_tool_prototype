@@ -26,4 +26,6 @@ const newDemogrQuestion = () => {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+    @import url('public/style/components/demographics/demographics.scss');
+</style>

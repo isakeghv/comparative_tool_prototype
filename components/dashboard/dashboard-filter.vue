@@ -20,5 +20,5 @@ const filterView = (filter) =>{
 </script>
 
 <style scoped>
-    @import url('public/style/components/dashboard/dashboard-main-aside.scss');
+    @import url('public/style/components/dashboard/dashboard-sidebar.scss');
 </style>

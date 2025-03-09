@@ -3,7 +3,7 @@
         <div class="demographic__main">
         <h2 class="demographic__headline font-h5 font-semi">Demographics</h2>
         <div class="demographic__row">
-            <label for="demographiq_request_checkbox" class="demographic__label">
+            <label for="demographic_request_checkbox" class="demographic__label">
                 <span class="demographic__span  font-normal">Request demographics</span>
                 <span class="demographic__slider" :class="{'demographic__slider--active':requestModel}">
                     <span class="demographic__thumbnail" :class="{'demographic__thumbnail--active':requestModel}"></span>

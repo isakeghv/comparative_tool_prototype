@@ -12,6 +12,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   components: [
     { path: "~/components", pathPrefix: false },
+    { path: "~/components/auth", pathPrefix: false },
     { path: "~/components/dashboard", pathPrefix: false },
     { path: "~/components/study", pathPrefix: false },
     { path: "~/components/study/demographic", pathPrefix: false },

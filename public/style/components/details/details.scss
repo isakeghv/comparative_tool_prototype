@@ -12,6 +12,7 @@
     padding-bottom: 0.8rem;
     margin-bottom: 1.4rem;
     transition: v.$easeAnimation;
+    letter-spacing: 0.02rem;
 
     &:focus {
         border-bottom: c.$cyan solid 2px;
@@ -21,15 +22,14 @@
 .details {
     &__container {
         @include v.main-area;
-        width: v.$mainAreaWidth;
     }
 
     &__main {
+        width: v.$mainAreaWidth;
         display: flex;
         flex-direction: column;
-        width: v.$mainAreaWidth;
     }
-
+    
     &__label {
         margin-bottom: 0.8rem;
     }
