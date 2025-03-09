@@ -41,15 +41,25 @@
 
 <script setup>
 //importing reactive variable which holds the id of the study and where the study questions are stored
-import { study, initialStudy } from '~/public/script/reactive';
+import { user, study, initialStudy } from '~/public/script/reactive';
 const props = defineProps({
     name: String,
     id: String,
 })
 
-//Fix so the study is saved to the actual database as well
-const saveStudy = () => {
+// flag to prevent creating study when saving multiple times
+const isStudyCreated = ref(false);
 
+// need to pass all the comparisons to pass it as true (probably should find a way to not repeat too much)
+const compareStudy = () => {
+    return JSON.stringify(study.questions) === JSON.stringify(initialStudy.questions) &&
+           JSON.stringify(study.demographicReq) === JSON.stringify(initialStudy.demographicReq) &&
+           JSON.stringify(study.demographic) === JSON.stringify(initialStudy.demographic) &&
+           JSON.stringify(study.description) === JSON.stringify(initialStudy.description) &&
+           JSON.stringify(study.title) === JSON.stringify(initialStudy.title)
+};
+
+const updateSaveHistory = () => {
     //saves it to "study.initial": 
     // - The "back" button prevents user from going back if the initial study-configuration is not
     //      similar to the current. Saving updates so the "initial" has the current setup, so the user can go back
@@ -60,8 +70,82 @@ const saveStudy = () => {
     initialStudy.title = JSON.parse(JSON.stringify(study.title))
 }
 
+// send a POST request to the 'study' endpoint, and pass the user/title/desc data for saving (temporarily)
+const createStudy = async () => {
+    const response = await fetch('/api/study', {
+        method: 'POST',
+        body: JSON.stringify({
+            'id': study.id,
+            // get the id from const 'user' that was set when user logged in, and send it to the API endpoint to reference the user as the creator
+            'user': user.info._id,
+            'title': study.title,
+            'description': study.description
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+  const result = await response.json();
+
+    if (result.created) {
+        const studyId = result.studyId;
+    } else {
+        console.log('Failed to create study');
+    }
+}
+
+const updateStudy = async () => {
+    const updatedData = {
+        title: study.title,
+        description: study.description
+    }
+
+    const response = await fetch('/api/study', {
+        method: 'PUT',
+        body: JSON.stringify({
+            'id': study.id,
+            updatedData
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+  const result = await response.json();
+
+    if (result.updated) {
+        const studyId = result.studyId;
+    } else {
+        console.log('Failed to update study');
+    }
+}
+
+// when clicking on 'save', update the tracking of changes and create new study if it hasn't been created yet
+const saveStudy = async () => {
+    const noChanges = compareStudy();
+    console.log(noChanges);
+
+    // first update the tracking of the initial and current study
+    updateSaveHistory();
+    
+    // if study gets created, update the flag to true
+    if (!isStudyCreated.value) {
+        isStudyCreated.value = true;
+        return await createStudy();
+    } else {
+        console.log('already exists');
+    }
+    
+    // prevent doing unecessary calls to db if no data has been changed
+    if (!noChanges) {
+        return await updateStudy();
+    } else {
+        console.log('no need to save')
+    }
+}
 </script>
 
 <style scoped>
-@import url('public/style/components/dashboard/dashboard-header.scss');
+    @import url('public/style/components/dashboard/dashboard-header.scss');
 </style>

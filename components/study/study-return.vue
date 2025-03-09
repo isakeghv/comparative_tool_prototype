@@ -58,14 +58,12 @@ const resetVariables = () => {
     study.demographicReq = true;
     study.demographic = [];
     study.description = null;
-    study.title = null;
 
     initialStudy.title = null;
     initialStudy.questions = [];
     initialStudy.demographicReq = true;
     initialStudy.demographic = [];
     initialStudy.description = null;
-    initialStudy.title = null;
 
     console.log(study),
     console.log(initialStudy);

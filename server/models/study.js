@@ -25,40 +25,25 @@ const QuestionSchema = new Schema({
     required: true,
   },
   multipleChoice: {
-    options: [{ type: String }],
-    required: function () {
-      return this.responseType === "multipleChoice";
-    },
+    options: [{ type: String }]
   },
   checkbox: {
     options: [{ type: String }],
     selectionMin: { type: Number },
-    selectionMax: { type: Number },
-    required: function () {
-      return this.responseType === "checkbox";
-    },
+    selectionMax: { type: Number }
   },
   range: {
     min: { type: Number },
     max: { type: Number },
     startLabel: { type: String },
-    endLabel: { type: String },
-    required: function () {
-      return this.responseType === "range";
-    },
+    endLabel: { type: String }
   },
   dragAndDrop: {
-    dropBox: [{ type: String }],
-    required: function () {
-      return this.responseType === "dragAndDrop";
-    },
+    dropBox: [{ type: String }]
   },
   linearSorting: {
     startLabel: { type: String },
-    endLabel: { type: String },
-    required: function () {
-      return this.responseType === "linearSorting";
-    },
+    endLabel: { type: String }
   },
   artifacts: [ArtifactSchema],
 });
@@ -78,6 +63,8 @@ const DemographicSchema = new Schema({
 
 // saving study schema with relevant questions, settings, and participant/study information
 const StudySchema = new Schema({
+  // new data-generated id
+  id: { type: String, required: true },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserProfile",
@@ -86,21 +73,21 @@ const StudySchema = new Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   currentReplies: { type: Number, default: 0 },
-  closingMethod: { type: String, required: true },
+  /* closingMethod: { type: String, required: true }, */
   status: {
     type: String,
     enum: ["ongoing", "completed", "draft"],
     required: true,
-    default: draft,
+    default: "draft",
   },
   closingLimit: {
     date: { type: Date },
     duration: { type: String },
     replies: { type: Number },
   },
-  questions: [QuestionSchema],
+  /* questions: [QuestionSchema],
   demographicReq: { type: Boolean, required: true },
-  demographic: [DemographicSchema],
+  demographic: [DemographicSchema], */
   created: {
     type: Date,
     immutable: true,

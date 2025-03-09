@@ -1,6 +1,6 @@
 import { connDb } from "../utils/connDb.js";
 import { verifyToken } from '../utils/jwt.js';
-import { study, question } from '../models/old_study.js';
+import { study } from '../models/study.js';
 
 // get study by its id, and populate the study with the retrieved data
 const getStudy = async (e) => {
@@ -19,30 +19,41 @@ const getStudy = async (e) => {
     }
 }
 
-const newStudy = async (userId) => {
+const newStudy = async (id, userRef, title, desc) => {
 	// only need to initialize study with the _id of userProfile to keep a reference of the creator and content; the rest of the fields are default / will get updated later
 	const createdStudy = new study({
-		user: userId
+		id: id,
+		user: userRef,
+		title: title,
+		description: desc
 	})
 	
     try {
-		// create study
+		// create study and save it in the database
 		await createdStudy.save();
 		setResponseStatus(201);		
 
-		// send the newly created study id to make it possible to use it as an endpoint
-		return { created: true, studyId: createdStudy._id, message: "Study successfully created." };
+		return { created: true, message: "Study successfully created." };
     } catch (err) {
+		console.log(err);
 		return { created: false, message: "Issue occured while creating study.", error: err.message };
     }
 }
 
-const updateStudy = async(studyId, data) => {
+// should make the parameters optional?
+const updateStudy = async(id, data) => {
 	// const updateData = { title: 'idk'};
 	const studyRecord = ''
 
-	// find by study id, update it, and return the updated version of the study
-	const updatedStudy = await study.findByIdAndUpdate(studyId, data, { new: true });
+	try {
+		// find one with matching study id, update it, and return the updated version of the study
+		const updatedStudy = await study.findOneAndUpdate({ id: id }, data, { new: true });
+		// setResonseStatus here
+		return { updated: true, message: "Study successfully updated." };
+	} catch (err) {
+		console.log(err);
+		return { updated: false, message: "Issue occured while updating study.", error: err.message };
+	}
 }
 
 export default defineEventHandler(async (e) => {
@@ -55,17 +66,16 @@ export default defineEventHandler(async (e) => {
 		return await getStudy(title);
 	}
 
-	// read body, deconstruct data from the POST request, and create a new 'study' instance
+	// read body, deconstruct data from the POST request, and create a new 'study' instance (currently with minimal fields to check)
 	if (e.node.req.method === 'POST') {
-		const { userId } = body;
-		return await newStudy(userId);
+		const { id, user, title, description } = body;
+		return await newStudy(id, user, title, description);
 	}
 
 	// update the study
 	if (e.node.req.method === 'PUT') {
-		const { updateData } = body;
-
-		// ...
-		return await newStudy(userId, updateData);
+		const { id, updatedData } = body;
+			
+		return await updateStudy(id, updatedData);
 	}
 });
