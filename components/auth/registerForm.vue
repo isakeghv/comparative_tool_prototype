@@ -150,5 +150,5 @@ const registerUser = async () => {
 </script>
 
 <style scoped>
-@import url('public/style/components/login/login.scss');
+@import url('public/style/components/login/_login.scss');
 </style>

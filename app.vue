@@ -7,6 +7,6 @@
 </script>
 
 <style>
-  @import url('public/style/main/main.scss');
+  @import url('public/style/main/_main.scss');
 
 </style>

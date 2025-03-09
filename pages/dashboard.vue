@@ -57,5 +57,5 @@ await getUserInfo();
 </script>
 
 <style scoped>
-@import url('public/style/pages/dashboard/dashboard.scss');
+@import url('public/style/pages/dashboard/_dashboard.scss');
 </style>

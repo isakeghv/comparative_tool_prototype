@@ -45,5 +45,5 @@ const updateRequest = () => {
 </script>
 
 <style scoped>
-    @import url('public/style/components/demographics/demographics.scss');
+    @import url('public/style/components/demographics/_demographics.scss');
 </style>

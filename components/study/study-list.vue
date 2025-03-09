@@ -71,5 +71,5 @@ const addQuestion = () => {
 </script>
 
 <style scoped>
-    @import url('public/style/components/study/study-sidebar.scss');
+    @import url('public/style/components/study/_study-sidebar.scss');
 </style>

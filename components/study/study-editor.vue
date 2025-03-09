@@ -40,5 +40,5 @@ const toggleDisplay = (component, number, id)=>{
 </script>
 
 <style scoped>
-    @import url('public/style/pages/study/study.scss');
+    @import url('public/style/pages/study/_study.scss');
 </style>

@@ -156,5 +156,5 @@ watch(
 </script>
 
 <style scoped>
-    @import url('public/style/components/study/study-aside.scss');
+    @import url('public/style/components/study/_study-aside.scss');
 </style>

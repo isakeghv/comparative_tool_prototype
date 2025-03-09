@@ -57,5 +57,5 @@ const selectForm = (type) => {
 </script>
 
 <style scoped>
-    @import url('public/style/pages/index/index.scss');
+    @import url('public/style/pages/index/_index.scss');
 </style>

@@ -68,5 +68,5 @@ const config = computed(()=>{
 </script>
 
 <style scoped>
-    @import url('public/style/components/study/study-main.scss');
+    @import url('public/style/components/study/_study-main.scss');
 </style>

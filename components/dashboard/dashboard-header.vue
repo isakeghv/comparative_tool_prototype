@@ -63,5 +63,5 @@ const saveStudy = () => {
 </script>
 
 <style scoped>
-@import url('public/style/components/dashboard/dashboard-header.scss');
+@import url('public/style/components/dashboard/_dashboard-header.scss');
 </style>

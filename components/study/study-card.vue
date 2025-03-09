@@ -77,5 +77,5 @@ const studyExport = (id, format) =>{
 </script>
 
 <style scoped>
-@import url('public/style/components/study/study-card.scss');
+@import url('public/style/components/study/_study-card.scss');
 </style>
