@@ -1,7 +1,7 @@
 import { connDb } from "../utils/connDb.js";
 import { getCookie, useRuntimeConfig } from "#imports";
 import { userCredential, userProfile } from "../models/user.js";
-import { study } from "../models/study.js";
+import { study } from "../models/old_study.js";
 import jwt from "jsonwebtoken";
 
 export default defineEventHandler(async (e) => {

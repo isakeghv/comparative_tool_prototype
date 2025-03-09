@@ -48,15 +48,7 @@ const addQuestion = () => {
     //blueprint for how the question-object is arranged
     const questionBp = {
         id: crypto.randomUUID(),
-        question: 'Question',
-        //setting draft as default for status
-        status: 'draft',
-        closingMethod: [],
-        closingLimit: {
-            date: null,
-            duration: null,
-            replies: null,
-        },
+        question: 'Write a new question',
         required: true,
         type: null,
         range: {
@@ -75,9 +67,6 @@ const addQuestion = () => {
     //so the new question is displayed in the page when requested to be made
     selectQuestion({ query: 'question', number: questions.value.length - 1, id: question.id })
 }
-
-
-
 
 </script>
 

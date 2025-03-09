@@ -20,7 +20,7 @@
             border: 0;
         }
 
-        &--question {
+        &--borderless {
             padding-bottom: 0;
             border: none;
         }
@@ -85,6 +85,13 @@
         // uh look at this later
         border-width: 1px;
         border: v.$borderSolid;
+    }
+
+    &__button {
+        &--delete {
+            // add soomething here I guess
+            color: black;
+        }
     }
 }
 

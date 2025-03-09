@@ -73,6 +73,5 @@ const durationSelectedUnit = ref('days');
 </script>
 
 <style scoped>
-    @import url('public/style/components/details/details-aside.scss');
-    @import url('public/style/components/demographics/demographics-aside.scss');
+    @import url('public/style/components/study/study-aside.scss');
 </style>

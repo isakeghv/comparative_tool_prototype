@@ -1,0 +1,81 @@
+{
+    "id": "00000",
+    "answerTime": 5000,
+    "timestamp": "2025-03-06T00:00:00Z",
+    "questions": [
+        {
+            "title": "Which artifact do you prefer?",
+            "responseType": "multipleChoice",
+            "answer": [
+                "artifact1"
+            ],
+            "alternatives": [
+                "artifact1",
+                "artifact2"
+            ]
+        },
+        {
+            "title": "Choose which artifacts you prefer",
+            "responseType": "checkbox",
+            "answer": [
+                "artifact1",
+                "artifact2",
+                "artifact3"
+            ],
+            "alternatives": [
+                "artifact1",
+                "artifact2",
+                "artifact3"
+            ]
+        },
+        {
+            "title": "Do you like it?",
+            "responseType": "trueFalse",
+            "answer": false,
+            "artifacts": [
+                "artifact1"
+            ]
+        },
+        {
+            "title": "How would you rate the quality of this artifact?",
+            "responseType": "range",
+            "answer": {
+                "score": 7,
+                "min": 1,
+                "max": 10
+            },
+            "artifacts": [
+                "artifact1"
+            ]
+        },
+        {
+            "title": "Sort these artifacts by preference",
+            "responseType": "linearSorting",
+            "answer": [
+                "artifact3",
+                "artifact1",
+                "artifact2"
+            ],
+            "artifacts": [
+                "artifact1",
+                "artifact2",
+                "artifact3"
+            ]
+        },
+        {
+            "title": "Drag the artifacts into categories",
+            "responseType": "dragAndDrop",
+            "answer": {
+                "not_chosen": "artifact1",
+                "modern": "artifact2",
+                "stunning": "artifact3"
+            },
+            "artifacts": [
+                "artifact1",
+                "artifact2",
+                "artifact3",
+                "artifact4"
+            ]
+        }
+    ]
+}

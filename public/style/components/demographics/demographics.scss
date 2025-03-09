@@ -55,12 +55,12 @@
         border: c.$bluePrimary 2px solid;
         background-color: transparent;
         color: c.$bluePrimary;
-        transition: background-color 0.1s ease-in-out;
         margin-top: 0.8rem;
 
         &:hover {
             border: c.$bluePrimary-hover 2px solid;
             color: c.$bluePrimary-hover;
+            transition: border 0.1s ease-in-out, color 0.1s ease-in-out, background-color 0.1s ease-in-out;
           }
       
           &:active {

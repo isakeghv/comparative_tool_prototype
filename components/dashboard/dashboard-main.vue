@@ -1,7 +1,7 @@
 <template>
   <aside class="aside">
     <div class="aside__container">
-      <Dashboard-newStudy @newStudy="(id) => emitNewStudy(id)" />
+      <Dashboard-new-study @newStudy="(id) => emitNewStudy(id)" />
       <Dashboard-filter @filter="(study) => (filter = study)" />
     </div>
     <div class="aside__container aside__container--small">

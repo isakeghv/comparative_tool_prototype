@@ -1,6 +1,6 @@
 import { connDb } from "../utils/connDb.js";
 import { verifyToken } from '../utils/jwt.js';
-import { study, question } from '../models/study.js';
+import { study, question } from '../models/old_study.js';
 
 // get study by its id, and populate the study with the retrieved data
 const getStudy = async (e) => {

@@ -1,6 +1,6 @@
 <template>
     <aside class="aside" v-if="id">
-        <div class="aside__container aside__container--question">
+        <div class="aside__container aside__container--borderless">
             <label for="demographic_question" class="aside__label aside__headline font-large font-semi">
                 Question
             </label>
@@ -55,7 +55,7 @@
                 </label>
             </div>
         </div>
-        <div class="aside__container">
+        <div class="aside__container aside__container--borderless">
             <button class="aside__button aside__button--delete" @click="deleteQuestion()">
                 Delete question
             </button>
@@ -156,5 +156,5 @@ watch(
 </script>
 
 <style scoped>
-    @import url('public/style/components/demographics/demographics-aside.scss');
+    @import url('public/style/components/study/study-aside.scss');
 </style>
