@@ -1,3 +1,59 @@
 @use './colors' as c;
 
-$borderSolid: solid c.$gray 1px;
+@mixin main-area {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 60%;
+    padding: $areaPadding;
+}
+
+// this is left unused currently
+@mixin left-area {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 20%;
+    padding: $areaPadding;
+    border-right: $borderSolid;
+}
+
+@mixin right-area {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 25%;
+    border-left: $borderSolid;
+}
+
+@mixin textArea($height) {
+    resize: none;
+    outline: none;
+    height: $height;
+    border: $borderSolid;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    
+    &:hover {
+        border: c.$gray 1px solid;
+    }
+}
+
+@mixin inputArea($width) {
+    outline: none;
+    width: $width;
+    height: 2.5rem;
+    border: $borderSolid;
+    border-radius: 0.6rem;
+    padding: 0.5rem;
+    
+    &:hover {
+        border: c.$gray 1px solid;
+    }
+}
+
+$mainAreaWidth: clamp(20rem, -4rem + 48vw, 50rem);
+$borderSolid: solid c.$lightGray 1px;
+$areaPadding: 2.4rem 2.2rem;
+$easeAnimation: all 0.3s ease-out;
+
+
+
+

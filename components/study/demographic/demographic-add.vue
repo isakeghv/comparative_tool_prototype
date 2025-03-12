@@ -1,5 +1,5 @@
 <template>
-    <button class="demographic__button" @click="newDemogrQuestion()">
+    <button class="demographic__button font-small font-semi" @click="newDemogrQuestion()">
         Add new question
     </button>
 </template>
@@ -26,4 +26,6 @@ const newDemogrQuestion = () => {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+    @import url('public/style/components/demographics/demographics.scss');
+</style>

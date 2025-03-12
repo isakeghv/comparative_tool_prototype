@@ -1,0 +1,221 @@
+@use "../../variables/_colors.scss" as c;
+@use "../../variables/variables" as v;
+
+.study {
+  &__container {
+    @include v.main-area;
+  }
+}
+
+.wrapper{
+    position: absolute;
+    display: flex;
+    right: -1px;
+    top: -1px;
+
+    &__button{
+        width: 2rem;
+        height: 2rem;
+        padding: 0.125rem;
+        background-color: white;
+        border: v.$borderSolid;
+        border-radius: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        &--radius{
+            border-radius: 0 0.5rem 0 0;
+        }
+    }
+    &__icon{
+        height: 90%;
+    }
+}
+
+.study{
+    &__input{
+        margin: 1rem 0;
+        padding: 0.25rem;
+        border-radius: 0.5rem;
+        border: v.$borderSolid;
+    }
+}
+
+.overlay{
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.expand{
+    position: fixed;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    width: clamp(20rem, 100vw, 65rem);
+    padding: 2.5rem 0.25rem 0.125rem;
+    background-color: white;
+    border: v.$borderSolid;
+    border-radius: 0.5rem;
+
+    &__img{
+        width: 100%;
+        border-radius:0.25rem;
+    }
+    &__button{
+        position: absolute;
+        right: 0.25rem;
+        top: 0.25rem;
+        height: 2rem;
+        color: white;
+        background-color: c.$red;
+        border: none;
+        padding: 0 2rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        transition: background-color 0.1s ease-in-out;
+
+        &:hover{
+            background-color: c.$lightRed;
+        }
+    }
+}
+
+.artifact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  &__container {
+    border: v.$borderSolid;
+    width: 12rem;
+    border-radius: 0.5rem;
+    position: relative;
+
+    &--square{
+        height: 12rem;
+        overflow: hidden;
+    }
+  }
+  &__headline{
+    margin: 1rem 0 0 0;
+    flex: 1 0 100%;
+  }
+  &__add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: v.$borderSolid;
+    cursor: pointer;
+  }
+  &__image {
+    border-bottom: v.$borderSolid;
+    border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px) 0 0;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+  &__input {
+    width: 100%;
+    text-overflow: ellipsis;
+  }
+  &__plus {
+    width: 100%;
+    padding: 3rem;
+  }
+  &__footer {
+    padding: 0.5rem;
+    height: 3rem;
+    width: 100%;
+
+    &--hidden{
+        display: none;
+    }
+  }
+  &__row{
+    width: 100%;
+    padding: 0 0.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    position: relative;
+    border: v.$borderSolid;
+    border-radius: calc(0.5rem - 4px);
+  }
+
+  &__label {
+    width: 1.5rem;
+    display: inline-block;
+  }
+  &__input {
+    &--small {
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      border: none;
+      padding: 0 0.25rem;
+      width: calc(100% - 3rem);
+      outline: none;
+    }
+  }
+  &__info {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    border: v.$borderSolid;
+    right: 0.5rem;
+    top: 50%;
+    cursor: pointer;
+    transform: translateY(-50%);
+  }
+  &__absolute {
+    position: absolute;
+    width: 15rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: white;
+    border: v.$borderSolid;
+    bottom: 100%;
+    left: 100%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.3);
+  }
+  &__button{
+    width: calc(100% - 1rem);
+    margin: 0 0.5rem 0.5rem;
+    
+    padding: 0.5rem 0.5rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    border: none;
+    background-color: #4C68F0;
+    color: white;
+    transition: background-color 0.1s ease-in-out;
+  }
+}
+
+/*
+<div class="artifact">
+            <div class="artifact__container"></div>
+
+            <div class="artifact__container">
+                <label for="study_file_input" class="artifact__label" aria-label="Choose file">
+                    <svg class="artifact__plus" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 39.5H76M38 0V76" stroke="#444444" stroke-width="6" />
+                    </svg>
+                </label>
+                
+                <input type="file" name="" id="study_file_input" class="artifact__input artifact__input--file">
+            </div>
+        </div>
+*/

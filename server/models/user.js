@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
-const userCredentialSchema = new mongoose.Schema({
+const UserCredentialSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: {
         type: String,
@@ -11,14 +11,14 @@ const userCredentialSchema = new mongoose.Schema({
     },
     // reference so a userCredential will always be linked to its userProfile document
     userProfile: { type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile', required: true }
-});
+})
 
-const userProfileSchema = new mongoose.Schema({
+const UserProfileSchema = new mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
 });
 
 
-export const userCredential = mongoose.model('UserCredential', userCredentialSchema);
-export const userProfile = mongoose.model('UserProfile', userProfileSchema)
+export const userCredential = mongoose.model('UserCredential', UserCredentialSchema);
+export const userProfile = mongoose.model('UserProfile', UserProfileSchema)
 

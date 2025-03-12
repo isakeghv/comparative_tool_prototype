@@ -1,5 +1,5 @@
 <template>
-    <button class="aside__button" @click="logout">
+    <button class="aside__button font-normal" @click="logout">
         Log out
     </button>
 </template>
@@ -30,5 +30,5 @@ const logout = async () => {
 </script>
 
 <style scoped>
-@import url('public/style/components/aside/dashboard-main-aside.css');
+    @import url('public/style/components/dashboard/_dashboard-sidebar.scss');
 </style>

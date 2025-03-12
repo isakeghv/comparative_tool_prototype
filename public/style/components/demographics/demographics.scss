@@ -1,0 +1,71 @@
+@use '../../variables/_colors.scss' as c;
+@use '../../variables/variables' as v;
+
+.demographic {
+    &__container {
+        @include v.main-area;
+    }
+
+    &__main {
+        width: v.$mainAreaWidth;
+    }
+
+    &__headline {
+        margin-bottom: 1.4rem;
+
+        &::after {
+            content: '';
+            border-bottom: v.$borderSolid;
+            width: 100%;
+            display: block;
+            margin-top: 0.8rem;
+        }
+    }
+
+    &__row {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-right: 1rem;
+        margin: 1.4rem 0;
+    }
+    
+    &__checkbox {
+        background-color: blue;
+    }
+
+    &__more {
+        position: absolute;
+        display: inline-flex;
+        border: none;
+        background: transparent;
+        right: -1rem;
+    }
+
+    &__svg {
+        height: 1.6rem;
+    }
+
+    &__button {
+        padding: 0.5rem 1rem;
+        width: 10rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        border: c.$bluePrimary 2px solid;
+        background-color: transparent;
+        color: c.$bluePrimary;
+        margin-top: 0.8rem;
+
+        &:hover {
+            border: c.$bluePrimary-hover 2px solid;
+            color: c.$bluePrimary-hover;
+            transition: border 0.1s ease-in-out, color 0.1s ease-in-out, background-color 0.1s ease-in-out;
+          }
+      
+          &:active {
+            border: c.$bluePrimary-active 2px solid;
+            color: c.$bluePrimary-active;
+          }
+    }
+}

@@ -1,8 +1,6 @@
 @use "../../variables/_colors.scss" as c;
 @use "../../variables/_variables.scss" as v;
 
-$loginGrey: #cccccc;
-
 .form {
   display: flex;
   flex-direction: column;
@@ -11,7 +9,7 @@ $loginGrey: #cccccc;
   height: 100%;
   padding: 4rem 3rem 10rem;
   background-color: c.$white;
-  border: 1px solid $loginGrey;
+  border: v.$borderSolid;
   border-radius: 15px;
   gap: 0;
 
@@ -25,18 +23,21 @@ $loginGrey: #cccccc;
     margin-top: 2rem;
     line-height: 0;
   }
+
   &__input {
     background: none;
     border: none;
-    border-bottom: 2px solid $loginGrey;
+    border-bottom: 2px solid c.$lightGray;
     outline: none;
     width: 100%;
     padding: 0.8rem 2.5rem 0.2rem 0;
+    transition: v.$easeAnimation;
 
     &:focus {
       border-bottom: 2px solid c.$cyan;
     }
   }
+
   &__submit {
     display: flex;
     align-items: center;
@@ -56,15 +57,17 @@ $loginGrey: #cccccc;
       background-color: c.$bluePrimary-active;
     }
   }
+
   &__svg {
     position: absolute;
     right: 0;
     height: 2rem;
     width: 2rem;
-    fill: $loginGrey;
+    fill: c.$lightGray;
     top: 50%;
     transform: translateY(-50%);
   }
+
   &__cont {
     position: relative;
     width: 100%;
@@ -73,6 +76,7 @@ $loginGrey: #cccccc;
     justify-content: center;
     align-items: center;
   }
+
   &__button {
     border: none;
     background-color: transparent;
@@ -98,15 +102,22 @@ $loginGrey: #cccccc;
 
     &__text {
         margin-left: 0.6rem;
+
+        &--success {
+          color: c.$green;
+        }
+
+        &--error {
+          color: c.$red;
+        }
     }
+
     &__success {
         background-color: c.$lightGreen;
-        color: c.$green;
     }
 
     &__error {
         background-color: c.$lightRed;
-        color: c.$red;
     }
 }
 

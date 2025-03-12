@@ -1,5 +1,5 @@
 <template>
-    <button class="study__filter" @click="filterView(filter)" v-for="filter in filters">
+    <button class="study__filter font-normal" @click="filterView(filter)" v-for="filter in filters">
         View {{ filter }}
     </button>
 </template>
@@ -20,5 +20,5 @@ const filterView = (filter) =>{
 </script>
 
 <style scoped>
-    @import url('public/style/components/aside/dashboard-main-aside.css');
+    @import url('public/style/components/dashboard/_dashboard-sidebar.scss');
 </style>

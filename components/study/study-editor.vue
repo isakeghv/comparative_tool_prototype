@@ -1,8 +1,11 @@
+<!-- return main area of the created study based on the computed properties (showDetails, showDemographics, showQuestionMain) -->
 <template>
-    <Study-aside @swapDisplay="(data) =>toggleDisplay(data.component, data.number, data.id)"/>
-    <Study-details v-if="showDetails"/>
-    <Demographic v-if="showDemographics"/>
-    <Study-main v-if="showQuestionMain" :index="questionIndex" :id="questionId"/>
+    <div class="container">
+        <Study-sidebar @swapDisplay="(data) => toggleDisplay(data.component, data.number, data.id)"/>
+        <Details v-if="showDetails"/>
+        <Demographic v-if="showDemographics"/>
+        <Study-main v-if="showQuestionMain" :index="questionIndex" :id="questionId"/>
+    </div>
 </template>
 
 <script setup>
@@ -35,3 +38,7 @@ const toggleDisplay = (component, number, id)=>{
 }
 
 </script>
+
+<style scoped>
+    @import url('public/style/pages/study/study.scss');
+</style>

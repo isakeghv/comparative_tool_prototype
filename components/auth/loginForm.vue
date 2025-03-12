@@ -2,12 +2,12 @@
 	<form @submit.prevent="login" class="form">
 		<h1 class="form__headline font-h4">Sign in</h1>
 		<div v-if="loginStatus === 'success'" class="msg msg__success">
-			<span class="msg__text font-small font-semi">{{ statusMsg }}</span>
+			<span class="msg__text msg__text--success font-small font-semi">{{ statusMsg }}</span>
 		</div>
 		<div v-else-if="loginStatus === 'error'" class="msg msg__error">
-			<span class="msg__text font-small font-semi">{{ statusMsg }}</span>
+			<span class="msg__text msg__text--error font-small font-semi">{{ statusMsg }}</span>
 		</div>
-		<label for="login_email_inp" class="form__label font-semi">Email</label>
+		<label for="login_email_inp" class="form__label font-normal font-semi">Email</label>
 		<div class="form__cont">
 			<svg xmlns="http://www.w3.org/2000/svg" class="form__svg" viewBox="0 -960 960 960">
 				<path
@@ -16,11 +16,10 @@
 			<input type="email" name="email" v-model="email" id="login_email_inp" placeholder="Enter email"
 				class="font-normal form__input" required>
 		</div>
-		<label for="login_pwd_inp" class="form__label font-semi">Password</label>
+		<label for="login_pwd_inp" class="form__label font-normal font-semi">Password</label>
 		<div class="form__cont">
 			<svg xmlns="http://www.w3.org/2000/svg" class="form__svg" viewBox="0 -960 960 960">
-				<path
-					d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
+				<path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z"/>
 			</svg>
 			<input type="password" id="login_pwd_inp" name="password" v-model="pwd" placeholder="Enter password"
 				class="font-normal form__input" required>
@@ -80,5 +79,5 @@ const login = async () => {
 </script>
 
 <style scoped>
-	@import url('public/style/components/login/login.css');
+	@import url('public/style/components/login/login.scss');
 </style>
