@@ -4,7 +4,7 @@
         <h2 class="demographic__headline font-h5 font-semi">Demographics</h2>
         <div class="demographic__row">
             <label for="demographic_request_checkbox" class="demographic__label">
-                <span class="demographic__span  font-normal">Request demographics</span>
+                <span class="demographic__span font-normal">Request demographics</span>
                 <span class="demographic__slider" :class="{'demographic__slider--active':requestModel}">
                     <span class="demographic__thumbnail" :class="{'demographic__thumbnail--active':requestModel}"></span>
                 </span>
@@ -31,11 +31,96 @@ const selectedId = ref('')
 
 //default questions to request if no demograpics questions are present in "study.demographics"
 const defaultQuestions = [
-    {question: 'Request age',required: true,  request: false, responseType: 'number', range: {min: 0, max: 100}, id: crypto.randomUUID()},
-    {question: 'Request gender',required: true, request: false, responseType: 'radio', options: ['Male', 'Female'],  id: crypto.randomUUID()},
-    {question: 'Request nationality',required: true, request: false, responseType: 'text', id: crypto.randomUUID() },
-    {question: 'Request level of education',required: true, request: false, responseType: 'text', id: crypto.randomUUID() },
-]
+    {
+        id: crypto.randomUUID(),
+        question: 'Request age',
+        request: false,
+        responseType: 'number',
+        required: true,
+        text: {
+            maxWords: 0
+        },
+        radio: {
+            options: []
+        },
+        number: {
+            min: 0,
+            max: 100
+        },
+        date: {
+            year: true,
+            month: false,
+            day: false
+        }
+    },
+    {
+        id: crypto.randomUUID(),
+        question: 'Request gender',
+        request: false,
+        responseType: 'radio',
+        required: true,
+        text: {
+            maxWords: 0
+        },
+        radio: {
+            options: ['Male', 'Female']
+        },
+        number: {
+            min: 0,
+            max: 100
+        },
+        date: {
+            year: true,
+            month: false,
+            day: false
+        }
+    },
+    {
+        id: crypto.randomUUID(),
+        question: 'Request nationality',
+        request: false,
+        responseType: 'text',
+        required: true,
+        text: {
+            maxWords: 0
+        },
+        radio: {
+            options: []
+        },
+        number: {
+            min: 0,
+            max: 100
+        },
+        date: {
+            year: true,
+            month: false,
+            day: false
+        }
+    },
+    {
+        id: crypto.randomUUID(),
+        question: 'Request level of education',
+        request: false,
+        responseType: 'text',
+        required: true,
+        text: {
+            maxWords: 0
+        },
+        radio: {
+            options: []
+        },
+        number: {
+            min: 0,
+            max: 100
+        },
+        date: {
+            year: true,
+            month: false,
+            day: false
+        }
+    }
+];
+
 
 //initiating: if there is nothing in demographics questions, load with default setup
 const initiateConfig = ()=>{
