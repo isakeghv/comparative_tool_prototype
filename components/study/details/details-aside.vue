@@ -12,7 +12,7 @@
                     Duration
                 </label>
             </div>
-            <div class="aside__container--row">
+            <div class="aside__row">
                 <span class="font-normal">Run for</span>
                 <label for="details_duration_number" class="hide">Number: </label>
                 <input type="number" id="details_duration_number" class="aside__input--number font-small" name="details_duration_number" min="0" step="1"/>
@@ -31,7 +31,7 @@
                     Date
                 </label>
             </div>
-            <div class="aside__container--row">
+            <div class="aside__row">
                 <span class="font-normal">Run until</span>
                 <label for="details_date" class="hide">Date: </label>
                 <input type="date" id="details_date" class="aside__input--date font-small" name="details_date"/>
@@ -44,7 +44,7 @@
                     Responses
                 </label>
             </div>
-            <div class="aside__container--row">
+            <div class="aside__row">
                 <span class="font-normal">Closes at</span>
                 <label for="details_responses_number" class="hide">Number: </label>
                 <input type="number" id="details_responses_number" class="aside__input--number font-small" name="details_responses_number"/>

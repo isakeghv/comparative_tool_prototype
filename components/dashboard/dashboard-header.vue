@@ -79,14 +79,16 @@ const createStudy = async () => {
             // get the id from const 'user' that was set when user logged in, and send it to the API endpoint to reference the user as the creator
             'user': user.info._id,
             'title': study.title,
-            'description': study.description
+            'description': study.description,
+            'demographic': study.demographic,
+            'demographicReq': study.demographicReq
         }),
         headers: {
             'Content-Type': 'application/json'
         }
     });
 
-  const result = await response.json();
+    const result = await response.json();
 
     if (result.created) {
         const studyId = result.studyId;
@@ -98,7 +100,9 @@ const createStudy = async () => {
 const updateStudy = async () => {
     const updatedData = {
         title: study.title,
-        description: study.description
+        description: study.description,
+        demographic: study.demographic,
+        demographicReq: study.demographicReq
     }
 
     const response = await fetch('/api/study', {
@@ -112,7 +116,7 @@ const updateStudy = async () => {
         }
     });
 
-  const result = await response.json();
+    const result = await response.json();
 
     if (result.updated) {
         const studyId = result.studyId;
@@ -128,20 +132,28 @@ const saveStudy = async () => {
 
     // first update the tracking of the initial and current study
     updateSaveHistory();
-    
-    // if study gets created, update the flag to true
-    if (!isStudyCreated.value) {
-        isStudyCreated.value = true;
-        return await createStudy();
-    } else {
-        console.log('already exists');
-    }
-    
+
     // prevent doing unecessary calls to db if no data has been changed
-    if (!noChanges) {
+    if (isStudyCreated.value && !noChanges) {
         return await updateStudy();
     } else {
         console.log('no need to save')
+    }
+
+    // if study gets created, update the flag to true
+    if (!isStudyCreated.value) {
+        isStudyCreated.value = true;
+        const newStudy = createStudy();
+
+        // push it manually to the dashbaord overview instead of re-fetching it
+        // need to find out how to update it with its information (title, description etc.)
+        if (newStudy) {
+            user.studies.push(newStudy);
+        }
+
+        return;
+    } else {
+        console.log('already exists');
     }
 }
 </script>
