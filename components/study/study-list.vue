@@ -48,7 +48,7 @@ const addQuestion = () => {
     //blueprint for how the question-object is arranged
     const questionBp = {
             id: crypto.randomUUID(),
-            title: '',
+            question: '',
             required: true,
             responseType: null,
             radio: {
