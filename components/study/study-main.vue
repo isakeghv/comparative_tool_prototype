@@ -2,7 +2,8 @@
     <div class="study__container">
 
         <label for="study_question_input" class="study__label font-h1">Question</label>
-        <input type="text" class="study__input study__input--text font-h3" id="study_question_input" v-model="config.question">
+        <input type="text" class="study__input study__input--text font-h3" id="study_question_input"
+            v-model="config.question">
 
         <div class="artifact">
             <h3 class="artifact__headline font-h3 font-medium">Artifacts</h3>
@@ -42,11 +43,31 @@
                         </svg>
                     </button>
                 </div>
-                <img :src="artifact.source" :alt="artifact.id" class="artifact__image" v-if="isImage">
+
+                <img :src="artifact.source" :alt="artifact.id" class="artifact__image" v-if="isImage(artifact.source)">
+                <svg class="artifact__icon" v-if="isAudioFile(artifact.source)" viewBox="0 0 88 72" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 24L40 0V72L16 48H7C3.13401 48 0 44.866 0 41V36V31C0 27.134 3.13401 24 7 24H16Z"
+                        fill="black" />
+                    <path
+                        d="M71.7145 71.8564C81.7224 62.7135 88.0003 49.5561 88.0003 34.9324C88.0003 21.8353 82.9646 9.91431 74.7238 1L69.7461 5.97769C76.1583 13.884 80.0003 23.9596 80.0003 34.9324C80.0003 47.434 75.0132 58.7708 66.9199 67.0619L71.7145 71.8564Z"
+                        fill="black" />
+                    <path
+                        d="M61.5131 60.5592C67.9758 54.3701 72.0001 45.6551 72.0001 36.0002C72.0001 27.4139 68.8173 19.571 63.5672 13.5869L57.8944 19.2597C61.7044 23.7828 64.0001 29.6234 64.0001 36.0002C64.0001 43.446 60.8703 50.1607 55.8545 54.9006L61.5131 60.5592Z"
+                        fill="black" />
+                    <path
+                        d="M50.4646 49.5113C53.8976 45.846 55.9997 40.9187 55.9997 35.5005C55.9997 31.4142 54.8041 27.6072 52.7437 24.4102L46.8649 30.289C47.5934 31.8754 47.9997 33.6405 47.9997 35.5005C47.9997 38.7095 46.7904 41.6361 44.8027 43.8495L50.4646 49.5113Z"
+                        fill="black" />
+                </svg>
+                <embed :src="artifact.source" class="artifact__image" type="application/pdf" v-if="isPdf(artifact.source)">
+                <video :src="artifact.source" class="artifact__video" preload="metadata" muted v-if="isVideoFile(artifact.source)"></video>
+
                 <div class="artifact__footer">
-                    <p class="artifact__absolute" v-if="showInfo === i">All artifacts must have a unique identifier. You
-                        can set one yourself (recomended), use the file-name of the uploaded file (recomended if
-                        unique), or generate one by clicking the "generate unique id" button</p>
+                    <p class="artifact__absolute" v-if="showInfo === i">
+                        All artifacts must have a unique identifier. You can set one yourself (recomended),
+                        use the file-name of the uploaded file (recomended if unique), or generate one by
+                        clicking the "generate unique id" button
+                    </p>
                     <div class="artifact__row">
                         <label :for="`artifact_id-${i}_input`" class="artifact__label">
                             <span class="artifact__span">Id:</span>
@@ -57,8 +78,9 @@
                             v-model="artifact.id" :placeholder="!artifact.id ? 'Id is required' : ''">
                     </div>
                 </div>
-                <button class="artifact__button" @click="artifact.id = JSON.stringify(Date.now())">Generate unique
-                    id</button>
+                <button class="artifact__button" @click="artifact.id = JSON.stringify(Date.now())">
+                    Generate unique id
+                </button>
             </div>
 
             <div class="artifact__container artifact__container--square">
@@ -73,10 +95,15 @@
                 </div>
             </div>
         </div>
-        <button class="overlay"v-if="selectedSource" @click="selectedSource = ''" aria-label="exit window"></button>
+        <button class="overlay" v-if="selectedSource" @click="selectedSource = ''" aria-label="exit window"></button>
         <div class="expand" v-if="selectedSource">
             <button class="expand__button" @click="selectedSource = ''">Exit</button>
             <img :src="selectedSource" :alt="selectedId" class="expand__img" v-if="isImage(selectedSource)">
+            <embed :src="selectedSource" class="expand__embed" v-if="isPdf(selectedSource)">
+            <audio class="expand__audio" v-if="isAudioFile(selectedSource)" controls>
+                <source :src="selectedSource" type="audio/mpeg">
+            </audio>
+            <video :src="selectedSource" controls class="artifact__img" v-if="isVideoFile(selectedSource)"></video>
         </div>
         {{ study }}
     </div>
@@ -97,17 +124,37 @@ const showInfo = ref(null)
 const selectedSource = ref('');
 const selectedId = ref('');
 
-const selectMedia = (source, id)=>{
+const selectMedia = (source, id) => {
     selectedSource.value = source;
     selectedId.value = id
 }
 
+//returns true if file is image-file
 const isImage = (file) => {
     const extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
     const extension = file.slice(file.lastIndexOf('.')).toLowerCase();
     return extensions.includes(extension);
-
 }
+
+const isPdf = (file) =>{
+    return file.slice(file.lastIndexOf('.')).toLowerCase().includes('pdf')
+}
+
+//returns true if file is audio-file
+const isAudioFile = (file) => {
+    const extensions = ['.mp3', '.wav', '.ogg', '.flac', '.aac', '.m4a', '.wma']
+    const extension = file.slice(file.lastIndexOf('.')).toLowerCase();
+    return extensions.includes(extension);
+}
+
+//returns true if the file is a video file
+const isVideoFile = (file) => {
+    const extensions = ['.mp4', '.mov', '.avi', '.mkv', '.webm', '.flv', '.wmv', '.mpeg'];
+    const extension = file.slice(file.lastIndexOf('.')).toLowerCase();
+    return extensions.includes(extension);
+}
+
+
 
 //iterating array if id does not correspond with id of study located by index
 const iterateArr = (id) => {
@@ -189,6 +236,6 @@ In this component we need to be able to give the following options:
 </script>
 
 <style scoped>
-    @import url('public/style/components/study/study-main.scss');
-    @import url('public/style/components/study/study-aside.scss');
+@import url('public/style/components/study/study-main.scss');
+@import url('public/style/components/study/study-aside.scss');
 </style>
