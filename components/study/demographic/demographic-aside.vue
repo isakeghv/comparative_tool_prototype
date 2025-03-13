@@ -13,7 +13,7 @@
             <input type="checkbox" id="demographic_required_checkbox" class="aside__checkbox" v-model="requiredModel" @change="updateRequired()">
         </div>
         <div class="aside__container">
-            <p class="aside__headline font-large font-semi">Response format</p>
+            <p class="font-large font-semi">Response format</p>
         </div>
         <div class="aside__container">
             <fieldset class="aside__fieldset">

@@ -5,6 +5,33 @@
   &__container {
     @include v.main-area;
   }
+
+  &__main {
+      width: v.$mainAreaWidth;
+  }
+
+  &__headline {
+    margin-bottom: 1.4rem;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__input  {
+    margin-bottom: 3rem;
+    padding: 0.8rem;
+    border-radius: 0.5rem;
+    border: v.$borderSolid;
+    border-color: c.$lightGray;
+    transition: v.$easeAnimation;
+    letter-spacing: 0.02rem;
+
+    &:focus, &:active {
+        border-color: c.$cyan;
+    }
+  }
 }
 
 .wrapper{
@@ -31,15 +58,6 @@
     }
     &__icon{
         height: 90%;
-    }
-}
-
-.study{
-    &__input{
-        margin: 1rem 0;
-        padding: 0.25rem;
-        border-radius: 0.5rem;
-        border: v.$borderSolid;
     }
 }
 
@@ -89,8 +107,7 @@
 
 .artifact {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  flex-flow: column wrap;
 
   &__container {
     border: v.$borderSolid;
@@ -103,10 +120,19 @@
         overflow: hidden;
     }
   }
-  &__headline{
-    margin: 1rem 0 0 0;
-    flex: 1 0 100%;
+
+  &__headline {
+    margin-bottom: 1.4rem;
+
+    &::after {
+        content: '';
+        border-bottom: v.$borderSolid;
+        width: 100%;
+        display: block;
+        margin-top: 0.8rem;
+    }
   }
+
   &__add {
     display: flex;
     align-items: center;
