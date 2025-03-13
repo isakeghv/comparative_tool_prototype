@@ -47,18 +47,33 @@ const selectQuestion = (data) => {
 const addQuestion = () => {
     //blueprint for how the question-object is arranged
     const questionBp = {
-        id: crypto.randomUUID(),
-        question: '',
-        required: true,
-        type: null,
-        range: {
-            //setting some default values
-            min: 0,
-            max: 100
-        },
-        options: [],
-        artifacts: []
-    };
+            id: crypto.randomUUID(),
+            question: '',
+            required: true,
+            responseType: null,
+            multipleChoice: {
+                options: []
+            },
+            checkbox: {
+                options: [],
+                selectionMin: 1,
+                selectionMax: 1
+            },
+            range: {
+                min: 0,
+                max: 100,
+                startLabel: '',
+                endLabel: ''
+            },
+            dragAndDrop: {
+                dropBox: []
+            },
+            linearSorting: {
+                startLabel: '',
+                endLabel: ''
+            },
+            artifacts: []
+        }
 
     const question = JSON.parse(JSON.stringify(questionBp));
 

@@ -14,21 +14,21 @@ export const user = reactive({
 //reactive variable to hold the selected study-id and questions
 export const study = reactive({
     id: null,
+    title: null,
+    description: null,
     questions: [],
     demographicReq: true,
-    demographic: [],
-    description: null,
-    title: null,
+    demographic: []
 })
 
 //to hold the initial configuration. used to compare if user is trying to return and changes have been made.
     //to make sure user cannot return and lose changes
 export const initialStudy = reactive({
+    title: null,
+    description: null,
     questions: [],
     demographicReq: true,
-    demographic: [],
-    description: null,
-    title: null,
+    demographic: []
 })
 
 //used to handle which component should be displayed when creating a study (description, demographic etc).

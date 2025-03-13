@@ -11,18 +11,20 @@
         padding: 1.6rem;
         border-bottom: v.$borderSolid;
 
-        &--row {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0;
-            border: 0;
-        }
-
         &--borderless {
             padding-bottom: 0;
             border: none;
+        }
+    }
+
+    &__row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+
+        &--toggle {
+            margin-top: 0.8rem;
         }
     }
 
@@ -33,6 +35,11 @@
 
         &--spaced {
             margin-bottom: 0.8rem;
+        }
+
+        &--nested {
+            gap: 0.4rem;
+            margin-left: 2rem;
         }
     }
 
@@ -73,11 +80,11 @@
     }
 
     &__input--number {
-        @include v.inputArea(4em);
+        @include v.inputArea(4.4rem);
     }
 
     &__input--date {
-        @include v.inputArea(12em);
+        @include v.inputArea(12rem);
     }
 
     &__checkbox, &__radio {
@@ -92,6 +99,23 @@
             // add soomething here I guess
             color: black;
         }
+    }
+
+    &__fieldset {
+        border: none;
+        padding: 0;
+        margin: 0;
+        min-width: 0;
+        display: flex;
+        gap: 0.4rem;
+        flex-direction: column;
+    }
+
+    &__date_select {
+        display: flex;
+        flex-direction: column;
+        margin-top: 0.4rem;
+        gap: 0.4rem;
     }
 }
 

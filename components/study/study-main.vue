@@ -189,5 +189,6 @@ In this component we need to be able to give the following options:
 </script>
 
 <style scoped>
-@import url('public/style/components/study/study-main.scss');
+    @import url('public/style/components/study/study-main.scss');
+    @import url('public/style/components/study/study-aside.scss');
 </style>
