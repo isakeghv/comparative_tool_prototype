@@ -133,7 +133,6 @@
 
         {{ study }}
         </div>
-    </div>
     <!-- forward id/index of a specific question to e.g. update its response format -->
     <Study-aside :index="props.index" :id="props.id"/>
 </template>
