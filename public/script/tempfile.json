@@ -1,19 +1,21 @@
 {
   "id": "id-of-study",
   "title": "title of study",
+  "terms": "The default terms and conditions created by us => that participants agrees to us collecting the information, storing it => ip address etc.",
+  "customTerms": "Custom terms, conditions and privacy rules that the researcher can create if wanted",
   "description": "description of study",
   "currentReplies": "amount of replies currently collected",
+  "status": "the status of the study: ongoing, completed, draft",
+  "closingMethod": "hold the study should close, date, duration, replies, manually etc",
+  "closingLimit": {
+    "date": "date of when study should close. Should hold both",
+    "duration": "should hold date and time of when study should close, relative to the selected duration",
+    "replies": "at what amount of replies the study should close"
+  },
   "questions": [
     {
       "id": "The ID of the question",
       "question": "The question in text",
-      "status": "the status of the study: ongoing, completed, draft",
-      "closingMethod": "hold the study should close, date, duration, replies, manually etc",
-      "closingLimit": {
-        "date": "date of when study should close. Should hold both",
-        "duration": "should hold date and time of when study should close, relative to the selected duration",
-        "replies": "at what amount of replies the study should close"
-      },
       "required": "true/false. deciding if question is required or not",
       "type": "type of question, e.g. multiple-choise, checkbox, range, linear sorting, drag and drop",
       "range": {
@@ -43,13 +45,6 @@
     {
       "id": "The ID of the question",
       "question": "The question in text",
-      "status": "the status of the study: ongoing, completed, draft",
-      "closingMethod": "hold the study should close, date, duration, replies, manually etc",
-      "closingLimit": {
-        "date": "date of when study should close. Should hold both",
-        "duration": "should hold date and time of when study should close, relative to the selected duration",
-        "replies": "at what amount of replies the study should close"
-      },
       "required": "true/false. deciding if question is required or not",
       "type": "type of question, e.g. multiple-choise, checkbox, range, linear sorting, drag and drop",
       "range": {

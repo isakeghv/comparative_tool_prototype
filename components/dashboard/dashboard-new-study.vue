@@ -18,10 +18,8 @@
 </template>
 
 <script setup>
-import { user } from '~/public/script/reactive';
 
 const emit = defineEmits(['newStudy'])
-const router = useRouter();
 
 const createNewStudy = async () => {
     //creating random id for study

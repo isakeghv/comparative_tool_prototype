@@ -70,39 +70,21 @@
                         clicking the "generate unique id" button
                     </p>
                     <div class="artifact__row">
+                        <p class="artifact__id" v-if="showArtifactId === i">{{ artifact.id }}</p>
                         <label :for="`artifact_id-${i}_input`" class="artifact__label">
                             <span class="artifact__span">Id:</span>
                         </label>
                         <span class="artifact__info" @mouseover="showInfo = i" @mouseleave="showInfo = null"
                             aria-label="information about id">?</span>
                         <input type="text" :id="`artifact_id-${i}_input`" class="artifact__input artifact__input--small"
-                            v-model="artifact.id" :placeholder="!artifact.id ? 'Id is required' : ''">
+                            v-model="artifact.id" :placeholder="!artifact.id ? 'Id is required' : ''" @mouseover="showArtifactId = i" @mouseleave="showArtifactId = null">
 
                     </div>
-                    <img :src="artifact.source" :alt="artifact.id" class="artifact__image" v-if="isImage">
-                    <div class="artifact__footer">
-                        <p class="artifact__absolute" v-if="showInfo === i">All artifacts must have a unique identifier. You
-                            can set one yourself (recomended), use the file-name of the uploaded file (recomended if
-                            unique), or generate one by clicking the "generate unique id" button</p>
-                        <div class="artifact__row">
-                            <label :for="`artifact_id-${i}_input`" class="artifact__label">
-                                <span class="artifact__span">Id:</span>
-                            </label>
-                            <span class="artifact__info" @mouseover="showInfo = i" @mouseleave="showInfo = null"
-                                aria-label="information about id">?</span>
-                            <input type="text" :id="`artifact_id-${i}_input`" class="artifact__input artifact__input--small"
-                                v-model="artifact.id" :placeholder="!artifact.id ? 'Id is required' : ''">
-                        </div>
-                    </div>
-                    <button class="artifact__button" @click="artifact.id = JSON.stringify(Date.now())">Generate unique
-                        id</button>
                 </div>
                 <button class="artifact__button" @click="artifact.id = JSON.stringify(Date.now())">
                     Generate unique id
                 </button>
             </div>
-
-
                 <div class="artifact__container artifact__container--square">
                     <label for="study_file_input" class="artifact__add" aria-label="Choose file">
                         <svg class="artifact__plus" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -144,6 +126,8 @@ const showInfo = ref(null)
 
 const selectedSource = ref('');
 const selectedId = ref('');
+
+const showArtifactId = ref(false);
 
 const selectMedia = (source, id) => {
     selectedSource.value = source;
@@ -222,35 +206,6 @@ const uploadFile = async (e) => {
 
     e.target.value = '';
 };
-
-/*
-------------------
-******************
-------------------
-
-NOTE!
-
-In this component we need to be able to give the following options:
-- Modify/write question question.
-- upload artifact and give it a unique name (so multiple files do not have the same name), 
-    but it should extract the initial file-name and first and place as "identifier" for the artifact (can be modifier later)
-- set/change identifier name of artifact.
-- Decide if question is required or not before moving to next question/submitting
-- Selecting what type of response (multiple choise, drag and drop etc).
-- Set response options (for multiple choise and drag-and drop)
-- set minimum and max values for "range" option in "response-format"
-- set closing-method (date, duration, replies)
-- set the closing-limit
-
-
-------------------
-******************
-------------------
-
-
-
-
-*/
 
 </script>
 

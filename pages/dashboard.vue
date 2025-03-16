@@ -1,7 +1,7 @@
 <template>
 	<Dashboard-Header :name="displayName"/>
 	<div class="container" v-if="showMain && !study.id">
-		<Dashboard-main @newStudy="(id) => study.id = id"/>
+		<Dashboard-main @newStudy="(id) => study.id = id"/>
 	</div>
     <Study-editor v-if="study.id"/>
 
