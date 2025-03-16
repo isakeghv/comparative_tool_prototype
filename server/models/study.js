@@ -122,6 +122,10 @@ const StudySchema = new Schema({
 		ref: "UserProfile",
 		required: true,
 	},
+	customTerms: {
+		request: Boolean,
+		terms: String,
+	},
 	title: { type: String, required: true },
 	description: { type: String, required: true },
 	currentReplies: { type: Number, default: 0 },
