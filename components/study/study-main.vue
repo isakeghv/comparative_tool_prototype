@@ -4,6 +4,7 @@
             <div class="study__header">
                 <label for="study_question_input" class="study__label study__headline font-h5 font-semi">Question</label>
                 <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question">
+                <!-- {{ study }} -->
             </div>
 
         <div class="artifact">

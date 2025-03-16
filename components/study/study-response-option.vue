@@ -8,6 +8,24 @@
             </label>
         </div>
 
+        <!-- checkbox -->
+        <div class="aside__options" v-if="isCheckboxResponse">
+            <div class="aside__option" v-for="(option, i) in checkboxModel" :key="i">
+                <label :for="`option_${option}_${i}_txt`" class="aside__label">{{ i + 1 }}</label>
+                <input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="checkboxModel[i]">
+                <button class="aside__button aside__button--option" @click="deleteOption(i)">Delete</button>
+            </div>
+            <button class="aside__button aside__button--add" @click="addOption()">Add option</button>
+        </div>
+        <div class="aside__row aside__row--toggle" v-if="isCheckboxResponse">
+            <label for="question_selection_min" class="aside__label font-normal">Selection from </label>
+            <input type="number" id="question_selection_min" class="aside__input--number font-small" name="question_selection_min" min="0" step="1" v-model="selectionMinModel"/>
+            <label for="question_selection_max" class="aside__label font-normal">to</label>
+            <input type="number" id="question_selection_max" class="aside__input--number font-small" name="question_selection_max" step="1" v-model="selectionMaxModel"/>
+        </div> 
+
+
+        <!-- range --> 
         <div class="aside__row aside__row--toggle" v-if="isRangeResponse">
             <label for="question_range_min" class="aside__label font-normal">
                 Min
@@ -29,6 +47,17 @@
                 placeholder="End label (optional)" v-model="rangeEndModel">
         </div>
 
+        <!-- drag and drop -->
+        <div class="aside__options" v-if="isDropResponse">
+        <div class="aside__option" v-for="(option, i) in dropBoxModel" :key="i">
+            <!-- */<label :for="`option_${option}_${i}_txt`" class="aside__label">{{ i + 1 }}</label>
+            <input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="dropBoxModel[i]">
+            <button class="aside__button aside__button--option" @click="deleteOption(i)">Delete</button> -->
+        </div>
+            <button class="aside__button aside__button--add" @click="addOption()">Add option</button>
+        </div>
+
+        <!-- linear sorting -->
         <div class="aside__row aside__row--toggle" v-if="isLinearResponse">
             <label for="question_range_start_label" class="font-small">Start</label>
             <input type="text" id="question_range_start_label" class="aside__input--wide"
@@ -53,7 +82,7 @@ const props = defineProps({
     id: String
 });
 
-const thisquestion = computed(() => study.questions.find(q => q.id === props.id));
+const thisQuestion = computed(() => study.questions.find(q => q.id === props.id));
 
 const emit = defineEmits(['update:modelValue', 'update:questionValues']);
 
@@ -66,16 +95,19 @@ const localModel = computed({
 });
 
 const responseModel = ref('');
+const checkboxModel = ref([]);
 const minModel = ref('');
 const maxModel = ref('');
 const rangeStartModel = ref('');
 const rangeEndModel = ref('');
+const dropBoxModel = ref([]);
 const linearStartModel = ref('');
 const linearEndModel = ref('');
 
-// const isCheckboxResponse = computed(() => props.value === 'checkbox' && responseModel.value === 'checkbox');
-const isRangeResponse = computed(() => thisquestion.value.responseType == 'range' && props.value === 'range');
-const isLinearResponse = computed(() => thisquestion.value.responseType == 'linear'&& props.value === 'linear');
+const isCheckboxResponse = computed(() => thisQuestion.value.responseType == 'checkbox' && props.value === 'checkbox');
+const isRangeResponse = computed(() => thisQuestion.value.responseType == 'range' && props.value === 'range');
+const isDropResponse = computed(() => thisQuestion.value.responseType == 'drop' && props.value === 'drop');
+const isLinearResponse = computed(() => thisQuestion.value.responseType == 'linear'&& props.value === 'linear');
 
 // emit all the question option values at once to parent
 const updateValues = () => {

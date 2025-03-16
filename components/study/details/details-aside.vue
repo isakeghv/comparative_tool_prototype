@@ -8,7 +8,7 @@
         <div class="aside__container">
             <div class="aside__selection aside__selection--spaced">
                 <input type="checkbox" id="details_duration_checkbox" class="aside__checkbox">
-                <label for="details_duration" class="aside__label aside__label--headline font-normal font-medium">
+                <label for="details_duration_checkbox" class="aside__label aside__label--headline font-normal font-medium">
                     Duration
                 </label>
             </div>
@@ -27,7 +27,7 @@
         <div class="aside__container">
             <div class="aside__selection aside__selection--spaced">
                 <input type="checkbox" id="details_date_checkbox" class="aside__checkbox">
-                <label for="details_date" class="aside__label aside__label--headline font-normal font-medium">
+                <label for="details_date_checkbox" class="aside__label aside__label--headline font-normal font-medium">
                     Date
                 </label>
             </div>
@@ -40,7 +40,7 @@
         <div class="aside__container">
             <div class="aside__selection aside__selection--spaced">
                 <input type="checkbox" id="details_responeses_checkbox" class="aside__checkbox">
-                <label for="details_responses" class="aside__label aside__label--headline font-medium font-semi">
+                <label for="details_responses_checkbox" class="aside__label aside__label--headline font-medium font-semi">
                     Responses
                 </label>
             </div>

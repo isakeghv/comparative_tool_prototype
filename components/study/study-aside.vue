@@ -36,7 +36,7 @@ const requiredModel = ref('');
 const responseModel = ref('');
 
 // find the specific question to modify data
-const getQuestion = (id) => study.questions.find(question => question.id === id);
+const getQuestion = (id) => study.questions.find(q => q.id === id);
 
 // define the options for the response type
 const options = [
@@ -78,6 +78,7 @@ watch(
     { immediate: true }
 );
 
+// update responsModel type when it gets emitted a new value
 watch(
     () => responseModel.value,
     (newValue) => {

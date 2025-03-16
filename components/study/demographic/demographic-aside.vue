@@ -34,7 +34,7 @@
             <div class="aside__selection">
                 <input type="radio" value="radio" name="demographic_radio" id="demographic_radio" class="aside__radio" v-model="responseModel">
                 <label for="demographic_radio" class="aside__label aside__label--headline font-normal font-medium">
-                    Radio
+                    Multiple choice
                 </label>
             </div>
             <div class="aside__options" v-if="isRadioResponse">
@@ -43,7 +43,7 @@
                     <input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="optionsModel[i]">
                     <button class="aside__button aside__button--option" @click="deleteOption(i)">Delete</button>
                 </div>
-                <button class="aside__button aside__button--add" @click="addOption()">Add option</button>
+                <button class="aside__button aside__button--add" @click="handleAddOption">Add option</button>
             </div>
         </div>
         <div class="aside__container">
@@ -95,6 +95,7 @@
 </template>
 
 <script setup>
+import { addOption, deleteOption } from '~/server/utils/response-utils';
 import { study } from '~/public/script/reactive';
 
 const props = defineProps({
@@ -124,11 +125,11 @@ const removeItem = (array, item) => {
     return array.filter(element => element !== item);
 };
 
-// delete a specific option for `Radio` at its index using splice
-const deleteOption = (index)=>{
-    optionsModel.value.splice(index, 1);
-    selectedQuestion.value.options = optionsModel.value;
-}
+// // delete a specific option for `Radio` at its index using splice
+// const deleteOption = (index) =>{
+//     optionsModel.value.splice(index, 1);
+//     selectedQuestion.value.options = optionsModel.value;
+// }
 
 //deleting demographic question
 const deleteQuestion = ()=>{
@@ -172,14 +173,20 @@ const initiateConfig = (id)=>{
     maxModel.value = selectedQuestion.value.number.max;
 }
 
-const addOption = ()=>{
-    //add "options" if issue not already existing: question does not have options
-    if (!selectedQuestion.value.radio.options) selectedQuestion.value.radio.options = [];
+const handleAddOption = () => {
+  addOption(selectedQuestion.value.radio.options, optionsModel.value);
+};
 
-    //pushing new option to multiple-choise
-    selectedQuestion.value.radio.options.push('');
-    optionsModel.value = selectedQuestion.value.radio.options;
-}
+// addOption(selectedQuestion.value.radio.options, optionsModel.value);
+
+// const addOption = ()=>{
+//     //add "options" if issue not already existing: question does not have options
+//     if (!selectedQuestion.value.radio.options) selectedQuestion.value.radio.options = [];
+
+//     //pushing new option to multiple-choise
+//     selectedQuestion.value.radio.options.push('');
+//     optionsModel.value = selectedQuestion.value.radio.options;
+// }
 
 //handling if multiple-choice options should be displayed or not
 const isRadioResponse = computed(() => responseModel.value === 'radio');
