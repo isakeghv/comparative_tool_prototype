@@ -2,7 +2,12 @@ import { readMultipartFormData } from "#imports";
 import { writeFile } from "fs/promises";
 import { existsSync } from "fs";
 import { join, extname } from "path";
-import { randomUUID } from 'crypto'
+import { randomUUID } from 'crypto';
+import { fileTypeFromBuffer } from "file-type";
+
+const allowedExtensions = ["jpg", "jpeg", "png", "pdf", "mp3", "mp4"]; 
+// 10MB file limit
+const maxFileSize = 10 * 1024 * 1024;
 
 export default defineEventHandler(async (e) => {
   const folderPath = join(process.cwd(), "public", "artifacts");
@@ -19,11 +24,27 @@ export default defineEventHandler(async (e) => {
 
   if (!fileData) return { success: false, code: 400, message: "No uploaded file found" };
 
+  //check if file is right
+  if (fileData.data.length > maxFileSize) {
+    return { success: false, code: 400, message: "File is too large" };
+  }
+
   //saving original file-name in variable, so it can be returned to client as an identifier
   const initialName = fileData.filename;
 
   //gettingThe correct extension for the file
-  const extension = extname(initialName)
+  const extension = extname(initialName).toLowerCase().replace(".", "");
+
+
+  if (!allowedExtensions.includes(extension)) {
+    return { success: false, code: 400, message: "Invalid file type" };
+  }
+
+    //Verify actual file type using MIME detection
+    const detectedType = await fileTypeFromBuffer(fileData.data);
+    if (!detectedType || !allowedExtensions.includes(detectedType.ext)) {
+      return { success: false, code: 400, message: "File content does not match its extension" };
+    }
 
   //creating new completely unique file-name so no files have the same name by accident
   const newName = `${randomUUID()}${extension}`
