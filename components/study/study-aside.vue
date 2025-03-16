@@ -9,7 +9,7 @@
         />
 
         <div class="aside__container aside__selection">
-            <label for="demographic_required" class="aside__label aside__label--headline font-normal font-medium">
+            <label for="demographic_required_checkbox" class="aside__label aside__label--headline font-normal font-medium">
                 Required
             </label>
             <input type="checkbox" id="demographic_required_checkbox" class="aside__checkbox" v-model="requiredModel" @change="updateRequired()">

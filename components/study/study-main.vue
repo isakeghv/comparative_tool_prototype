@@ -6,10 +6,6 @@
                 <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question">
             </div>
 
-        <label for="study_question_input" class="study__label font-h1">Question</label>
-        <input type="text" class="study__input study__input--text font-h3" id="study_question_input"
-            v-model="config.question">
-
         <div class="artifact">
             <h3 class="artifact__headline font-h3 font-medium">Artifacts</h3>
             <div class="artifact__container" v-for="(artifact, i) in config.artifacts">
@@ -131,7 +127,6 @@
             <video :src="selectedSource" controls class="artifact__img" v-if="isVideoFile(selectedSource)"></video>
         </div>
 
-        {{ study }}
         </div>
     <!-- forward id/index of a specific question to e.g. update its response format -->
     <Study-aside :index="props.index" :id="props.id"/>
