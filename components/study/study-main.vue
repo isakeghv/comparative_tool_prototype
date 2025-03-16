@@ -1,5 +1,10 @@
 <template>
     <div class="study__container">
+        <div class="study__main">
+            <div class="study__header">
+                <label for="study_question_input" class="study__label study__headline font-h5 font-semi">Question</label>
+                <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question">
+            </div>
 
         <label for="study_question_input" class="study__label font-h1">Question</label>
         <input type="text" class="study__input study__input--text font-h3" id="study_question_input"
@@ -76,22 +81,42 @@
                             aria-label="information about id">?</span>
                         <input type="text" :id="`artifact_id-${i}_input`" class="artifact__input artifact__input--small"
                             v-model="artifact.id" :placeholder="!artifact.id ? 'Id is required' : ''">
+
                     </div>
+                    <img :src="artifact.source" :alt="artifact.id" class="artifact__image" v-if="isImage">
+                    <div class="artifact__footer">
+                        <p class="artifact__absolute" v-if="showInfo === i">All artifacts must have a unique identifier. You
+                            can set one yourself (recomended), use the file-name of the uploaded file (recomended if
+                            unique), or generate one by clicking the "generate unique id" button</p>
+                        <div class="artifact__row">
+                            <label :for="`artifact_id-${i}_input`" class="artifact__label">
+                                <span class="artifact__span">Id:</span>
+                            </label>
+                            <span class="artifact__info" @mouseover="showInfo = i" @mouseleave="showInfo = null"
+                                aria-label="information about id">?</span>
+                            <input type="text" :id="`artifact_id-${i}_input`" class="artifact__input artifact__input--small"
+                                v-model="artifact.id" :placeholder="!artifact.id ? 'Id is required' : ''">
+                        </div>
+                    </div>
+                    <button class="artifact__button" @click="artifact.id = JSON.stringify(Date.now())">Generate unique
+                        id</button>
                 </div>
                 <button class="artifact__button" @click="artifact.id = JSON.stringify(Date.now())">
                     Generate unique id
                 </button>
             </div>
 
-            <div class="artifact__container artifact__container--square">
-                <label for="study_file_input" class="artifact__add" aria-label="Choose file">
-                    <svg class="artifact__plus" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0 39.5H76M38 0V76" stroke="#444444" stroke-width="6" />
-                    </svg>
-                </label>
-                <div class="artifact__footer artifact__footer--hidden">
-                    <input type="file" name="" id="study_file_input" class="artifact__input artifact__input--file"
-                        @change="uploadFile">
+
+                <div class="artifact__container artifact__container--square">
+                    <label for="study_file_input" class="artifact__add" aria-label="Choose file">
+                        <svg class="artifact__plus" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 39.5H76M38 0V76" stroke="#444444" stroke-width="6" />
+                        </svg>
+                    </label>
+                    <div class="artifact__footer artifact__footer--hidden">
+                        <input type="file" name="" id="study_file_input" class="artifact__input artifact__input--file"
+                            @change="uploadFile">
+                    </div>
                 </div>
             </div>
         </div>
@@ -105,10 +130,12 @@
             </audio>
             <video :src="selectedSource" controls class="artifact__img" v-if="isVideoFile(selectedSource)"></video>
         </div>
+
         {{ study }}
+        </div>
     </div>
-
-
+    <!-- forward id/index of a specific question to e.g. update its response format -->
+    <Study-aside :index="props.index" :id="props.id"/>
 </template>
 
 <script setup>
@@ -200,8 +227,6 @@ const uploadFile = async (e) => {
     console.log(study);
 
     e.target.value = '';
-
-
 };
 
 /*

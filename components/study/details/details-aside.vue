@@ -34,7 +34,7 @@
             <div class="aside__row">
                 <span class="font-normal">Run until</span>
                 <label for="details_date" class="hide">Date: </label>
-                <input type="date" id="details_date" class="aside__input--date font-small" name="details_date"/>
+                <input type="date" id="details_date" class="aside__input--wide font-small" name="details_date"/>
             </div>
         </div>
         <div class="aside__container">
