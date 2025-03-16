@@ -35,7 +35,7 @@ const newStudy = async (id, userRef, title, desc, demographicArr, demographicReq
 		await createdStudy.save();
 		setResponseStatus(201);		
 
-		return { created: true, message: "Study successfully created." };
+		return { created: true, message: "Study successfully created.", study: createdStudy };
     } catch (err) {
 		console.log(err);
 		return { created: false, message: "Issue occured while creating study.", error: err.message };

@@ -92,6 +92,7 @@ const createStudy = async () => {
 
     if (result.created) {
         const studyId = result.studyId;
+        return result;
     } else {
         console.log('Failed to create study');
     }
@@ -143,13 +144,11 @@ const saveStudy = async () => {
     // if study gets created, update the flag to true
     if (!isStudyCreated.value) {
         isStudyCreated.value = true;
-        const newStudy = createStudy();
+        const newStudy = await createStudy();
 
         // push it manually to the dashbaord overview instead of re-fetching it
         // need to find out how to update it with its information (title, description etc.)
-        if (newStudy) {
-            user.studies.push(newStudy);
-        }
+        if (newStudy) user.studies.push(JSON.parse(JSON.stringify(newStudy.study)));
 
         return;
     } else {
