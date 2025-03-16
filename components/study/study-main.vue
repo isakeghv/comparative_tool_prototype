@@ -80,10 +80,11 @@
                 <button class="expand__button" @click="selectedSource = ''">Exit</button>
                 <img :src="selectedSource" :alt="selectedId" class="expand__img" v-if="isImage(selectedSource)">
             </div>
-        <!-- {{ study }} -->
+        {{ study }}
         </div>
     </div>
-    <Study-aside />
+    <!-- forward id/index of a specific question to e.g. update its response format -->
+    <Study-aside :index="props.index" :id="props.id"/>
 </template>
 
 <script setup>
