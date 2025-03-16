@@ -8,6 +8,9 @@
         <button class="sidebar__button font-normal" @click="changeDisplay('demographics')">
             Demographics
         </button>
+        <button class="sidebar__button font-normal" @click="changeDisplay('terms')">
+            Terms and policy
+        </button>
         </div>
         <Study-list @select="(data)=>changeDisplay(data.query, data.number, data.id)"/>
     </aside>

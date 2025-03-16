@@ -4,6 +4,7 @@
         <Study-sidebar @swapDisplay="(data) => toggleDisplay(data.component, data.number, data.id)"/>
         <Details v-if="showDetails"/>
         <Demographic v-if="showDemographics"/>
+        <Study-terms-privacy v-if="showTerms"/>
         <Study-main v-if="showQuestionMain" :index="questionIndex" :id="questionId"/>
     </div>
 </template>
@@ -24,6 +25,10 @@ const showDemographics = computed(()=>{
 
 const showQuestionMain = computed(()=>{
     return displayComponent.value === 'question'
+})
+
+const showTerms = computed(()=>{
+    return displayComponent.value === 'terms'
 })
 
 //handles toggling of which component to display. "number = null" is responsible of handling which question to open

@@ -2,7 +2,10 @@
   "id": "id-of-study",
   "title": "title of study",
   "terms": "The default terms and conditions created by us => that participants agrees to us collecting the information, storing it => ip address etc.",
-  "customTerms": "Custom terms, conditions and privacy rules that the researcher can create if wanted",
+  "customTerms": {
+    "request": "true/false, handing of it should be asked or not",
+    "terms": "Custom terms, conditions and privacy rules that the researcher can create if wanted"
+  },
   "description": "description of study",
   "currentReplies": "amount of replies currently collected",
   "status": "the status of the study: ongoing, completed, draft",

@@ -16,7 +16,10 @@ export const study = reactive({
     id: null,
     title: null,
     description: null,
-    customTerms: '',
+    customTerms: {
+        request: false,
+        terms: ''
+    },
     questions: [],
     demographicReq: true,
     demographic: []
