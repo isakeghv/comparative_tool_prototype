@@ -57,8 +57,8 @@ const addQuestion = () => {
             },
             checkbox: {
                 options: [],
-                selectionMin: 1,
-                selectionMax: 1
+                selectionMin: '',
+                selectionMax: ''
             },
             range: {
                 min: 0,
@@ -66,7 +66,7 @@ const addQuestion = () => {
                 startLabel: '',
                 endLabel: ''
             },
-            drag: {
+            drop: {
                 dropBoxes: []
             },
             linear: {
