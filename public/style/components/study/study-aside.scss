@@ -9,7 +9,11 @@
         display: flex;
         flex-direction: column;
         padding: 1.6rem;
+        border: none;
         border-bottom: v.$borderSolid;
+        margin: 0;
+        min-width: 0;
+        gap: 0.4rem;
 
         &--borderless {
             padding-bottom: 0;
@@ -83,7 +87,7 @@
         @include v.inputArea(4.4rem);
     }
 
-    &__input--date {
+    &__input--wide {
         @include v.inputArea(12rem);
     }
 

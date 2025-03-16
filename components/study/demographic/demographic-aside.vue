@@ -13,7 +13,7 @@
             <input type="checkbox" id="demographic_required_checkbox" class="aside__checkbox" v-model="requiredModel" @change="updateRequired()">
         </div>
         <div class="aside__container">
-            <p class="aside__headline font-large font-semi">Response format</p>
+            <p class="font-large font-semi">Response format</p>
         </div>
         <div class="aside__container">
             <fieldset class="aside__fieldset">
@@ -32,7 +32,7 @@
         </div>
         <div class="aside__container">
             <div class="aside__selection">
-                <input type="radio" value="radio" name="demographic__radio" id="demographic_radio" class="aside__radio" v-model="responseModel">
+                <input type="radio" value="radio" name="demographic_radio" id="demographic_radio" class="aside__radio" v-model="responseModel">
                 <label for="demographic_radio" class="aside__label aside__label--headline font-normal font-medium">
                     Radio
                 </label>
@@ -49,7 +49,7 @@
         <div class="aside__container">
             <fieldset class="aside__fieldset">
                 <div class="aside__selection">
-                    <input type="radio" value="number" name="demographic_number_radio" id="demographic_number_radio" class="aside__radio" v-model="responseModel">
+                    <input type="radio" value="number" name="demographic_radio" id="demographic_number_radio" class="aside__radio" v-model="responseModel">
                     <label for="demographic_number_radio" class="aside__label aside__label--headline font-normal font-medium">
                         Number
                     </label> 
@@ -65,7 +65,7 @@
         <div class="aside__container">
             <fieldset class="aside__fieldset">
                 <div class="aside__selection">
-                    <input type="radio" value="date" name="demographic_date_radio" id="demographic_date_radio" class="aside__radio" v-model="responseModel">
+                    <input type="radio" value="date" name="demographic_radio" id="demographic_date_radio" class="aside__radio" v-model="responseModel">
                     <label for="demographic_date_radio" class="aside__label aside__label--headline font-normal font-medium">
                         Date
                     </label>

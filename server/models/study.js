@@ -24,7 +24,7 @@ const QuestionSchema = new Schema({
 		],
 		required: true,
 	},
-	multipleChoice: {
+	radio: {
 		options: [{ type: String }]
 	},
 	checkbox: {
@@ -38,16 +38,17 @@ const QuestionSchema = new Schema({
 		startLabel: { type: String },
 		endLabel: { type: String }
 	},
-	dragAndDrop: {
+	drag: {
 		dropBox: [{ type: String }]
 	},
-	linearSorting: {
+	linear: {
 		startLabel: { type: String },
 		endLabel: { type: String }
 	},
 	artifacts: [ArtifactSchema],
 });
 
+// structure of demographic questions
 const DemographicSchema = new Schema({
 	id: {
 		type: String,
@@ -63,7 +64,12 @@ const DemographicSchema = new Schema({
 	},
 	responseType: {
 		type: String,
-		default: '',
+		enum: [
+			"text",
+			"radio",
+			"number",
+			"date",
+		]
 	},
 	required: {
 		type: Boolean,

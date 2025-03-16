@@ -21,6 +21,7 @@
             </span>
         </div>
         <ul class="question__list" ref="listRef" id="question__list">
+            <!-- pass specific question config to question item-->
             <Study-item @select="(data) => selectQuestion(data)" parent="#question__list" :config="question" :index="i"
                 v-for="(question, i) in questions" />
         </ul>
@@ -31,7 +32,7 @@
 import { study } from '~/public/script/reactive';
 
 const listRef = ref('')
-const emit = defineEmits(['select'])
+const emit = defineEmits(['select', 'newQuestion'])
 
 //returning the array of questions
 const questions = computed(() => {
@@ -51,7 +52,7 @@ const addQuestion = () => {
             question: '',
             required: true,
             responseType: null,
-            multipleChoice: {
+            radio: {
                 options: []
             },
             checkbox: {
@@ -65,10 +66,10 @@ const addQuestion = () => {
                 startLabel: '',
                 endLabel: ''
             },
-            dragAndDrop: {
-                dropBox: []
+            drag: {
+                dropBoxes: []
             },
-            linearSorting: {
+            linear: {
                 startLabel: '',
                 endLabel: ''
             },
