@@ -144,23 +144,6 @@ const saveStudy = async () => {
         return;
     }
 
-    // prevent doing unecessary calls to db if no data has been changed -> if study has been created (true) and has had changes (true)
-    if (isStudyCreated.value && noChanges) {
-        console.log('Update study...');
-        const updatedStudy = await updateStudy();
-
-        // if (updatedStudy) {
-        //         const studyIndex = user.studies.findIndex(study => study.id === updatedStudy.id);
-                
-        //         // if study was found, updated the quiz at the index location
-        //         if (studyIndex !== -1) {
-        //             user.studies[studyIndex] = JSON.parse(JSON.stringify(updatedStudy));
-        //             console.log('Update update update !!!');
-        //         }
-        // }
-        return;
-    }
-
     console.log('Has the study been created? (2)', isStudyCreated.value);
 
     // if study gets created, update the flag to true
@@ -179,7 +162,7 @@ const saveStudy = async () => {
 
         return;
     } else if (!noChanges) {
-        console.log('Updated study... (2)');
+        console.log('Updated study...');
         const updatedStudy = await updateStudy();
 
         // this is not working
