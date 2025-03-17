@@ -4,6 +4,11 @@ export const form = reactive({
     type: null,
 })
 
+// had to move here because rashboard doesnt know when it
+export const isStudyCreated = reactive({
+    value: false
+});
+
 //to store information to display in ui. "info" for user-info: name etc, 
 // "studies" for the studies that is saved to user-id
 export const user = reactive({

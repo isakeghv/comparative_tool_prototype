@@ -1,5 +1,5 @@
 import { connDb } from "../services/connDb.js";
-import { verifyToken } from '../services/jwt.js';
+import { verifyToken } from '../utils/jwt.js';
 import { study } from '../schemas/studySchema.js';
 
 // get study by its id, and populate the study with the retrieved data
@@ -19,7 +19,7 @@ const getStudy = async (e) => {
     }
 }
 
-const newStudy = async (id, userRef, title, desc, demographicArr, demographicReq) => {
+const newStudy = async (id, userRef, title, desc, demographicArr, demographicReq, questionArr) => {
 	// only need to initialize study with the _id of userProfile to keep a reference of the creator and content; the rest of the fields are default / will get updated later
 	const createdStudy = new study({
 		id: id,
@@ -27,7 +27,8 @@ const newStudy = async (id, userRef, title, desc, demographicArr, demographicReq
 		title: title,
 		description: desc,
 		demographic: demographicArr,
-		demographicReq: demographicReq
+		demographicReq: demographicReq,
+		questions: questionArr
 	})
 	
     try {
@@ -70,8 +71,8 @@ export default defineEventHandler(async (e) => {
 
 	// read body, deconstruct data from the POST request, and create a new 'study' instance (currently with minimal fields to check)
 	if (e.node.req.method === 'POST') {
-		const { id, user, title, description, demographic, demographicReq } = body;
-		return await newStudy(id, user, title, description, demographic, demographicReq);
+		const { id, user, title, description, demographic, demographicReq, questions } = body;
+		return await newStudy(id, user, title, description, demographic, demographicReq, questions);
 	}
 
 	// update the study

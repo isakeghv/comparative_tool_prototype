@@ -41,14 +41,14 @@
 
 <script setup>
 //importing reactive variable which holds the id of the study and where the study questions are stored
-import { user, study, initialStudy } from '~/public/script/reactive';
+import { user, study, initialStudy, isStudyCreated } from '~/public/script/reactive';
 const props = defineProps({
     name: String,
     id: String,
 })
 
 // flag to prevent creating study when saving multiple times
-const isStudyCreated = ref(false);
+// const isStudyCreated = ref(false);
 
 // need to pass all the comparisons to pass it as true (probably should find a way to not repeat too much)
 const compareStudy = () => {
@@ -75,13 +75,14 @@ const createStudy = async () => {
     const response = await fetch('/api/study', {
         method: 'POST',
         body: JSON.stringify({
-            'id': study.id,
+            id: study.id,
             // get the id from const 'user' that was set when user logged in, and send it to the API endpoint to reference the user as the creator
-            'user': user.info._id,
-            'title': study.title,
-            'description': study.description,
-            'demographic': study.demographic,
-            'demographicReq': study.demographicReq
+            user: user.info._id,
+            title: study.title,
+            description: study.description,
+            demographic: study.demographic,
+            demographicReq: study.demographicReq,
+            questions: study.questions
         }),
         headers: {
             'Content-Type': 'application/json'
@@ -91,7 +92,6 @@ const createStudy = async () => {
     const result = await response.json();
 
     if (result.created) {
-        const studyId = result.studyId;
         return result;
     } else {
         console.log('Failed to create study');
@@ -103,13 +103,14 @@ const updateStudy = async () => {
         title: study.title,
         description: study.description,
         demographic: study.demographic,
-        demographicReq: study.demographicReq
+        demographicReq: study.demographicReq,
+        questions: study.questions
     }
 
     const response = await fetch('/api/study', {
         method: 'PUT',
         body: JSON.stringify({
-            'id': study.id,
+            id: study.id,
             updatedData
         }),
         headers: {
@@ -120,7 +121,7 @@ const updateStudy = async () => {
     const result = await response.json();
 
     if (result.updated) {
-        const studyId = result.studyId;
+        return result;
     } else {
         console.log('Failed to update study');
     }
@@ -128,31 +129,73 @@ const updateStudy = async () => {
 
 // when clicking on 'save', update the tracking of changes and create new study if it hasn't been created yet
 const saveStudy = async () => {
+    // compare the two study states to see if there has been no changes
     const noChanges = compareStudy();
-    console.log(noChanges);
+    console.log('Has it changed?', !noChanges);
+
+    console.log('Has the study been created? (1)', isStudyCreated.value);
 
     // first update the tracking of the initial and current study
     updateSaveHistory();
 
-    // prevent doing unecessary calls to db if no data has been changed
-    if (isStudyCreated.value && !noChanges) {
-        return await updateStudy();
-    } else {
-        console.log('no need to save')
+    // if no changes, return 
+    if (noChanges) {
+        console.log('No changes detected. Nothing to save.');
+        return;
     }
+
+    // prevent doing unecessary calls to db if no data has been changed -> if study has been created (true) and has had changes (true)
+    if (isStudyCreated.value && noChanges) {
+        console.log('Update study...');
+        const updatedStudy = await updateStudy();
+
+        // if (updatedStudy) {
+        //         const studyIndex = user.studies.findIndex(study => study.id === updatedStudy.id);
+                
+        //         // if study was found, updated the quiz at the index location
+        //         if (studyIndex !== -1) {
+        //             user.studies[studyIndex] = JSON.parse(JSON.stringify(updatedStudy));
+        //             console.log('Update update update !!!');
+        //         }
+        // }
+        return;
+    }
+
+    console.log('Has the study been created? (2)', isStudyCreated.value);
 
     // if study gets created, update the flag to true
     if (!isStudyCreated.value) {
-        isStudyCreated.value = true;
+        console.log('Creating a new study...');
         const newStudy = await createStudy();
 
         // push it manually to the dashbaord overview instead of re-fetching it
         // need to find out how to update it with its information (title, description etc.)
-        if (newStudy) user.studies.push(JSON.parse(JSON.stringify(newStudy.study)));
+        
+        if (newStudy) {
+            console.log('New study created and added to dashboard');
+            user.studies.push(JSON.parse(JSON.stringify(newStudy.study)));
+            isStudyCreated.value = true;
+        }
 
         return;
+    } else if (!noChanges) {
+        console.log('Updated study... (2)');
+        const updatedStudy = await updateStudy();
+
+        // this is not working
+        // if (updatedStudy) {
+        //         // check if the current index is the same as the questions id of the updated one
+        //         const studyIndex = user.studies.findIndex(study => study.id === updatedStudy.id);
+        //         console.log(studyIndex);
+        //         // if study isn't unaccessible, updated the quiz at the index location
+        //         if (studyIndex !== -1) {
+        //             user.studies[studyIndex] = JSON.parse(JSON.stringify(updatedStudy));
+        //             console.log('Update update update !!!');
+        //         }
+        // }
+        return;
     } else {
-        console.log('already exists');
+        console.log('Nothing to save.');
     }
 }
 </script>

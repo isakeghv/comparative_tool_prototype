@@ -121,7 +121,7 @@ const StudySchema = new Schema({
 		terms: String,
 	},
 	title: { type: String, required: true },
-	description: { type: String, required: true },
+	description: { type: String },
 	currentReplies: { type: Number, default: 0 },
 	/* closingMethod: { type: String, required: true }, */
 	status: {
@@ -135,7 +135,7 @@ const StudySchema = new Schema({
 		duration: { type: String },
 		replies: { type: Number },
 	},
-	/* questions: [QuestionSchema] */
+	questions: [QuestionSchema],
 	demographicReq: { type: Boolean, required: true, default: false },
 	demographic: [DemographicSchema],
 	created: {
