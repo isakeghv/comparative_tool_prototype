@@ -19,7 +19,7 @@ const props = defineProps({
 
 // because our application doesn't detect reloads, the flag needs to update when returning back to dashboard
 const resetStudyCreatedFlag = () => {
-    isStudyCreated.value = !isStudyCreated.value;
+    isStudyCreated.value = false;
 }
 
 //looping over arrays, and checking if they are the same, to make sure unsaved changed are not lost
@@ -49,34 +49,41 @@ const compareStudy = () => {
     //checking if arrays are the same. Using a bit "overcomplicated" function due to one array being "array" 
     // and other array is "proxyarray", causing it to see it as false
     const similarArrays = compareArray(flattenArray(props.current.questions), flattenArray(props.initial.questions)) && compareArray(flattenArray(props.current.demographic), flattenArray(props.initial.demographic))
+    
 
-
+    // need to compare the arrays (demographics/questions) as string, as they would else lead to false due to comparing memory locations and not content
     return props.current.demographicReq === props.initial.demographicReq &&
         props.current.description === props.initial.description &&
-        props.current.title === props.initial.title && similarArrays;
+        props.current.title === props.initial.title &&
+        JSON.stringify(props.current.demographic) === JSON.stringify(props.initial.demographic) &&
+        JSON.stringify(props.current.questions) === JSON.stringify(props.initial.questions) &&
+        JSON.stringify(props.current.customTerms) === JSON.stringify(props.initial.customTerms) &&
+        similarArrays;
 }
 
 //resetting variables there is no issue incorrect information being displayed when opening different study
 const resetVariables = () => {
     study.id = null;
     study.title = null;
-    study.questions = [];
+    study.description = null;
     study.demographicReq = true;
     study.demographic = [];
-    study.description = null;
-
+    study.customTerms.request = false;
+    study.customTerms.terms = '';
+    study.questions = [];
+ 
     initialStudy.title = null;
-    initialStudy.questions = [];
+    initialStudy.description = null;
     initialStudy.demographicReq = true;
     initialStudy.demographic = [];
-    initialStudy.description = null;
-
-    console.log(study),
-    console.log(initialStudy);
+    initialStudy.customTerms.request = false;
+    initialStudy.customTerms.terms = '';
+    initialStudy.questions = [];
 }
 
 const goBack = () => {
-    if (compareStudy()) resetVariables();
+    const isAlike = compareStudy();
+    if (isAlike) resetVariables();
     else alert('Changes have not been saved. Change this with a proper custom prompt-box, with the option to "disgard changes", "save and return to dashboard", or "cancel"');
 }
 

@@ -1,9 +1,9 @@
 <template>
-	<Dashboard-Header :name="displayName"/>
+	<DashboardHeader :name="displayName"/>
 	<div class="container" v-if="showMain && !study.id">
-		<Dashboard-main @newStudy="(id) => study.id = id"/>
+		<DashboardMain @newStudy="(id) => study.id = id"/>
 	</div>
-    <Study-editor v-if="study.id"/>
+    <StudyEditor v-if="study.id"/>
 
 	<!--Display message if issues fetting user-info-->
 	<div class="container" v-if="!showMain && !study.id">

@@ -1,6 +1,6 @@
 <template>
     <aside class="sidebar">
-        <Study-return :current="currentConfig" :initial="initialStudy"/>
+        <StudyReturn :current="currentConfig" :initial="initialStudy"/>
         <div class="sidebar__top">
         <button class="sidebar__button font-normal" @click="changeDisplay('details')">
             Study details
@@ -12,7 +12,7 @@
             Terms and policy
         </button>
         </div>
-        <Study-list @select="(data)=>changeDisplay(data.query, data.number, data.id)"/>
+        <StudyList @select="(data)=>changeDisplay(data.query, data.number, data.id)"/>
     </aside>
 </template>
 
@@ -21,11 +21,15 @@ import { study, initialStudy } from '~/public/script/reactive';
 
 const currentConfig = computed(()=>{
     return {
-        questions: study.questions,
+        title: study.title,
+        description: study.description,
         demographicReq: study.demographicReq,
         demographic: study.demographic,
-        description: study.description,
-        title: study.title
+        customTerms: {
+			request: study.customTerms.request,
+			terms: study.customTerms.terms,
+		},
+        questions: study.questions
     }
 })
 

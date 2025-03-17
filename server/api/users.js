@@ -1,7 +1,7 @@
 import { connDb } from "../services/connDb.js";
 import { getCookie, useRuntimeConfig } from "#imports";
-import { userCredential, userProfile } from "../schemas/userSchema.js";
-import { study } from "../schemas/studySchema.js";
+import { UserCredential, UserProfile } from "../schemas/userSchema.js";
+import { Study } from "../schemas/studySchema.js";
 import jwt from "jsonwebtoken";
 
 export default defineEventHandler(async (e) => {
@@ -18,16 +18,16 @@ export default defineEventHandler(async (e) => {
 		const decoded = jwt.verify(token, config.private.secretJWT);
 		const userId = decoded.userId;
 		// get the userCredential account
-		const user = await userCredential.findOne({ _id: userId }).lean();
+		const user = await UserCredential.findOne({ _id: userId }).lean();
 
 	//checking that the user is found
 	if (user) {
 		// convert to ObjectId to str, and save userProfile id in variable
 		const userProfileId = user.userProfile.toString();
-		const userProfileData = await userProfile.findOne({ _id: userProfileId }).lean();
+		const userProfileData = await UserProfile.findOne({ _id: userProfileId }).lean();
 
 		//getting the studies associated with user
-		const studies = await study.find({ user: userProfileId }).lean();
+		const studies = await Study.find({ user: userProfileId }).lean();
 
 		// return userProfileId and the studies connected to it
 		return {userProfileData, studies}

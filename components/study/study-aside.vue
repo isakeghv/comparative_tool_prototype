@@ -30,7 +30,7 @@ const props = defineProps({
     id: String
 });
 
-const selectedQuestion = ref(null);
+const selectedQuestion = ref({});
 const questionModel = ref('');
 const requiredModel = ref('');
 const responseModel = ref('');

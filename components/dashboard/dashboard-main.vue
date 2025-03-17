@@ -1,19 +1,19 @@
 <template>
   <aside class="aside">
     <div class="aside__container">
-      <Dashboard-new-study @newStudy="(id) => emitNewStudy(id)" />
-      <Dashboard-filter @filter="(study) => (filter = study)" />
+      <DashboardNewStudy @newStudy="(id) => emitNewStudy(id)" />
+      <DashboardFilter @filter="(study) => (filter = study)" />
     </div>
     <div class="aside__container aside__container--small">
       <button class="aside__button font-normal">Settings</button>
-      <Dashboard-logout />
+      <DashboardLogout />
     </div>
   </aside>
   <main class="main">
     <h2 class="main__headline font-h5 font-semi">{{ mainTitle }}</h2>
     <div class="main__grid">
       <!-- showing the create date instead of start date is temporary -->
-      <Study-card
+      <StudyCard
         v-for="study in studies"
         :key="study._id"
         @select="(study) => console.log(study)"

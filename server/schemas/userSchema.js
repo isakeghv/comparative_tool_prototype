@@ -19,6 +19,6 @@ const UserProfileSchema = new mongoose.Schema({
 });
 
 
-export const userCredential = mongoose.model('UserCredential', UserCredentialSchema);
-export const userProfile = mongoose.model('UserProfile', UserProfileSchema)
+export const UserCredential = mongoose.model('UserCredential', UserCredentialSchema);
+export const UserProfile = mongoose.model('UserProfile', UserProfileSchema)
 

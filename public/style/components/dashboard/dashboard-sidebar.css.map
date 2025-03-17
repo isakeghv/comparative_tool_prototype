@@ -1,0 +1,1 @@
+{"version":3,"sources":["dashboard-sidebar.scss","dashboard-sidebar.css","../../variables/_colors.scss"],"names":[],"mappings":"AAGI;EACI,cAAA;EACA,aAAA;ACFR;ADKI;EACI,aAAA;EACA,cAAA;EACA,8BAAA;EACA,mBAAA;ACHR;ADKQ;EACI,YAAA;ACHZ;ADOI;EACI,aAAA;EACA,mBAAA;ACLR;ADQI;EACI,uCAAA;EACA,kBAAA;EACA,6BAAA;EACA,YAAA;ACNR;ADQQ;EACI,yBEdG;ADQf","file":"dashboard-sidebar.css"}

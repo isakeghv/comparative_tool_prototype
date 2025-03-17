@@ -1,9 +1,9 @@
 import bcrypt from "bcryptjs";
 import { connDb } from "../services/connDb.js";
-import { userCredential, userProfile } from '../schemas/userSchema.js';
+import { UserCredential, UserProfile } from '../schemas/userSchema.js';
 
 const checkEmail = async (email) => {
-	const existingUser = await userCredential.findOne({ email });
+	const existingUser = await UserCredential.findOne({ email });
 
 	if (existingUser) {
 		// setting response to 200 to confirm that email was found
@@ -19,13 +19,13 @@ const createUser = async (fname, lname, email, pwd) => {
 	const hashedPassword = await bcrypt.hash(pwd, 12);
 
 	// split the user credentials and profile data from each other
-	const newUserP = new userProfile({
+	const newUserP = new UserProfile({
 		firstName: fname,
 		lastName: lname,
 	})
 
 	// create new user credentials using its schema
-	const newUserC = new userCredential({
+	const newUserC = new UserCredential({
 		email: email,
 		password: hashedPassword,
 		userProfile: newUserP._id

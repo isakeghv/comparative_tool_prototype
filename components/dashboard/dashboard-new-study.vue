@@ -38,7 +38,7 @@ const createNewStudy = async () => {
         }
     });
 
-  const result = await response.json();
+    const result = await response.json();
 
     // redirect without reloading to the newly created study page using the study id
     if (result.created) {

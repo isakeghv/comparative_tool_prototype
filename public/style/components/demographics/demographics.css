@@ -1,0 +1,99 @@
+.demographic__container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 60%;
+  padding: 2.4rem 2.2rem;
+}
+.demographic__main {
+  width: clamp(20rem, -4rem + 48vw, 50rem);
+}
+.demographic__headline {
+  margin-bottom: 1.4rem;
+}
+.demographic__headline::after {
+  content: "";
+  border-bottom: solid #CCCCCC 1px;
+  width: 100%;
+  display: block;
+  margin-top: 0.8rem;
+}
+.demographic__row {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 1rem;
+  margin: 1.4rem 0;
+}
+.demographic__row--remove {
+  margin-top: 0;
+}
+.demographic__checkbox {
+  background-color: blue;
+}
+.demographic__more {
+  position: absolute;
+  display: inline-flex;
+  border: none;
+  background: transparent;
+  right: -1rem;
+}
+.demographic__svg {
+  height: 1.6rem;
+}
+.demographic__button {
+  padding: 0.5rem 1rem;
+  width: 10rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  border: #6062D6 2px solid;
+  background-color: transparent;
+  color: #6062D6;
+  margin-top: 0.8rem;
+}
+.demographic__button:hover {
+  border: #6D6ED6 2px solid;
+  color: #6D6ED6;
+  transition: border 0.1s ease-in-out, color 0.1s ease-in-out, background-color 0.1s ease-in-out;
+}
+.demographic__button:active {
+  border: #5355C2 2px solid;
+  color: #5355C2;
+}
+.demographic__slider {
+  position: relative;
+  display: inline-block;
+  width: 2.8rem;
+  height: 1.4rem;
+  background: #A4A4A4;
+  border-radius: 1rem;
+  cursor: pointer;
+  padding: 0 0.1rem;
+  transition: background 0.3s;
+}
+.demographic__slider:has(.demographic__checkbox:checked) {
+  background: #CECEF3;
+}
+.demographic__checkbox {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.demographic__thumbnail {
+  position: absolute;
+  width: 1.2rem;
+  height: 1.2rem;
+  background: #F6F6F6;
+  border-radius: 50%;
+  transition: transform 0.4s, background 0.3s;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.demographic__thumbnail:hover {
+  box-shadow: 0 0 0.3rem 0.1rem rgba(0, 0, 0, 0.2);
+}
+.demographic__thumbnail--active {
+  transform: translate(1.4rem, -50%);
+  background: #6062D6;
+}/*# sourceMappingURL=demographics.css.map */

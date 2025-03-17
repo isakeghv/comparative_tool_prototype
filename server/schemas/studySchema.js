@@ -117,11 +117,11 @@ const StudySchema = new Schema({
 		required: true,
 	},
 	customTerms: {
-		request: Boolean,
-		terms: String,
+		request: { type: Boolean, default: false},
+		terms: { type: String }
 	},
 	title: { type: String, required: true },
-	description: { type: String },
+	description: String,
 	currentReplies: { type: Number, default: 0 },
 	/* closingMethod: { type: String, required: true }, */
 	status: {
@@ -153,4 +153,4 @@ const StudySchema = new Schema({
 	},
 });
 
-export const study = mongoose.model('Study', StudySchema);
+export const Study = mongoose.model('Study', StudySchema);

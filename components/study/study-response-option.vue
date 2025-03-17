@@ -161,9 +161,9 @@ watch(
         if (!newQuestion) return;
 
         // populate the input fields to match the current question configuration
-        checkboxModel.value = newQuestion?.checkbox.options;
-        selectionMinModel.value = newQuestion?.selectionMin;
-        selectionMaxModel.value = newQuestion?.selectionMax;
+        checkboxModel.value = newQuestion?.checkbox?.options;
+        selectionMinModel.value = newQuestion?.checkbox?.selectionMin;
+        selectionMaxModel.value = newQuestion?.checkbox?.selectionMax;
         minModel.value = newQuestion?.range?.min;
         maxModel.value = newQuestion?.range?.max;
         rangeStartModel.value = newQuestion?.range?.startLabel;

@@ -1,11 +1,11 @@
 <!-- return main area of the created study based on the computed properties (showDetails, showDemographics, showQuestionMain) -->
 <template>
     <div class="container">
-        <Study-sidebar @swapDisplay="(data) => toggleDisplay(data.component, data.number, data.id)"/>
+        <StudySidebar @swapDisplay="(data) => toggleDisplay(data.component, data.number, data.id)"/>
         <Details v-if="showDetails"/>
         <Demographic v-if="showDemographics"/>
-        <Study-terms-privacy v-if="showTerms"/>
-        <Study-main v-if="showQuestionMain" :index="questionIndex" :id="questionId"/>
+        <StudyTermsPrivacy v-if="showTerms"/>
+        <StudyMain v-if="showQuestionMain" :index="questionIndex" :id="questionId"/>
     </div>
 </template>
 

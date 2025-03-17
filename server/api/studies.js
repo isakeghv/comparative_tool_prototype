@@ -1,6 +1,6 @@
 import { connDb } from "../services/connDb.js";
 import { verifyToken } from '../utils/jwt.js';
-import { study } from '../schemas/studySchema.js';
+import { Study } from '../schemas/studySchema.js';
 
 // get study by its id, and populate the study with the retrieved data
 const getStudy = async (e) => {
@@ -12,30 +12,35 @@ const getStudy = async (e) => {
 
     try {
 		setResponseStatus(200);
-
 		return { found: true, message: "..." };
     } catch (err) {
 		return { found: false, message: "...", error: err.message };
     }
 }
 
-const newStudy = async (id, userRef, title, desc, demographicArr, demographicReq, questionArr) => {
-	// only need to initialize study with the _id of userProfile to keep a reference of the creator and content; the rest of the fields are default / will get updated later
-	const createdStudy = new study({
-		id: id,
-		user: userRef,
-		title: title,
-		description: desc,
-		demographic: demographicArr,
-		demographicReq: demographicReq,
-		questions: questionArr
-	})
+const newStudy = async (data) => {
+	// deconstruct the data from body; `customTerms` fields need to be deconstructed again as it is nested
+	const { id, user, title, description, demographicReq, demographic, questions,  customTerms: { request, terms } } = data;
+
+	// only need to initialize study with the _id of `userProfile` to keep a reference of the creator and content; the rest of the fields comes with the `study` reactive variable
+	// don't need to do field: value if they have the same name
+    const createdStudy = new Study({
+        id,
+        user,
+        title,
+        description,
+		demographicReq,
+        demographic,
+        questions,
+        customTerms: {
+            request, terms
+        }
+    });
 	
     try {
 		// create study and save it in the database
 		await createdStudy.save();
 		setResponseStatus(201);		
-
 		return { created: true, message: "Study successfully created.", study: createdStudy };
     } catch (err) {
 		console.log(err);
@@ -44,15 +49,15 @@ const newStudy = async (id, userRef, title, desc, demographicArr, demographicReq
 }
 
 // should make the parameters optional?
-const updateStudy = async(id, data) => {
-	// const updateData = { title: 'idk'};
-	const studyRecord = ''
+const updateStudy = async(data) => {
+	// deconstruct to seperate id from the other data that will be updated
+	const { id, ...updateFields } = data;
 
 	try {
 		// find one with matching study id, update it, and return the updated version of the study
-		const updatedStudy = await study.findOneAndUpdate({ id: id }, data, { new: true });
+		const study = await Study.findOneAndUpdate({ id: id }, updateFields, { new: true });
 		// setResonseStatus here
-		return { updated: true, message: "Study successfully updated." };
+		return { updated: true, message: "Study successfully updated.", study};
 	} catch (err) {
 		console.log(err);
 		return { updated: false, message: "Issue occured while updating study.", error: err.message };
@@ -71,14 +76,10 @@ export default defineEventHandler(async (e) => {
 
 	// read body, deconstruct data from the POST request, and create a new 'study' instance (currently with minimal fields to check)
 	if (e.node.req.method === 'POST') {
-		const { id, user, title, description, demographic, demographicReq, questions } = body;
-		return await newStudy(id, user, title, description, demographic, demographicReq, questions);
+		return await newStudy(body);
 	}
 
 	// update the study
-	if (e.node.req.method === 'PUT') {
-		const { id, updatedData } = body;
-			
-		return await updateStudy(id, updatedData);
-	}
+	if (e.node.req.method === 'PUT') {	
+		return await updateStudy(body);	}
 });

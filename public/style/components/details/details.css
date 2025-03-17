@@ -1,0 +1,42 @@
+.hide {
+  display: none;
+}
+
+#details__title_input {
+  border: none;
+  border-bottom: #CCCCCC solid 2px;
+  outline: none;
+  padding-bottom: 0.8rem;
+  margin-bottom: 1.4rem;
+  transition: all 0.3s ease-out;
+  letter-spacing: 0.02rem;
+}
+#details__title_input:focus {
+  border-bottom: #54C0D1 solid 2px;
+}
+
+.details__container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 60%;
+  padding: 2.4rem 2.2rem;
+}
+.details__main {
+  width: clamp(20rem, -4rem + 48vw, 50rem);
+  display: flex;
+  flex-direction: column;
+}
+.details__label {
+  margin-bottom: 0.8rem;
+}
+.details__textarea {
+  resize: none;
+  outline: none;
+  height: 10rem;
+  border: solid #CCCCCC 1px;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+.details__textarea:hover {
+  border: #A4A4A4 1px solid;
+}/*# sourceMappingURL=details.css.map */

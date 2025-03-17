@@ -21,13 +21,13 @@ export const study = reactive({
     id: null,
     title: null,
     description: null,
+    demographicReq: true,
+    demographic: [],
     customTerms: {
         request: false,
         terms: ''
     },
-    questions: [],
-    demographicReq: true,
-    demographic: []
+    questions: []
 })
 
 //to hold the initial configuration. used to compare if user is trying to return and changes have been made.
@@ -35,9 +35,13 @@ export const study = reactive({
 export const initialStudy = reactive({
     title: null,
     description: null,
-    questions: [],
     demographicReq: true,
-    demographic: []
+    demographic: [],
+    customTerms: {
+        request: false,
+        terms: ''
+    },
+    questions: []
 })
 
 //used to handle which component should be displayed when creating a study (description, demographic etc).

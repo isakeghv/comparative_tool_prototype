@@ -22,7 +22,7 @@
         </div>
         <ul class="question__list" ref="listRef" id="question__list">
             <!-- pass specific question config to question item-->
-            <Study-item @select="(data) => selectQuestion(data)" parent="#question__list" :config="question" :index="i"
+            <StudyItem @select="(data) => selectQuestion(data)" parent="#question__list" :config="question" :index="i"
                 v-for="(question, i) in questions" />
         </ul>
     </div>
@@ -51,7 +51,7 @@ const addQuestion = () => {
             id: crypto.randomUUID(),
             question: '',
             required: true,
-            responseType: null,
+            responseType: '',
             // radio: {
             //     options: []
             // },
