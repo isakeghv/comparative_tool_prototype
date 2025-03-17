@@ -32,7 +32,7 @@ const currentConfig = computed(()=>{
 const emit = defineEmits(['swapDisplay'])
 
 //emitting, so the correct component is displayed in "study-create"
-const changeDisplay = (component, number = null, id=null) => {
+const changeDisplay = (component, number = null, id = null) => {
     emit('swapDisplay', { component, number, id })
 }
 
@@ -40,5 +40,5 @@ const changeDisplay = (component, number = null, id=null) => {
 </script>
 
 <style scoped>
-    @import url('public/style/components/study/_study-sidebar.scss');
+    @import url('public/style/components/study/study-sidebar.scss');
 </style>

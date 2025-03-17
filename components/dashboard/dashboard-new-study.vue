@@ -51,5 +51,5 @@ const createNewStudy = async () => {
 </script>
 
 <style scoped>
-    @import url('public/style/components/dashboard/_dashboard-sidebar.scss');
+    @import url('public/style/components/dashboard/dashboard-sidebar.scss');
 </style>

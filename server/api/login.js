@@ -1,8 +1,8 @@
 import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import { useRuntimeConfig, setCookie } from '#imports';
-import { connDb } from "../utils/connDb.js";
-import { userCredential } from '../models/user.js';
+import { connDb } from "../services/connDb.js";
+import { userCredential } from '../schemas/userSchema.js';
 
 // need to add functionality for token-checking, prevent brute-forcing etc. so this is temporary
 const checkPassword = async (email, pwd, e) => {

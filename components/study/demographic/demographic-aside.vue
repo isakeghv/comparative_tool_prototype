@@ -25,8 +25,9 @@
                 </div>
                 <div class="aside__row aside__row--toggle" v-if="isTextResponse">
                     <label for="demographic_text_number" class="hide">Max word count: </label>
-                    <input type="number" id="demographic_text_number" class="aside__input--number font-small" name="demographic_text_number" min="0" max="3000" step="100" v-model="textModel"/>
-                    <span class="font-normal"> / 3000 words</span>
+                    <input type="number" id="demographic_text_number" class="aside__input--number font-small"
+                        name="demographic_text_number" min="0" max="3000" step="100" v-model="textModel" placeholder="0"/>
+                    <span class="font-normal"> / 3000 characters</span>
                 </div>     
             </fieldset>
         </div>
@@ -43,7 +44,7 @@
                     <input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="optionsModel[i]">
                     <button class="aside__button aside__button--option" @click="deleteOption(i)">Delete</button>
                 </div>
-                <button class="aside__button aside__button--add" @click="handleAddOption">Add option</button>
+                <button class="aside__button aside__button--add" @click="addOption">Add option</button>
             </div>
         </div>
         <div class="aside__container">
@@ -95,7 +96,7 @@
 </template>
 
 <script setup>
-import { addOption, deleteOption } from '~/server/utils/response-utils';
+import { addNewOption, removeOptionAtIndex } from '~/server/utils/responseUtils';
 import { study } from '~/public/script/reactive';
 
 const props = defineProps({
@@ -113,35 +114,23 @@ const optionsModel = ref([]);
 const textModel = ref();
 const minModel = ref();
 const maxModel= ref();
-const yearModel = ref(true);
+const yearModel = ref(false);
 const monthModel = ref(false);
 const dayModel = ref(false);
 
 //for finding a specific id in an array and returning the relevant option
 const returnDemographic = (id) => study.demographic.find(demographic => demographic.id === id) || null;
 
-//returning the relevant item to delete
-const removeItem = (array, item) => {
-    return array.filter(element => element !== item);
-};
-
-// // delete a specific option for `Radio` at its index using splice
-// const deleteOption = (index) =>{
-//     optionsModel.value.splice(index, 1);
-//     selectedQuestion.value.options = optionsModel.value;
-// }
-
 //deleting demographic question
 const deleteQuestion = ()=>{
-    const thisDemographic = returnDemographic(props.id)
-    study.demographic = removeItem(study.demographic, thisDemographic);
+    const thisDemographic = returnDemographic(props.id);
+    study.demographic = study.demographic.filter(e => e !== thisDemographic);
 }
 
 //updating required status for the question
 const updateRequired = ()=>{
     const thisDemographic = returnDemographic(props.id)
     thisDemographic.required = requiredModel.value;
-    // demographicReq
 }
 
 //makes sure the demographics question is updated
@@ -167,26 +156,22 @@ const initiateConfig = (id)=>{
     responseModel.value = selectedQuestion.value.responseType;
 
     // for the different options for the questions
-    textModel.value = selectedQuestion.value.text?.maxWords;
+    textModel.value = selectedQuestion.value.text?.maxChar;
     optionsModel.value = selectedQuestion.value.radio?.options;
     minModel.value = selectedQuestion.value.number.min;
     maxModel.value = selectedQuestion.value.number.max;
+    yearModel.value = selectedQuestion.value.date.year;
+    monthModel.value = selectedQuestion.value.date.month;
+    dayModel.value = selectedQuestion.value.date.day;
 }
 
-const handleAddOption = () => {
-  addOption(selectedQuestion.value.radio.options, optionsModel.value);
+const addOption = () => {
+    addNewOption(selectedQuestion.value.radio.options, optionsModel.value);
 };
 
-// addOption(selectedQuestion.value.radio.options, optionsModel.value);
-
-// const addOption = ()=>{
-//     //add "options" if issue not already existing: question does not have options
-//     if (!selectedQuestion.value.radio.options) selectedQuestion.value.radio.options = [];
-
-//     //pushing new option to multiple-choise
-//     selectedQuestion.value.radio.options.push('');
-//     optionsModel.value = selectedQuestion.value.radio.options;
-// }
+const deleteOption = (i) => {
+    removeOptionAtIndex(selectedQuestion.value.radio.options, optionsModel.value, i);
+}
 
 //handling if multiple-choice options should be displayed or not
 const isRadioResponse = computed(() => responseModel.value === 'radio');
@@ -210,15 +195,18 @@ watch(responseModel, (newResponse) => {
 });
 
 // update the nested values of a response type when switching to another question; watching each v-model of the array to be less repetitive
-watch([textModel, optionsModel, minModel, maxModel], () => {
+watch([textModel, optionsModel, minModel, maxModel, yearModel, monthModel, dayModel], () => {
     const thisDemographic = returnDemographic(props.id);
 
     if (!thisDemographic) return;
 
-    thisDemographic.text.maxWords = textModel.value;
+    thisDemographic.text.maxChar = textModel.value;
     thisDemographic.number.min = minModel.value;
     thisDemographic.number.max = maxModel.value;
     thisDemographic.radio.options = optionsModel.value;
+    thisDemographic.date.year = yearModel.value;
+    thisDemographic.date.month = monthModel.value;
+    thisDemographic.date.day = dayModel.value;
 });
 </script>
 

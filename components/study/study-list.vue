@@ -52,17 +52,17 @@ const addQuestion = () => {
             question: '',
             required: true,
             responseType: null,
-            radio: {
-                options: []
-            },
+            // radio: {
+            //     options: []
+            // },
             checkbox: {
                 options: [],
                 selectionMin: '',
                 selectionMax: ''
             },
             range: {
-                min: 0,
-                max: 100,
+                min: '',
+                max: '',
                 startLabel: '',
                 endLabel: ''
             },
@@ -83,9 +83,8 @@ const addQuestion = () => {
     //so the new question is displayed in the page when requested to be made
     selectQuestion({ query: 'question', number: questions.value.length - 1, id: question.id })
 }
-
 </script>
 
 <style scoped>
-    @import url('public/style/components/study/_study-sidebar.scss');
+    @import url('public/style/components/study/study-sidebar.scss');
 </style>

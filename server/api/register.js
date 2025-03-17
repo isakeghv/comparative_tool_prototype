@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
-import { connDb } from "../utils/connDb.js";
-import { userCredential, userProfile } from '../models/user.js';
+import { connDb } from "../services/connDb.js";
+import { userCredential, userProfile } from '../schemas/userSchema.js';
 
 const checkEmail = async (email) => {
 	const existingUser = await userCredential.findOne({ email });

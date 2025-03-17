@@ -4,11 +4,12 @@
             <div class="study__header">
                 <label for="study_question_input" class="study__label study__headline font-h5 font-semi">Question</label>
                 <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question">
-                <!-- {{ study }} -->
             </div>
+            
+            {{ study }}
 
         <div class="artifact">
-            <h3 class="artifact__headline font-h3 font-medium">Artifacts</h3>
+            <h3 class="artifact__headline font-h5 font-medium">Artifacts</h3>
             <div class="artifact__container" v-for="(artifact, i) in config.artifacts">
                 <div class="wrapper">
                     <button class="wrapper__button" @click="selectMedia(artifact.source, artifact.id)">

@@ -3,6 +3,10 @@
         <label :for="id" class="demographic__label">
             <span class="demographic__span font-normal">{{ config.question }} <span class="demographic__required" v-if="config.required">*</span></span>
         </label>
+        <label class="demographic__slider">
+            <input type="checkbox" :id="`demographic_${index}_checkbox`" v-model="requestModel" class="demographic__checkbox" @change="updateRequest()">
+            <span class="demographic__thumbnail" :class="{'demographic__thumbnail--active': requestModel}"></span>
+        </label>
         <!-- <input type="checkbox" v-model="requestModel" name="" :id="id" class="demographic__checkbox" @change="updateRequest"> -->
         <button class="demographic__more" @click="toggleQuestionId()">
             <svg class="demographic__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
@@ -18,7 +22,8 @@ const props = defineProps({
     index: Number
 })
 
-const emit = defineEmits(['edit'])
+const emit = defineEmits(['edit']);
+const requestModel = ref(props.config.request);
 
 //giving checkboxes and labels their own id
 const id = computed(()=>{
@@ -30,8 +35,6 @@ const toggleQuestionId = () =>{
     emit('edit', props.config.id)
 
 }
-
-const requestModel = ref(props.config.request);
 
 //updating in config if question should be asked or not
 const updateRequest = () => {

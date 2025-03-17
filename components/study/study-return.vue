@@ -87,10 +87,8 @@ const handleBeforeUnload = (event) => {
     if (!compareStudy()) event.preventDefault();
     else resetVariables();
 };
-
-
 </script>
 
 <style scoped>
-    @import url('public/style/components/study/_study-sidebar.scss');
+    @import url('public/style/components/study/study-sidebar.scss');
 </style>

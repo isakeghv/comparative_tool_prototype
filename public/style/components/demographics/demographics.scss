@@ -29,6 +29,10 @@
         align-items: center;
         padding-right: 1rem;
         margin: 1.4rem 0;
+
+        &--remove {
+            margin-top: 0;
+        }
     }
     
     &__checkbox {
@@ -70,6 +74,46 @@
     }
 
     &__slider {
-        
+        position: relative;
+        display: inline-block;
+        width: 2.8rem;
+        height: 1.4rem;
+        background: c.$gray;
+        border-radius: 1rem;
+        cursor: pointer;
+        padding: 0 0.1rem; 
+        transition: background 0.3s;
+
+        &:has(.demographic__checkbox:checked) {
+            background: c.$lightBlue;
+        }  
     }
-}
+    
+    // cannot display: none if you want animations
+    &__checkbox {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        position: absolute;
+    }
+    
+    &__thumbnail {
+        position: absolute;
+        width: 1.2rem;
+        height: 1.2rem;
+        background: c.$white-active;
+        border-radius: 50%;
+        transition: transform 0.4s, background 0.3s;
+        top: 50%;
+        transform: translateY(-50%);
+
+        &:hover {
+            box-shadow: 0 0 0.3rem 0.1rem rgba(0, 0, 0, 0.2);
+        }
+
+        &--active {
+            transform: translate(1.4rem, -50%);
+            background: c.$bluePrimary;
+        }
+    }
+}    

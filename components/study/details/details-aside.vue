@@ -39,7 +39,7 @@
         </div>
         <div class="aside__container">
             <div class="aside__selection aside__selection--spaced">
-                <input type="checkbox" id="details_responeses_checkbox" class="aside__checkbox">
+                <input type="checkbox" id="details_responses_checkbox" class="aside__checkbox">
                 <label for="details_responses_checkbox" class="aside__label aside__label--headline font-medium font-semi">
                     Responses
                 </label>
