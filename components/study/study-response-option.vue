@@ -13,9 +13,9 @@
             <div class="aside__option" v-for="(option, i) in checkboxModel" :key="i">
                 <label :for="`option_${option}_${i}_txt`" class="aside__label">{{ i + 1 }}</label>
                 <input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="checkboxModel[i]">
-                <button class="aside__button aside__button--option" @click="deleteCheckbox(i)">Delete</button>
+                <button class="aside__button aside__button--option" @click="deleteCheckbox(i)" v-if="!disabled">Delete</button>
             </div>
-            <button class="aside__button aside__button--add" @click="addCheckbox()">Add option</button>
+            <button class="aside__button aside__button--add" @click="addCheckbox()" v-if="!disabled">Add option</button>
         </div>
         <div class="aside__row aside__row--toggle" v-show="isCheckboxResponse">
             <label for="question_selection_min" class="aside__label font-normal">Selection from </label>
@@ -45,7 +45,7 @@
                 name="question_range_max" step="1" v-model="maxModel" />
             <label for="question_range_end" class="hide">End label</label>
             <input type="text" id="question_range_end" class="aside__input--wide" name="question_range_end"
-                placeholder="End label (optional)" v-model="rangeEndModel" readonly>
+                placeholder="End label (optional)" v-model="rangeEndModel">
         </div>
 
         <!-- drag and drop -->
@@ -53,9 +53,9 @@
             <div class="aside__option" v-for="(option, i) in dropBoxModel" :key="i">
                 <label :for="`option_${option}_${i}_txt`" class="aside__label">Drop-box</label>
                 <input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="dropBoxModel[i]">
-                <button class="aside__button aside__button--option" @click="deleteDropBox(i)">Delete</button>
+                <button class="aside__button aside__button--option" @click="deleteDropBox(i)" v-if="!disabled">Delete</button>
             </div>
-            <button class="aside__button aside__button--add" @click="addDropBox()">Add drop-box</button>
+            <button class="aside__button aside__button--add" @click="addDropBox()" v-if="!disabled">Add drop-box</button>
         </div>
 
         <!-- linear sorting -->
