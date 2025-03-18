@@ -82,7 +82,7 @@ const updateDesiredRes = ()=>{
         study.desiredResponses = '';
         return;
     }
-    
+
     study.desiredResponses = Number(totalResModel.value);
 }
 
@@ -123,7 +123,6 @@ const durationToMs = ()=>{
 
     study.closingLimit.duration = closingTime;
 
-    console.log(study);
 }
 
 
