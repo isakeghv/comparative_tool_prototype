@@ -7,13 +7,14 @@
     "terms": "Custom terms, conditions and privacy rules that the researcher can create if wanted"
   },
   "description": "description of study",
+  "desiredResponses": "holds amount of desired responses",
   "currentReplies": "amount of replies currently collected",
   "status": "the status of the study: ongoing, completed, draft",
   "closingMethod": "hold the study should close, date, duration, replies, manually etc",
   "closingLimit": {
     "date": "date of when study should close. Should hold both",
-    "duration": "should hold date and time of when study should close, relative to the selected duration",
-    "replies": "at what amount of replies the study should close"
+    "duration": "should hold date and time of when study should close in milliseconds, relative to the selected duration",
+    "responses": "at what amount of replies the study should close"
   },
   "questions": [
     {

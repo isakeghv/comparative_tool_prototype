@@ -21,6 +21,13 @@ export const study = reactive({
     id: null,
     title: null,
     description: null,
+    desiredResponses: '',
+    closingMethod: [],
+    closingLimit: {
+        date: '',
+        duration: '',
+        responses: ''
+    },
     demographicReq: true,
     demographic: [],
     customTerms: {

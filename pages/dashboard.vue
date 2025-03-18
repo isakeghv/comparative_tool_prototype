@@ -38,7 +38,6 @@ const showUnableSaveBox = ref(false);
 
 //toggles the prompt-box providing user message that study cannot be saved
 const displayUnableSaveBox = (display)=>{
-    console.log('testing');
     showUnableSaveBox.value = display
 }
 
