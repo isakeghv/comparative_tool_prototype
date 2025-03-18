@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { study, initialStudy } from '~/public/script/reactive'
+import { study, initialStudy, wasStudyCreated } from '~/public/script/reactive'
 
 const props = defineProps({
     current: Object,
@@ -19,7 +19,7 @@ const props = defineProps({
 
 // because our application doesn't detect reloads, the flag needs to update when returning back to dashboard
 const resetStudyCreatedFlag = () => {
-    // isStudyCreated.value = false;
+    wasStudyCreated.value = false;
 }
 
 //looping over arrays, and checking if they are the same, to make sure unsaved changed are not lost

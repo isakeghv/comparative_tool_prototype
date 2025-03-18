@@ -42,13 +42,14 @@
 <script setup>
 //importing reactive variable which holds the id of the study and where the study questions are stored
 import { StudyService } from '~/server/services/studyService';
-import { user, study, initialStudy } from '~/public/script/reactive';
+import { user, study, initialStudy, wasStudyCreated } from '~/public/script/reactive';
 
-const isStudyCreated = ref(false);
+// const isStudyCreated = ref(false);
 
 const props = defineProps({
     name: String,
     id: String,
+    isCreatingStudy: Boolean
 })
 
 // need to pass all the comparisons to pass it as true (probably should find a way to not repeat too much)
@@ -87,10 +88,10 @@ const saveStudy = async () => {
         return;
     }
 
-    console.log('Has the study been created?', isStudyCreated.value);
+    console.log('Has the study been created?', wasStudyCreated.value);
 
-    // if study gets created, update the flag to true
-    if (!isStudyCreated.value) {
+    // if study gets created, update the flag to true; 'isCreatingStudy' prop sent from 'Dashboard' component also has to be true
+    if (!wasStudyCreated.value && props.isCreatingStudy) {
         console.log('Creating a new study...');
 
         // pass in the data from the `study` reactive variable and the user id as a ref
@@ -99,7 +100,7 @@ const saveStudy = async () => {
         if (newStudy) {
             console.log('New study created and added to dashboard');
             user.studies.push(JSON.parse(JSON.stringify(newStudy.study)));
-            isStudyCreated.value = true;
+            wasStudyCreated.value = true;
         }
 
         return;

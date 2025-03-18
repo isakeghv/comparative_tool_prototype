@@ -1,5 +1,5 @@
 <template>
-	<DashboardHeader :name="displayName"/>
+	<DashboardHeader :name="displayName" :isCreatingStudy="isCreatingStudy"/>
 	<div class="container" v-if="showMain && !study.id">
 		<DashboardMain
             @newStudy="(id) => onNewStudy(id)" 
@@ -26,9 +26,12 @@ import { setStudyData } from '~/server/utils/studyUtils';
 
 const showMain = ref(true);
 const displayName = ref('');
-const isReadOnly = ref(false);
+const isReadOnly = ref();
 
-// provide the 'disabled' state to all child components as some of them are deeply nested instead of sending it as a prop
+// need to track if study already exists or should be updated due to the saving logic
+const isCreatingStudy = ref(false);
+
+// provide the 'disabled' state to all child components as some of them are deeply nested instead of sending it as a prop to avoid prop drilling
 provide('disabled', isReadOnly);
 
 const getUserInfo = async () => {
@@ -76,17 +79,20 @@ const populateStudy = (id) => {
 const onNewStudy = (id) => {
     study.id = id;
     isReadOnly.value = false;
+    isCreatingStudy.value = true;
 }
 
 // open in read only mode, where all fields are disabled
 const onSelectStudy = (study) => {
     populateStudy(study);
     isReadOnly.value = true;
+    isCreatingStudy.value = false;
 }
 
 const onEditStudy = (study) => {
     populateStudy(study);
     isReadOnly.value = false;
+    isCreatingStudy.value = false;
 }
 
 </script>
