@@ -1,9 +1,14 @@
 <template>
 	<DashboardHeader :name="displayName"/>
 	<div class="container" v-if="showMain && !study.id">
-		<DashboardMain @newStudy="(id) => study.id = id"/>
+		<DashboardMain
+            @newStudy="(id) => onNewStudy(id)" 
+            @selectStudy="(study) => onSelectStudy(study)"
+            @editStudy="(study) => onEditStudy(study)"
+        />
 	</div>
-    <StudyEditor v-if="study.id"/>
+    <!-- show study editor if id has been passed in, and show as read only/disabled if opened with select (read operation) -->
+    <StudyEditor v-if="study.id" :disabled="isReadOnly"/>
 
 	<!--Display message if issues fetting user-info-->
 	<div class="container" v-if="!showMain && !study.id">
@@ -13,15 +18,18 @@
         <span class="container__span">or</span>
         <button class="container__button">sign out</button>
 	</div>
-
 </template>
 
 <script setup>
-import { user } from '~/public/script/reactive';
-import { study } from '~/public/script/reactive';
+import { user, study, initialStudy } from '~/public/script/reactive';
+import { setStudyData } from '~/server/utils/studyUtils';
 
 const showMain = ref(true);
-const displayName = ref('')
+const displayName = ref('');
+const isReadOnly = ref(false);
+
+// provide the 'disabled' state to all child components as some of them are deeply nested instead of sending it as a prop
+provide('disabled', isReadOnly);
 
 const getUserInfo = async () => {
 	try {
@@ -53,6 +61,33 @@ const getUserInfo = async () => {
 }
 
 await getUserInfo();
+
+const populateStudy = (id) => {
+    // find study with matching id that is stored when user loads dashboard
+    const selectedStudy = user.studies.find(study => study.id === id);
+
+    // load the study with the data of selected study if it exists, and update flag to avoid creating a new studying when saving
+    if (selectedStudy) {
+        setStudyData(study, initialStudy, selectedStudy);
+        // isStudyCreated.value = true;
+    }
+}
+
+const onNewStudy = (id) => {
+    study.id = id;
+    isReadOnly.value = false;
+}
+
+// open in read only mode, where all fields are disabled
+const onSelectStudy = (study) => {
+    populateStudy(study);
+    isReadOnly.value = true;
+}
+
+const onEditStudy = (study) => {
+    populateStudy(study);
+    isReadOnly.value = false;
+}
 
 </script>
 

@@ -4,10 +4,10 @@ export const form = reactive({
     type: null,
 })
 
-// had to move here because rashboard doesnt know when it
-export const isStudyCreated = reactive({
-    value: false
-});
+// had to move here because dashboard doesn't know when it should reset after clicking out of study
+// export const isStudyCreated = reactive({
+//     value: false
+// });
 
 //to store information to display in ui. "info" for user-info: name etc, 
 // "studies" for the studies that is saved to user-id

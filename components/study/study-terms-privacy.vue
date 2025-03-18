@@ -5,12 +5,12 @@
             <div class="demographic__row demographic__row--remove">
                 <span class="demographic__span font-normal">Include custom policy/terms</span>
                 <label for="terms__request_checkbox" class="demographic__slider">
-                    <input type="checkbox" v-model="requestModel" id="terms__request_checkbox" class="demographic__checkbox" @change="updateRequest()">
+                    <input type="checkbox" v-model="requestModel" id="terms__request_checkbox" class="demographic__checkbox" @change="updateRequest()" :disabled="disabled">
                     <span class="demographic__thumbnail" :class="{'demographic__thumbnail--active': requestModel}"></span>
                 </label>
             </div>
             <label for="terms__textarea" class="details__label font-h6 font-medium hide" v-if="study.customTerms.request">Terms of Service and Privacy Policy: </label>
-            <textarea id="terms__textarea" class="details__textarea font-normal" v-model="study.customTerms.terms"v-if="study.customTerms.request">
+            <textarea id="terms__textarea" class="details__textarea font-normal" v-model="study.customTerms.terms"v-if="study.customTerms.request" :disabled="disabled">
         </textarea>
         </div>
     </div>
@@ -18,6 +18,7 @@
 
 <script setup>
 import { study } from '~/public/script/reactive';
+const disabled = inject('disabled');
 const requestModel = ref(study.customTerms.request);
 
 const updateRequest = () => {

@@ -47,7 +47,6 @@ const emit = defineEmits(['select', 'delete', 'edit', 'duplicate', 'export'])
 const studySelect = (id) =>{
     showPopUp.value = false
     emit('select', id);
-
 }
 
 //emitting study id with "delete" event

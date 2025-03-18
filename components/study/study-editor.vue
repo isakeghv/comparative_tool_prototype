@@ -2,16 +2,23 @@
 <template>
     <div class="container">
         <StudySidebar @swapDisplay="(data) => toggleDisplay(data.component, data.number, data.id)"/>
-        <Details v-if="showDetails"/>
-        <Demographic v-if="showDemographics"/>
-        <StudyTermsPrivacy v-if="showTerms"/>
-        <StudyMain v-if="showQuestionMain" :index="questionIndex" :id="questionId"/>
+        <Details v-if="showDetails" />
+        <Demographic v-if="showDemographics" />
+        <StudyTermsPrivacy v-if="showTerms" />
+        <StudyMain v-if="showQuestionMain" :index="questionIndex" :id="questionId" />
     </div>
 </template>
 
 <script setup>
 
-const displayComponent = ref('');
+// need to pass it down to child components as well so the input fields etc. can be targetted
+// reminder: disables hover effects, remove disabled color for title
+// const props = defineProps({
+//   disabled: { type: Boolean, default: false }
+// });
+
+// show details as default when opening/creating a study
+const displayComponent = ref('details');
 const questionIndex = ref();
 const questionId = ref()
 
@@ -42,6 +49,7 @@ const toggleDisplay = (component, number, id)=>{
     questionId.value = id;
 }
 
+// console.log("readonly prop in setup:", props.disabled);
 </script>
 
 <style scoped>

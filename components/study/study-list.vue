@@ -3,7 +3,7 @@
         <div class="question__container">
             <span class="question__header">
                 <h2 class="question__title font-large">Questions</h2>
-                <button class="question__add" aria-label="add new question" @click="addQuestion">
+                <button class="question__add" aria-label="add new question" @click="addQuestion" v-if="!disabled">
                     <svg class="question__plus" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="16" cy="16" r="16" fill="url(#paint0_linear_172_144)" />
                         <path
@@ -30,6 +30,7 @@
 
 <script setup>
 import { study } from '~/public/script/reactive';
+const disabled = inject('disabled');
 
 const listRef = ref('')
 const emit = defineEmits(['select', 'newQuestion'])

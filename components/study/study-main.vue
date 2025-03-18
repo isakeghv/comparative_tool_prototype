@@ -3,10 +3,10 @@
         <div class="study__main">
             <div class="study__header">
                 <label for="study_question_input" class="study__label study__headline font-h5 font-semi">Question</label>
-                <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question">
+                <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question" :disabled="disabled">
             </div>
             
-            {{ study }}
+            <!-- {{ study }} -->
 
         <div class="artifact">
             <h3 class="artifact__headline font-h5 font-medium">Artifacts</h3>
@@ -79,15 +79,14 @@
                         <span class="artifact__info" @mouseover="showInfo = i" @mouseleave="showInfo = null"
                             aria-label="information about id">?</span>
                         <input type="text" :id="`artifact_id-${i}_input`" class="artifact__input artifact__input--small"
-                            v-model="artifact.id" :placeholder="!artifact.id ? 'Id is required' : ''" @mouseover="showArtifactId = i" @mouseleave="showArtifactId = null">
-
+                            v-model="artifact.id" :placeholder="!artifact.id ? 'Id is required' : ''" @mouseover="showArtifactId = i" @mouseleave="showArtifactId = null" :disabled="disabled">
                     </div>
                 </div>
-                <button class="artifact__button" @click="artifact.id = JSON.stringify(Date.now())">
+                <button class="artifact__button" @click="artifact.id = JSON.stringify(Date.now())" v-if="!disabled">
                     Generate unique id
                 </button>
             </div>
-                <div class="artifact__container artifact__container--square">
+                <div class="artifact__container artifact__container--square" v-if="!disabled">
                     <label for="study_file_input" class="artifact__add" aria-label="Choose file">
                         <svg class="artifact__plus" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 39.5H76M38 0V76" stroke="#444444" stroke-width="6" />
@@ -118,6 +117,7 @@
 
 <script setup>
 import { study } from '~/public/script/reactive';
+const disabled = inject('disabled');
 
 const props = defineProps({
     index: Number,

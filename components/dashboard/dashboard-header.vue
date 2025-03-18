@@ -42,7 +42,9 @@
 <script setup>
 //importing reactive variable which holds the id of the study and where the study questions are stored
 import { StudyService } from '~/server/services/studyService';
-import { user, study, initialStudy, isStudyCreated } from '~/public/script/reactive';
+import { user, study, initialStudy } from '~/public/script/reactive';
+
+const isStudyCreated = ref(false);
 
 const props = defineProps({
     name: String,
@@ -105,7 +107,7 @@ const saveStudy = async () => {
         console.log('Updating study...');
 
         // if changes have happened, send a PUT request with the study data as the body
-        const updatedStudy = await StudyService.updateStudy(study);
+        const updatedStudy = await StudyService.updateStudy(study.id, study);
 
         if (updatedStudy) {
             // find index of the study that is currently in progress and display correct information if changes have happened to UI w/o reloading

@@ -1,5 +1,5 @@
 <template>
-    <fieldset class="aside__container">
+    <fieldset class="aside__container" :disabled="disabled">
         <div class="aside__selection">
             <input type="radio" :value="value" name="question_radio" :id="`response_${value}_radio`"
                 class="aside__radio" v-model="localModel" @change="updateResponse" />
@@ -35,7 +35,7 @@
                 name="question_range_min" step="1" v-model.number="minModel" />
             <label for="question_range_start" class="hide">Start label</label>
             <input type="text" id="question_range_start" class="aside__input--wide" name="question_range_start"
-                placeholder="Start label (optional)" v-model="rangeStartModel">
+                placeholder="Start label (optional)" v-model="rangeStartModel" disabled>
         </div>
         <div class="aside__row" v-show="isRangeResponse">
             <label for="question_range_max" class="aside__label font-normal">
@@ -45,7 +45,7 @@
                 name="question_range_max" step="1" v-model="maxModel" />
             <label for="question_range_end" class="hide">End label</label>
             <input type="text" id="question_range_end" class="aside__input--wide" name="question_range_end"
-                placeholder="End label (optional)" v-model="rangeEndModel">
+                placeholder="End label (optional)" v-model="rangeEndModel" readonly>
         </div>
 
         <!-- drag and drop -->
@@ -75,7 +75,8 @@
 
 <script setup>
 import { study } from '~/public/script/reactive';
-import { addNewOption, removeOptionAtIndex } from '~/server/utils/responseUtils';
+import { addNewOption, removeOptionAtIndex } from '~/server/utils/studyUtils';
+const disabled = inject('disabled');
 
 const props = defineProps({
     question: Object,
