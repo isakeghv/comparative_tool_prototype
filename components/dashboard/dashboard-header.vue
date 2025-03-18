@@ -16,18 +16,7 @@
                         <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z"/>
                     </svg>
                 </button>
-                <button class="header__button" data-tooltip="Undo">
-                    <svg class="header__icon" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
-                        <path xmlns="http://www.w3.org/2000/svg" d="M280-200v-80h284q63 0 109.5-40T720-420q0-60-46.5-100T564-560H312l104 104-56 56-200-200 200-200 56 56-104 104h252q97 0 166.5 63T800-420q0 94-69.5 157T564-200H280Z"/>
-                    </svg>
-
-                </button>
-                <button class="header__button" data-tooltip="Redo">
-                    <svg class="header__icon" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
-                        <path xmlns="http://www.w3.org/2000/svg" d="M396-200q-97 0-166.5-63T160-420q0-94 69.5-157T396-640h252L544-744l56-56 200 200-200 200-56-56 104-104H396q-63 0-109.5 40T240-420q0 60 46.5 100T396-280h284v80H396Z"/>
-                    </svg>
-
-                </button>
+                <Dashboard-undoRedo />
                 <button class="header__button" data-tooltip="Link">
                     <svg class="header__icon" viewBox="0 -960 960 960" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path xmlns="http://www.w3.org/2000/svg" d="M680-80q-50 0-85-35t-35-85q0-6 3-28L282-392q-16 15-37 23.5t-45 8.5q-50 0-85-35t-35-85q0-50 35-85t85-35q24 0 45 8.5t37 23.5l281-164q-2-7-2.5-13.5T560-760q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-24 0-45-8.5T598-672L317-508q2 7 2.5 13.5t.5 14.5q0 8-.5 14.5T317-452l281 164q16-15 37-23.5t45-8.5q50 0 85 35t35 85q0 50-35 85t-85 35Z"/>
@@ -81,34 +70,28 @@ const updateSaveHistory = () => {
 const saveStudy = async () => {
     // compare the two study states to see if there has been no changes
     const noChanges = compareStudy();
-    console.log('Has it changed?', !noChanges);
-    
-    // first update the tracking of the initial and current study
-    updateSaveHistory();
 
-    if (noChanges) {
-        console.log('No changes detected. Nothing to save.');
-        return;
-    }
+    //returning if no changes have been made
+    if (noChanges) return;
 
-    console.log('Has the study been created?', wasStudyCreated.value);
 
     // if study gets created, update the flag to true; 'isCreatingStudy' prop sent from 'Dashboard' component also has to be true
     if (!wasStudyCreated.value && props.isCreatingStudy) {
-        console.log('Creating a new study...');
 
         // pass in the data from the `study` reactive variable and the user id as a ref
         const newStudy = await StudyService.createStudy(study, user.info._id);
 
         if (newStudy && newStudy.study) {
-            console.log('New study created and added to dashboard');
             user.studies.push(JSON.parse(JSON.stringify(newStudy.study)));
             wasStudyCreated.value = true;
+
+            // first update the tracking of the initial and current study
+            updateSaveHistory();
+
         } else emit('unableSave');
 
         return;
     } else if (!noChanges) {
-        console.log('Updating study...');
 
         // if changes have happened, send a PUT request with the study data as the body
         const updatedStudy = await StudyService.updateStudy(study.id, study);
@@ -116,11 +99,13 @@ const saveStudy = async () => {
         if (updatedStudy) {
             // find index of the study that is currently in progress and display correct information if changes have happened to UI w/o reloading
             const studyIndex = user.studies.findIndex(study => study.id === updatedStudy.study.id);
-7
+
+            // first update the tracking of the initial and current study
+            updateSaveHistory();
+
             // if updatedStudy id is found within user.studies
             if (studyIndex !== -1) {
                 user.studies[studyIndex] = JSON.parse(JSON.stringify(updatedStudy.study));
-                console.log('Study updated successfully.');
             }
         } else emit('unableSave');
 
