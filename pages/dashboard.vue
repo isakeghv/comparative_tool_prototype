@@ -1,5 +1,5 @@
 <template>
-	<DashboardHeader :name="displayName" :isCreatingStudy="isCreatingStudy"/>
+	<DashboardHeader :name="displayName" :isCreatingStudy="isCreatingStudy" @unableSave="displayUnableSaveBox(true)"/>
 	<div class="container" v-if="showMain && !study.id">
 		<DashboardMain
             @newStudy="(id) => onNewStudy(id)" 
@@ -9,6 +9,9 @@
 	</div>
     <!-- show study editor if id has been passed in, and show as read only/disabled if opened with select (read operation) -->
     <StudyEditor v-if="study.id" :disabled="isReadOnly"/>
+
+    <!--Prompt box informing user that study cannot be saved due to missing fields-->
+    <Dashboard-unableSave @exit="displayUnableSaveBox(false)" v-if="showUnableSaveBox && study.id"/>
 
 	<!--Display message if issues fetting user-info-->
 	<div class="container" v-if="!showMain && !study.id">
@@ -30,6 +33,14 @@ const isReadOnly = ref();
 
 // need to track if study already exists or should be updated due to the saving logic
 const isCreatingStudy = ref(false);
+
+const showUnableSaveBox = ref(false);
+
+//toggles the prompt-box providing user message that study cannot be saved
+const displayUnableSaveBox = (display)=>{
+    console.log('testing');
+    showUnableSaveBox.value = display
+}
 
 // provide the 'disabled' state to all child components as some of them are deeply nested instead of sending it as a prop to avoid prop drilling
 provide('disabled', isReadOnly);

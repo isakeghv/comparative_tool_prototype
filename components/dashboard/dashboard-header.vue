@@ -52,6 +52,9 @@ const props = defineProps({
     isCreatingStudy: Boolean
 })
 
+//event to emit in case the study was unable to save
+const emit = defineEmits(['unableSave'])
+
 // need to pass all the comparisons to pass it as true (probably should find a way to not repeat too much)
 const compareStudy = () => {
     return JSON.stringify(study.questions) === JSON.stringify(initialStudy.questions) &&
@@ -97,11 +100,11 @@ const saveStudy = async () => {
         // pass in the data from the `study` reactive variable and the user id as a ref
         const newStudy = await StudyService.createStudy(study, user.info._id);
 
-        if (newStudy) {
+        if (newStudy && newStudy.study) {
             console.log('New study created and added to dashboard');
             user.studies.push(JSON.parse(JSON.stringify(newStudy.study)));
             wasStudyCreated.value = true;
-        }
+        } else emit('unableSave');
 
         return;
     } else if (!noChanges) {
@@ -119,12 +122,10 @@ const saveStudy = async () => {
                 user.studies[studyIndex] = JSON.parse(JSON.stringify(updatedStudy.study));
                 console.log('Study updated successfully.');
             }
-        }
+        } else emit('unableSave');
 
         return;
-    } else {
-        console.log('Nothing to save.');
-    }
+    } else emit('unableSave');
 };
 
 </script>
