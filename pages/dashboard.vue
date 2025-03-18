@@ -3,7 +3,7 @@
 	<div class="container" v-if="showMain && !study.id">
 		<DashboardMain
             @newStudy="(id) => onNewStudy(id)" 
-            @selectStudy="(study) => onSelectStudy(study)"
+            @selectStudy="(study) => onEditStudy(study)"
             @editStudy="(study) => onEditStudy(study)"
         />
 	</div>
@@ -83,11 +83,11 @@ const onNewStudy = (id) => {
 }
 
 // open in read only mode, where all fields are disabled
-const onSelectStudy = (study) => {
-    populateStudy(study);
-    isReadOnly.value = true;
-    isCreatingStudy.value = false;
-}
+// const onSelectStudy = (study) => {
+//     populateStudy(study);
+//     isReadOnly.value = true;
+//     isCreatingStudy.value = false;
+// }
 
 const onEditStudy = (study) => {
     populateStudy(study);
