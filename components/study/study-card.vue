@@ -3,12 +3,11 @@
         <img src="" alt="thumbnail of study" class="card__img">
         <h3 class="card__title font-medium">{{ title }}</h3>
         <p class="card__paragraph font-small">Started: {{ startDate }}.</p>
-        <button class="card__select" aria-label="Open study" @click="studySelect(id)"></button>
+        <button class="card__select" aria-label="Open study" @click="studyEdit(id)"></button>
         <button class="card__button" aria-label="Open toolbar" @click="showPopUp = !showPopUp">
             <div class="card__dot"></div>
         </button>
         <div class="popup" v-if="showPopUp">
-            <button class="popup__button font-normal" @click="studySelect(id)">Open</button>
             <button class="popup__button font-normal" @click="studyEdit(id)">Edit</button>
             <button class="popup__button font-normal" @click="studyDelete(id)">Delete</button>
             <button class="popup__button font-normal" @click="studyDuplicate(id)">Duplicate</button>
@@ -44,10 +43,10 @@ const filterDisplay = computed(()=>{
 const emit = defineEmits(['select', 'delete', 'edit', 'duplicate', 'export'])
 
 //emitting study id with "select" event
-const studySelect = (id) =>{
-    showPopUp.value = false
-    emit('select', id);
-}
+// const studySelect = (id) =>{
+//     showPopUp.value = false
+//     emit('select', id);
+// }
 
 //emitting study id with "delete" event
 const studyDelete = (id) => {

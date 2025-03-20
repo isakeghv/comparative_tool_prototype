@@ -11,11 +11,15 @@
         <!-- checkbox -->
         <div class="aside__options" v-show="isCheckboxResponse">
             <div class="aside__option" v-for="(option, i) in checkboxModel" :key="i">
-                <label :for="`option_${option}_${i}_txt`" class="aside__label">{{ i + 1 }}</label>
+                <label :for="`option_${option}_${i}_txt`" class="aside__label aside__identifier">{{ i + 1 }}</label>
                 <input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="checkboxModel[i]">
-                <button class="aside__button aside__button--option" @click="deleteCheckbox(i)" v-if="!disabled">Delete</button>
+                <button class="aside__button aside__button--remove" @click="deleteCheckbox(i)" v-if="!disabled">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="aside__cross" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
             </div>
-            <button class="aside__button aside__button--add" @click="addCheckbox()" v-if="!disabled">Add option</button>
+            <button class="aside__button aside__button--add font-semi font-small" @click="addCheckbox()" v-if="!disabled">Add option</button>
         </div>
         <div class="aside__row aside__row--toggle" v-show="isCheckboxResponse">
             <label for="question_selection_min" class="aside__label font-normal">Selection from </label>
@@ -35,7 +39,7 @@
                 name="question_range_min" step="1" v-model.number="minModel" />
             <label for="question_range_start" class="hide">Start label</label>
             <input type="text" id="question_range_start" class="aside__input--wide" name="question_range_start"
-                placeholder="Start label (optional)" v-model="rangeStartModel" disabled>
+                placeholder="Start label (optional)" v-model="rangeStartModel">
         </div>
         <div class="aside__row" v-show="isRangeResponse">
             <label for="question_range_max" class="aside__label font-normal">
@@ -55,7 +59,7 @@
                 <input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="dropBoxModel[i]">
                 <button class="aside__button aside__button--option" @click="deleteDropBox(i)" v-if="!disabled">Delete</button>
             </div>
-            <button class="aside__button aside__button--add" @click="addDropBox()" v-if="!disabled">Add drop-box</button>
+            <button class="aside__button aside__button--add font-small" @click="addDropBox()" v-if="!disabled">Add drop-box</button>
         </div>
 
         <!-- linear sorting -->
