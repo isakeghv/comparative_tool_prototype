@@ -51,19 +51,33 @@ const compareStudy = () => {
            JSON.stringify(study.demographic) === JSON.stringify(initialStudy.demographic) &&
            JSON.stringify(study.description) === JSON.stringify(initialStudy.description) &&
            JSON.stringify(study.title) === JSON.stringify(initialStudy.title) &&
-           JSON.stringify(study.customTerms) === JSON.stringify(initialStudy.customTerms)
+           JSON.stringify(study.customTerms) === JSON.stringify(initialStudy.customTerms) &&
+           JSON.stringify(study.desiredResponses) === JSON.stringify(initialStudy.desiredResponses) &&
+           JSON.stringify(study.closingLimit) === JSON.stringify(initialStudy.closingLimit) &&
+           JSON.stringify(study.closingMethod) === JSON.stringify(initialStudy.closingMethod)
 };
 
 //saves it to "study.initial": 
 // - The "back" button prevents user from going back if the initial study-configuration is not
 //      similar to the current. Saving updates so the "initial" has the current setup, so the user can go back
 const updateSaveHistory = () => {
-    initialStudy.questions = JSON.parse(JSON.stringify(study.questions));
-    initialStudy.demographicReq = JSON.parse(JSON.stringify(study.demographicReq));
-    initialStudy.demographic = JSON.parse(JSON.stringify(study.demographic));
-    initialStudy.description = JSON.parse(JSON.stringify(study.description));
-    initialStudy.title = JSON.parse(JSON.stringify(study.title));
-    initialStudy.customTerms = JSON.parse(JSON.stringify(study.customTerms));
+    // create an array of the study properties to loop through more efficiently
+    const properties = [
+        'questions',
+        'demographicReq',
+        'demographic',
+        'description',
+        'title',
+        'customTerms',
+        'desiredResponses',
+        'closingLimit',
+        'closingMethod'
+    ];
+
+    properties.forEach(property => {
+        initialStudy[property] = JSON.parse(JSON.stringify(study[property]));
+    });
+
 };
 
 // when clicking on 'save', update the tracking of changes and create new study if it hasn't been created yet
@@ -74,12 +88,12 @@ const saveStudy = async () => {
     //returning if no changes have been made
     if (noChanges) return;
 
-
     // if study gets created, update the flag to true; 'isCreatingStudy' prop sent from 'Dashboard' component also has to be true
     if (!wasStudyCreated.value && props.isCreatingStudy) {
 
         // pass in the data from the `study` reactive variable and the user id as a ref
         const newStudy = await StudyService.createStudy(study, user.info._id);
+        console.log(newStudy);
 
         if (newStudy && newStudy.study) {
             user.studies.push(JSON.parse(JSON.stringify(newStudy.study)));

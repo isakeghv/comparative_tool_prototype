@@ -75,7 +75,6 @@ const totalResModel = ref('');
 //array holding the closing-methods
 const closingMethods = ref([]);
 
-
 //updates the amount of desired responses
 const updateDesiredRes = ()=>{
     if (!totalResModel.value){
@@ -85,7 +84,6 @@ const updateDesiredRes = ()=>{
 
     study.desiredResponses = Number(totalResModel.value);
 }
-
 
 const setResLimit = ()=>{
     const stop = !closingMethods.value.includes("responses");
@@ -125,7 +123,6 @@ const durationToMs = ()=>{
 
 }
 
-
 //updates the date that closing should be done at
 const updateDate = ()=>{
     const stop = !closingMethods.value.includes("date");
@@ -160,7 +157,6 @@ const updateClosing = ()=> {
     //updates response-limit in reactive variable
     if (updateResponses) setResLimit();
     else if (study.closingLimit.responses) study.closingLimit.responses = '';
-
 }
 
 const props = defineProps({

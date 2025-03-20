@@ -4,7 +4,7 @@ import { Study } from '../../schemas/studySchema.js';
 
 const newStudy = async (data) => {
 	// deconstruct the data from body; `customTerms` fields need to be deconstructed again as it is nested
-	const { id, user, title, description, demographicReq, demographic, questions,  customTerms: { request, terms } } = data;
+	const { id, user, title, description, demographicReq, demographic, questions,  customTerms: { request, terms }, currentReplies, closingMethod, closingLimit: { date, duration, responses }, desiredResponses } = data;
 
 	// only need to initialize study with the _id of `userProfile` to keep a reference of the creator and content; the rest of the fields comes with the `study` reactive variable
 	// don't need to do field: value if they have the same name
@@ -18,7 +18,15 @@ const newStudy = async (data) => {
         questions,
         customTerms: {
             request, terms
-        }
+        },
+		currentReplies,
+		closingMethod,
+		closingLimit: {
+			date,
+			duration,
+			responses
+		},
+		desiredResponses
     });
 	
     try {

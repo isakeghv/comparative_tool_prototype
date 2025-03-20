@@ -43,24 +43,23 @@ const flattenArray = (arr) => {
     );
 };
 
-
 //comparing the current update with last saved to make sure unsaved changes are not ost
 const compareStudy = () => {
-
-    //checking if arrays are the same. Using a bit "overcomplicated" function due to one array being "array" 
-    // and other array is "proxyarray", causing it to see it as false
-    const similarArrays = compareArray(flattenArray(props.current.questions), flattenArray(props.initial.questions)) && compareArray(flattenArray(props.current.demographic), flattenArray(props.initial.demographic))
-    
-
-    // need to compare the arrays (demographics/questions) as string, as they would else lead to false due to comparing memory locations and not content
+    const similarArrays = compareArray(flattenArray(props.current.questions), flattenArray(props.initial.questions)) &&
+                          compareArray(flattenArray(props.current.demographic), flattenArray(props.initial.demographic));
+                          
     return props.current.demographicReq === props.initial.demographicReq &&
         props.current.description === props.initial.description &&
         props.current.title === props.initial.title &&
         JSON.stringify(props.current.demographic) === JSON.stringify(props.initial.demographic) &&
         JSON.stringify(props.current.questions) === JSON.stringify(props.initial.questions) &&
         JSON.stringify(props.current.customTerms) === JSON.stringify(props.initial.customTerms) &&
+        JSON.stringify(props.current.closingMethod) === JSON.stringify(props.initial.closingMethod) &&
+        JSON.stringify(props.current.closingLimit) === JSON.stringify(props.initial.closingLimit) &&
+        props.current.desiredResponses === props.initial.desiredResponses &&
         similarArrays;
-}
+};
+
 
 //resetting variables there is no issue incorrect information being displayed when opening different study
 const resetVariables = () => {
@@ -72,6 +71,11 @@ const resetVariables = () => {
     study.customTerms.request = false;
     study.customTerms.terms = '';
     study.questions = [];
+    study.closingMethod = '';
+    study.closingLimit.date = '';
+    study.closingLimit.duration = '';
+    study.closingLimit.responses = '';
+    study.desiredResponses = '';
  
     initialStudy.title = null;
     initialStudy.description = null;
@@ -80,6 +84,11 @@ const resetVariables = () => {
     initialStudy.customTerms.request = false;
     initialStudy.customTerms.terms = '';
     initialStudy.questions = [];
+    initialStudy.closingMethod = '';
+    initialStudy.closingLimit.date = '';
+    initialStudy.closingLimit.duration = '';
+    initialStudy.closingLimit.responses = '';
+    initialStudy.desiredResponses = '';
 }
 
 const goBack = () => {

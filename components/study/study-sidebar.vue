@@ -23,6 +23,13 @@ const currentConfig = computed(()=>{
     return {
         title: study.title,
         description: study.description,
+        closingMethod: study.closingMethod,
+        closingLimit: {
+            date: study.closingLimit.date,
+            duration: study.closingLimit.duration,
+            responses: study.closingLimit.responses
+        },
+        desiredResponses: study.desiredResponses,
         demographicReq: study.demographicReq,
         demographic: study.demographic,
         customTerms: {

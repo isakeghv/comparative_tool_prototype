@@ -23,6 +23,9 @@ export const setStudyData = (study, initialStudy, studyData) => {
     study.demographic = studyData.demographic;
     study.customTerms = studyData.customTerms;
     study.questions = studyData.questions;
+    study.desiredResponses = studyData.desiredResponses;
+    study.closingMethod = studyData.closingMethod;
+    study.closingLimit = studyData.closingLimit;
 
     initialStudy.title = studyData.title;
     initialStudy.description = studyData.description;
@@ -30,4 +33,7 @@ export const setStudyData = (study, initialStudy, studyData) => {
     initialStudy.demographic = studyData.demographic;
     initialStudy.customTerms = studyData.customTerms;
     initialStudy.questions = studyData.questions;
+    initialStudy.desiredResponses = studyData.desiredResponses;
+    initialStudy.closingMethod = studyData.closingMethod;
+    initialStudy.closingLimit = studyData.closingLimit;
 }

@@ -82,6 +82,7 @@ const populateStudy = (id) => {
     // load the study with the data of selected study if it exists, and update flag to avoid creating a new studying when saving
     if (selectedStudy) {
         setStudyData(study, initialStudy, selectedStudy);
+        // console.log(JSON.stringify(selectedStudy));
         // isStudyCreated.value = true;
     }
 }

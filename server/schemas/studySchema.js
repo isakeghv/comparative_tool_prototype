@@ -123,18 +123,19 @@ const StudySchema = new Schema({
 	title: { type: String, required: true },
 	description: String,
 	currentReplies: { type: Number, default: 0 },
-	/* closingMethod: { type: String, required: true }, */
 	status: {
 		type: String,
 		enum: ['ongoing', 'completed', 'draft'],
 		required: true,
 		default: 'draft',
 	},
+	closingMethod: { type: Array },
 	closingLimit: {
 		date: { type: Date },
 		duration: { type: String },
-		replies: { type: Number },
+		responses: { type: Number },
 	},
+	desiredResponses: { type: Number },
 	questions: [QuestionSchema],
 	demographicReq: { type: Boolean, required: true, default: false },
 	demographic: [DemographicSchema],
