@@ -5,6 +5,7 @@
             @newStudy="(id) => onNewStudy(id)" 
             @selectStudy="(study) => onEditStudy(study)"
             @editStudy="(study) => onEditStudy(study)"
+            @deleteStudy="(study) => onDeleteStudy(study)"
         />
 	</div>
     <!-- show study editor if id has been passed in, and show as read only/disabled if opened with select (read operation) -->
@@ -26,6 +27,7 @@
 <script setup>
 import { user, study, initialStudy } from '~/public/script/reactive';
 import { setStudyData } from '~/server/utils/studyUtils';
+import StudyService from '~/server/services/studyService';
 
 const showMain = ref(true);
 const displayName = ref('');
@@ -79,11 +81,9 @@ const populateStudy = (id) => {
     // find study with matching id that is stored when user loads dashboard
     const selectedStudy = user.studies.find(study => study.id === id);
 
-    // load the study with the data of selected study if it exists, and update flag to avoid creating a new studying when saving
+    // load the study with the data of selected study if it exists
     if (selectedStudy) {
         setStudyData(study, initialStudy, selectedStudy);
-        // console.log(JSON.stringify(selectedStudy));
-        // isStudyCreated.value = true;
     }
 }
 
@@ -106,8 +106,13 @@ const onEditStudy = (study) => {
     isCreatingStudy.value = false;
 }
 
+
+const onDeleteStudy = (study) => {
+    StudyService.deleteStudy(study);
+}
+
 </script>
 
 <style scoped>
-@import url('public/style/pages/dashboard/dashboard.scss');
+    @import url('public/style/pages/dashboard/dashboard.scss');
 </style>

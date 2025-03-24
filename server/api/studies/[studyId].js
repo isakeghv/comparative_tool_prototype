@@ -8,11 +8,11 @@ const getStudy = async (e) => {
     const studyId = e.context.params?.studyId;
 
     // find study in databaaaaase
-    const study = Study.findOne({ _id: studyId });
+    const study = await Study.findOne({ id: studyId });
 
     try {
         setResponseStatus(200);
-        return { found: true, message: "Study found..." };
+        return { found: true, message: "Study found...", study };
     } catch (err) {
         return { found: false, message: "...", error: err.message };
     }
@@ -36,6 +36,21 @@ const updateStudy = async(e, data) => {
     }
 }
 
+const deleteStudy = async (e) => {
+    const studyId = e.context.params?.studyId;
+
+    // use one of MongoDB's CRUD function to delete a study by its id
+    const study = await Study.findOneAndDelete({ id: studyId });
+
+    try {
+        setResponseStatus(200);
+        return { found: true, message: "Study deleted successfully." };
+    } catch (err) {
+        return { found: false, message: "...", error: err.message };
+    }
+}
+
+
 export default defineEventHandler(async (e) => {
     verifyToken(e);
     await connDb();
@@ -45,9 +60,12 @@ export default defineEventHandler(async (e) => {
         return await getStudy(e);
     }
 
-    // update the study
     if (e.node.req.method === 'PUT') {
         const body = await readBody(e);
         return await updateStudy(e, body);
+    }
+
+    if (e.node.req.method === 'DELETE') {
+        return await deleteStudy(e);
     }
 });

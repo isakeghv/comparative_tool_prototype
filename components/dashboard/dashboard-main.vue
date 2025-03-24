@@ -16,7 +16,7 @@
 			<StudyCard v-for="study in studies" :key="study.id"
 				@select="(study) => emitSelectStudy(study)"
 				@edit="(study) => emitEditStudy(study)"
-				@delete="(study) => console.log(study)"
+				@delete="(study) => emitDeleteStudy(study)"
 				@duplicate="(study) => console.log(study)" :status="study.status" :filter="filter"
 				@export="(study) => console.log(study)" :id="study.id" :title="study.title"
 				:startDate="study.created" />
@@ -25,24 +25,24 @@
 </template>
 
 <script setup>
-import { StudyService } from '~/server/services/studyService';
-import { user } from "~/public/script/reactive";
+import { user } from '~/public/script/reactive';
 
 //Setting variable to store which filter to use for which studies to display. Setting default to 'all' so all
 //studies are displayed as default. This is passed to "StudyBlock" with the :filter attr
-const filter = ref("all");
+const filter = ref('all');
 
-const emit = defineEmits(["newStudy", "selectStudy", "editStudy"]);
+const emit = defineEmits(['newStudy', 'selectStudy', 'editStudy', 'deleteStudy']);
 
 // emit them again to reach `Dashboard` component that handles the showing of dashboard and study editor
-const emitNewStudy = (id) => emit("newStudy", id);
-const emitSelectStudy = (study) => emit("selectStudy", study);
-const emitEditStudy = (study) => emit("editStudy", study);
+const emitNewStudy = (id) => emit('newStudy', id);
+const emitSelectStudy = (study) => emit('selectStudy', study);
+const emitEditStudy = (study) => emit('editStudy', study);
+const emitDeleteStudy = (study) => emit('deleteStudy', study);
 
 
 //computed property being automatically update to display the correct title relative to the selected filter
 const mainTitle = computed(() => {
-	if (["all", "completed", "ongoing", "draft"].includes(filter.value))
+	if (['all', 'completed', 'ongoing', 'draft'].includes(filter.value))
 		return `Viewing ${filter.value} studies`;
 	return `Viewing ${filter.value}`;
 });

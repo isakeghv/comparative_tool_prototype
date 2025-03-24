@@ -30,7 +30,7 @@
 
 <script setup>
 //importing reactive variable which holds the id of the study and where the study questions are stored
-import { StudyService } from '~/server/services/studyService';
+import StudyService from '~/server/services/studyService';
 import { user, study, initialStudy, wasStudyCreated } from '~/public/script/reactive';
 
 // const isStudyCreated = ref(false);
