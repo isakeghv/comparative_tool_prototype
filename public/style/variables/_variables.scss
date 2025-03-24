@@ -39,9 +39,9 @@
 @mixin inputArea($width) {
     outline: none;
     width: $width;
-    height: 2.5rem;
+    height: 2.4rem;
     border: $borderSolid;
-    border-radius: 0.6rem;
+    border-radius: 0.5rem;
     padding: 0.5rem;
     
     &:hover {
