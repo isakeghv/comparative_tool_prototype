@@ -111,34 +111,34 @@ const linearEndModel = ref('');
 
 const thisQuestion = () => study.questions.find(q => q.id === props.id);
 
-const isCheckboxResponse = computed(() => {
-	const result = props.value === 'checkbox' && thisQuestion().responseType === 'checkbox';
-	console.log('isCheckboxResponse:', result);
-	return result;
-});
+// const isCheckboxResponse = computed(() => {
+// 	const result = props.value === 'checkbox' && thisQuestion().responseType === 'checkbox';
+// 	console.log('isCheckboxResponse:', result);
+// 	return result;
+// });
 
-const isRangeResponse = computed(() => {
-	const result = props.value === 'range' && thisQuestion().responseType === 'range';
-	console.log('isRangeResponse:', result);
-	return result;
-});
+// const isRangeResponse = computed(() => {
+// 	const result = props.value === 'range' && thisQuestion().responseType === 'range';
+// 	console.log('isRangeResponse:', result);
+// 	return result;
+// });
 
-const isDropResponse = computed(() => {
-	const result = props.value === 'drop' && thisQuestion().responseType === 'drop';
-	console.log('isDropResponse:', result);
-	return result;
-});
+// const isDropResponse = computed(() => {
+// 	const result = props.value === 'drop' && thisQuestion().responseType === 'drop';
+// 	console.log('isDropResponse:', result);
+// 	return result;
+// });
 
-const isLinearResponse = computed(() => {
-	const result = props.value === 'linear' && thisQuestion().responseType === 'linear';
-	console.log('isLinearResponse:', result);
-	return result;
-});
+// const isLinearResponse = computed(() => {
+// 	const result = props.value === 'linear' && thisQuestion().responseType === 'linear';
+// 	console.log('isLinearResponse:', result);
+// 	return result;
+// });
 
-// const isCheckboxResponse = computed(() => props.value === 'checkbox' && thisQuestion().responseType === 'checkbox');
-// const isRangeResponse = computed(() => props.value === 'range' && thisQuestion().responseType === 'range');
-// const isDropResponse = computed(() => props.value === 'drop' && thisQuestion().responseType === 'drop');
-// const isLinearResponse = computed(() => props.value === 'linear' && thisQuestion().responseType === 'linear');
+const isCheckboxResponse = computed(() => props.value === 'checkbox' && thisQuestion().responseType === 'checkbox');
+const isRangeResponse = computed(() => props.value === 'range' && thisQuestion().responseType === 'range');
+const isDropResponse = computed(() => props.value === 'drop' && thisQuestion().responseType === 'drop');
+const isLinearResponse = computed(() => props.value === 'linear' && thisQuestion().responseType === 'linear');
 
 
 // create a computed property for two-way binding so parent knows what the response type is, and can change accordingly
@@ -150,11 +150,11 @@ const localModel = computed({
 });
 
 const addDropBox = () => {
-	addNewOption(props.question.drop.dropBoxes, dropBoxModel.value);
+	addNewOption(props.question.drop.dropBox, dropBoxModel.value);
 };
 
 const deleteDropBox = (i) => {
-	removeOptionAtIndex(props.question.drop.dropBoxes, dropBoxModel.value, i);
+	removeOptionAtIndex(props.question.drop.dropBox, dropBoxModel.value, i);
 }
 
 // emit all the question option values at once to parent
@@ -195,7 +195,7 @@ watch(
 		maxModel.value = newQuestion?.range?.max;
 		rangeStartModel.value = newQuestion?.range?.startLabel;
 		rangeEndModel.value = newQuestion?.range?.endLabel;
-		dropBoxModel.value = newQuestion?.drop?.dropBoxes || [];
+		dropBoxModel.value = newQuestion?.drop?.dropBox || [];
 		linearStartModel.value = newQuestion?.linear?.startLabel;
 		linearEndModel.value = newQuestion?.linear?.endLabel;
 	},
