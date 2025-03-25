@@ -11,7 +11,7 @@ const ArtifactSchema = new Schema({
 // update earlier schema for questions and adding some validation so 'responseType' will correspond to its option
 const QuestionSchema = new Schema({
 	id: { type: String, required: true },
-	title: { type: String, required: true, default: 'Question' },
+	question: { type: String, required: true },
 	required: { type: Boolean, required: true },
 	responseType: {
 		type: String,
@@ -28,7 +28,7 @@ const QuestionSchema = new Schema({
 		options: [{ type: String }],
 	},
 	checkbox: {
-		options: [{ type: String }],
+		// options: [{ type: String }],
 		selectionMin: { type: Number },
 		selectionMax: { type: Number }
 	},
@@ -38,7 +38,7 @@ const QuestionSchema = new Schema({
 		startLabel: { type: String },
 		endLabel: { type: String }
 	},
-	drag: {
+	drop: {
 		dropBox: [{ type: String }]
 	},
 	linear: {

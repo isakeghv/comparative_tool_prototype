@@ -11,6 +11,7 @@
 
 <script setup>
 import { study, initialStudy, wasStudyCreated } from '~/public/script/reactive'
+import { compareStudies } from '~/server/utils/studyUtils';
 
 const props = defineProps({
     current: Object,
@@ -22,44 +23,44 @@ const resetStudyCreatedFlag = () => {
     wasStudyCreated.value = false;
 }
 
-//looping over arrays, and checking if they are the same, to make sure unsaved changed are not lost
-const compareArray = (arr1, arr2) => {
-    for (let i = 0; i < arr1.length; i++) {
-        const item1 = arr1[i]
-        const item2 = arr2[i]
-        if (item1 !== item2) return false
-    }
-    return true;
-}
+// //looping over arrays, and checking if they are the same, to make sure unsaved changed are not lost
+// const compareArray = (arr1, arr2) => {
+//     for (let i = 0; i < arr1.length; i++) {
+//         const item1 = arr1[i]
+//         const item2 = arr2[i]
+//         if (item1 !== item2) return false
+//     }
+//     return true;
+// }
 
-//flattens array so objects can be compared correctly.
-const flattenArray = (arr) => {
-    //make sure it is an array
-    if (!Array.isArray(arr)) return [];
+// //flattens array so objects can be compared correctly.
+// const flattenArray = (arr) => {
+//     //make sure it is an array
+//     if (!Array.isArray(arr)) return [];
 
-    //if all good, continue flattening array
-    return arr.flatMap(obj =>
-        Object.values(obj || {}).flatMap(v => (typeof v === 'object' && v !== null) ? flattenArray([v]) : v)
-    );
-};
+//     //if all good, continue flattening array
+//     return arr.flatMap(obj =>
+//         Object.values(obj || {}).flatMap(v => (typeof v === 'object' && v !== null) ? flattenArray([v]) : v)
+//     );
+// };
 
-//comparing the current update with last saved to make sure unsaved changes are not ost
-const compareStudy = () => {
-    const similarArrays = compareArray(flattenArray(props.current.questions), flattenArray(props.initial.questions)) &&
-                          compareArray(flattenArray(props.current.demographic), flattenArray(props.initial.demographic));
+// //comparing the current update with last saved to make sure unsaved changes are not ost
+// const compareStudy = () => {
+//     const similarArrays = compareArray(flattenArray(props.current.questions), flattenArray(props.initial.questions)) &&
+//                           compareArray(flattenArray(props.current.demographic), flattenArray(props.initial.demographic));
                           
-    return props.current.demographicReq === props.initial.demographicReq &&
-        props.current.description === props.initial.description &&
-        props.current.title === props.initial.title &&
-        JSON.stringify(props.current.demographic) === JSON.stringify(props.initial.demographic) &&
-        JSON.stringify(props.current.questions) === JSON.stringify(props.initial.questions) &&
-        JSON.stringify(props.current.customTerms) === JSON.stringify(props.initial.customTerms) &&
-        JSON.stringify(props.current.closingMethod) === JSON.stringify(props.initial.closingMethod) &&
-        JSON.stringify(props.current.closingLimit) === JSON.stringify(props.initial.closingLimit) &&
-        props.current.desiredResponses === props.initial.desiredResponses &&
-        similarArrays;
-};
-
+//     // console.log(props.current.questions, props.initial.questions)
+//     return props.current.demographicReq === props.initial.demographicReq &&
+//         props.current.description === props.initial.description &&
+//         props.current.title === props.initial.title &&
+//         JSON.stringify(props.current.demographic) === JSON.stringify(props.initial.demographic) &&
+//         JSON.stringify(props.current.questions) === JSON.stringify(props.initial.questions) &&
+//         JSON.stringify(props.current.customTerms) === JSON.stringify(props.initial.customTerms) &&
+//         JSON.stringify(props.current.closingMethod) === JSON.stringify(props.initial.closingMethod) &&
+//         JSON.stringify(props.current.closingLimit) === JSON.stringify(props.initial.closingLimit) &&
+//         props.current.desiredResponses === props.initial.desiredResponses &&
+//         similarArrays;
+// };
 
 //resetting variables there is no issue incorrect information being displayed when opening different study
 const resetVariables = () => {
@@ -92,9 +93,13 @@ const resetVariables = () => {
 }
 
 const goBack = () => {
-    const isAlike = compareStudy();
-    if (isAlike) resetVariables();
-    else alert('Changes have not been saved. Change this with a proper custom prompt-box, with the option to "disgard changes", "save and return to dashboard", or "cancel"');
+    const isAlike = compareStudies(props.current, props.initial);
+
+    if (isAlike) {
+        resetVariables();
+    } else {
+        alert('Changes have not been saved. Change this with a proper custom prompt-box, with the option to "disgard changes", "save and return to dashboard", or "cancel"');
+    }
 }
 
 //to prevent page reload if changes have not been saved

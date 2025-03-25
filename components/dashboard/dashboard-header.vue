@@ -32,6 +32,7 @@
 //importing reactive variable which holds the id of the study and where the study questions are stored
 import StudyService from '~/server/services/studyService';
 import { user, study, initialStudy, wasStudyCreated } from '~/public/script/reactive';
+import { compareStudies } from '~/server/utils/studyUtils';
 
 // const isStudyCreated = ref(false);
 
@@ -43,19 +44,6 @@ const props = defineProps({
 
 //event to emit in case the study was unable to save
 const emit = defineEmits(['unableSave'])
-
-// need to pass all the comparisons to pass it as true (probably should find a way to not repeat too much)
-const compareStudy = () => {
-    return JSON.stringify(study.questions) === JSON.stringify(initialStudy.questions) &&
-           JSON.stringify(study.demographicReq) === JSON.stringify(initialStudy.demographicReq) &&
-           JSON.stringify(study.demographic) === JSON.stringify(initialStudy.demographic) &&
-           JSON.stringify(study.description) === JSON.stringify(initialStudy.description) &&
-           JSON.stringify(study.title) === JSON.stringify(initialStudy.title) &&
-           JSON.stringify(study.customTerms) === JSON.stringify(initialStudy.customTerms) &&
-           JSON.stringify(study.desiredResponses) === JSON.stringify(initialStudy.desiredResponses) &&
-           JSON.stringify(study.closingLimit) === JSON.stringify(initialStudy.closingLimit) &&
-           JSON.stringify(study.closingMethod) === JSON.stringify(initialStudy.closingMethod)
-};
 
 //saves it to "study.initial": 
 // - The "back" button prevents user from going back if the initial study-configuration is not
@@ -77,13 +65,12 @@ const updateSaveHistory = () => {
     properties.forEach(property => {
         initialStudy[property] = JSON.parse(JSON.stringify(study[property]));
     });
-
 };
 
 // when clicking on 'save', update the tracking of changes and create new study if it hasn't been created yet
 const saveStudy = async () => {
     // compare the two study states to see if there has been no changes
-    const noChanges = compareStudy();
+    const noChanges = compareStudies(study, initialStudy);
 
     //returning if no changes have been made
     if (noChanges) return;
@@ -106,7 +93,6 @@ const saveStudy = async () => {
 
         return;
     } else if (!noChanges) {
-
         // if changes have happened, send a PUT request with the study data as the body
         const updatedStudy = await StudyService.updateStudy(study.id, study);
 

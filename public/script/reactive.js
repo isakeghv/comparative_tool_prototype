@@ -37,8 +37,8 @@ export const study = reactive({
     questions: []
 })
 
-//to hold the initial configuration. used to compare if user is trying to return and changes have been made.
-    //to make sure user cannot return and lose changes
+// to hold the initial configuration. used to compare if user is trying to return and changes have been made.
+//     to make sure user cannot return and lose changes
 export const initialStudy = reactive({
     title: null,
     description: null,
@@ -57,6 +57,8 @@ export const initialStudy = reactive({
     },
     questions: []
 })
+
+// export const initialStudy = reactive({ ...study });
 
 //used to handle which component should be displayed when creating a study (description, demographic etc).
 //if "component" is a question, the ".question" should hold which question should be displayed

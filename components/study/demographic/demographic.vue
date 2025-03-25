@@ -7,7 +7,7 @@
                 <span class="demographic__span font-normal">Request demographics</span>
             </label>
             <label class="demographic__slider">
-                <input type="checkbox" v-model="requestModel" id="demographic__request_checkbox" class="demographic__checkbox" @change="updateRequest()" :disabled="disabled">
+                <input type="checkbox" v-model="requestModel" id="demographic__request_checkbox" class="demographic__checkbox" @change="updateRequest()">
                 <span class="demographic__thumbnail" :class="{'demographic__thumbnail--active': requestModel}"></span>
             </label>
         </div>
@@ -20,7 +20,6 @@
 
 <script setup>
 import { study } from '~/public/script/reactive';
-const disabled = inject('disabled');
 
 const requestModel = ref(study.demographicReq);
 

@@ -26,7 +26,7 @@
 
 <script setup>
 import { user, study, initialStudy } from '~/public/script/reactive';
-import { setStudyData } from '~/server/utils/studyUtils';
+// import { setStudyData } from '~/server/utils/studyUtils';
 import StudyService from '~/server/services/studyService';
 
 const showMain = ref(true);
@@ -83,7 +83,27 @@ const populateStudy = (id) => {
 
     // load the study with the data of selected study if it exists
     if (selectedStudy) {
-        setStudyData(study, initialStudy, selectedStudy);
+        study.id = selectedStudy.id;
+        study.title = selectedStudy.title;
+        study.description = selectedStudy.description;
+        study.demographicReq = selectedStudy.demographicReq;
+        study.demographic = selectedStudy.demographic;
+        study.customTerms = selectedStudy.customTerms;
+        study.questions = selectedStudy.questions;
+        study.desiredResponses = selectedStudy.desiredResponses;
+        study.closingMethod = selectedStudy.closingMethod;
+        study.closingLimit = selectedStudy.closingLimit;
+
+        // use deep copy to avoid sharing references
+        initialStudy.title = JSON.parse(JSON.stringify(selectedStudy.title));
+        initialStudy.description = JSON.parse(JSON.stringify(selectedStudy.description));
+        initialStudy.demographicReq = JSON.parse(JSON.stringify(selectedStudy.demographicReq));
+        initialStudy.demographic = JSON.parse(JSON.stringify(selectedStudy.demographic));
+        initialStudy.customTerms = JSON.parse(JSON.stringify(selectedStudy.customTerms));
+        initialStudy.questions = JSON.parse(JSON.stringify(selectedStudy.questions));
+        initialStudy.desiredResponses = JSON.parse(JSON.stringify(selectedStudy.desiredResponses));
+        initialStudy.closingMethod = JSON.parse(JSON.stringify(selectedStudy.closingMethod));
+        initialStudy.closingLimit = JSON.parse(JSON.stringify(selectedStudy.closingLimit));
     }
 }
 

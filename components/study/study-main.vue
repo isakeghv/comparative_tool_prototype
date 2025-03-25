@@ -3,10 +3,10 @@
         <div class="study__main">
             <div class="study__header">
                 <label for="study_question_input" class="study__label study__headline font-h5 font-semi">Question</label>
-                <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question" :disabled="disabled">
+                <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question">
             </div>
             
-            <!-- {{ study }} -->
+        <!-- {{ study }} -->
 
         <div class="artifact">
             <h3 class="artifact__headline font-h5 font-medium">Artifacts</h3>
@@ -79,14 +79,14 @@
                         <span class="artifact__info" @mouseover="showInfo = i" @mouseleave="showInfo = null"
                             aria-label="information about id">?</span>
                         <input type="text" :id="`artifact_id-${i}_input`" class="artifact__input artifact__input--small"
-                            v-model="artifact.id" :placeholder="!artifact.id ? 'Id is required' : ''" @mouseover="showArtifactId = i" @mouseleave="showArtifactId = null" :disabled="disabled">
+                            v-model="artifact.id" :placeholder="!artifact.id ? 'Id is required' : ''" @mouseover="showArtifactId = i" @mouseleave="showArtifactId = null">
                     </div>
                 </div>
-                <button class="artifact__button" @click="artifact.id = JSON.stringify(Date.now())" v-if="!disabled">
+                <button class="artifact__button" @click="artifact.id = JSON.stringify(Date.now())">
                     Generate unique id
                 </button>
             </div>
-                <div class="artifact__container artifact__container--square" v-if="!disabled">
+                <div class="artifact__container artifact__container--square">
                     <label for="study_file_input" class="artifact__add" aria-label="Choose file">
                         <svg class="artifact__plus" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 39.5H76M38 0V76" stroke="#444444" stroke-width="6" />
@@ -107,7 +107,7 @@
             <audio class="expand__audio" v-if="isAudioFile(selectedSource)" controls>
                 <source :src="selectedSource" type="audio/mpeg">
             </audio>
-            <video :src="selectedSource" controls class="artifact__img" v-if="isVideoFile(selectedSource)"></video>
+            <video :src="selectedSource" controls class="expand__img" v-if="isVideoFile(selectedSource)"></video>
         </div>
 
         </div>
@@ -117,7 +117,7 @@
 
 <script setup>
 import { study } from '~/public/script/reactive';
-const disabled = inject('disabled');
+import { isImage, isPdf, isAudioFile, isVideoFile } from '@/server/utils/fileUtils.js'
 
 const props = defineProps({
     index: Number,
@@ -135,33 +135,6 @@ const selectMedia = (source, id) => {
     selectedSource.value = source;
     selectedId.value = id
 }
-
-//returns true if file is image-file
-const isImage = (file) => {
-    const extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
-    const extension = file.slice(file.lastIndexOf('.')).toLowerCase();
-    return extensions.includes(extension);
-}
-
-const isPdf = (file) =>{
-    return file.slice(file.lastIndexOf('.')).toLowerCase().includes('pdf')
-}
-
-//returns true if file is audio-file
-const isAudioFile = (file) => {
-    const extensions = ['.mp3', '.wav', '.ogg', '.flac', '.aac', '.m4a', '.wma']
-    const extension = file.slice(file.lastIndexOf('.')).toLowerCase();
-    return extensions.includes(extension);
-}
-
-//returns true if the file is a video file
-const isVideoFile = (file) => {
-    const extensions = ['.mp4', '.mov', '.avi', '.mkv', '.webm', '.flv', '.wmv', '.mpeg'];
-    const extension = file.slice(file.lastIndexOf('.')).toLowerCase();
-    return extensions.includes(extension);
-}
-
-
 
 //iterating array if id does not correspond with id of study located by index
 const iterateArr = (id) => {
@@ -203,8 +176,6 @@ const uploadFile = async (e) => {
         id: response.id,
         source: response.source
     })
-
-    console.log(study);
 
     e.target.value = '';
 };

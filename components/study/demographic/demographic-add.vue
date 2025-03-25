@@ -1,13 +1,11 @@
 <template>
-    <button class="demographic__button font-small font-semi" @click="newDemogrQuestion()" v-if="!disabled">
+    <button class="demographic__button font-small font-semi" @click="newDemogrQuestion()">
         Add new question
     </button>
 </template>
 
 <script setup>
 import { study } from '~/public/script/reactive';
-// should hide button instead...
-const disabled = inject('disabled');
 
 const emit = defineEmits(['newQuestion'])
 
