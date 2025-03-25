@@ -177,7 +177,7 @@ const updateValues = () => {
 			endLabel: linearEndModel.value
 		},
 		drop: {
-			dropBoxes: dropBoxModel.value
+			dropBox: dropBoxModel.value
 		}
 	});
 };
