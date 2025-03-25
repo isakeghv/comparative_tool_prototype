@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 // each schema below will be embedded directly into the 'StudySchema' document
@@ -11,24 +11,24 @@ const ArtifactSchema = new Schema({
 // update earlier schema for questions and adding some validation so 'responseType' will correspond to its option
 const QuestionSchema = new Schema({
 	id: { type: String, required: true },
-	title: { type: String, required: true, default: "Question" },
+	question: { type: String, required: true },
 	required: { type: Boolean, required: true },
 	responseType: {
 		type: String,
 		enum: [
-			"radio",
-			"checkbox",
-			"range",
-			"drag",
-			"linear",
+			'radio',
+			'checkbox',
+			'range',
+			'drop',
+			'linear',
 		],
 		required: true,
 	},
 	radio: {
-		options: [{ type: String }]
+		options: [{ type: String }],
 	},
 	checkbox: {
-		options: [{ type: String }],
+		// options: [{ type: String }],
 		selectionMin: { type: Number },
 		selectionMax: { type: Number }
 	},
@@ -38,7 +38,7 @@ const QuestionSchema = new Schema({
 		startLabel: { type: String },
 		endLabel: { type: String }
 	},
-	drag: {
+	drop: {
 		dropBox: [{ type: String }]
 	},
 	linear: {
@@ -65,10 +65,10 @@ const DemographicSchema = new Schema({
 	responseType: {
 		type: String,
 		enum: [
-			"text",
-			"radio",
-			"number",
-			"date",
+			'text',
+			'radio',
+			'number',
+			'date',
 		]
 	},
 	required: {
@@ -76,9 +76,8 @@ const DemographicSchema = new Schema({
 		required: true,
 	},
 	text: {
-		maxWords: {
+		maxChar: {
 			type: Number,
-			default: 0,
 		},
 	},
 	radio: {
@@ -90,25 +89,20 @@ const DemographicSchema = new Schema({
 	number: {
 		min: {
 			type: Number,
-			default: 0,
 		},
 		max: {
 			type: Number,
-			default: 100,
 		},
 	},
 	date: {
 		year: {
 			type: Boolean,
-			default: true,
 		},
 		month: {
 			type: Boolean,
-			default: false,
 		},
 		day: {
 			type: Boolean,
-			default: false,
 		},
 	},
 });
@@ -119,25 +113,30 @@ const StudySchema = new Schema({
 	id: { type: String, required: true },
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "UserProfile",
+		ref: 'UserProfile',
 		required: true,
+	},
+	customTerms: {
+		request: { type: Boolean, default: false},
+		terms: { type: String }
 	},
 	title: { type: String, required: true },
-	description: { type: String, required: true },
+	description: String,
 	currentReplies: { type: Number, default: 0 },
-	/* closingMethod: { type: String, required: true }, */
 	status: {
 		type: String,
-		enum: ["ongoing", "completed", "draft"],
+		enum: ['ongoing', 'completed', 'draft'],
 		required: true,
-		default: "draft",
+		default: 'draft',
 	},
+	closingMethod: { type: Array },
 	closingLimit: {
 		date: { type: Date },
 		duration: { type: String },
-		replies: { type: Number },
+		responses: { type: Number },
 	},
-	/* questions: [QuestionSchema] */
+	desiredResponses: { type: Number },
+	questions: [QuestionSchema],
 	demographicReq: { type: Boolean, required: true, default: false },
 	demographic: [DemographicSchema],
 	created: {
@@ -155,4 +154,4 @@ const StudySchema = new Schema({
 	},
 });
 
-export const study = mongoose.model("Study", StudySchema);
+export const Study = mongoose.model('Study', StudySchema);

@@ -1,9 +1,18 @@
 <template>
-	<Dashboard-Header :name="displayName"/>
+	<DashboardHeader :name="displayName" :isCreatingStudy="isCreatingStudy" @unableSave="displayUnableSaveBox(true)"/>
 	<div class="container" v-if="showMain && !study.id">
-		<Dashboard-main @newStudy="(id) => study.id = id"/>
+		<DashboardMain
+            @newStudy="(id) => onNewStudy(id)" 
+            @selectStudy="(id) => onEditStudy(id)"
+            @editStudy="(id) => onEditStudy(id)"
+            @deleteStudy="(id) => onDeleteStudy(id)"
+        />
 	</div>
-    <Study-editor v-if="study.id"/>
+    <!-- show study editor if id has been passed in, and show as read only/disabled if opened with select (read operation) -->
+    <StudyEditor v-if="study.id" :disabled="isReadOnly"/>
+
+    <!--Prompt box informing user that study cannot be saved due to missing fields-->
+    <Dashboard-unableSave @exit="displayUnableSaveBox(false)" v-if="showUnableSaveBox && study.id"/>
 
 	<!--Display message if issues fetting user-info-->
 	<div class="container" v-if="!showMain && !study.id">
@@ -13,15 +22,29 @@
         <span class="container__span">or</span>
         <button class="container__button">sign out</button>
 	</div>
-
 </template>
 
 <script setup>
-import { user } from '~/public/script/reactive';
-import { study } from '~/public/script/reactive';
+import { user, study, initialStudy } from '~/public/script/reactive';
+// import { setStudyData } from '~/server/utils/studyUtils';
+import StudyService from '~/server/services/studyService';
 
 const showMain = ref(true);
-const displayName = ref('')
+const displayName = ref('');
+const isReadOnly = ref();
+
+// need to track if study already exists or should be updated due to the saving logic
+const isCreatingStudy = ref(false);
+
+const showUnableSaveBox = ref(false);
+
+//toggles the prompt-box providing user message that study cannot be saved
+const displayUnableSaveBox = (display)=>{
+    showUnableSaveBox.value = display
+}
+
+// provide the 'disabled' state to all child components as some of them are deeply nested instead of sending it as a prop to avoid prop drilling
+provide('disabled', isReadOnly);
 
 const getUserInfo = async () => {
 	try {
@@ -54,8 +77,62 @@ const getUserInfo = async () => {
 
 await getUserInfo();
 
+const populateStudy = (id) => {
+    // find study with matching id that is stored when user loads dashboard
+    const selectedStudy = user.studies.find(study => study.id === id);
+
+    // load the study with the data of selected study if it exists
+    if (selectedStudy) {
+        study.id = selectedStudy.id;
+        study.title = selectedStudy.title;
+        study.description = selectedStudy.description;
+        study.demographicReq = selectedStudy.demographicReq;
+        study.demographic = selectedStudy.demographic;
+        study.customTerms = selectedStudy.customTerms;
+        study.questions = selectedStudy.questions;
+        study.desiredResponses = selectedStudy.desiredResponses;
+        study.closingMethod = selectedStudy.closingMethod;
+        study.closingLimit = selectedStudy.closingLimit;
+
+        // use deep copy to avoid sharing references
+        initialStudy.title = JSON.parse(JSON.stringify(selectedStudy.title));
+        initialStudy.description = JSON.parse(JSON.stringify(selectedStudy.description));
+        initialStudy.demographicReq = JSON.parse(JSON.stringify(selectedStudy.demographicReq));
+        initialStudy.demographic = JSON.parse(JSON.stringify(selectedStudy.demographic));
+        initialStudy.customTerms = JSON.parse(JSON.stringify(selectedStudy.customTerms));
+        initialStudy.questions = JSON.parse(JSON.stringify(selectedStudy.questions));
+        initialStudy.desiredResponses = JSON.parse(JSON.stringify(selectedStudy.desiredResponses));
+        initialStudy.closingMethod = JSON.parse(JSON.stringify(selectedStudy.closingMethod));
+        initialStudy.closingLimit = JSON.parse(JSON.stringify(selectedStudy.closingLimit));
+    }
+}
+
+const onNewStudy = (id) => {
+    study.id = id;
+    isReadOnly.value = false;
+    isCreatingStudy.value = true;
+}
+
+const onEditStudy = (id) => {
+    populateStudy(id);
+    isReadOnly.value = false;
+    isCreatingStudy.value = false;
+}
+
+
+const onDeleteStudy = (id) => {
+    StudyService.deleteStudy(id);
+    // find index of the study in the array
+    const studyIndex = user.studies.findIndex(study => study.id === id);
+
+    // if the index was found, remove the study from the array
+    if (studyIndex !== -1) {
+        user.studies.splice(studyIndex, 1);
+    }
+}
+
 </script>
 
 <style scoped>
-@import url('public/style/pages/dashboard/dashboard.scss');
+    @import url('public/style/pages/dashboard/dashboard.scss');
 </style>

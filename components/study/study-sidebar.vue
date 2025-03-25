@@ -1,6 +1,6 @@
 <template>
     <aside class="sidebar">
-        <Study-return :current="currentConfig" :initial="initialStudy"/>
+        <StudyReturn :current="currentConfig" :initial="initialStudy"/>
         <div class="sidebar__top">
         <button class="sidebar__button font-normal" @click="changeDisplay('details')">
             Study details
@@ -8,8 +8,11 @@
         <button class="sidebar__button font-normal" @click="changeDisplay('demographics')">
             Demographics
         </button>
+        <button class="sidebar__button font-normal" @click="changeDisplay('terms')">
+            Terms and policy
+        </button>
         </div>
-        <Study-list @select="(data)=>changeDisplay(data.query, data.number, data.id)"/>
+        <StudyList @select="(data)=>changeDisplay(data.query, data.number, data.id)"/>
     </aside>
 </template>
 
@@ -18,18 +21,29 @@ import { study, initialStudy } from '~/public/script/reactive';
 
 const currentConfig = computed(()=>{
     return {
-        questions: study.questions,
+        title: study.title,
+        description: study.description,
+        closingMethod: study.closingMethod,
+        closingLimit: {
+            date: study.closingLimit.date,
+            duration: study.closingLimit.duration,
+            responses: study.closingLimit.responses
+        },
+        desiredResponses: study.desiredResponses,
         demographicReq: study.demographicReq,
         demographic: study.demographic,
-        description: study.description,
-        title: study.title
+        customTerms: {
+			request: study.customTerms.request,
+			terms: study.customTerms.terms,
+		},
+        questions: study.questions
     }
 })
 
 const emit = defineEmits(['swapDisplay'])
 
 //emitting, so the correct component is displayed in "study-create"
-const changeDisplay = (component, number = null, id=null) => {
+const changeDisplay = (component, number = null, id = null) => {
     emit('swapDisplay', { component, number, id })
 }
 
@@ -37,5 +51,5 @@ const changeDisplay = (component, number = null, id=null) => {
 </script>
 
 <style scoped>
-    @import url('public/style/components/study/_study-sidebar.scss');
+    @import url('public/style/components/study/study-sidebar.scss');
 </style>

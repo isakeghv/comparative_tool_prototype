@@ -4,6 +4,11 @@ export const form = reactive({
     type: null,
 })
 
+// had to move here because dashboard doesn't know when it should reset after clicking out of study
+export const wasStudyCreated = reactive({
+    value: false
+});
+
 //to store information to display in ui. "info" for user-info: name etc, 
 // "studies" for the studies that is saved to user-id
 export const user = reactive({
@@ -16,20 +21,44 @@ export const study = reactive({
     id: null,
     title: null,
     description: null,
-    questions: [],
+    closingMethod: [],
+    closingLimit: {
+        date: '',
+        duration: '',
+        responses: ''
+    },
+    desiredResponses: '',
     demographicReq: true,
-    demographic: []
+    demographic: [],
+    customTerms: {
+        request: false,
+        terms: ''
+    },
+    questions: []
 })
 
-//to hold the initial configuration. used to compare if user is trying to return and changes have been made.
-    //to make sure user cannot return and lose changes
+// to hold the initial configuration. used to compare if user is trying to return and changes have been made.
+//     to make sure user cannot return and lose changes
 export const initialStudy = reactive({
     title: null,
     description: null,
-    questions: [],
+    closingMethod: [],
+    closingLimit: {
+        date: '',
+        duration: '',
+        responses: ''
+    },
+    desiredResponses: '',
     demographicReq: true,
-    demographic: []
+    demographic: [],
+    customTerms: {
+        request: false,
+        terms: ''
+    },
+    questions: []
 })
+
+// export const initialStudy = reactive({ ...study });
 
 //used to handle which component should be displayed when creating a study (description, demographic etc).
 //if "component" is a question, the ".question" should hold which question should be displayed

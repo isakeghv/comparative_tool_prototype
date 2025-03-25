@@ -4,8 +4,8 @@
             <p class="font-large font-semi">Response format</p>
         </div>
 
-        <Study-response-option v-model="responseModel" :text="option.text" :value="option.value" :id="props.id" 
-            v-for="(option, index) in options" :question="selectedQuestion" :key="option.value" @update:questionValues="handleQuestionValues($event)"
+        <Study-response-option v-model="responseModel" :text="option.text" :value="option.value" :key="option.value" :id="props.id" 
+            v-for="option in options" :question="selectedQuestion" @update:questionValues="handleQuestionValues($event)"
         />
 
         <div class="aside__container aside__selection">
@@ -15,7 +15,7 @@
             <input type="checkbox" id="demographic_required_checkbox" class="aside__checkbox" v-model="requiredModel" @change="updateRequired()">
         </div>
         <div class="aside__container aside__container--borderless">
-            <button class="aside__button aside__button--delete" @click="deleteQuestion()">
+            <button class="aside__button aside__button--delete font-semi font-small" @click="deleteQuestion()">
                 Delete question
             </button>
         </div>
@@ -30,13 +30,13 @@ const props = defineProps({
     id: String
 });
 
-const selectedQuestion = ref(null);
+const selectedQuestion = ref({});
 const questionModel = ref('');
 const requiredModel = ref('');
 const responseModel = ref('');
 
 // find the specific question to modify data
-const getQuestion = (id) => study.questions.find(question => question.id === id);
+const getQuestion = (id) => study.questions.find(q => q.id === id);
 
 // define the options for the response type
 const options = [
@@ -47,7 +47,7 @@ const options = [
     { text: "Linear sorting", value: "linear" },
 ];
 
-const handleQuestionValues = ( updatedValues) => {
+const handleQuestionValues = (updatedValues) => {
     const thisQuestion = getQuestion(props.id);
 
     // find the current question, and merge with the new values
@@ -69,6 +69,16 @@ const initiateConfig = (id) => {
     requiredModel.value = selectedQuestion.value.required;
 };
 
+const updateRequired = ()=>{
+    const thisQuestion = getQuestion(props.id)
+    thisQuestion.required = requiredModel.value;
+}
+
+const deleteQuestion = ()=>{
+    const thisQuestion = getQuestion(props.id);
+    study.questions = study.questions.filter(e => e !== thisQuestion);
+}
+
 // watch when question id changes, and show them immediately (had issue with the first question not showing up)
 watch(
     () => props.id,
@@ -78,16 +88,18 @@ watch(
     { immediate: true }
 );
 
+// update responsModel type when it gets emitted a new value
 watch(
-    () => responseModel.value,
-    (newValue) => {
-        const thisQuestion = getQuestion(props.id);
-
-        if (thisQuestion) {
-            thisQuestion.responseType = newValue;
-        }
+  () => responseModel.value,
+  (newValue) => {
+    console.log('Response model:', newValue);
+    const thisQuestion = getQuestion(props.id);
+    if (thisQuestion && thisQuestion.responseType !== newValue) {
+      thisQuestion.responseType = newValue;
     }
+  }
 );
+
 
 </script>
 

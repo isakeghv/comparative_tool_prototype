@@ -15,7 +15,8 @@
 </template>
 
 <script setup>
-import { study } from '~/public/script/reactive'
+import { study } from '~/public/script/reactive';
+
 const props = defineProps({
     index: Number,
     config: Object,
@@ -75,5 +76,5 @@ const drop = (event) => {
 </script>
 
 <style scoped>
-    @import url('public/style/components/study/_study-sidebar.scss');
+    @import url('public/style/components/study/study-sidebar.scss');
 </style>

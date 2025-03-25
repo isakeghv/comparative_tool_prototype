@@ -18,17 +18,17 @@ const newDemogrQuestion = () => {
         responseType: '',
         required: true,
         text: {
-            maxWords: 0
+            maxChar: ''
         },
         radio: {
             options: []
         },
         number: { 
-            min: 0,
-            max: 100
+            min: '',
+            max: ''
         },
         date: {
-            year: true,
+            year: false,
             month: false,
             day: false
         }

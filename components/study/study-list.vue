@@ -22,7 +22,7 @@
         </div>
         <ul class="question__list" ref="listRef" id="question__list">
             <!-- pass specific question config to question item-->
-            <Study-item @select="(data) => selectQuestion(data)" parent="#question__list" :config="question" :index="i"
+            <StudyItem @select="(data) => selectQuestion(data)" parent="#question__list" :config="question" :index="i"
                 v-for="(question, i) in questions" />
         </ul>
     </div>
@@ -51,23 +51,23 @@ const addQuestion = () => {
             id: crypto.randomUUID(),
             question: '',
             required: true,
-            responseType: null,
-            radio: {
-                options: []
-            },
+            responseType: '',
+            // radio: {
+            //     options: []
+            // },
             checkbox: {
-                options: [],
-                selectionMin: 1,
-                selectionMax: 1
+                // options: [],
+                selectionMin: '',
+                selectionMax: ''
             },
             range: {
-                min: 0,
-                max: 100,
+                min: '',
+                max: '',
                 startLabel: '',
                 endLabel: ''
             },
-            drag: {
-                dropBoxes: []
+            drop: {
+                dropBox: []
             },
             linear: {
                 startLabel: '',
@@ -83,9 +83,8 @@ const addQuestion = () => {
     //so the new question is displayed in the page when requested to be made
     selectQuestion({ query: 'question', number: questions.value.length - 1, id: question.id })
 }
-
 </script>
 
 <style scoped>
-    @import url('public/style/components/study/_study-sidebar.scss');
+    @import url('public/style/components/study/study-sidebar.scss');
 </style>
