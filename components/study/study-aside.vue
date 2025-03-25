@@ -5,7 +5,7 @@
         </div>
 
         <Study-response-option v-model="responseModel" :text="option.text" :value="option.value" :key="option.value" :id="props.id" 
-            v-for="option in options" :question="selectedQuestion" @update:questionValues="handleQuestionValues($event)"
+            v-for="option in options" :question="selectedQuestion" @update="handleQuestionValues($event)"
         />
 
         <div class="aside__container aside__selection">

@@ -67,7 +67,7 @@ const addQuestion = () => {
                 endLabel: ''
             },
             drop: {
-                dropBoxes: []
+                dropBox: []
             },
             linear: {
                 startLabel: '',
