@@ -3,9 +3,9 @@
 	<div class="container" v-if="showMain && !study.id">
 		<DashboardMain
             @newStudy="(id) => onNewStudy(id)" 
-            @selectStudy="(study) => onEditStudy(study)"
-            @editStudy="(study) => onEditStudy(study)"
-            @deleteStudy="(study) => onDeleteStudy(study)"
+            @selectStudy="(id) => onEditStudy(id)"
+            @editStudy="(id) => onEditStudy(id)"
+            @deleteStudy="(id) => onDeleteStudy(id)"
         />
 	</div>
     <!-- show study editor if id has been passed in, and show as read only/disabled if opened with select (read operation) -->
@@ -113,22 +113,22 @@ const onNewStudy = (id) => {
     isCreatingStudy.value = true;
 }
 
-// open in read only mode, where all fields are disabled
-// const onSelectStudy = (study) => {
-//     populateStudy(study);
-//     isReadOnly.value = true;
-//     isCreatingStudy.value = false;
-// }
-
-const onEditStudy = (study) => {
-    populateStudy(study);
+const onEditStudy = (id) => {
+    populateStudy(id);
     isReadOnly.value = false;
     isCreatingStudy.value = false;
 }
 
 
-const onDeleteStudy = (study) => {
-    StudyService.deleteStudy(study);
+const onDeleteStudy = (id) => {
+    StudyService.deleteStudy(id);
+    // find index of the study in the array
+    const studyIndex = user.studies.findIndex(study => study.id === id);
+
+    // if the index was found, remove the study from the array
+    if (studyIndex !== -1) {
+        user.studies.splice(studyIndex, 1);
+    }
 }
 
 </script>

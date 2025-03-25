@@ -23,7 +23,7 @@
                     </svg>
                 </button>
             </div>
-            <button class="header__publish font-semi font-normal">Publish</button>
+            <button class="header__publish font-semi font-normal" @click="publishStudy">Publish</button>
         </div>
     </header>
 </template>
@@ -113,6 +113,20 @@ const saveStudy = async () => {
     } else emit('unableSave');
 };
 
+const publishStudy = async () => {
+    // return if it hasn't been saved yet -> should probably show a prompt box of sorts
+    const noChanges = compareStudies(study, initialStudy);
+
+    // if there is changes and it hasn't been created yet, show a prompt box telling them to save, else publish the study
+    // TODO: add more checks here omg
+    if (!noChanges) {
+        emit('unableSave');
+    } else {
+        const updatedStudy = await StudyService.publishStudy(study.id);
+        console.log(updatedStudy);
+        console.log(study.id);
+    }
+}
 </script>
 
 <style scoped>

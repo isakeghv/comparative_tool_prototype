@@ -163,6 +163,7 @@ initiateDropBox();
 
 initiateTypeModel();
 
+
 watch(
 	() => props.question,
 	(newQuestion) => {
