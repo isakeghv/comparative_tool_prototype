@@ -2,27 +2,13 @@
 	<fieldset class="aside__container">
 		<div class="aside__selection">
 			<input type="radio" :value="value" name="question_radio" :id="`response_${value}_radio`"
-				class="aside__radio" v-model="localModel" @change="updateResponse" />
+				class="aside__radio" v-model="responseModel" @change="updateValues()" />
 			<label :for="`response_${value}_radio`" class="aside__label aside__label--headline font-normal font-medium">
 				{{ text }}
 			</label>
 		</div>
-
-		<!-- checkbox -->
-		<!-- <div class="aside__options" v-show="isCheckboxResponse">
-            <div class="aside__option" v-for="(option, i) in checkboxModel" :key="i">
-                <label :for="`option_${option}_${i}_txt`" class="aside__label aside__identifier">{{ i + 1 }}</label>
-                <input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="checkboxModel[i]">
-                <button class="aside__button aside__button--remove" @click="deleteCheckbox(i)">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="aside__cross" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                    </svg>
-                </button>
-            </div>
-            <button class="aside__button aside__button--add font-semi font-small" @click="addCheckbox()">Add option</button>
-        </div> -->
-		<div class="aside__row aside__row--toggle" v-show="isCheckboxResponse">
-			<label for="question_selection_min" class="aside__label font-normal">Selection from </label>
+		<div class="aside__row aside__row--toggle" v-if="isCheckboxResponse">
+			<label for="question_selection_min" class="aside__label font-normal">Possible, from </label>
 			<input type="number" id="question_selection_min" class="aside__input--number font-small"
 				name="question_selection_min" min="0" step="1" v-model="selectionMinModel" />
 			<label for="question_selection_max" class="aside__label font-normal">to</label>
@@ -31,7 +17,7 @@
 		</div>
 
 		<!-- range -->
-		<div class="aside__row aside__row--toggle" v-show="isRangeResponse">
+		<div class="aside__row aside__row--toggle" v-if="isRangeResponse">
 			<label for="question_range_min" class="aside__label font-normal">
 				Min
 			</label>
@@ -41,7 +27,7 @@
 			<input type="text" id="question_range_start" class="aside__input--wide" name="question_range_start"
 				placeholder="Start label (optional)" v-model="rangeStartModel">
 		</div>
-		<div class="aside__row" v-show="isRangeResponse">
+		<div class="aside__row" v-if="isRangeResponse">
 			<label for="question_range_max" class="aside__label font-normal">
 				Max
 			</label>
@@ -53,10 +39,10 @@
 		</div>
 
 		<!-- drag and drop -->
-		<div class="aside__options" v-show="isDropResponse">
+		<div class="aside__options" v-if="isDropResponse">
 			<div class="aside__option" v-for="(option, i) in dropBoxModel" :key="i">
-				<label :for="`option_${option}_${i}_txt`" class="aside__label aside__box">Drop-box</label>
-				<input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="dropBoxModel[i]">
+				<label :for="`option_${option}_${i}_txt`" class="aside__label aside__box">Box {{ i + 1}}</label>
+				<input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="dropBoxModel[i]" @input="updateDropOption()">
 				<button class="aside__button aside__button--remove" @click="deleteDropBox(i)">
 					<svg xmlns="http://www.w3.org/2000/svg" class="aside__cross" height="24px" viewBox="0 -960 960 960"
 						width="24px">
@@ -69,23 +55,22 @@
 		</div>
 
 		<!-- linear sorting -->
-		<div class="aside__row aside__row--toggle" v-show="isLinearResponse">
+		<div class="aside__row aside__row--toggle" v-if="isLinearResponse">
 			<label for="question_range_start_label" class="font-small">Start</label>
 			<input type="text" id="question_range_start_label" class="aside__input--wide"
 				placeholder="Start label (optional)" v-model="linearStartModel">
 		</div>
-		<div class="aside__row" v-show="isLinearResponse">
+		<div class="aside__row" v-if="isLinearResponse">
 			<label for="question_range_end_label" class="font-small">End</label>
 			<input type="text" id="question_range_end_label" class="aside__input--wide"
 				placeholder="End label (optional)" v-model="linearEndModel">
 		</div>
 	</fieldset>
-
 </template>
 
 <script setup>
 import { study } from '~/public/script/reactive';
-import { addNewOption, removeOptionAtIndex } from '~/server/utils/studyUtils';
+import { removeOptionAtIndex } from '~/server/utils/studyUtils';
 
 const props = defineProps({
 	question: Object,
@@ -95,10 +80,9 @@ const props = defineProps({
 	id: String
 });
 
-const emit = defineEmits(['update:modelValue', 'update:questionValues']);
+const emit = defineEmits(['update']);
 
 const responseModel = ref('');
-// const checkboxModel = ref([]);
 const selectionMinModel = ref('');
 const selectionMaxModel = ref('');
 const minModel = ref('');
@@ -111,84 +95,79 @@ const linearEndModel = ref('');
 
 const thisQuestion = () => study.questions.find(q => q.id === props.id);
 
-// const isCheckboxResponse = computed(() => {
-// 	const result = props.value === 'checkbox' && thisQuestion().responseType === 'checkbox';
-// 	console.log('isCheckboxResponse:', result);
-// 	return result;
-// });
-
-// const isRangeResponse = computed(() => {
-// 	const result = props.value === 'range' && thisQuestion().responseType === 'range';
-// 	console.log('isRangeResponse:', result);
-// 	return result;
-// });
-
-// const isDropResponse = computed(() => {
-// 	const result = props.value === 'drop' && thisQuestion().responseType === 'drop';
-// 	console.log('isDropResponse:', result);
-// 	return result;
-// });
-
-// const isLinearResponse = computed(() => {
-// 	const result = props.value === 'linear' && thisQuestion().responseType === 'linear';
-// 	console.log('isLinearResponse:', result);
-// 	return result;
-// });
-
 const isCheckboxResponse = computed(() => props.value === 'checkbox' && thisQuestion().responseType === 'checkbox');
 const isRangeResponse = computed(() => props.value === 'range' && thisQuestion().responseType === 'range');
 const isDropResponse = computed(() => props.value === 'drop' && thisQuestion().responseType === 'drop');
 const isLinearResponse = computed(() => props.value === 'linear' && thisQuestion().responseType === 'linear');
 
+//adding new dropbox to array
+const addDropBox = () => dropBoxModel.value.push('');
 
-// create a computed property for two-way binding so parent knows what the response type is, and can change accordingly
-const localModel = computed({
-	get: () => props.modelValue,
-	set: (newValue) => {
-		emit('update:modelValue', newValue);
-	}
-});
+const updateDropOption = ()=>{
+	const id = props.question.id
 
-const addDropBox = () => {
-	addNewOption(props.question.drop.dropBox, dropBoxModel.value);
-};
+	//searching through questions in the current study to get the current question.
+	const q = study.questions.find(q => q.id == id);
+
+	//returning if unable to get the correct question being updated
+	if (!q) return alert('Unable to locate the question being modified');
+	
+	q.drop.dropBox = dropBoxModel.value;
+}
+
+//handles so the responseType is correct when changing questions
+const initiateTypeModel = () =>{
+	responseModel.value = props.question.responseType;
+}
 
 const deleteDropBox = (i) => {
 	removeOptionAtIndex(props.question.drop.dropBox, dropBoxModel.value, i);
+	updateDropOption();
 }
 
-// emit all the question option values at once to parent
-const updateValues = () => {
-	emit("update:questionValues", {
-		responseType: responseModel.value,
-		checkbox: {
-			// options: checkboxModel.value,
-			selectionMin: selectionMinModel.value,
-			selectionMax: selectionMaxModel.value
-		},
-		range: {
-			min: minModel.value,
-			max: maxModel.value,
-			startLabel: rangeStartModel.value,
-			endLabel: rangeEndModel.value
-		},
-		linear: {
-			startLabel: linearStartModel.value,
-			endLabel: linearEndModel.value
-		},
-		drop: {
-			dropBox: dropBoxModel.value
-		}
-	});
-};
+const updateValues = () =>{
+	const checkbox = {
+		selectionMin: selectionMinModel.value,
+		selectionMax: selectionMaxModel.value
+	}
+
+	const responseType = responseModel.value;
+
+	const range = {
+		min: minModel.value,
+		max: maxModel.value,
+		startLabel: rangeStartModel.value,
+		endLabel: rangeEndModel.value
+	}
+
+	const linear = {
+		startLabel: linearStartModel.value,
+		endLabel: linearEndModel.value
+	}
+
+	const drop = {
+		dropBox: dropBoxModel.value
+	}
+
+	emit('update', {responseType, checkbox, range, linear, drop});
+}
+
+//to initiate dropBox response option
+const initiateDropBox = () => {
+	//returning in case the current iteration is not for dropbox: To avoid redundant loopings and actions
+	if (props.question.responseType !== 'drop' && props.value !== 'drop') return;
+	dropBoxModel.value = props.question.drop.dropBox
+}
+
+initiateDropBox();
+
+initiateTypeModel();
+
 
 watch(
 	() => props.question,
 	(newQuestion) => {
 		if (!newQuestion) return;
-
-		// populate the input fields to match the current question configuration
-		// checkboxModel.value = newQuestion?.checkbox?.options;
 		selectionMinModel.value = newQuestion?.checkbox?.selectionMin;
 		selectionMaxModel.value = newQuestion?.checkbox?.selectionMax;
 		minModel.value = newQuestion?.range?.min;
@@ -209,9 +188,6 @@ watch(
 		responseModel.value = newValue;
 	}
 );
-
-// update when either of the response type changes, and emit the updated values to parent
-watch([selectionMinModel, selectionMaxModel, minModel, maxModel, rangeStartModel, rangeEndModel, dropBoxModel, linearStartModel, linearEndModel], updateValues, { deep: true } );
 
 </script>
 
