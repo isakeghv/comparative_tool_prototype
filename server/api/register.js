@@ -63,12 +63,12 @@ export default defineEventHandler(async (event) => {
 	//validation
 	if (!firstname || !lastname || !email || !password) {
 		setResponseStatus(event, 400)
-		return { created: false, message: "All fields are required"}
+		return { created: false, message: "All fields are required."}
 	}
 	// Email validation
 	if (!validator.isEmail(email)){
 		setResponseStatus(event, 400)
-		return {created: false, message: "Invalid email format"}
+		return {created: false, message: "Invalid email format."}
 	}
 	// Password validation must meet criteria
 	if (!validator.isStrongPassword(password, {
@@ -77,7 +77,7 @@ export default defineEventHandler(async (event) => {
 		minNumbers: 1
 	})) {
 		setResponseStatus(event, 400)
-		return { created:false, message: "Password must be at least 8 characters long and include, uppercase letter and a number"}
+		return { created:false, message: "Password must be at least 8 characters long and include, uppercase letter and a number."}
 	}
 
 
