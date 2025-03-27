@@ -7,14 +7,28 @@ const getStudy = async (e) => {
     // get studyId from the parameter in the URL
     const studyId = e.context.params?.studyId;
 
-    // find study in databaaaaase
-    const study = await Study.findOne({ id: studyId });
-
     try {
+        // find specific study, and use projection to specify which fields should be included
+        const study = await Study.findOne(
+        { id: studyId },
+        {
+            _id: 0,
+            id: 1,
+            title: 1,
+            description: 1,
+            customTerms: 1,
+            status: 1,
+            closingMethod: 1,
+            desiredResponses: 1,
+            questions: 1,
+            demographicReq: 1,
+            demographic: 1,
+        }
+    ).lean();
         setResponseStatus(200);
-        return { found: true, message: "Study found...", study };
+        return { found: true, message: "Study found successfully.", study };
     } catch (err) {
-        return { found: false, message: "...", error: err.message };
+        return { found: false, message: "Issue occured while fetching study.", error: err.message };
     }
 }
 
@@ -28,7 +42,7 @@ const updateStudy = async(e, data) => {
         // find one with matching study id, update it, and return the updated version of the study
         const study = await Study.findOneAndUpdate({ id: studyId }, updateFields, { new: true });
         // setResonseStatus here (someday)
-        return { updated: true, message: "Study successfully updated.", study};
+        return { updated: true, message: "Study updated successfully.", study};
     } catch (err) {
         console.log(err);
         return { updated: false, message: "Issue occured while updating study.", error: err.message };
@@ -45,7 +59,7 @@ const deleteStudy = async (e) => {
         setResponseStatus(200);
         return { found: true, message: "Study deleted successfully." };
     } catch (err) {
-        return { found: false, message: "...", error: err.message };
+        return { found: false, message: "Issue occured while deleting study.", error: err.message };
     }
 }
 
