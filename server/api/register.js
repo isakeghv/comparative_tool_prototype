@@ -65,12 +65,12 @@ export default defineEventHandler(async (event) => {
 		setResponseStatus(event, 400)
 		return { created: false, message: "All fields are required"}
 	}
-
+	// Email validation
 	if (!validator.isEmail(email)){
 		setResponseStatus(event, 400)
 		return {created: false, message: "Invalid email format"}
 	}
-
+	// Password validation must meet criteria
 	if (!validator.isStrongPassword(password, {
 		minLength: 8,
 		minUppercase: 1,
