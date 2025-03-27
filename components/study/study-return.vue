@@ -11,7 +11,7 @@
 
 <script setup>
 import { study, initialStudy, wasStudyCreated } from '~/public/script/reactive'
-import { compareStudies } from '~/server/utils/studyUtils';
+import { compareStudies } from '~/utils/studyUtils';
 
 const props = defineProps({
     current: Object,

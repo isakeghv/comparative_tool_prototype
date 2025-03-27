@@ -79,14 +79,12 @@ const deleteStudy = async (studyId) => {
 
 const publishStudy = async (studyId) => {
     try {
-        const response = await fetch(`/api/studies/${studyId}`, {
+        const response = await fetch(`/api/studies/${studyId}/publish`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             }
         })
-
-        console.log('hi');
 
         if (!response.ok) {
             throw new Error(`Failed to publish study: ${response.statusText}`);

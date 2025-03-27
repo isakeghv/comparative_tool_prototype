@@ -98,7 +98,7 @@
 </template>
 
 <script setup>
-import { addNewOption, removeOptionAtIndex } from '~/server/utils/studyUtils';
+import { addNewOption, removeOptionAtIndex } from '~/utils/studyUtils';
 import { study } from '~/public/script/reactive';
 
 const props = defineProps({

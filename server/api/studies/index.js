@@ -1,5 +1,5 @@
-import { connDb } from "../../services/connDb.js";
-import { verifyToken } from '../../utils/jwt.js';
+import { connDb } from '~/server/services/connDb.js';
+import { verifyToken } from '~/server/services/jwt.js';
 import { Study } from '../../schemas/studySchema.js';
 
 const newStudy = async (data) => {
@@ -32,13 +32,13 @@ const newStudy = async (data) => {
 
 	
     try {
-		// create study and save it in the database
-		await createdStudy.save();
-		setResponseStatus(201);		
-		return { created: true, message: "Study successfully created.", study: createdStudy };
+      // create study and save it in the database
+      await createdStudy.save();
+      setResponseStatus(201);		
+
+      return { created: true, message: "Study successfully created.", study: createdStudy };
     } catch (err) {
-		console.log(err);
-		return { created: false, message: "Issue occured while creating study.", error: err.message };
+      return { created: false, message: "Issue occured while creating study.", error: err.message };
     }
 }
 

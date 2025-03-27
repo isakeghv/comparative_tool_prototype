@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { connDb } from "../services/connDb.js";
+import { connDb } from '~/server/services/connDb.js';
 import { UserCredential, UserProfile } from '../schemas/userSchema.js';
 
 const checkEmail = async (email) => {

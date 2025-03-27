@@ -1,24 +1,9 @@
 <template>
 	<section class="question">
 		<h2 class="participant__title font-h5 font-medium">{{ currentQuestion.question }}</h2>
-		{{  responseType }}
 
-		<div v-if="responseType === 'checkbox'">
-			{{ currentQuestion.checkbox }}
-		</div>
-
-		<div v-if="responseType === 'range'">
-			{{ currentQuestion.range }}
-		</div>
-
-		<div v-if="responseType === 'linear'">
-			{{ currentQuestion.linear }}
-		</div>
-
-		<div v-if="responseType === 'drop'">
-			{{ currentQuestion.range }}
-		</div>
-
+		<!-- dynamically render a component based on its response type-->
+		<component :is="responseComponent" :question="currentQuestion" />
 
 		<div v-for="artifact in currentQuestion.artifacts" :key="artifact.id" @click="selectMedia(artifact.source, artifact.id)" class="artifact__container artifact__borderless">
 			<div class="wrapper">
@@ -74,7 +59,11 @@
 </template>
 
 <script setup>
-import { isImage, isPdf, isAudioFile, isVideoFile } from '@/server/utils/fileUtils.js';
+import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
+import ArtifactSelection from './artifact/artifact-selection.vue';
+import ArtifactRange from './artifact/artifact-range.vue';
+import ArtifactLinear from './artifact/artifact-linear.vue';
+import ArtifactDrop from './artifact/artifact-drop.vue';
 
 const props = defineProps({
 	questions: Array,
@@ -82,10 +71,10 @@ const props = defineProps({
 });
 
 // access the question at a specific index
-const currentQuestion = computed(() => props.questions[props.questionIndex] || {});
 
 // the response type of the question
 const responseType = computed(() => currentQuestion.value?.responseType || '');
+const currentQuestion = computed(() => props.questions?.[props.questionIndex] ?? {});
 
 // store source and id of image to show it and make it expandable
 const selectedSource = ref('');
@@ -96,9 +85,23 @@ const selectMedia = (source, id) => {
     selectedId.value = id;
 };
 
+// return component depending on the response type of the current question
+const responseComponent = computed(() => {
+	const map = {
+		radio: ArtifactSelection,
+		checkbox: ArtifactSelection,
+		range: ArtifactRange,
+		drop: ArtifactDrop,
+		linear: ArtifactLinear
+	};
+
+	return map[responseType.value]
+});
+
 // track changes when the index gets updated
 watch(() => props.questionIndex, () => {
 }, { deep: true, immediate: true });
+
 </script>
 
 <style scoped>

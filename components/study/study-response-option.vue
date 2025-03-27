@@ -70,7 +70,7 @@
 
 <script setup>
 import { study } from '~/public/script/reactive';
-import { removeOptionAtIndex } from '~/server/utils/studyUtils';
+import { removeOptionAtIndex } from '~/utils/studyUtils';
 
 const props = defineProps({
 	question: Object,

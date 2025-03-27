@@ -27,7 +27,7 @@
 <script setup>
 import { user, study, initialStudy } from '~/public/script/reactive';
 // import { setStudyData } from '~/server/utils/studyUtils';
-import StudyService from '~/server/services/studyService';
+import StudyService from '~/services/studyService';
 
 const showMain = ref(true);
 const displayName = ref('');

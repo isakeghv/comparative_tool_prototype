@@ -17,10 +17,7 @@ const props = defineProps({
     },
 });
 
-const study = ref({
-    id: 123,
-    published: true
-});
+// add the uh timeline here too
 </script>
 
 <style scoped>

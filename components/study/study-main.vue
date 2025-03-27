@@ -117,7 +117,7 @@
 
 <script setup>
 import { study } from '~/public/script/reactive';
-import { isImage, isPdf, isAudioFile, isVideoFile } from '@/server/utils/fileUtils.js'
+import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js'
 
 const props = defineProps({
     index: Number,

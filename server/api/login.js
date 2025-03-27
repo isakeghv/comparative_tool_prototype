@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import { useRuntimeConfig, setCookie } from '#imports';
-import { connDb } from "../services/connDb.js";
+import { connDb } from '~/server/services/connDb.js';
 import { UserCredential } from '../schemas/userSchema.js';
 
 // need to add functionality for token-checking, prevent brute-forcing etc. so this is temporary

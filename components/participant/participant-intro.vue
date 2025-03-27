@@ -12,12 +12,6 @@
 			<h3>Terms & Service</h3>
 			<p>{{ study.customTerms.terms }}</p>
 		</section>
-
-		<section v-if="study.demographicReq" class="participant__section">
-			<h3>Demographics</h3>
-			<p>{{ study.customTerms.terms }}</p>
-		</section>
-
 		<div>
 			<button @click="handleStart">Start</button>
 		</div>

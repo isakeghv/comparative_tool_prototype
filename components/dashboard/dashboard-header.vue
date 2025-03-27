@@ -30,9 +30,9 @@
 
 <script setup>
 //importing reactive variable which holds the id of the study and where the study questions are stored
-import StudyService from '~/server/services/studyService';
+import StudyService from '~/services/studyService';
 import { user, study, initialStudy, wasStudyCreated } from '~/public/script/reactive';
-import { compareStudies } from '~/server/utils/studyUtils';
+import { compareStudies } from '~/utils/studyUtils';
 
 // const isStudyCreated = ref(false);
 
@@ -121,12 +121,18 @@ const publishStudy = async () => {
     // TODO: add more checks here omg
     if (!noChanges) {
         emit('unableSave');
-    } else {
-        const updatedStudy = await StudyService.publishStudy(study.id);
-        console.log(updatedStudy);
-        console.log(study.id);
+        return;
     }
+
+    const studyIndex = user.studies.findIndex(userStudy => userStudy.id === study.id);
+
+    // don't update if status is already 'ongoing'
+    if (user.studies[studyIndex].status === 'ongoing') return;
+
+    const updatedStudy = await StudyService.publishStudy(study.id);
+    user.studies[studyIndex].status = 'ongoing';
 }
+
 </script>
 
 <style scoped>
