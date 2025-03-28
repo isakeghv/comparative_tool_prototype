@@ -49,6 +49,17 @@
     }
 }
 
+@mixin overlay() {
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: none;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+}
+
 $mainAreaWidth: clamp(20rem, -4rem + 48vw, 50rem);
 $borderSolid: solid c.$lightGray 1px;
 $areaPadding: 2.4rem 2.2rem;

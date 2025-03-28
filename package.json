@@ -19,6 +19,8 @@
     "vue-router": "latest"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
+    "nock": "^14.0.2",
     "sass-embedded": "^1.85.1"
   }
 }

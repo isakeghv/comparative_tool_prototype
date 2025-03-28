@@ -12,19 +12,29 @@
 				<input type="checkbox" id="terms__checkbox" class="terms__checkbox" v-model="isChecked" />
 				<label for="terms__checkbox" class="terms__label font-small">
 					By participating, you confirm that you have read, understood, and agree to our 
-				<a href="#" @click.prevent="togglePopup" class="terms__link font-small">Terms of Service</a> and
-				<a href="#" @click.prevent="togglePopup" class="terms__link font-small">Privacy Policy</a>.
+				<a href="#" @click.prevent="togglePopup" class="terms__link font-small">User Agreement</a>.
 				</label>
 
 				<div class="terms__popup" v-if="showPopup">
-					<p>{{ study.customTerms.terms }}</p>
+					<button class="terms__button terms__button--close" @click="showPopup = false">
+						<svg xmlns="http://www.w3.org/2000/svg" class="terms__cross" viewBox="0 -960 960 960"
+							width="24px">
+							<path
+								d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+						</svg>
+					</button>
+					<div class="terms__text">
+						<h3 class="participant__sub font-h5">User Agreement</h3>
+						<p>{{ study.customTerms.terms }}</p>
+					</div>
 				</div>
 
 			</div>
 
 		</section>
 		<div>
-			<button @click="handleStart" :disabled="!isChecked">Start</button>
+			<button @click="handleStart" :disabled="!isChecked" class="participant__button participant__button--start">Start</button>
+			<div v-if="showPopup" class="overlay" @click="showPopup = false"></div>
 		</div>
 	</div>
 </template>
