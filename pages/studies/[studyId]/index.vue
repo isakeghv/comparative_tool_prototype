@@ -2,7 +2,7 @@
     <ParticipantHeader :start="start" @start="handleStart"/>
     <main class="participant__cont">
         <ParticipantIntro
-            v-if="study && showIntro"
+            v-if="study && isOpen && showIntro"
             :study="study" 
             :handleStart="handleStart" 
         />
@@ -11,7 +11,7 @@
             <p>{{ message }}</p>
         </div>
 
-        <ParticipantMain v-if="study && start" :study="study" />
+        <ParticipantMain v-if="study && isOpen && start" :study="study" />
     </main>
 </template>
 
@@ -21,10 +21,10 @@ import StudyService from '~/services/studyService';
 
 const studyId = ref(null);
 const study = ref(null);
+const isOpen = ref(false);
 const isValidId = ref(true);
 const message = ref('');
-// const questions = ref([]);
-// const questionIndex = ref(0);
+
 
 // show view depending on which page the user is on
 const currentView = ref('intro');
@@ -59,13 +59,11 @@ const loadStudy = async (studyId) => {
         // store the fetched study in the local state for futher processing
         study.value = response.study;
 
-        if (study.value.status === 'draft') {
-            message.value = "The study hasn't been published yet.";
-        } else if (study.value.status === 'closed') {
-            message.value = "The study is closed.";
-        } else if (study.value.status !== 'ongoing') {
-            // just have a simple message to avoid saying too much information in case of an error
-            message.value = "The study hasn't been published yet.";
+        // dervied from the response of the fetch, and checks if study is 'ongoing' and future calculations
+        isOpen.value = response.isOpen;
+
+        if (!isOpen.value) {
+            message.value = "The study is not open for participation.";
         }
 
     } catch (error) {
@@ -77,9 +75,9 @@ const loadStudy = async (studyId) => {
 
 // make sure to only show the page views if study is published etc.
 // TODO: should propbably move the 'ongoing' check to the template
-const showIntro = computed(() => study.value.status === 'ongoing' && currentView.value === 'intro');
-const showDemographics = computed(() => study.value.demographicReq && study.value.status === 'ongoing' && currentView.value === 'demographics');
-const showQuestions = computed(() => study.value.status === 'ongoing' && currentView.value === 'questions');
+const showIntro = computed(() => isOpen.value && currentView.value === 'intro');
+const showDemographics = computed(() => isOpen.value && study.value.demographicReq && currentView.value === 'demographics');
+const showQuestions = computed(() => isOpen.value && currentView.value === 'questions');
 
 // when clicked on start, create a participant session
 const handleStart = () => {

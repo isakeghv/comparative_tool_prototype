@@ -92,7 +92,6 @@ watch(
 watch(
   () => responseModel.value,
   (newValue) => {
-    console.log('Response model:', newValue);
     const thisQuestion = getQuestion(props.id);
     if (thisQuestion && thisQuestion.responseType !== newValue) {
       thisQuestion.responseType = newValue;

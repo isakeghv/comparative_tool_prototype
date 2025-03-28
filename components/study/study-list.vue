@@ -52,11 +52,7 @@ const addQuestion = () => {
             question: '',
             required: true,
             responseType: '',
-            // radio: {
-            //     options: []
-            // },
             checkbox: {
-                // options: [],
                 selectionMin: '',
                 selectionMax: ''
             },

@@ -62,7 +62,7 @@
 <script setup>
 import { study } from '~/public/script/reactive';
 
-const selectModel = ref('');
+const selectModel = ref('days');
 const durationModel = ref('')
 
 const dateModel = ref('');
@@ -161,9 +161,6 @@ const props = defineProps({
     id: String,
     disabled: { type: Boolean, default: false }
 })
-
-// default selected duration unit to days
-const durationSelectedUnit = ref('days');
 
 </script>
 

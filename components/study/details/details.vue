@@ -9,7 +9,6 @@
     </div>
     </div>
     <DetailsAside />
-    <!-- :id="selectedId" v-if="requestModel" -->
 </template>
 
 <script setup>
@@ -29,7 +28,7 @@ const updateDesc = (input) =>{
 } 
 
 //initiating content, so title and description has correct content when component is opened
-const initiateContent = ()=>{
+const initiateContent = () => {
     if (study.title) titleModel.value = study.title;
     if (study.description) descrModel.value = study.description;
 }

@@ -18,15 +18,17 @@ const getStudy = async (e) => {
             description: 1,
             customTerms: 1,
             status: 1,
-            closingMethod: 1,
-            desiredResponses: 1,
             questions: 1,
             demographicReq: 1,
             demographic: 1,
         }
-    ).lean();
+        ).lean();
+
+        // add future calculatiosn based on closing methods later
+        const isOpen = study.status === "ongoing"
+        
         setResponseStatus(200);
-        return { found: true, message: "Study found successfully.", study };
+        return { found: true, message: "Study found successfully.", study, isOpen };
     } catch (err) {
         return { found: false, message: "Issue occured while fetching study.", error: err.message };
     }
