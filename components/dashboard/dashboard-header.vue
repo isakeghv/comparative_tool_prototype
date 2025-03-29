@@ -25,6 +25,7 @@
             </div>
             <button class="header__publish font-semi font-normal" @click="publishStudy">Publish</button>
         </div>
+        <slot></slot>
     </header>
 </template>
 

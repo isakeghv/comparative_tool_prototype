@@ -1,5 +1,16 @@
 <template>
-    <ParticipantHeader :start="start" @start="handleStart"/>
+    <DashboardHeader>
+        <div v-if="start" class="progress">
+        <div class="progress__container">
+            <div class="progress__bar">
+                <div class="progress__bar--fill" :style="{ width: progressFill + '%' }">
+                </div>
+            </div>
+        </div>
+        <span class="progress__percentage font-small font-medium">{{ progressFill + '%' }}</span>
+    </div>
+    </DashboardHeader>
+
     <main class="participant__cont">
         <ParticipantIntro
             v-if="study && isOpen && showIntro"
@@ -11,7 +22,7 @@
             <p>{{ message }}</p>
         </div>
 
-        <ParticipantMain v-if="study && isOpen && start" :study="study"/>
+        <ParticipantMain v-if="study && isOpen && start" :study="study" @updateProgress="updateProgress" @totalSteps="getTotalSteps"/>
     </main>
 </template>
 
@@ -25,6 +36,9 @@ const isOpen = ref(false);
 const isValidId = ref(true);
 const message = ref('');
 
+// to calculate the progress bar
+const progressFill = ref(0);
+const totalSteps = ref(null);
 
 // show view depending on which page the user is on
 const currentView = ref('intro');
@@ -85,6 +99,13 @@ const handleStart = () => {
     currentView.value = "questions";
     // console.log(questions.value);
 }
+
+const updateProgress = (progress) => {
+    // get the percentage of (current step / total steps)
+    progressFill.value = (progress / totalSteps.value) * 100;
+}
+
+const getTotalSteps = (steps) => totalSteps.value = steps;
 
 // watch for changes in the route param; set the study id ref to the one in the URL
 watch(() => useRoute().params.studyId, async (newStudyId) => {
