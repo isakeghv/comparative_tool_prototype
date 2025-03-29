@@ -1,6 +1,6 @@
 <template>
 	<section class="question">
-		<h2 class="participant__title font-h5 font-medium">{{ currentQuestion.question }}</h2>
+		<h2 class="participant__headline font-h5 font-semi">{{ currentQuestion.question }}</h2>
 
 		<!-- dynamically render a component based on its response type-->
 		<component :is="responseComponent" :question="currentQuestion" />
@@ -73,8 +73,8 @@ const props = defineProps({
 // access the question at a specific index
 
 // the response type of the question
-const responseType = computed(() => currentQuestion.value?.responseType || '');
 const currentQuestion = computed(() => props.questions?.[props.questionIndex] ?? {});
+const responseType = computed(() => currentQuestion.value?.responseType || '');
 
 // store source and id of image to show it and make it expandable
 const selectedSource = ref('');

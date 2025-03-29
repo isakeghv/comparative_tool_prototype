@@ -24,7 +24,7 @@ import { study } from '~/public/script/reactive';
 const requestModel = ref(study.demographicReq);
 
 //updating if demographics should be requested or not
-const updateRequest = ()=>{
+const updateRequest = () => {
     study.demographicReq = requestModel.value;
 }
 
@@ -47,11 +47,6 @@ const defaultQuestions = [
         number: {
             min: 0,
             max: 100
-        },
-        date: {
-            year: false,
-            month: false,
-            day: false
         }
     },
     {
@@ -69,11 +64,6 @@ const defaultQuestions = [
         number: {
             min: '',
             max: ''
-        },
-        date: {
-            year: false,
-            month: false,
-            day: false
         }
     },
     {
@@ -91,11 +81,6 @@ const defaultQuestions = [
         number: {
             min: '',
             max: ''
-        },
-        date: {
-            year: false,
-            month: false,
-            day: false
         }
     },
     {
@@ -113,11 +98,6 @@ const defaultQuestions = [
         number: {
             min: '',
             max: ''
-        },
-        date: {
-            year: false,
-            month: false,
-            day: false
         }
     }
 ];

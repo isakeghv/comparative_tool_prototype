@@ -1,6 +1,6 @@
 <template>
 	<div class="participant__start">
-	<h2 class="participant__headline font-h4 font-semi">{{ study.title }}</h2>
+	<h2 class="participant__title font-h4 font-semi">{{ study.title }}</h2>
 
 		<!-- should check if description is empty -->
 		<section class="participant__section">
@@ -33,7 +33,7 @@
 
 		</section>
 		<div>
-			<button @click="handleStart" :disabled="!isChecked" class="participant__button participant__button--start">Start</button>
+			<button @click="handleStart" :disabled="!isChecked && study.customTerms.request" class="participant__button participant__button--start font-small font-semi">Start</button>
 			<div v-if="showPopup" class="overlay" @click="showPopup = false"></div>
 		</div>
 	</div>

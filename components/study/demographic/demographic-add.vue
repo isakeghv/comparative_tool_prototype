@@ -26,11 +26,6 @@ const newDemogrQuestion = () => {
         number: { 
             min: '',
             max: ''
-        },
-        date: {
-            year: false,
-            month: false,
-            day: false
         }
     }
 

@@ -11,7 +11,7 @@
             <p>{{ message }}</p>
         </div>
 
-        <ParticipantMain v-if="study && isOpen && start" :study="study" />
+        <ParticipantMain v-if="study && isOpen && start" :study="study"/>
     </main>
 </template>
 
@@ -76,8 +76,6 @@ const loadStudy = async (studyId) => {
 // make sure to only show the page views if study is published etc.
 // TODO: should propbably move the 'ongoing' check to the template
 const showIntro = computed(() => isOpen.value && currentView.value === 'intro');
-const showDemographics = computed(() => isOpen.value && study.value.demographicReq && currentView.value === 'demographics');
-const showQuestions = computed(() => isOpen.value && currentView.value === 'questions');
 
 // when clicked on start, create a participant session
 const handleStart = () => {

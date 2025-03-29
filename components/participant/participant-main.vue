@@ -47,5 +47,5 @@ const prevQuestion = () => {
 </script>
 
 <style scoped>
-
+    @import url('public/style/pages/participant/participant.scss');
 </style>

@@ -24,9 +24,7 @@ const QuestionSchema = new Schema({
 		],
 		required: true,
 	},
-	radio: {
-		options: [{ type: String }],
-	},
+	// radio: { type: String },
 	checkbox: {
 		// options: [{ type: String }],
 		selectionMin: { type: Number },
@@ -94,17 +92,7 @@ const DemographicSchema = new Schema({
 			type: Number,
 		},
 	},
-	date: {
-		year: {
-			type: Boolean,
-		},
-		month: {
-			type: Boolean,
-		},
-		day: {
-			type: Boolean,
-		},
-	},
+	// date: { type: Boolean }
 });
 
 // saving study schema with relevant questions, settings, and participant/study information

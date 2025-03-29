@@ -26,7 +26,7 @@
                 <div class="aside__row aside__row--toggle" v-if="isTextResponse">
                     <label for="demographic_text_number" class="hide">Max word count: </label>
                     <input type="number" id="demographic_text_number" class="aside__input--number font-small"
-                        name="demographic_text_number" min="0" max="3000" step="100" v-model="textModel" placeholder="0"/>
+                    name="demographic_text_number" min="0" max="3000" step="100" v-model="textModel" placeholder="0"/>
                     <span class="font-normal"> / 3000 characters</span>
                 </div>     
             </fieldset>
@@ -42,7 +42,7 @@
                 <div class="aside__option" v-for="(option, i) in optionsModel" :key="i">
                     <label :for="`option_${option}_${i}_txt`" class="aside__label aside__identifier">{{ i + 1 }}</label>
                     <input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="optionsModel[i]">
-                    <button class="aside__button aside__button--remove" @click="deleteOption(i)">
+                    <button class="aside__button aside__button--remove font-small font-medium" @click="deleteOption(i)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="aside__cross" height="24px" viewBox="0 -960 960 960" width="24px"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
                     </button>
                 </div>
@@ -66,28 +66,12 @@
             </fieldset>
         </div>
         <div class="aside__container">
-            <fieldset class="aside__fieldset">
-                <div class="aside__selection">
-                    <input type="radio" value="date" name="demographic_radio" id="demographic_date_radio" class="aside__radio" v-model="responseModel">
-                    <label for="demographic_date_radio" class="aside__label aside__label--headline font-normal font-medium">
-                        Date
-                    </label>
-                </div>
-                <div class="aside__date_select" v-if="isDateResponse">
-                    <div class="aside__selection aside__selection--nested">
-                        <input type="checkbox" name="demographic_date_year" id="demographic_date_year" v-model="yearModel"/>
-                        <label for="demographic_date_year" class="aside__label">Year</label>
-                    </div>
-                    <div class="aside__selection aside__selection--nested">
-                        <input type="checkbox" name="demographic_date_month" id="demographic_date_month" v-model="monthModel"/>
-                        <label for="demographic_date_month" class="aside__label">Month</label>
-                    </div>
-                    <div class="aside__selection aside__selection--nested">
-                        <input type="checkbox" name="demographic_date_day" id="demographic_date_day" v-model="dayModel"/> 
-                        <label for="demographic_date_day" class="aside__label">Day</label>
-                    </div>
-                </div>
-            </fieldset>
+            <div class="aside__selection">
+                <input type="radio" value="date" name="demographic_radio" id="demographic_date_radio" class="aside__radio" v-model="responseModel">
+                <label for="demographic_date_radio" class="aside__label aside__label--headline font-normal font-medium">
+                    Date
+                </label>
+            </div>
         </div>
         <div class="aside__container aside__container--borderless">
             <button class="aside__button aside__button--delete" @click="deleteQuestion()">
@@ -116,9 +100,6 @@ const optionsModel = ref([]);
 const textModel = ref();
 const minModel = ref();
 const maxModel= ref();
-const yearModel = ref(false);
-const monthModel = ref(false);
-const dayModel = ref(false);
 
 //for finding a specific id in an array and returning the relevant option
 const returnDemographic = (id) => study.demographic.find(demographic => demographic.id === id) || null;
@@ -162,9 +143,6 @@ const initiateConfig = (id)=>{
     optionsModel.value = selectedQuestion.value.radio?.options;
     minModel.value = selectedQuestion.value.number.min;
     maxModel.value = selectedQuestion.value.number.max;
-    yearModel.value = selectedQuestion.value.date.year;
-    monthModel.value = selectedQuestion.value.date.month;
-    dayModel.value = selectedQuestion.value.date.day;
 }
 
 const addOption = () => {
@@ -179,7 +157,7 @@ const deleteOption = (i) => {
 const isRadioResponse = computed(() => responseModel.value === 'radio');
 const isTextResponse = computed(() => responseModel.value === 'text');
 const isNumberResponse = computed(() => responseModel.value === 'number');
-const isDateResponse = computed(() => responseModel.value === 'date');
+// const isDateResponse = computed(() => responseModel.value === 'date');
 
 // when a new question is selected, the question config gets updated
 watch(
@@ -196,7 +174,7 @@ watch(responseModel, (newResponse) => {
 });
 
 // update the nested values of a response type when switching to another question; watching each v-model of the array to be less repetitive
-watch([textModel, optionsModel, minModel, maxModel, yearModel, monthModel, dayModel], () => {
+watch([textModel, optionsModel, minModel, maxModel], () => {
     const thisDemographic = returnDemographic(props.id);
 
     if (!thisDemographic) return;
@@ -205,9 +183,6 @@ watch([textModel, optionsModel, minModel, maxModel, yearModel, monthModel, dayMo
     thisDemographic.number.min = minModel.value;
     thisDemographic.number.max = maxModel.value;
     thisDemographic.radio.options = optionsModel.value;
-    thisDemographic.date.year = yearModel.value;
-    thisDemographic.date.month = monthModel.value;
-    thisDemographic.date.day = dayModel.value;
 });
 </script>
 
