@@ -1,13 +1,15 @@
 <template>
-    <ParticipantDemographics v-if="adjustedQuestionIdx === -1" :study=study />
-    <ParticipantQuestions v-else :questions="questions" :questionIndex="adjustedQuestionIdx" />
+    <main class="participant__cont">
+        <ParticipantDemographics v-if="adjustedQuestionIdx === -1" :study=study />
+        <ParticipantQuestions v-else :questions="questions" :questionIndex="adjustedQuestionIdx" />
 
-    <div class="participant__navigation">
-        <button @click="prevQuestion" v-if="questionIndex !== 0" class="participant__button participant__button--back font-small font-semi">Back</button>
-        <!-- show 'send' button if question index is at the last step -->
-        <button @click="sendForm"  v-if="questionIndex === totalSteps - 1" class="participant__button participant__button--send font-small font-semi">Send</button>
-        <button @click="nextQuestion" v-else class="participant__button participant__button--next font-small font-semi">Next</button>
-    </div>
+        <div class="participant__navigation">
+            <button @click="prevQuestion" v-if="questionIndex !== 0" class="participant__button participant__button--back font-small font-semi">Back</button>
+            <!-- show 'send' button if question index is at the last step -->
+            <button @click="sendForm"  v-if="questionIndex === totalSteps - 1" class="participant__button participant__button--send font-small font-semi">Send</button>
+            <button @click="nextQuestion" v-else class="participant__button participant__button--next font-small font-semi">Next</button>
+        </div>
+    </main>
 </template>
 
 <script setup>

@@ -1,17 +1,19 @@
 <template>
-	<div class="participant__center">
-		<section v-if="study?.demographicReq" class="participant__section">
-			<h2 class="participant__headline font-h5 font-semi">Demographics</h2>
-			<p>{{ study.demographics }}</p>
+	<div class="participant__cont--alt">
+		<div class="participant__center">
+			<section v-if="study?.demographicReq" class="participant__section">
+				<h2 class="participant__headline font-h5 font-semi">Demographics</h2>
+				<p>{{ study.demographics }}</p>
 
-			
-			<div v-for="question in questions">
-				<div v-if="question.request" class="participant__box">
-					<h3 class="participant__sub font-normal font-medium">{{ question.question }} <span v-if="question.required">*</span></h3>
-					<component :is="getResponseComponent(question.responseType)" :question="question" />
+				
+				<div v-for="question in questions">
+					<div v-if="question.request" class="participant__box">
+						<h3 class="participant__sub font-normal font-medium">{{ question.question }} <span v-if="question.required">*</span></h3>
+						<component :is="getResponseComponent(question.responseType)" :question="question" />
+					</div>
 				</div>
-			</div>
-		</section>
+			</section>
+		</div>
 	</div>
 </template>
 

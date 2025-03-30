@@ -30,8 +30,16 @@
     &__cont {
         display: flex;
         flex-direction: column;
-        min-height: calc(100vh - 4rem);
-        padding: 3.5rem 5.5rem;
+        height: calc(100vh - 4rem);
+        width: 100%;
+
+        &--intro {
+            padding: 3rem 5rem;
+        }
+
+        &--alt {
+            padding: 3rem 5rem 0 5rem;
+        }
     }
 
     &__center {
@@ -59,12 +67,12 @@
         justify-content: flex-end;
         margin-top: auto;
         gap: 0.4rem;
+        padding: 1.8rem 2.4rem;
     }
 
     &__button {
         cursor: pointer;
         border-radius: 0.5rem;
-        border: none;
         background: none;
         padding: 0.6rem 1.2rem;
 
@@ -72,6 +80,7 @@
         &--start, &--next, &--send {
             background-color: c.$bluePrimary;
             color: c.$white;
+            border: 2px solid c.$bluePrimary;
 
             &:hover {
                 background-color: c.$bluePrimary-hover;

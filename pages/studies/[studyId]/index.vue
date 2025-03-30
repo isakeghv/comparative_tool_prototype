@@ -11,19 +11,17 @@
     </div>
     </DashboardHeader>
 
-    <main class="participant__cont">
-        <ParticipantIntro
-            v-if="study && isOpen && showIntro"
-            :study="study" 
-            :handleStart="handleStart" 
-        />
+    <ParticipantIntro
+        v-if="study && isOpen && showIntro"
+        :study="study" 
+        :handleStart="handleStart" 
+    />
 
-        <div v-else>
-            <p>{{ message }}</p>
-        </div>
-
-        <ParticipantMain v-if="study && isOpen && start" :study="study" @updateProgress="updateProgress" @totalSteps="getTotalSteps"/>
+    <main class="participant__cont" v-if="message !== ''">
+        <p>{{ message }}</p>
     </main>
+
+    <ParticipantMain v-if="study && isOpen && start" :study="study" @updateProgress="updateProgress" @totalSteps="getTotalSteps"/>
 </template>
 
 <script setup>

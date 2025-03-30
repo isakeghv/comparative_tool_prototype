@@ -1,3 +1,86 @@
 @use "../../variables/_colors.scss" as c;
 @use "../../variables/variables" as v;
 
+.question {
+    width: 100%;
+    height: 100%;
+}
+
+.participant {
+    &__cont {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 4rem);
+        width: 100%;
+        padding: 3rem 5rem;
+
+        &--alt {
+            padding: 3rem 5rem 0 5rem;
+        }
+    }
+}
+
+.question {
+    &__cont {
+        width: 100%;
+        height: 100%;
+
+        &--top {
+            display: flex;
+            flex: 1;
+            height: 75%;
+        }
+
+        &--btm {
+            border: v.$borderSolid;
+            flex: 2;
+            height: 25%;
+        }
+    }
+
+    &__headline {
+        margin-bottom: 0.8rem;
+    }
+
+    &__panel {
+        width: 50%;
+
+        &--left {
+            border-right: v.$borderSolid;
+            padding: 1.5rem 2.5rem;
+        }
+    }
+
+    &__list {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 0.8rem;
+    }
+}
+
+.artifact {
+    &__expand {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        aspect-ratio: 16 / 9;
+
+        &--img, &--video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        &--embed {
+            width: 100%;
+            height: 100%;
+        }
+
+        &--audio {
+            display: block;
+            width: 80%;
+        } 
+    }
+}
