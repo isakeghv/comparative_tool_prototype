@@ -18,12 +18,22 @@
 		</div>
 		<label for="login_pwd_inp" class="form__label font-normal font-semi">Password</label>
 		<div class="form__cont">
-			<svg xmlns="http://www.w3.org/2000/svg" class="form__svg" viewBox="0 -960 960 960">
-				<path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z"/>
-			</svg>
-			<input type="password" id="login_pwd_inp" name="password" v-model="pwd" placeholder="Enter password"
-				class="font-normal form__input" required>
-		</div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="form__svg" viewBox="0 -960 960 960">
+                <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z"/>
+            </svg>
+            <div class="form__cont form__cont--password">
+                <svg xmlns="http://www.w3.org/2000/svg" class="form__svg" viewBox="0 0 24 2">
+                    <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z"/>
+                </svg>
+                <input :type="showPassword ? 'text' : 'password'" v-model="pwd" placeholder="Enter password" class="font-normal form__input" required/>
+                <button type="button" @click="showPassword = !showPassword" class="form__toggle-password">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="eye-icon">
+                        <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+                    </svg>
+                    <div v-if="!showPassword" class="eye-slash-line"></div>
+                </button>
+            </div>
+        </div>
 		<div class="form__cont">
 			<input type="submit" value="Login" class="form__submit font-normal font-semi">
 			<span class="form__span font-small">Don't have an account?
@@ -45,6 +55,9 @@ const loginStatus = ref("");
 const statusMsg = ref("")
 
 const emit = defineEmits(['toggle'])
+
+// Toggle password visibility
+const showPassword = ref(false);
 
 const toggleSignup = (event) => {
 	event.preventDefault();
