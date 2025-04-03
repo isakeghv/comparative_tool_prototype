@@ -62,7 +62,7 @@
                         d="M50.4646 49.5113C53.8976 45.846 55.9997 40.9187 55.9997 35.5005C55.9997 31.4142 54.8041 27.6072 52.7437 24.4102L46.8649 30.289C47.5934 31.8754 47.9997 33.6405 47.9997 35.5005C47.9997 38.7095 46.7904 41.6361 44.8027 43.8495L50.4646 49.5113Z"
                         fill="black" />
                 </svg>
-                <embed :src="artifact.source" class="artifact__image" type="application/pdf" v-if="isPdf(artifact.source)">
+                <embed :src="artifact.source" class="artifact__embed" type="application/pdf" v-if="isPdf(artifact.source)">
                 <video :src="artifact.source" class="artifact__video" preload="metadata" muted v-if="isVideoFile(artifact.source)"></video>
 
                 <div class="artifact__footer">

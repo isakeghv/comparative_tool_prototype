@@ -1,5 +1,6 @@
 <template>
-	<div v-for="artifact in artifacts" :key="artifact.id" @click="selectMedia(artifact.source, artifact.id)" class="artifact__container artifact__borderless">
+	<div v-for="artifact in artifacts" :key="artifact.id" @click="selectMedia(artifact.source, artifact.id)" class="artifact__container artifact__borderless"
+    ref="artifactRef" :draggable="draggableArtifact" @drop="onDrop" @dragstart="dragStart($event, artifact)" @mousedown="setDraggable(true)" @dragover.prevent>
 		<div class="wrapper">
 			<button class="wrapper__button wrapper__button--radius" @click="selectMedia(artifact.source, artifact.id)">
                 <svg class="wrapper__icon" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -33,8 +34,11 @@
                 d="M50.4646 49.5113C53.8976 45.846 55.9997 40.9187 55.9997 35.5005C55.9997 31.4142 54.8041 27.6072 52.7437 24.4102L46.8649 30.289C47.5934 31.8754 47.9997 33.6405 47.9997 35.5005C47.9997 38.7095 46.7904 41.6361 44.8027 43.8495L50.4646 49.5113Z"
                 fill="black" />
         </svg>
-		<embed :src="artifact.source" class="artifact__image artifact__border" type="application/pdf" v-if="isPdf(artifact.source)">
-		<video :src="artifact.source" class="artifact__video artifact__border" preload="metadata" muted v-if="isVideoFile(artifact.source)"></video>
+        <div v-if="isPdf(artifact.source)">
+            <div class="embed__handle"></div>
+            <iframe :src="artifact.source" class="artifact__embed artifact__border" type="application/pdf"></iframe>
+        </div>
+        <video :src="artifact.source" class="artifact__video artifact__border" preload="metadata" muted v-if="isVideoFile(artifact.source)"></video>
 	</div>
 </template>
 
@@ -42,16 +46,41 @@
 import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
 
 const props = defineProps({
-	artifacts: Array
+	artifacts: Array,
+    haveDraggable: Boolean
 });
+
+const artifactRef = ref('')
+const draggableArtifact = ref(false);
 
 const emit = defineEmits(['selectMedia']);
 
 const selectMedia = (source, id) => {
 	emit('selectMedia', source, id);
 };
+
+const setDraggable = (boolean) => {
+    draggableArtifact.value = boolean;
+    if (boolean) document.addEventListener('mouseup', setDraggableFalse);
+    else document.removeEventListener('mouseup', setDraggableFalse);
+};
+
+//calls draggabble function to reset draggability of item
+const setDraggableFalse = () => setDraggable(false);
+
+// set artifact id and source, allow it to move, and emit to parent which artifact was moved
+const dragStart = (e, artifact) => {
+    e.dataTransfer.setData('artifactId', artifact.id);
+    e.dataTransfer.setData('artifactSource', artifact.source);
+
+    e.dataTransfer.effectAllowed = 'move';
+
+    console.log(artifact.id);
+};
+
 </script>
 
 <style scoped>
 	@import url('public/style/components/study/study-main.scss');
+    @import url('public/style/components/participant/participant-question.scss');
 </style>

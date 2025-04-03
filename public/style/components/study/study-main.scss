@@ -139,6 +139,10 @@
 		border-radius: 0.5rem;
 		position: relative;
 
+		&--small {
+			max-width: 9rem;
+		}
+		
 		&--square {
 			aspect-ratio: 1 / 1;
 			display: block;
@@ -168,7 +172,8 @@
 	}
 
 	&__image,
-	&__video {
+	&__video,
+	&__embed {
 		border-bottom: v.$borderSolid;
 		border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px) 0 0;
 		width: 100%;
@@ -177,6 +182,11 @@
 		max-height: 80vh;
 	}
 
+	// &__embed {
+	// 	body::-webkit-scrollbar {
+	// 		display: none;
+	// 	}
+	// }
 
 	&__video {
 		pointer-events: none;

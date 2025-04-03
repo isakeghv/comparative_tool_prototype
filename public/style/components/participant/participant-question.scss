@@ -35,6 +35,7 @@
             border: v.$borderSolid;
             flex: 2;
             height: 25%;
+            padding: 1rem 0;
         }
     }
 
@@ -83,4 +84,17 @@
             width: 80%;
         } 
     }
+}
+
+.drop_zone {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.embed__handle {
+    width: 100%;
+    height: 100%;
+    position: absolute;
 }

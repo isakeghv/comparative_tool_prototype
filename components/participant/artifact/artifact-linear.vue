@@ -13,13 +13,14 @@
         </div>
     </div>
 
-    <div class="question__cont--btm"></div>
+    <slot name="drop-zone"></slot>
 </template>
 
 <script setup>
 const props = defineProps({
     question: Object
 })
+
 </script>
 
 <style scoped>
