@@ -10,10 +10,10 @@
 		<div class="aside__row aside__row--toggle" v-if="isCheckboxResponse">
 			<label for="question_selection_min" class="aside__label font-normal">Possible, from </label>
 			<input type="number" id="question_selection_min" class="aside__input--number font-small"
-				name="question_selection_min" min="0" step="1" v-model="selectionMinModel" />
+				name="question_selection_min" min="0" step="1" v-model="selectionMinModel" @input="updateMinModel()"/>
 			<label for="question_selection_max" class="aside__label font-normal">to</label>
 			<input type="number" id="question_selection_max" class="aside__input--number font-small"
-				name="question_selection_max" step="1" v-model="selectionMaxModel" />
+				name="question_selection_max" step="1" v-model="selectionMaxModel" @input="updateMaxModel()"/>
 		</div>
 
 		<!-- range -->
@@ -22,20 +22,20 @@
 				Min
 			</label>
 			<input type="number" id="question_range_min" class="aside__input--number font-small"
-				name="question_range_min" step="1" v-model.number="minModel" />
+				name="question_range_min" step="1" v-model="minModel" @input="updateMinRange(minModel)"/>
 			<label for="question_range_start" class="hide">Start label</label>
 			<input type="text" id="question_range_start" class="aside__input--wide" name="question_range_start"
-				placeholder="Start label (optional)" v-model="rangeStartModel">
+				placeholder="Start label (optional)" v-model="rangeStartModel" @input="updateMinRangeLabel(rangeStartModel)">
 		</div>
 		<div class="aside__row" v-if="isRangeResponse">
 			<label for="question_range_max" class="aside__label font-normal">
 				Max
 			</label>
 			<input type="number" id="question_range_max" class="aside__input--number font-small"
-				name="question_range_max" step="1" v-model="maxModel" />
+				name="question_range_max" step="1" v-model="maxModel" @input="updateMaxRange(maxModel)"/>
 			<label for="question_range_end" class="hide">End label</label>
 			<input type="text" id="question_range_end" class="aside__input--wide" name="question_range_end"
-				placeholder="End label (optional)" v-model="rangeEndModel">
+				placeholder="End label (optional)" v-model="rangeEndModel" @input="updateMaxRangeLabel(rangeEndModel)">
 		</div>
 
 		<!-- drag and drop -->
@@ -58,12 +58,12 @@
 		<div class="aside__row aside__row--toggle" v-if="isLinearResponse">
 			<label for="question_range_start_label" class="font-small">Start</label>
 			<input type="text" id="question_range_start_label" class="aside__input--wide"
-				placeholder="Start label (optional)" v-model="linearStartModel">
+				placeholder="Start label (optional)" v-model="linearStartModel" @input="updateMinLinear(linearStartModel)">
 		</div>
 		<div class="aside__row" v-if="isLinearResponse">
 			<label for="question_range_end_label" class="font-small">End</label>
 			<input type="text" id="question_range_end_label" class="aside__input--wide"
-				placeholder="End label (optional)" v-model="linearEndModel">
+				placeholder="End label (optional)" v-model="linearEndModel" @input="updateMaxLinear(linearEndModel)">
 		</div>
 	</fieldset>
 </template>
@@ -115,10 +115,18 @@ const updateDropOption = ()=>{
 	q.drop.dropBox = dropBoxModel.value;
 }
 
+//updating response-type configurations in "study"
+const updateMinLinear = (input) => thisQuestion().linear.startLabel = input;
+const updateMaxLinear = (input) => thisQuestion().linear.endLabel = input;
+const updateMinRangeLabel = (input) =>thisQuestion().range.startLabel = input;
+const updateMaxRangeLabel = (input) =>thisQuestion().range.endLabel = input;
+const updateMinRange = (input) =>thisQuestion().range.min = input;
+const updateMaxRange = (input) =>thisQuestion().range.max = input;
+const updateMinModel = () =>thisQuestion().checkbox.selectionMin = selectionMinModel.value;
+const updateMaxModel = () =>thisQuestion().checkbox.selectionMax = selectionMaxModel.value;
+
 //handles so the responseType is correct when changing questions
-const initiateTypeModel = () =>{
-	responseModel.value = props.question.responseType;
-}
+const initiateTypeModel = () =>responseModel.value = props.question.responseType;
 
 const deleteDropBox = (i) => {
 	removeOptionAtIndex(props.question.drop.dropBox, dropBoxModel.value, i);
