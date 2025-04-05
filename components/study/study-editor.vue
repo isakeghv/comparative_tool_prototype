@@ -10,12 +10,11 @@
 </template>
 
 <script setup>
+const emit = defineEmits(['unableSave'])
 
-// need to pass it down to child components as well so the input fields etc. can be targetted
-// reminder: disables hover effects, remove disabled color for title
-// const props = defineProps({
-//   disabled: { type: Boolean, default: false }
-// });
+// const forwardErrorMsg = (err) => {
+//     emit('unableSave', err);
+// };
 
 // show details as default when opening/creating a study
 const displayComponent = ref('details');

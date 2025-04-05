@@ -9,10 +9,10 @@
         />
 	</div>
     <!-- show study editor if id has been passed in, and show as read only/disabled if opened with select (read operation) -->
-    <StudyEditor v-if="study.id" :disabled="isReadOnly"/>
+    <StudyEditor v-if="study.id" :disabled="isReadOnly" />
 
     <!--Prompt box informing user that study cannot be saved due to missing fields-->
-    <Dashboard-unableSave @exit="displayUnableSaveBox(false)" v-if="showUnableSaveBox && study.id"/>
+    <DashboardUnableSave @exit="displayUnableSaveBox(false)" v-if="showUnableSaveBox && study.id" :errors="errorMsgs.list" />
 
 	<!--Display message if issues fetting user-info-->
 	<div class="container" v-if="!showMain && !study.id">
@@ -25,21 +25,24 @@
 </template>
 
 <script setup>
-import { user, study, initialStudy } from '~/public/script/reactive';
-// import { setStudyData } from '~/server/utils/studyUtils';
+import { user, study, initialStudy, errorMsgs } from '~/public/script/reactive';
 import StudyService from '~/services/studyService';
 
 const showMain = ref(true);
 const displayName = ref('');
-const isReadOnly = ref();
+const isReadOnly = ref(false);
+const status = ref('');
 
 // need to track if study already exists or should be updated due to the saving logic
 const isCreatingStudy = ref(false);
-
 const showUnableSaveBox = ref(false);
 
+// const handleErrorMsg = (err) => {
+//     errorMessage.value = err; 
+// };
+
 //toggles the prompt-box providing user message that study cannot be saved
-const displayUnableSaveBox = (display)=>{
+const displayUnableSaveBox = (display) =>{
     showUnableSaveBox.value = display
 }
 
@@ -81,6 +84,9 @@ const populateStudy = (id) => {
     // find study with matching id that is stored when user loads dashboard
     const selectedStudy = user.studies.find(study => study.id === id);
 
+    // set current status of study
+    status.value = selectedStudy.status;
+
     // load the study with the data of selected study if it exists
     if (selectedStudy) {
         study.id = selectedStudy.id;
@@ -111,14 +117,17 @@ const onNewStudy = (id) => {
     study.id = id;
     isReadOnly.value = false;
     isCreatingStudy.value = true;
+    errorMsgs.list = [];
 }
 
 const onEditStudy = (id) => {
     populateStudy(id);
-    isReadOnly.value = false;
-    isCreatingStudy.value = false;
-}
 
+    // set 'isReadOnly' to false if current study is true
+    isReadOnly.value = status.value !== 'draft';
+    isCreatingStudy.value = false;
+    errorMsgs.list = [];
+}
 
 const onDeleteStudy = (id) => {
     StudyService.deleteStudy(id);
@@ -129,7 +138,14 @@ const onDeleteStudy = (id) => {
     if (studyIndex !== -1) {
         user.studies.splice(studyIndex, 1);
     }
+    errorMsgs.list = [];
 }
+
+// show warning modal if it contains any errors
+watch(errorMsgs.list, (newMsgs) => {
+    console.log(newMsgs);
+    showUnableSaveBox.value = newMsgs.length > 0;
+});
 
 </script>
 

@@ -69,3 +69,7 @@ export const display = ({
     //demographicId will hold the id of the relevant demographic-question to modify, e.g: to show and update in demographic aside
     demographicId: null,
 })
+
+export const errorMsgs = reactive({
+    list: []
+})

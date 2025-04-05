@@ -3,23 +3,22 @@
 @mixin main-area {
     display: flex;
     flex-direction: column;
-    flex: 1 1 60%;
+    flex: 1 1 55%;
     padding: $areaPadding;
 }
 
-// this is left unused currently
 @mixin left-area {
     display: flex;
-    flex-direction: column;
-    flex: 1 1 20%;
+    flex-flow: column nowrap;
+    flex: 1 1 22%;
     padding: $areaPadding;
     border-right: $borderSolid;
 }
 
 @mixin right-area {
     display: flex;
-    flex-direction: column;
-    flex: 1 1 25%;
+    flex-flow: column nowrap;
+    flex: 1 1 23%;
     border-left: $borderSolid;
 }
 

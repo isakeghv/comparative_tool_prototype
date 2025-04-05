@@ -12,10 +12,10 @@
             <label for="demographic_required_checkbox" class="aside__label aside__label--headline font-normal font-medium">
                 Required
             </label>
-            <input type="checkbox" id="demographic_required_checkbox" class="aside__checkbox" v-model="requiredModel" @change="updateRequired()">
+            <input type="checkbox" id="demographic_required_checkbox" class="aside__checkbox" v-model="requiredModel" @change="updateRequired()" :disabled=isDisabled>
         </div>
         <div class="aside__container aside__container--borderless">
-            <button class="aside__button aside__button--delete font-semi font-small" @click="deleteQuestion()">
+            <button v-if="!isDisabled" class="aside__button aside__button--delete font-semi font-small" @click="deleteQuestion()">
                 Delete question
             </button>
         </div>
@@ -24,6 +24,7 @@
 
 <script setup>
 import { study } from '~/public/script/reactive';
+const isDisabled = inject('disabled'); 
 
 const props = defineProps({
     index: Number,

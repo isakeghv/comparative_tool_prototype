@@ -6,7 +6,7 @@
             <label for="demographic_request_checkbox" class="demographic__label">
                 <span class="demographic__span font-normal">Request demographics</span>
             </label>
-            <label class="demographic__slider">
+            <label class="demographic__slider" :disabled=isDisabled>
                 <input type="checkbox" v-model="requestModel" id="demographic__request_checkbox" class="demographic__checkbox" @change="updateRequest()">
                 <span class="demographic__thumbnail" :class="{'demographic__thumbnail--active': requestModel}"></span>
             </label>
@@ -20,6 +20,7 @@
 
 <script setup>
 import { study } from '~/public/script/reactive';
+const isDisabled = inject('disabled');
 
 const requestModel = ref(study.demographicReq);
 
@@ -42,7 +43,7 @@ const defaultQuestions = [
             maxChar: 0
         },
         radio: {
-            options: []
+            options: ['']
         },
         number: {
             min: 0,
@@ -76,7 +77,7 @@ const defaultQuestions = [
             maxChar: 200
         },
         radio: {
-            options: []
+            options: ['']
         },
         number: {
             min: '',
@@ -93,7 +94,7 @@ const defaultQuestions = [
             maxChar: ''
         },
         radio: {
-            options: []
+            options: ['']
         },
         number: {
             min: '',
@@ -103,8 +104,8 @@ const defaultQuestions = [
 ];
 
 //initiating: if there is nothing in demographics questions, load with default setup
-const initiateConfig = ()=>{
-    if (study.demographic.length <= 0) study.demographic = defaultQuestions;
+const initiateConfig = () =>{
+    if (study.demographic.length === 0) study.demographic = defaultQuestions;
 }
 
 initiateConfig();

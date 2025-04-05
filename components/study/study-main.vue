@@ -3,7 +3,7 @@
         <div class="study__main">
             <div class="study__header">
                 <label for="study_question_input" class="study__label study__headline font-h5 font-semi">Question</label>
-                <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question">
+                <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question" :disabled=isDisabled>
             </div>
             
         <!-- {{ study }} -->
@@ -117,7 +117,11 @@
 
 <script setup>
 import { study } from '~/public/script/reactive';
-import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js'
+import { setMessage } from '~/utils/validationUtils.js';
+import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
+
+const isDisabled = inject('disabled');
+const emit = defineEmits(['unableSave'])
 
 const props = defineProps({
     index: Number,
@@ -125,10 +129,8 @@ const props = defineProps({
 })
 
 const showInfo = ref(null)
-
 const selectedSource = ref('');
 const selectedId = ref('');
-
 const showArtifactId = ref(false);
 
 const selectMedia = (source, id) => {
@@ -180,9 +182,17 @@ const uploadFile = async (e) => {
     e.target.value = '';
 };
 
+
+// store an error message if the 'question' field of x question is missing a title
+watch(() => config.value.question, (newQuestion) => {
+    const msg = `Question ${props.index + 1} is missing a title.`;
+    const condition = newQuestion.trim() === '';
+
+    setMessage(condition, msg);
+});
 </script>
 
 <style scoped>
-@import url('public/style/components/study/study-main.scss');
-@import url('public/style/components/study/study-aside.scss');
+    @import url('public/style/components/study/study-main.scss');
+    @import url('public/style/components/study/study-aside.scss');
 </style>

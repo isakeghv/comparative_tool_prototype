@@ -196,3 +196,17 @@
         padding-top: 0;
     }
 }
+
+.input {
+    &__invalid {
+        outline: 2.5px solid c.$red;
+        border: none;
+
+        &:hover, 
+        &:focus, 
+        &:active {
+            outline: 2.5px solid c.$red;
+            border: none;
+        }
+    }
+}

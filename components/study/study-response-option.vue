@@ -2,18 +2,18 @@
 	<fieldset class="aside__container">
 		<div class="aside__selection">
 			<input type="radio" :value="value" name="question_radio" :id="`response_${value}_radio`"
-				class="aside__radio" v-model="responseModel" @change="updateValues()" />
+				class="aside__radio" v-model="responseModel" @change="updateValues()" :disabled=isDisabled />
 			<label :for="`response_${value}_radio`" class="aside__label aside__label--headline font-normal font-medium">
 				{{ text }}
 			</label>
 		</div>
 		<div class="aside__row aside__row--toggle" v-if="isCheckboxResponse">
-			<label for="question_selection_min" class="aside__label font-normal">Possible, from </label>
+			<label for="question_selection_min" class="aside__label font-normal">Possible from </label>
 			<input type="number" id="question_selection_min" class="aside__input--number font-small"
-				name="question_selection_min" min="0" step="1" v-model="selectionMinModel" @input="updateMinModel()"/>
+				name="question_selection_min" min="0" step="1" v-model="selectionMinModel" @input="updateMinModel()" :disabled=isDisabled />
 			<label for="question_selection_max" class="aside__label font-normal">to</label>
 			<input type="number" id="question_selection_max" class="aside__input--number font-small"
-				name="question_selection_max" step="1" v-model="selectionMaxModel" @input="updateMaxModel()"/>
+				name="question_selection_max" step="1" v-model="selectionMaxModel" @input="updateMaxModel()" :disabled=isDisabled />
 		</div>
 
 		<!-- range -->
@@ -22,28 +22,28 @@
 				Min
 			</label>
 			<input type="number" id="question_range_min" class="aside__input--number font-small"
-				name="question_range_min" step="1" v-model="minModel" @input="updateMinRange(minModel)"/>
+				name="question_range_min" step="1" v-model="minModel" @input="updateMinRange(minModel)" :disabled=isDisabled />
 			<label for="question_range_start" class="hide">Start label</label>
 			<input type="text" id="question_range_start" class="aside__input--wide" name="question_range_start"
-				placeholder="Start label (optional)" v-model="rangeStartModel" @input="updateMinRangeLabel(rangeStartModel)">
+				placeholder="Start label (optional)" v-model="rangeStartModel" @input="updateMinRangeLabel(rangeStartModel)" :disabled=isDisabled>
 		</div>
 		<div class="aside__row" v-if="isRangeResponse">
 			<label for="question_range_max" class="aside__label font-normal">
 				Max
 			</label>
 			<input type="number" id="question_range_max" class="aside__input--number font-small"
-				name="question_range_max" step="1" v-model="maxModel" @input="updateMaxRange(maxModel)"/>
+				name="question_range_max" step="1" v-model="maxModel" @input="updateMaxRange(maxModel)" :disabled=isDisabled />
 			<label for="question_range_end" class="hide">End label</label>
 			<input type="text" id="question_range_end" class="aside__input--wide" name="question_range_end"
-				placeholder="End label (optional)" v-model="rangeEndModel" @input="updateMaxRangeLabel(rangeEndModel)">
+				placeholder="End label (optional)" v-model="rangeEndModel" @input="updateMaxRangeLabel(rangeEndModel)" :disabled=isDisabled>
 		</div>
 
 		<!-- drag and drop -->
 		<div class="aside__options" v-if="isDropResponse">
 			<div class="aside__option" v-for="(option, i) in dropBoxModel" :key="i">
-				<label :for="`option_${option}_${i}_txt`" class="aside__label aside__box">Box {{ i + 1}}</label>
-				<input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="dropBoxModel[i]" @input="updateDropOption()">
-				<button class="aside__button aside__button--remove" @click="deleteDropBox(i)">
+				<label :for="`option_${option}_${i}_txt`" class="aside__label aside__box">{{ i + 1}}</label>
+				<input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="dropBoxModel[i]" @input="updateDropOption()" :disabled=isDisabled>
+				<button v-if="!isDisabled && dropBoxLength > 1" class="aside__button aside__button--remove" @click="deleteDropBox(i)">
 					<svg xmlns="http://www.w3.org/2000/svg" class="aside__cross" height="24px" viewBox="0 -960 960 960"
 						width="24px">
 						<path
@@ -51,19 +51,19 @@
 					</svg>
 				</button>
 			</div>
-			<button class="aside__button aside__button--add font-small" @click="addDropBox()">Add drop-box</button>
+			<button v-if="!isDisabled && dropBoxLength < 15" class="aside__button aside__button--add font-small" @click="addDropBox()">Add drop-box</button>
 		</div>
 
 		<!-- linear sorting -->
 		<div class="aside__row aside__row--toggle" v-if="isLinearResponse">
 			<label for="question_range_start_label" class="font-small">Start</label>
 			<input type="text" id="question_range_start_label" class="aside__input--wide"
-				placeholder="Start label (optional)" v-model="linearStartModel" @input="updateMinLinear(linearStartModel)">
+				placeholder="Start label (optional)" v-model="linearStartModel" @input="updateMinLinear(linearStartModel)" :disabled=isDisabled>
 		</div>
 		<div class="aside__row" v-if="isLinearResponse">
 			<label for="question_range_end_label" class="font-small">End</label>
 			<input type="text" id="question_range_end_label" class="aside__input--wide"
-				placeholder="End label (optional)" v-model="linearEndModel" @input="updateMaxLinear(linearEndModel)">
+				placeholder="End label (optional)" v-model="linearEndModel" @input="updateMaxLinear(linearEndModel)" :disabled=isDisabled>
 		</div>
 	</fieldset>
 </template>
@@ -71,6 +71,9 @@
 <script setup>
 import { study } from '~/public/script/reactive';
 import { removeOptionAtIndex } from '~/utils/studyUtils';
+import { setMessage } from '~/utils/validationUtils.js';
+
+const isDisabled = inject('disabled');
 
 const props = defineProps({
 	question: Object,
@@ -100,8 +103,15 @@ const isRangeResponse = computed(() => props.value === 'range' && thisQuestion()
 const isDropResponse = computed(() => props.value === 'drop' && thisQuestion().responseType === 'drop');
 const isLinearResponse = computed(() => props.value === 'linear' && thisQuestion().responseType === 'linear');
 
+
+// check length; cannot delete a dropbox if it's just one left, and max 15 allowed
+const dropBoxLength = computed(() => dropBoxModel.value?.length);
+
 //adding new dropbox to array
-const addDropBox = () => dropBoxModel.value.push('');
+const addDropBox = () => {
+	// check if it's at least one dropbox has a value that isn't an empty sting
+	dropBoxModel.value.push('');
+};
 
 const updateDropOption = ()=>{
 	const id = props.question.id
@@ -126,7 +136,7 @@ const updateMinModel = () =>thisQuestion().checkbox.selectionMin = selectionMinM
 const updateMaxModel = () =>thisQuestion().checkbox.selectionMax = selectionMaxModel.value;
 
 //handles so the responseType is correct when changing questions
-const initiateTypeModel = () =>responseModel.value = props.question.responseType;
+const initiateTypeModel = () => responseModel.value = props.question.responseType;
 
 const deleteDropBox = (i) => {
 	removeOptionAtIndex(props.question.drop.dropBox, dropBoxModel.value, i);
@@ -168,9 +178,7 @@ const initiateDropBox = () => {
 }
 
 initiateDropBox();
-
 initiateTypeModel();
-
 
 watch(
 	() => props.question,
@@ -196,6 +204,16 @@ watch(
 		responseModel.value = newValue;
 	}
 );
+
+// watch(dropBoxModel, (newVal) => {
+// 	console.log('hiiii');
+// 	// check if at least one box is filled
+// 	console.log(newVal);
+// 	console.log(dropBoxModel.value);
+// 	const atLeastOneBox = dropBoxModel.value.some(value => value.trim() !== '');
+
+// 	setMessage(atLeastOneBox, 'You need at least one non-empty dropbox.');
+// });
 
 </script>
 
