@@ -6,7 +6,7 @@
 				<div class="question__list">
 					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id"
 						:responseType="responseType" :artifact="artifact" @selectMedia="selectMedia"
-						@moving="(artifact) => linear_moving(artifact)" @dropped="linear_drop()" v-if="responseType === 'linear'"/>
+						@moving="(artifact) => linear_moving(artifact)" @dropped="linear_drop(currentQuestion.id)" v-if="responseType === 'linear'"/>
 
 					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id"
 						:responseType="responseType" :artifact="artifact" @selectMedia="selectMedia"
@@ -20,7 +20,7 @@
 		</div>
 
 		<ArtifactDropLinear @mouseover="linear_artifactOver()" @mouseleave="linear_artifactIsOver = false"
-			:artifacts="linear_droppedArtifacts" v-if="responseType === 'linear'" />
+			:artifacts="participantAnswer[currentQuestion.id]" v-if="responseType === 'linear'" />
 		<div class="drop__row">
 		<ArtifactDropBox @mouseover="box_mouseover()" @mouseleave="box_mouseleave()" @dropped="box_drop(currentQuestion.id, index, box)" :box="box"
 			v-if="responseType === 'drop'" v-for="(box, index) in currentQuestion.drop.dropBox" :key="index" :artifact="participantAnswer[currentQuestion.id]?.[index]"/>

@@ -4,11 +4,11 @@
         <p class="drop_text">{{ box }}</p>
         <div class="drop_container">
             <div class="artifact__container artifact__container--small artifact__borderless">
-            <img :src="artifact.source" :alt="artifact.id" class="artifact__image artifact__image--round" v-if="hasArtifact && isImage(artifact.source)" />
-            <embed :src="artifact.source" :alt="artifact.id" class="artifact__image artifact__image--round" v-if="hasArtifact &&isPdf(artifact.source)" />
-            <audio :src="artifact.source" :alt="artifact.id" class="artifact__image artifact__image--round"
+            <img :src="artifact.source" :alt="artifact.id" :class="classname" v-if="hasArtifact && isImage(artifact.source)" />
+            <embed :src="artifact.source" :alt="artifact.id" :class="classname" v-if="hasArtifact &&isPdf(artifact.source)" />
+            <audio :src="artifact.source" :alt="artifact.id" :class="classname"
                 v-if="hasArtifact && isAudioFile(artifact.source)" />
-            <video :src="artifact" :alt="artifact.id" class="artifact__image artifact__image--round"
+            <video :src="artifact" :alt="artifact.id" :class="classname"
                 v-if="hasArtifact && isVideoFile(artifact.source)" />
         </div>
         </div>
@@ -22,6 +22,8 @@ const props = defineProps({
     artifact: Object,
     box: String,
 })
+
+const classname = ref('artifact__image artifact__image--round')
 
 const hasArtifact = computed(() =>{
     return props.artifact && props.artifact.source
