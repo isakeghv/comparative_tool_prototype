@@ -1,5 +1,5 @@
 <template>
-    <div @click="selectMedia(artifact.source, artifact.id)" :class="{'artifact__container--fixed': dragging}" class="artifact__container artifact__borderless"
+    <div :class="{'artifact__container--fixed': dragging}" class="artifact__container artifact__borderless"
         ref="artifactRef" @dragstart="dragStart($event, artifact)" :draggable="draggable" @drop="console.log('tester')">
         <div class="wrapper wrapper--zero">
             <ExpandButton @expand="selectMedia(artifact.source, artifact.id)" />

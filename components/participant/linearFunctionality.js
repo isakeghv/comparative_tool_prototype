@@ -38,9 +38,6 @@ export const linear_drop = (id) => {
 
 	//pushes to array of dropped artifacts, but only if the mouse if over the drop-area
     if (linear_artifactIsOver.value) participantAnswer[id].push(linear_draggedArtifact.value);
-	//if (linear_artifactIsOver.value) linear_droppedArtifacts.value.push(linear_draggedArtifact.value)
-
-    console.log(participantAnswer)
 
 	//setting dragged artifacts back to null, as it should not be able to drag artifacts again
 	linear_draggedArtifact.value = null;

@@ -4,13 +4,13 @@
 			<div class="question__panel question__panel--left">
 				<h2 class="question__headline font-h5 font-semi">{{ currentQuestion.question }}</h2>
 				<div class="question__list">
-					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id"
-						:responseType="responseType" :artifact="artifact" @selectMedia="selectMedia"
-						@moving="(artifact) => linear_moving(artifact)" @dropped="linear_drop(currentQuestion.id)" v-if="responseType === 'linear'"/>
+					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id" :responseType="responseType"
+						:artifact="artifact" @selectMedia="selectMedia" @moving="(artifact) => linear_moving(artifact)"
+						@dropped="linear_drop(currentQuestion.id)" v-if="responseType === 'linear'" />
 
-					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id"
-						:responseType="responseType" :artifact="artifact" @selectMedia="selectMedia"
-						@moving="(artifact) => box_moving(artifact)" v-if="responseType === 'drop'"/>
+					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id" :responseType="responseType"
+						:artifact="artifact" @selectMedia="selectMedia" @moving="(artifact) => box_moving(artifact)"
+						v-if="responseType === 'drop'" />
 				</div>
 			</div>
 
@@ -22,8 +22,10 @@
 		<ArtifactDropLinear @mouseover="linear_artifactOver()" @mouseleave="linear_artifactIsOver = false"
 			:artifacts="participantAnswer[currentQuestion.id]" v-if="responseType === 'linear'" />
 		<div class="drop__row">
-		<ArtifactDropBox @mouseover="box_mouseover()" @mouseleave="box_mouseleave()" @dropped="box_drop(currentQuestion.id, index, box)" :box="box"
-			v-if="responseType === 'drop'" v-for="(box, index) in currentQuestion.drop.dropBox" :key="index" :artifact="participantAnswer[currentQuestion.id]?.[index]"/>
+			<ArtifactDropBox @mouseover="box_mouseover()" @mouseleave="box_mouseleave()"
+				@dropped="box_drop(currentQuestion.id, index, box)" :box="box" v-if="responseType === 'drop'"
+				v-for="(box, index) in currentQuestion.drop.dropBox" :key="index"
+				:artifact="participantAnswer[currentQuestion.id]?.[index]" @expand="(artifact) => selectMedia(artifact.source, artifact.id)"/>
 		</div>
 	</section>
 </template>
@@ -50,11 +52,11 @@ const selectedSource = ref('');
 const selectedId = ref('');
 
 //randomize the order of the array, so that it is different each time
-const randOrder = (arr) =>{
+const randOrder = (arr) => {
 	return arr.sort(() => Math.random() - 0.5);
 }
 
-const artifactsArr = computed(() =>{
+const artifactsArr = computed(() => {
 	return randOrder(currentQuestion.value.artifacts)
 })
 

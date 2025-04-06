@@ -40,8 +40,6 @@ export const box_drop = (id, index, box) => {
         label: boxLabel
     }
 
-    console.log(participantAnswer)
-
     //setting dragged artifacts back to null, as it should not be able to drag artifacts again
     box_draggedArtifact.value = null;
 }

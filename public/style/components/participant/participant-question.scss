@@ -44,6 +44,7 @@
     }
 
     &__panel {
+        padding: 0.5rem;
         width: 50%;
 
         &--left {
@@ -105,8 +106,8 @@
     &_box{
         flex: 0 0 10rem;
         position: relative;
-        height: 12rem;
-        width: 10rem;
+        height: 9rem;
+        width: 7rem;
         padding: 0;
     }
     &_text{
@@ -124,7 +125,7 @@
     justify-content: center;
     align-items: center;
     position: absolute;
-    height: 9rem;
+    height: 6rem;
     width: 100%;
     left: 0;
     top: 2.5rem;
