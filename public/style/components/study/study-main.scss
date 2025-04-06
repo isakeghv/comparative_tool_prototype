@@ -41,6 +41,11 @@
 	right: -1px;
 	top: -1px;
 
+	&--zero{
+		right: 0;
+		top: 0;
+	}
+
 	&__button {
 		width: 2rem;
 		height: 2rem;
@@ -148,6 +153,12 @@
 			display: block;
 			overflow: hidden;
 		}
+
+		&--fixed{
+			position: absolute;
+			left: var(--x-pos);
+			top: var(--y-pos);
+		}
 	}
 
 	&__headline {
@@ -182,6 +193,11 @@
 		max-height: 80vh;
 	}
 
+	&__image--round{
+		border: none;
+		border-radius: 0.5rem;
+	}
+
 	// &__embed {
 	// 	body::-webkit-scrollbar {
 	// 		display: none;
@@ -207,7 +223,11 @@
 	}
 
 	&__borderless {
+		cursor: move;
 		border: none;
+		flex: 0 0 9rem;
+		width: 9rem;
+		height: 9rem;
 	}
 
 	&__input {

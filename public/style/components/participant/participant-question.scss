@@ -53,8 +53,8 @@
     }
 
     &__list {
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
+        display: flex;
+        flex-wrap: wrap;
         gap: 0.8rem;
     }
 }
@@ -88,9 +88,51 @@
 
 .drop_zone {
     width: 100%;
+    position: relative;
+}
+
+.drop{
+    &__row{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        border-top: v.$borderSolid;
+        padding: 0.5rem;
+    }
+    &_box{
+        flex: 0 0 10rem;
+        position: relative;
+        height: 12rem;
+        width: 10rem;
+        padding: 0;
+    }
+    &_text{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 2rem;
+        background-color: rgb(235, 235, 235);
+    }
+}
+
+.drop_container{
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
+    position: absolute;
+    height: 9rem;
+    width: 100%;
+    left: 0;
+    top: 2.5rem;
+
+    &--linear{
+        height: 100%;
+        top: 0;
+    }
 }
 
 .embed__handle {
