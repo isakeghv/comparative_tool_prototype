@@ -61,6 +61,7 @@
             </div>
         </div>
             <div class="form__cont">
+                <div id="turnstile-container"></div>
                 <input type="submit" value="Sign up" class="form__submit font-normal font-semi">
                 <span class="form__span font-small">Already have an account?
                     <button class="form__button font-small" @click="toggleSignin($event)">
@@ -73,6 +74,7 @@
 
 <script setup>
 import { ref } from "vue";
+import { onMounted} from "vue";
 
 const lastName = ref("");
 const firstName = ref("")
@@ -82,6 +84,34 @@ const showPassword = ref(false);
 // for the message modal
 const registerStatus = ref("");
 const statusMsg = ref("")
+
+
+onMounted(() => {
+  const containerId = 'turnstile-container';
+  const el = document.getElementById(containerId);
+  if (!el) return;
+
+
+  const renderCaptcha = () => {
+    window.turnstile?.render(`#${containerId}`, {
+      sitekey: '0x4AAAAAABDiqhbcAnsx6S1V',
+      theme: 'auto'
+    });
+  };
+
+  if (!window.turnstile) {
+    const script = document.createElement('script');
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    script.onload = renderCaptcha;
+  } else {
+    renderCaptcha();
+  }
+});
+
 
 const emit = defineEmits(['toggle', 'userCreated'])
 
@@ -104,6 +134,13 @@ const nameToCapital = (input) =>{
 const registerUser = async () => {
     const firstname = nameToCapital(firstName.value);
     const lastname = nameToCapital(lastName.value);
+    const token = document.querySelector('[name="cf-turnstile-response"]')?.value;
+
+  if (!token) {
+    registerStatus.value = 'error';
+    statusMsg.value = 'CAPTCHA verification failed.';
+    return;
+  }
 
     //calling backend function to create user
     const response = await fetch('/api/register', {
@@ -112,7 +149,8 @@ const registerUser = async () => {
             firstname: firstname,
             lastname: lastname,
             email: email.value,
-            password: pwd.value
+            password: pwd.value,
+            turnstileToken: token
         }),
         headers: {
             'Content-Type': 'application/json'

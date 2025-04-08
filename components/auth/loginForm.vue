@@ -35,6 +35,7 @@
             </div>
         </div>
 		<div class="form__cont">
+			<div id="turnstile-container"></div>
 			<input type="submit" value="Login" class="form__submit font-normal font-semi">
 			<span class="form__span font-small">Don't have an account?
 				<button class="form__button font-small" @click="toggleSignup($event)">
@@ -47,6 +48,8 @@
 
 <script setup>
 import { ref } from "vue";
+import { onMounted} from "vue";
+
 
 const email = ref("");
 const pwd = ref("");
@@ -64,13 +67,49 @@ const toggleSignup = (event) => {
 	emit('toggle');
 }
 
+
+onMounted(() => {
+  const containerId = 'turnstile-container';
+  const el = document.getElementById(containerId);
+  if (!el) return;
+
+
+  const renderCaptcha = () => {
+    window.turnstile?.render(`#${containerId}`, {
+      sitekey: '0x4AAAAAABDiqhbcAnsx6S1V',
+      theme: 'auto'
+    });
+  };
+
+  if (!window.turnstile) {
+    const script = document.createElement('script');
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    script.onload = renderCaptcha;
+  } else {
+    renderCaptcha();
+  }
+});
+
+
+
 const login = async () => {
+	const token = document.querySelector('[name="cf-turnstile-response"]')?.value;
+	if (!token) {
+    loginStatus.value = "error";
+    statusMsg.value = "CAPTCHA verification failed.";
+    return;
+  }
 	//calling backend function to login user
 	const response = await fetch('/api/login', {
 		method: 'POST',
 		body: JSON.stringify({
 			email: email.value,
-			password: pwd.value
+			password: pwd.value,
+			turnstileToken: token,
 		}),
 		headers: {
 			'Content-Type': 'application/json'
@@ -87,6 +126,7 @@ const login = async () => {
 	} else {
 		loginStatus.value = 'error';
 		statusMsg.value = success.message
+		window.turnstile?.reset();
 	}
 }
 </script>

@@ -58,7 +58,22 @@ export default defineEventHandler(async (event) => {
 	// connect to db
 	await connDb();
 	const body = await readBody(event);
-	const { firstname, lastname, email, password } = body;
+	const { firstname, lastname, email, password, turnstileToken } = body;
+
+	// Verify Turnstile token
+const captchaRes = await $fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+	method: 'POST',
+	body: new URLSearchParams({
+	  secret: TURNSTILE_SECRET_KEY,
+	  response: turnstileToken
+	})
+  });
+  
+  if (!captchaRes.success) {
+	setResponseStatus(event, 403);
+	return { created: false, message: 'CAPTCHA verification failed.' };
+  }
+
 
 	//validation
 	if (!firstname || !lastname || !email || !password) {

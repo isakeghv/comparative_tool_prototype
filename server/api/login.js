@@ -6,6 +6,8 @@ import { userCredential } from '../models/user.js';
 import validator from "validator";
 import { readBody, setResponseStatus } from "h3";
 
+const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
+
 // need to add functionality for token-checking, prevent brute-forcing etc. so this is temporary
 const checkPassword = async (email, pwd, event) => {
     try {
@@ -72,6 +74,20 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event);
     const rawEmail = body.email?.toString() || "";
     const rawPassword = body.password.toString() || "";
+    const turnstileToken = ""
+
+    const captchaRes = await $fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+        method: "POST",
+        body: new URLSearchParams({
+          secret: TURNSTILE_SECRET_KEY,
+          response: turnstileToken,
+        }),
+      });
+    
+      if (!captchaRes.success) {
+        setResponseStatus(event, 403);
+        return { isValid: false, message: "CAPTCHA verification failed." };
+      }
 
     // Validation for Email password remains as is for security
     if (!rawEmail || !validator.isEmail(rawEmail) || !rawPassword) {
