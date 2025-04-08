@@ -193,9 +193,15 @@
 		max-height: 80vh;
 	}
 
-	&__image--round{
-		border: none;
-		border-radius: 0.5rem;
+	&__image{
+		&--transition{
+			transition: border-radius 0.1s ease-in-out;
+		}
+
+		&--round{
+			border: none;
+			border-radius: 0.5rem;
+		}
 	}
 
 	// &__embed {

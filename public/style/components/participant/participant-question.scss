@@ -87,12 +87,15 @@
     }
 }
 
-.drop_zone {
-    width: 100%;
-    position: relative;
-}
-
 .drop{
+
+    &_zone {
+        width: 100%;
+        padding: 0;
+        display: flex;
+        align-items: flex-start;
+        position: relative;
+    }
     &__row{
         display: flex;
         flex-wrap: wrap;
@@ -117,22 +120,79 @@
         height: 2rem;
         background-color: rgb(235, 235, 235);
     }
-}
+    &_relative{
+        position: relative;
+        cursor: default;
+        transition: margin 0.1s ease-in-out;
 
-.drop_container{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    height: 6rem;
-    width: 100%;
-    left: 0;
-    top: 2.5rem;
+        &:hover{
+            margin: 0 2rem;
+            border-radius: 0;
+            & .artifact__image{
+                border-radius: 0;
+            }
 
-    &--linear{
+            & .drop__button{
+                width: 2rem;
+                visibility: visible;
+            }
+        }
+    }
+    &_container{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+    
+        &--linear{
+            overflow-x: auto;
+            gap: 0.5rem;
+            height: 100%;
+            top: 0;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            padding: 2.5rem 0 0;
+            left: 0;
+            top: 0;
+        }
+
+        &--text{
+            padding: 0.25rem 1rem;
+            justify-content: space-between;
+            height: 2rem;
+        }
+    }
+    &__button{
+        position: absolute;
         height: 100%;
         top: 0;
+        width: 2rem;
+        background-color: rgba(0, 0, 0, 0.1);
+        border: none;
+        visibility: hidden;
+        overflow: hidden;
+        cursor: pointer;
+        transition: width 0.1s ease-in-out, background-color 0.1s ease-in-out;
+        width: 0;
+
+        &:hover{
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        &:active{
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        &--left{
+            right: 100%;
+            border-radius: 0.5rem 0 0 0.5rem;
+        }
+        &--right{
+            left: 100%;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+    }
+    &_arrow{
+        height: 2rem;
     }
 }
 

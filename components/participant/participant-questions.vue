@@ -20,12 +20,16 @@
 		</div>
 
 		<ArtifactDropLinear @mouseover="linear_artifactOver()" @mouseleave="linear_artifactIsOver = false"
-			:artifacts="participantAnswer[currentQuestion.id]" v-if="responseType === 'linear'" />
+			:artifacts="participantAnswer[currentQuestion.id]" :questionid="currentQuestion.id"
+			v-if="responseType === 'linear'" :labels="currentQuestion.linear"
+			@moveup="(index) => linear_orderUp(currentQuestion.id, index)"
+			@movedown="(index) => linear_orderDown(currentQuestion.id, index)" @insertAt="(index) => linear_insertAt = index"/>
 		<div class="drop__row">
 			<ArtifactDropBox @mouseover="box_mouseover()" @mouseleave="box_mouseleave()"
 				@dropped="box_drop(currentQuestion.id, index, box)" :box="box" v-if="responseType === 'drop'"
 				v-for="(box, index) in currentQuestion.drop.dropBox" :key="index"
-				:artifact="participantAnswer[currentQuestion.id]?.[index]" @expand="(artifact) => selectMedia(artifact.source, artifact.id)"/>
+				:artifact="participantAnswer[currentQuestion.id]?.[index]"
+				@expand="(artifact) => selectMedia(artifact.source, artifact.id)" />
 		</div>
 	</section>
 </template>
@@ -34,7 +38,7 @@
 import ArtifactPreview from './artifact/artifact-preview.vue';
 import ArtifactDropLinear from './artifact/artifact-drop-linear.vue';
 import ArtifactDropBox from './artifact/artifact-drop-box.vue';
-import { linear_droppedArtifacts, linear_moving, linear_artifactIsOver, linear_artifactOver, linear_drop } from './linearFunctionality'
+import { linear_moving, linear_artifactIsOver, linear_artifactOver, linear_drop, linear_orderUp, linear_orderDown, linear_insertAt } from './linearFunctionality'
 import { box_moving, box_mouseover, box_drop, box_mouseleave } from './dropboxFunctionality'
 import { participantAnswer } from '~/public/script/participant';
 
