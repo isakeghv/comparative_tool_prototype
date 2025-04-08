@@ -4,11 +4,14 @@
             <p class="drop__label">{{ labels.startLabel }}</p>
             <p class="drop__label">{{ labels.endLabel }}</p>
         </div>
-        <div class="drop_container drop_container--linear" @mouseover="mouseover" @mouseleave="mouseleave" @mousemove="mousemove">
+        <div class="drop_container drop_container--linear" @mouseover="mouseover" @mouseleave="mouseleave"
+            @mousemove="mousemove">
             <div v-for="(artifact, index) in participantAnswer[questionid]" :key="artifact.id"
                 :ref="element => setRef(element, index)"
-                class="artifact__container artifact__container--small artifact__borderless drop_relative"
-                >
+                class="artifact__container artifact__container--small artifact__borderless drop_relative">
+                <div class="wrapper wrapper--zero">
+                    <ExpandButton @expand="expand(artifact.source, artifact.id)" />
+                </div>
                 <button class="drop__button drop__button--left" aria-label="Move item up in order" @click="up(index)"
                     v-if="index !== 0">
                     <svg class="drop_arrow" viewBox="0 0 61 108" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -17,13 +20,13 @@
                             fill="black" />
                     </svg>
                 </button>
-                <img :src="artifact.source" :alt="artifact.id" class="artifact__image artifact__image--transition"
+                <img :src="artifact.source" :alt="artifact.id" class="artifact__image--transition" :class="classname"
                     v-if="isImage(artifact.source)" />
-                <embed :src="artifact.source" :alt="artifact.id" class="artifact__image  artifact__image--transition"
+                <embed :src="artifact.source" :alt="artifact.id" class="artifact__image--transition" :class="classname"
                     v-if="isPdf(artifact.source)" />
-                <audio :src="artifact.source" :alt="artifact.id" class="artifact__image  artifact__image--transition"
+                <audio :src="artifact.source" :alt="artifact.id" class="artifact__image--transition" :class="classname"
                     v-if="isAudioFile(artifact.source)" />
-                <video :src="artifact.source" :alt="artifact.id" class="artifact__image  artifact__image--transition"
+                <video :src="artifact.source" :alt="artifact.id" class="artifact__image--transition" :class="classname"
                     v-if="isVideoFile(artifact.source)" />
                 <button class="drop__button drop__button--right" aria-label="Move item down in order"
                     @click="down(index)" v-if="index + 1 < participantAnswer[questionid]?.length">
@@ -41,24 +44,27 @@
 <script setup>
 import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
 import { participantAnswer } from '~/public/script/participant';
+import ExpandButton from './artifact-expand-button.vue';
 
 const props = defineProps({
     questionid: String,
     labels: Object,
 })
 
-const emit = defineEmits(['mouseover', 'mouseleave', 'moveup', 'movedown', 'insertAt']);
+const emit = defineEmits(['mouseover', 'mouseleave', 'moveup', 'movedown', 'insertAt', 'expand']);
 
 const mouseover = () => emit('mouseover');
 const mouseleave = () => emit('mouseleave');
 
 const itemRefs = ref([])
 
+const classname = ref('artifact__image artifact__image--round')
+
 const setRef = (element, index) => itemRefs.value[index] = element
 
 //gets the index at which the new item should be dropped
-const getIndex = (refs, cursorX) =>{
-    for (let i = 0; i < refs.length; i++){
+const getIndex = (refs, cursorX) => {
+    for (let i = 0; i < refs.length; i++) {
         const item = refs[i];
         if (!item) continue;
         const itemRect = item.getBoundingClientRect();
@@ -66,11 +72,13 @@ const getIndex = (refs, cursorX) =>{
 
         if (cursorX < itemCenter) return i;
     }
-	return refs.length;
+    return refs.length;
 }
 
+const expand = (source, id) => emit('expand', { source, id })
+
 //used to track where the cursor is placed relatively to the items in the array
-const mousemove = (event) =>{
+const mousemove = (event) => {
     const cursorX = event.clientX
 
     const index = getIndex(itemRefs.value, cursorX)

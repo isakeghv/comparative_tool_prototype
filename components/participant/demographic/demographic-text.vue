@@ -6,7 +6,7 @@
         :name="`response_text_${question.id}`" 
         :maxlength="question.text.maxChar" 
         v-model="textModel" 
-        :required="question.required"
+        :required="question.required" @input="input"
     />
     
     <span class="response__gray font-small">
@@ -19,6 +19,12 @@ const props = defineProps({
 })
 
 const textModel = ref('');
+
+const emit = defineEmits(['update']);
+
+const input = () =>{
+    emit('update', textModel.value)
+}
 
 </script>
 

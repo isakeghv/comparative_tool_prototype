@@ -5,8 +5,8 @@
         <div class="drop_container">
             <div class="artifact__container artifact__container--small artifact__borderless">
                 <div class="wrapper wrapper--zero" v-if="hasArtifact">
-                <ExpandButton @expand="expand(artifact.source, artifact.id)" />
-            </div>
+                    <ExpandButton @expand="expand(artifact.source, artifact.id)" />
+                </div>
                 <img :src="artifact.source" :alt="artifact.id" :class="classname"
                     v-if="hasArtifact && isImage(artifact.source)" />
                 <embed :src="artifact.source" :alt="artifact.id" :class="classname"
@@ -40,7 +40,7 @@ const emit = defineEmits(['mouseover', 'mouseleave', 'dropped', 'expand'])
 const mouseover = () => emit('mouseover');
 const mouseleave = () => emit('mouseleave');
 const mouseup = () => emit('dropped');
-const expand = (source, id) => emit('expand', {source, id})
+const expand = (source, id) => emit('expand', { source, id })
 
 </script>
 

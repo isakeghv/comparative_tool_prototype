@@ -39,7 +39,7 @@ export const linear_orderDown = (id, index) => {
 }
 
 //for when an artifact is dropped
-export const linear_drop = (id) => {
+export const linear_drop = (id, question) => {
 
     //returns if no artifact is being dragged: to avoid issues
     if (!linear_draggingArtifact.value) return
@@ -56,9 +56,17 @@ export const linear_drop = (id) => {
     //returns if artifact already exists in array of dropped artifacts
     if (existingArtifact) return
 
+    //formatting what should be inserted so it shows the order, id of the artifacts and the question it is relative to
+    const insert = {
+        number: linear_insertAt.value + 1,
+        id: linear_draggedArtifact.value.id,
+        source: linear_draggedArtifact.value.source,
+        question: question
+    }
+
     //pushes to array of dropped artifacts, but only if the mouse if over the drop-area
-    if (linear_artifactIsOver.value && linear_insertAt.value !== '') participantAnswer[id].splice(linear_insertAt.value, 0, linear_draggedArtifact.value);
-    else participantAnswer[id].push(linear_draggedArtifact.value);
+    if (linear_artifactIsOver.value && linear_insertAt.value !== '') participantAnswer[id].splice(linear_insertAt.value, 0, insert);
+    else participantAnswer[id].push(insert);
 
     //setting dragged artifacts back to null, as it should not be able to drag artifacts again
     linear_draggedArtifact.value = null;

@@ -136,6 +136,9 @@
                 width: 2rem;
                 visibility: visible;
             }
+            & .wrapper__button--radius{
+                border-radius: 0;
+            }
         }
     }
     &_container{

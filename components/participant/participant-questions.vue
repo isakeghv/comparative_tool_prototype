@@ -6,7 +6,7 @@
 				<div class="question__list">
 					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id" :responseType="responseType"
 						:artifact="artifact" @selectMedia="selectMedia" @moving="(artifact) => linear_moving(artifact)"
-						@dropped="linear_drop(currentQuestion.id)" v-if="responseType === 'linear'" />
+						@dropped="linear_drop(currentQuestion.id, currentQuestion.question)" v-if="responseType === 'linear'" />
 
 					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id" :responseType="responseType"
 						:artifact="artifact" @selectMedia="selectMedia" @moving="(artifact) => box_moving(artifact)"
@@ -23,10 +23,11 @@
 			:artifacts="participantAnswer[currentQuestion.id]" :questionid="currentQuestion.id"
 			v-if="responseType === 'linear'" :labels="currentQuestion.linear"
 			@moveup="(index) => linear_orderUp(currentQuestion.id, index)"
-			@movedown="(index) => linear_orderDown(currentQuestion.id, index)" @insertAt="(index) => linear_insertAt = index"/>
+			@movedown="(index) => linear_orderDown(currentQuestion.id, index)" @insertAt="(index) => linear_insertAt = index"
+			@expand="(artifact) => selectMedia(artifact.source, artifact.id)"/>
 		<div class="drop__row">
 			<ArtifactDropBox @mouseover="box_mouseover()" @mouseleave="box_mouseleave()"
-				@dropped="box_drop(currentQuestion.id, index, box)" :box="box" v-if="responseType === 'drop'"
+				@dropped="box_drop(currentQuestion.id, index, box, currentQuestion.question)" :box="box" v-if="responseType === 'drop'"
 				v-for="(box, index) in currentQuestion.drop.dropBox" :key="index"
 				:artifact="participantAnswer[currentQuestion.id]?.[index]"
 				@expand="(artifact) => selectMedia(artifact.source, artifact.id)" />
