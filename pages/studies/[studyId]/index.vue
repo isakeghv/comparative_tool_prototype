@@ -7,7 +7,7 @@
                 </div>
             </div>
         </div>
-        <span class="progress__percentage font-small font-medium">{{ progressFill + '%' }}</span>
+        <span class="progress__percentage font-small font-medium">{{ Math.round(progressFill) + '%' }}</span>
     </div>
     </DashboardHeader>
 

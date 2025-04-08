@@ -76,8 +76,6 @@ const sendForm = () => {
         if (question.key !== 'demographic') participantResponse.questions[question.key] = question.value
     })
 
-    console.log(participantResponse);
-
     console.log("Should check if required fields are filled out, and seeeend. weewee wawoo")
 }
 
