@@ -112,16 +112,14 @@
 
         </div>
     <!-- forward id/index of a specific question to e.g. update its response format -->
-    <StudyAside :index="props.index" :id="props.id"/>
+    <StudyAside :index="props.index" :id="props.id" />
 </template>
 
 <script setup>
 import { study } from '~/public/script/reactive';
-import { setMessage } from '~/utils/validationUtils.js';
 import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
 
 const isDisabled = inject('disabled');
-const emit = defineEmits(['unableSave'])
 
 const props = defineProps({
     index: Number,
@@ -182,14 +180,9 @@ const uploadFile = async (e) => {
     e.target.value = '';
 };
 
-
-// store an error message if the 'question' field of x question is missing a title
-watch(() => config.value.question, (newQuestion) => {
-    const msg = `Question ${props.index + 1} is missing a title.`;
-    const condition = newQuestion.trim() === '';
-
-    setMessage(condition, msg);
-});
+const switchQuestion = (nextQuestionId) => {
+    // should switch to next question when deleting a question
+};
 </script>
 
 <style scoped>

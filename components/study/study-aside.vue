@@ -4,16 +4,32 @@
             <p class="font-large font-semi">Response format</p>
         </div>
 
-        <Study-response-option v-model="responseModel" :text="option.text" :value="option.value" :key="option.value" :id="props.id" 
-            v-for="option in options" :question="selectedQuestion" @update="handleQuestionValues($event)"
+        <StudyResponseOption
+            v-for="option in options"
+            :key="option.value"
+            :text="option.text"
+            :value="option.value"
+            :index="props.index"
+            :id="props.id"
+            :modelValue="currentResponseType"
+            @update:modelValue="updateResponseType"
+            :disabled="isDisabled"
         />
-
+        
         <div class="aside__container aside__selection">
             <label for="demographic_required_checkbox" class="aside__label aside__label--headline font-normal font-medium">
                 Required
             </label>
-            <input type="checkbox" id="demographic_required_checkbox" class="aside__checkbox" v-model="requiredModel" @change="updateRequired()" :disabled=isDisabled>
+            <input
+                type="checkbox"
+                id="demographic_required_checkbox"
+                class="aside__checkbox"
+                v-model="requiredModel"
+                @change="updateRequired()"
+                :disabled="isDisabled"
+            />
         </div>
+
         <div class="aside__container aside__container--borderless">
             <button v-if="!isDisabled" class="aside__button aside__button--delete font-semi font-small" @click="deleteQuestion()">
                 Delete question
@@ -24,22 +40,36 @@
 
 <script setup>
 import { study } from '~/public/script/reactive';
-const isDisabled = inject('disabled'); 
+const isDisabled = inject('disabled');
 
 const props = defineProps({
     index: Number,
     id: String
 });
 
-const selectedQuestion = ref({});
-const questionModel = ref('');
-const requiredModel = ref('');
-const responseModel = ref('');
+const emit = defineEmits(['update:modelValue', 'deleteQuestion']);
+
+// only need to store if the question is required as ref due to response/question being handled by computed properties
+const requiredModel = ref(false);
 
 // find the specific question to modify data
 const getQuestion = (id) => study.questions.find(q => q.id === id);
+const currentQuestion = computed(() => getQuestion(props.id));
 
-// define the options for the response type
+// use computed getter/setter to read and write the question's response type directly to source data
+const currentResponseType = computed({
+    get: () => {
+        const question = currentQuestion.value;
+        return question.responseType || 'radio';
+    },
+    set: (newValue) => {
+        const question = getQuestion(props.id);
+        if (question) {
+            question.responseType = newValue;
+        }
+    }
+});
+
 const options = [
     { text: "Multiple choice", value: "radio" },
     { text: "Checkbox", value: "checkbox" },
@@ -48,26 +78,22 @@ const options = [
     { text: "Linear sorting", value: "linear" },
 ];
 
-const handleQuestionValues = (updatedValues) => {
-    const thisQuestion = getQuestion(props.id);
+// update the response type when selected
+const updateResponseType = (newValue) => {
+    const question = getQuestion(props.id);
 
-    // find the current question, and merge with the new values
-    if (thisQuestion) {
-        Object.assign(thisQuestion, updatedValues);
+    if (question) {
+        question.responseType = newValue;
+        emit('update:modelValue', newValue);
     }
-}
+};
 
-const initiateConfig = (id) => {
-    const thisQuestion = getQuestion(id);
-    if (!thisQuestion) return;
-
-    selectedQuestion.value = JSON.parse(JSON.stringify(thisQuestion));
-    if (!selectedQuestion.value) return;
-
-    // update the values the parent has access to
-    questionModel.value = selectedQuestion.value.question;
-    responseModel.value = selectedQuestion.value.responseType;
-    requiredModel.value = selectedQuestion.value.required;
+// initialize the required model from the current question
+const initializeRequired = () => {
+    const question = getQuestion(props.id);
+    if (question) {
+        requiredModel.value = question.required || false;
+    }
 };
 
 const updateRequired = ()=>{
@@ -75,32 +101,33 @@ const updateRequired = ()=>{
     thisQuestion.required = requiredModel.value;
 }
 
-const deleteQuestion = ()=>{
+// should switch to next question when deleting a question
+const deleteQuestion = () => {
     const thisQuestion = getQuestion(props.id);
-    study.questions = study.questions.filter(e => e !== thisQuestion);
+    study.questions = study.questions.filter(q => q !== thisQuestion);
+
+    // emit('deleteQuestion', nextQuestion.id);
 }
 
-// watch when question id changes, and show them immediately (had issue with the first question not showing up)
+// similar to the child component, initialize required model when id changes
 watch(
     () => props.id,
-    (id) => {
-        initiateConfig(id);
+    (newId) => {
+        if (newId) {
+            initializeRequired();
+        }
     },
     { immediate: true }
 );
 
-// update responsModel type when it gets emitted a new value
+// re-initialize when questions array changes
 watch(
-  () => responseModel.value,
-  (newValue) => {
-    const thisQuestion = getQuestion(props.id);
-    if (thisQuestion && thisQuestion.responseType !== newValue) {
-      thisQuestion.responseType = newValue;
-    }
-  }
+    () => study.questions,
+    () => {
+        initializeRequired();
+    },
+    { deep: true }
 );
-
-
 </script>
 
 <style scoped>

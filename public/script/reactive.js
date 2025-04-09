@@ -70,6 +70,3 @@ export const display = ({
     demographicId: null,
 })
 
-export const errorMsgs = reactive({
-    list: []
-})

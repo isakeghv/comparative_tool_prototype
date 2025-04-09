@@ -1,5 +1,5 @@
 <template>
-	<DashboardHeader :name="displayName" :isCreatingStudy="isCreatingStudy" @unableSave="displayUnableSaveBox(true)"/>
+	<DashboardHeader :name="displayName" :isCreatingStudy="isCreatingStudy" @unableSave="(reason) => displayUnableSaveBox(true, reason)" />
 	<div class="container" v-if="showMain && !study.id">
 		<DashboardMain
             @newStudy="(id) => onNewStudy(id)" 
@@ -12,7 +12,7 @@
     <StudyEditor v-if="study.id" :disabled="isReadOnly" />
 
     <!--Prompt box informing user that study cannot be saved due to missing fields-->
-    <DashboardUnableSave @exit="displayUnableSaveBox(false)" v-if="showUnableSaveBox && study.id" :errors="errorMsgs.list" />
+    <DashboardUnableSave @exit="displayUnableSaveBox(false)" v-if="showUnableSaveBox && study.id" :reason="unableSaveReason" />
 
 	<!--Display message if issues fetting user-info-->
 	<div class="container" v-if="!showMain && !study.id">
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { user, study, initialStudy, errorMsgs } from '~/public/script/reactive';
+import { user, study, initialStudy } from '~/public/script/reactive';
 import StudyService from '~/services/studyService';
 
 const showMain = ref(true);
@@ -33,17 +33,17 @@ const displayName = ref('');
 const isReadOnly = ref(false);
 const status = ref('');
 
+// reason why it wasn't possible to save
+const unableSaveReason = ref('');
+
 // need to track if study already exists or should be updated due to the saving logic
 const isCreatingStudy = ref(false);
 const showUnableSaveBox = ref(false);
 
-// const handleErrorMsg = (err) => {
-//     errorMessage.value = err; 
-// };
-
-//toggles the prompt-box providing user message that study cannot be saved
-const displayUnableSaveBox = (display) =>{
-    showUnableSaveBox.value = display
+//toggles the prompt-box providing user message that study cannot be saved, and a reason (if included)
+const displayUnableSaveBox = (display, reason = '') => {
+    showUnableSaveBox.value = display;
+    unableSaveReason.value = reason;
 }
 
 // provide the 'disabled' state to all child components as some of them are deeply nested instead of sending it as a prop to avoid prop drilling
@@ -89,27 +89,36 @@ const populateStudy = (id) => {
 
     // load the study with the data of selected study if it exists
     if (selectedStudy) {
-        study.id = selectedStudy.id;
-        study.title = selectedStudy.title;
-        study.description = selectedStudy.description;
-        study.demographicReq = selectedStudy.demographicReq;
-        study.demographic = selectedStudy.demographic;
-        study.customTerms = selectedStudy.customTerms;
-        study.questions = selectedStudy.questions;
-        study.desiredResponses = selectedStudy.desiredResponses;
-        study.closingMethod = selectedStudy.closingMethod;
-        study.closingLimit = selectedStudy.closingLimit;
+        // study.id = selectedStudy.id;
+        // study.title = selectedStudy.title;
+        // study.description = selectedStudy.description;
+        // study.demographicReq = selectedStudy.demographicReq;
+        // study.demographic = selectedStudy.demographic;
+        // study.customTerms = selectedStudy.customTerms;
+        // study.questions = selectedStudy.questions;
+        // study.desiredResponses = selectedStudy.desiredResponses;
+        // study.closingMethod = selectedStudy.closingMethod;
+        // study.closingLimit = selectedStudy.closingLimit;
 
-        // use deep copy to avoid sharing references
-        initialStudy.title = JSON.parse(JSON.stringify(selectedStudy.title));
-        initialStudy.description = JSON.parse(JSON.stringify(selectedStudy.description));
-        initialStudy.demographicReq = JSON.parse(JSON.stringify(selectedStudy.demographicReq));
-        initialStudy.demographic = JSON.parse(JSON.stringify(selectedStudy.demographic));
-        initialStudy.customTerms = JSON.parse(JSON.stringify(selectedStudy.customTerms));
-        initialStudy.questions = JSON.parse(JSON.stringify(selectedStudy.questions));
-        initialStudy.desiredResponses = JSON.parse(JSON.stringify(selectedStudy.desiredResponses));
-        initialStudy.closingMethod = JSON.parse(JSON.stringify(selectedStudy.closingMethod));
-        initialStudy.closingLimit = JSON.parse(JSON.stringify(selectedStudy.closingLimit));
+        // // use deep copy to avoid sharing references
+        // initialStudy.title = JSON.parse(JSON.stringify(selectedStudy.title));
+        // initialStudy.description = JSON.parse(JSON.stringify(selectedStudy.description));
+        // initialStudy.demographicReq = JSON.parse(JSON.stringify(selectedStudy.demographicReq));
+        // initialStudy.demographic = JSON.parse(JSON.stringify(selectedStudy.demographic));
+        // initialStudy.customTerms = JSON.parse(JSON.stringify(selectedStudy.customTerms));
+        // initialStudy.questions = JSON.parse(JSON.stringify(selectedStudy.questions));
+        // initialStudy.desiredResponses = JSON.parse(JSON.stringify(selectedStudy.desiredResponses));
+        // initialStudy.closingMethod = JSON.parse(JSON.stringify(selectedStudy.closingMethod));
+        // initialStudy.closingLimit = JSON.parse(JSON.stringify(selectedStudy.closingLimit));
+
+        study.id = selectedStudy.id;
+
+        // // use deep copy to avoid sharing references
+        const studyClone = JSON.parse(JSON.stringify(selectedStudy));
+        const initialStudyClone = JSON.parse(JSON.stringify(selectedStudy));
+        
+        Object.assign(study, studyClone);
+        Object.assign(initialStudy, initialStudyClone);
     }
 }
 
@@ -117,7 +126,6 @@ const onNewStudy = (id) => {
     study.id = id;
     isReadOnly.value = false;
     isCreatingStudy.value = true;
-    errorMsgs.list = [];
 }
 
 const onEditStudy = (id) => {
@@ -126,7 +134,6 @@ const onEditStudy = (id) => {
     // set 'isReadOnly' to false if current study is true
     isReadOnly.value = status.value !== 'draft';
     isCreatingStudy.value = false;
-    errorMsgs.list = [];
 }
 
 const onDeleteStudy = (id) => {
@@ -138,14 +145,7 @@ const onDeleteStudy = (id) => {
     if (studyIndex !== -1) {
         user.studies.splice(studyIndex, 1);
     }
-    errorMsgs.list = [];
 }
-
-// show warning modal if it contains any errors
-watch(errorMsgs.list, (newMsgs) => {
-    console.log(newMsgs);
-    showUnableSaveBox.value = newMsgs.length > 0;
-});
 
 </script>
 

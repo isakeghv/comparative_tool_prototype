@@ -123,6 +123,7 @@ const updateQuestion = ()=>{
     thisDemographic.question = questionModel.value;
 }
 
+
 //initiating. So the correct radio-button is checked, and the question is included in the text-area
 const initiateConfig = (id)=>{
     const demographic = returnDemographic(id);

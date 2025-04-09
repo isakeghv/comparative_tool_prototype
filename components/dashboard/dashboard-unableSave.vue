@@ -9,12 +9,7 @@
             </button>
         </div>
         <p class="modal__paragraph">
-            <div v-if="errors.length > 0">
-                <ul>
-                    <li v-for="(msg, index) in errors" :key="index">{{ msg }}</li>
-                </ul>
-            </div>
-            <div v-else>Some required fields are missing. Please ensure that the study details include a title.</div>
+            {{  message }}
         </p>
     </div>
 
@@ -22,7 +17,8 @@
 
 <script setup>
 const props = defineProps({
-    errors: Array
+    errors: Array,
+    reason: String
 });
 
 const emit = defineEmits(['exit']);
@@ -30,6 +26,14 @@ const emit = defineEmits(['exit']);
 const exit = () => {
     emit('exit');
 }
+
+const message = computed(() => {
+    console.log(props.reason);
+    if (props.reason === 'save') {
+        return 'You need to save your changes before publishing';
+    } else {
+        return 'Some required fields are missing. Please ensure that the study details include a title for example.';
+    }});
 
 // need to override the body styling due to scrollbar gutter
 onMounted(() => {

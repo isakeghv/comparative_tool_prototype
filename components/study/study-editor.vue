@@ -6,7 +6,7 @@
         <Demographic v-if="showDemographics" />
         <StudyTermsPrivacy v-if="showTerms" />
         <StudyMain v-if="showQuestionMain" :index="questionIndex" :id="questionId" />
-    </div>
+	</div>
 </template>
 
 <script setup>

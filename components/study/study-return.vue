@@ -105,10 +105,10 @@ const goBack = () => {
     if (isAlike) {
         resetVariables();
     } else if (!isDisabled.value) {
-        // Replace alert with a custom prompt-box logic
         const userChoice = confirm('Changes have not been saved. Do you want to discard changes and return to the dashboard?');
-        
-        if (userChoice) resetVariables();
+        if (userChoice) {
+            resetVariables();
+        }
     }
 }
 
@@ -116,15 +116,16 @@ const goBack = () => {
 onMounted(() => {
     window.addEventListener('beforeunload', handleBeforeUnload);
 });
+
 //Removing eventlistener in "onMounted"
 onUnmounted(() => {
     window.removeEventListener('beforeunload', handleBeforeUnload);
 });
 
-const handleBeforeUnload = (event) => {
-    // if (!compareStudy()) event.preventDefault();
+const handleBeforeUnload = () => {
     resetVariables();
 };
+
 </script>
 
 <style scoped>
