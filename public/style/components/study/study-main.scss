@@ -41,6 +41,11 @@
 	right: -1px;
 	top: -1px;
 
+	&--zero{
+		right: 0;
+		top: 0;
+	}
+
 	&__button {
 		width: 2rem;
 		height: 2rem;
@@ -55,6 +60,7 @@
 
 		&--radius {
 			border-radius: 0 0.5rem 0 0;
+			transition: border-radius 0.1s ease-in-out;
 		}
 	}
 
@@ -148,6 +154,12 @@
 			display: block;
 			overflow: hidden;
 		}
+
+		&--fixed{
+			position: absolute;
+			left: var(--x-pos);
+			top: var(--y-pos);
+		}
 	}
 
 	&__headline {
@@ -182,6 +194,18 @@
 		max-height: 80vh;
 	}
 
+	&__image{
+		&--transition{
+			transition: border-radius 0.1s ease-in-out;
+		}
+
+		&--round{
+			border: none;
+			border-radius: 0.5rem;
+		}
+	}
+
+
 	&__video {
 		pointer-events: none;
 	}
@@ -201,7 +225,11 @@
 	}
 
 	&__borderless {
+		cursor: move;
 		border: none;
+		flex: 0 0 6rem;
+		width: 6rem;
+		height: 6rem;
 	}
 
 	&__input {

@@ -1,6 +1,6 @@
 <template>
 	<label :for="`response_date_${question.id}`" class="response__label hide">Date</label>
-    <input type="date" :id="`response_date_${question.id}`" :name="`response_date_${question.id}`" v-model="dateModel" min="1920-01-01" :max="today" class="response__date" :required="question.required" />
+    <input type="date" :id="`response_date_${question.id}`" :name="`response_date_${question.id}`" v-model="dateModel" min="1920-01-01" :max="today" class="response__date" :required="question.required" @input="input"/>
 </template>
 
 <script setup>
@@ -9,6 +9,12 @@ const props = defineProps({
 })
 
 const dateModel = ref('');
+
+const emit = defineEmits(['update']);
+
+const input = () =>{
+    emit('update', dateModel.value)
+}
 
 // set date picker to no further than today's month
 const today = computed(() => {

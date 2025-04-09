@@ -15,6 +15,7 @@
 <script setup>
 // need to emit progress so progress bar know which question you're at, and to calculate the percentage of each step
 const emit = defineEmits(['updateProgress', 'totalSteps']);
+import { participantAnswer } from '~/public/script/participant';
 
 const props = defineProps({
     study: Object
@@ -57,7 +58,25 @@ const prevQuestion = () => {
 
 // TODO: send form if required fields are filled etc.
 const sendForm = () => {
-    console.log("Should check if required fields are filled out, and seeeend.")
+    //turning into array, so response can be iterated
+    const questions = Object.entries(participantAnswer).map(([key, value]) => ({ key, value }));
+
+    //creating response-object
+    const participantResponse = {};
+
+    //making sure that it has "questions"
+    if (!participantResponse.questions) participantResponse.questions = {};
+
+    //inserting demographics-reply into demographics
+    participantResponse.demographic = participantAnswer.demographic
+
+    //iterating array created earlier. Used to make sure response is given in the correct format
+    questions.forEach(question =>{
+        //only inserting if it is not demographics
+        if (question.key !== 'demographic') participantResponse.questions[question.key] = question.value
+    })
+
+    console.log("Should check if required fields are filled out, and seeeend. weewee wawoo")
 }
 
 </script>

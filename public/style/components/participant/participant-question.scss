@@ -44,6 +44,7 @@
     }
 
     &__panel {
+        padding: 0.5rem;
         width: 50%;
 
         &--left {
@@ -53,8 +54,8 @@
     }
 
     &__list {
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
+        display: flex;
+        flex-wrap: wrap;
         gap: 0.8rem;
     }
 }
@@ -86,11 +87,116 @@
     }
 }
 
-.drop_zone {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+.drop{
+
+    &_zone {
+        width: 100%;
+        padding: 0;
+        display: flex;
+        align-items: flex-start;
+        position: relative;
+    }
+    &__row{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        border-top: v.$borderSolid;
+        padding: 0.5rem;
+    }
+    &_box{
+        flex: 0 0 10rem;
+        position: relative;
+        height: 9rem;
+        width: 7rem;
+        padding: 0;
+    }
+    &_text{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 2rem;
+        background-color: rgb(235, 235, 235);
+    }
+    &_relative{
+        position: relative;
+        cursor: default;
+        transition: margin 0.1s ease-in-out;
+
+        &:hover{
+            margin: 0 2rem;
+            border-radius: 0;
+            & .artifact__image{
+                border-radius: 0;
+            }
+
+            & .drop__button{
+                width: 2rem;
+                visibility: visible;
+            }
+            & .wrapper__button--radius{
+                border-radius: 0;
+            }
+        }
+    }
+    &_container{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+    
+        &--linear{
+            overflow-x: auto;
+            gap: 0.5rem;
+            height: 100%;
+            top: 0;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            padding: 2.5rem 0 0;
+            left: 0;
+            top: 0;
+        }
+
+        &--text{
+            padding: 0.25rem 1rem;
+            justify-content: space-between;
+            height: 2rem;
+        }
+    }
+    &__button{
+        position: absolute;
+        height: 100%;
+        top: 0;
+        width: 2rem;
+        background-color: rgba(0, 0, 0, 0.1);
+        border: none;
+        visibility: hidden;
+        overflow: hidden;
+        cursor: pointer;
+        transition: width 0.1s ease-in-out, background-color 0.1s ease-in-out;
+        width: 0;
+
+        &:hover{
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        &:active{
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        &--left{
+            right: 100%;
+            border-radius: 0.5rem 0 0 0.5rem;
+        }
+        &--right{
+            left: 100%;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+    }
+    &_arrow{
+        height: 2rem;
+    }
 }
 
 .embed__handle {
