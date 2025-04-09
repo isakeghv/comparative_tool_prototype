@@ -4,13 +4,13 @@
             <label for="demographic_question" class="aside__label aside__headline font-large font-semi">
                 Question
             </label>
-            <textarea id="demographic_question_textarea" class="aside__textarea font-small" v-model="questionModel" @input="updateQuestion()"></textarea>
+            <textarea id="demographic_question_textarea" class="aside__textarea font-small" v-model="questionModel" @input="updateQuestion()" :disabled=isDisabled></textarea>
         </div>
         <div class="aside__container aside__selection aside__bottom">
             <label for="demographic_required" class="aside__label aside__label--headline font-normal font-medium">
                 Required
             </label>
-            <input type="checkbox" id="demographic_required_checkbox" class="aside__checkbox" v-model="requiredModel" @change="updateRequired()">
+            <input type="checkbox" id="demographic_required_checkbox" class="aside__checkbox" v-model="requiredModel" @change="updateRequired()" :disabled=isDisabled>
         </div>
         <div class="aside__container">
             <p class="font-large font-semi">Response format</p>
@@ -18,7 +18,7 @@
         <div class="aside__container">
             <fieldset class="aside__fieldset">
                 <div class="aside__selection">
-                    <input type="radio" value="text" name="aside__radio" id="demographic_text_radio" class="aside__radio" v-model="responseModel">
+                    <input type="radio" value="text" name="aside__radio" id="demographic_text_radio" class="aside__radio" v-model="responseModel" :disabled=isDisabled>
                     <label for="demographic_text_radio" class="aside__label aside__label--headline font-normal font-medium">
                         Text
                     </label>
@@ -26,14 +26,14 @@
                 <div class="aside__row aside__row--toggle" v-if="isTextResponse">
                     <label for="demographic_text_number" class="hide">Max word count: </label>
                     <input type="number" id="demographic_text_number" class="aside__input--number font-small"
-                    name="demographic_text_number" min="0" max="3000" step="100" v-model="textModel" placeholder="0"/>
+                    name="demographic_text_number" min="0" max="3000" step="100" v-model="textModel" placeholder="0" :disabled=isDisabled />
                     <span class="font-normal"> / 3000 characters</span>
                 </div>     
             </fieldset>
         </div>
         <div class="aside__container">
             <div class="aside__selection">
-                <input type="radio" value="radio" name="demographic_radio" id="demographic_radio" class="aside__radio" v-model="responseModel">
+                <input type="radio" value="radio" name="demographic_radio" id="demographic_radio" class="aside__radio" v-model="responseModel" :disabled=isDisabled>
                 <label for="demographic_radio" class="aside__label aside__label--headline font-normal font-medium">
                     Multiple choice
                 </label>
@@ -41,40 +41,40 @@
             <div class="aside__options" v-if="isRadioResponse">
                 <div class="aside__option" v-for="(option, i) in optionsModel" :key="i">
                     <label :for="`option_${option}_${i}_txt`" class="aside__label aside__identifier">{{ i + 1 }}</label>
-                    <input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="optionsModel[i]">
-                    <button class="aside__button aside__button--remove font-small font-medium" @click="deleteOption(i)">
+                    <input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="optionsModel[i]" :disabled=isDisabled>
+                    <button v-if="!isDisabled && optionsLength" class="aside__button aside__button--remove font-small font-medium" @click="deleteOption(i)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="aside__cross" height="24px" viewBox="0 -960 960 960" width="24px"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
                     </button>
                 </div>
-                <button class="aside__button aside__button--add" @click="addOption">Add option</button>
+                <button v-if="!isDisabled" class="aside__button aside__button--add" @click="addOption">Add option</button>
             </div>
         </div>
         <div class="aside__container">
             <fieldset class="aside__fieldset">
                 <div class="aside__selection">
-                    <input type="radio" value="number" name="demographic_radio" id="demographic_number_radio" class="aside__radio" v-model="responseModel">
+                    <input type="radio" value="number" name="demographic_radio" id="demographic_number_radio" class="aside__radio" v-model="responseModel" :disabled=isDisabled>
                     <label for="demographic_number_radio" class="aside__label aside__label--headline font-normal font-medium">
                         Number
                     </label> 
                 </div>      
                 <div class="aside__row aside__row--toggle" v-if="isNumberResponse">
                         <label for="demographic_number_min" class="aside__label font-normal">Min</label>
-                        <input type="number" id="demographic_number_min" class="aside__input--number font-small" name="demographic_number_min" min="0" step="1" v-model="minModel">
+                        <input type="number" id="demographic_number_min" class="aside__input--number font-small" name="demographic_number_min" min="0" step="1" v-model="minModel" :disabled=isDisabled>
                         <label for="demographic_number_max" class="aside__label font-normal">Max</label>
-                        <input type="number" id="demographic_number_max" class="aside__input--number font-small" name="demographic_number_max" step="1" v-model="maxModel">
+                        <input type="number" id="demographic_number_max" class="aside__input--number font-small" name="demographic_number_max" step="1" v-model="maxModel" :disabled=isDisabled>
                 </div>         
             </fieldset>
         </div>
         <div class="aside__container">
             <div class="aside__selection">
-                <input type="radio" value="date" name="demographic_radio" id="demographic_date_radio" class="aside__radio" v-model="responseModel">
+                <input type="radio" value="date" name="demographic_radio" id="demographic_date_radio" class="aside__radio" v-model="responseModel" :disabled=isDisabled>
                 <label for="demographic_date_radio" class="aside__label aside__label--headline font-normal font-medium">
                     Date
                 </label>
             </div>
         </div>
         <div class="aside__container aside__container--borderless">
-            <button class="aside__button aside__button--delete" @click="deleteQuestion()">
+            <button v-if="!isDisabled" class="aside__button aside__button--delete" @click="deleteQuestion()">
                 Delete question
             </button>
         </div>
@@ -84,6 +84,7 @@
 <script setup>
 import { addNewOption, removeOptionAtIndex } from '~/utils/studyUtils';
 import { study } from '~/public/script/reactive';
+const isDisabled = inject('disabled');
 
 const props = defineProps({
     id: String
@@ -122,6 +123,7 @@ const updateQuestion = ()=>{
     thisDemographic.question = questionModel.value;
 }
 
+
 //initiating. So the correct radio-button is checked, and the question is included in the text-area
 const initiateConfig = (id)=>{
     const demographic = returnDemographic(id);
@@ -157,7 +159,9 @@ const deleteOption = (i) => {
 const isRadioResponse = computed(() => responseModel.value === 'radio');
 const isTextResponse = computed(() => responseModel.value === 'text');
 const isNumberResponse = computed(() => responseModel.value === 'number');
-// const isDateResponse = computed(() => responseModel.value === 'date');
+
+// don't delete box if it's just one there
+const optionsLength = computed(() => optionsModel.value?.length > 1);
 
 // when a new question is selected, the question config gets updated
 watch(

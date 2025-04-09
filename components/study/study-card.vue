@@ -1,14 +1,17 @@
 <template>
     <div class="card" v-if="filterDisplay">
-        <img src="" alt="thumbnail of study" class="card__img">
+        <!-- <img src="" alt="thumbnail of study" class="card__img"> -->
+        <!-- just for now -->
+        <div alt="thumbnail of study" class="card__img"></div>
         <h3 class="card__title font-medium">{{ title }}</h3>
-        <p class="card__paragraph font-small">Started: {{ startDate }}.</p>
+        <p class="card__paragraph font-small">Started: {{ formattedStartDate }}</p>
         <button class="card__select" aria-label="Open study" @click="studyEdit(id)"></button>
         <button class="card__button" aria-label="Open toolbar" @click="showPopUp = !showPopUp">
             <div class="card__dot"></div>
         </button>
         <div class="popup" v-if="showPopUp">
-            <button class="popup__button font-normal" @click="studyEdit(id)">Edit</button>
+            <!-- only show 'edit' button if study is a draft -->
+            <button v-if="status === 'draft'" class="popup__button font-normal" @click="studyEdit(id)">Edit</button>
             <button class="popup__button font-normal" @click="studyDelete(id)">Delete</button>
             <button class="popup__button font-normal" @click="studyDuplicate(id)">Duplicate</button>
             <button class="popup__button font-normal" @click="studyExport(id, 'json')">Export JSON</button>
@@ -39,14 +42,19 @@ const filterDisplay = computed(()=>{
     return props.filter === 'all' || props.status === props.filter;
 })
 
+// format the start date to be readable
+const formattedStartDate = computed(() => {
+    if (!props.startDate) return 'N/A';
+    
+    return new Date(props.startDate).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    });
+});
+
 //Defining events to emit
 const emit = defineEmits(['select', 'delete', 'edit', 'duplicate', 'export'])
-
-//emitting study id with "select" event
-// const studySelect = (id) =>{
-//     showPopUp.value = false
-//     emit('select', id);
-// }
 
 //emitting study id with "delete" event
 const studyDelete = (id) => {

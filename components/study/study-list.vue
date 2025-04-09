@@ -3,7 +3,7 @@
         <div class="question__container">
             <span class="question__header">
                 <h2 class="question__title font-large">Questions</h2>
-                <button class="question__add" aria-label="add new question" @click="addQuestion">
+                <button v-if="!isDisabled" class="question__add" aria-label="add new question" @click="addQuestion">
                     <svg class="question__plus" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="16" cy="16" r="16" fill="url(#paint0_linear_172_144)" />
                         <path
@@ -30,6 +30,7 @@
 
 <script setup>
 import { study } from '~/public/script/reactive';
+const isDisabled = inject('disabled');
 
 const listRef = ref('')
 const emit = defineEmits(['select', 'newQuestion'])
@@ -49,9 +50,9 @@ const addQuestion = () => {
     //blueprint for how the question-object is arranged
     const questionBp = {
             id: crypto.randomUUID(),
-            question: '',
+            question: 'Question',
             required: true,
-            responseType: '',
+            responseType: 'radio',
             checkbox: {
                 selectionMin: '',
                 selectionMax: ''
@@ -63,7 +64,7 @@ const addQuestion = () => {
                 endLabel: ''
             },
             drop: {
-                dropBox: []
+                dropBox: ['']
             },
             linear: {
                 startLabel: '',
@@ -84,3 +85,5 @@ const addQuestion = () => {
 <style scoped>
     @import url('public/style/components/study/study-sidebar.scss');
 </style>
+
+

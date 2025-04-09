@@ -4,7 +4,7 @@
             <span class="demographic__span font-normal">{{ config.question }} <span class="demographic__required" v-if="config.required">*</span></span>
         </label>
         <label class="demographic__slider">
-            <input type="checkbox" :id="`demographic_${index}_checkbox`" v-model="requestModel" class="demographic__checkbox" @change="updateRequest()" />
+            <input type="checkbox" :id="`demographic_${index}_checkbox`" v-model="requestModel" class="demographic__checkbox" @change="updateRequest()" :disabled=isDisabled />
             <span class="demographic__thumbnail" :class="{'demographic__thumbnail--active': requestModel}"></span>
         </label>
         <!-- <input type="checkbox" v-model="requestModel" name="" :id="id" class="demographic__checkbox" @change="updateRequest"> -->
@@ -17,6 +17,8 @@
 </template>
 
 <script setup>
+const isDisabled = inject('disabled');
+
 const props = defineProps({
     config: Object,
     index: Number
@@ -33,7 +35,6 @@ const id = computed(()=>{
 //emitting if of question to edit
 const toggleQuestionId = () =>{
     emit('edit', props.config.id)
-
 }
 
 //updating in config if question should be asked or not
