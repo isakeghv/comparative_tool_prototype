@@ -11,6 +11,25 @@
 					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id" :responseType="responseType"
 						:artifact="artifact" @selectMedia="selectMedia" @moving="(artifact) => box_moving(artifact)"
 						v-if="responseType === 'drop'" />
+
+						<!-- Radio buttns -->
+					<label v-for="artifact in artifactsArr" :key="artifact.id" class="question__option--radio">
+  						<div :class="['artifact-container', {'artifact--selected': participantAnswer[currentQuestion.id] === artifact.id}]">
+    						<input type="radio" :name="currentQuestion.id" :value="artifact.id" v-model="participantAnswer[currentQuestion.id]"
+								 class="radio-overlay"/>
+							<ArtifactDisplay :artifact="artifact" :responseType="responseType" @selectMedia="selectMedia"/>
+  						</div>
+					</label>
+
+					<!-- Checkbox -->
+					<div v-if="responseType === 'checkbox'" class="question__options--horizontal">
+  						<label v-for="artifact in artifactsArr" :key="artifact.id" class="artifact-container"
+							 :class="{ 'artifact--selected': participantAnswer[currentQuestion.id]?.includes(artifact.id) }">
+							<input type="checkbox" :value="artifact.id" :checked="participantAnswer[currentQuestion.id]?.includes(artifact.id)"
+								 @change="toggleCheckbox(currentQuestion.id, artifact.id)" class="input-overlay"/>
+    						<ArtifactDisplay :artifact="artifact" :responseType="responseType" @selectMedia="selectMedia"/>
+  						</label>
+					</div>
 				</div>
 			</div>
 
@@ -69,6 +88,15 @@ const artifactsArr = computed(() => {
 const selectMedia = (source, id) => {
 	selectedSource.value = source;
 	selectedId.value = id;
+};
+
+const toggleCheckbox = (questionId, artifactId) => {
+  const current = participantAnswer[questionId] || [];
+  if (current.includes(artifactId)) {
+    participantAnswer[questionId] = current.filter(id => id !== artifactId);
+  } else {
+    participantAnswer[questionId] = [...current, artifactId];
+  }
 };
 
 
