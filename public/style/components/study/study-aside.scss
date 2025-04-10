@@ -63,6 +63,7 @@
         border: v.$borderSolid;
         border-radius: 5px;
         padding: 0.5rem;
+        cursor: pointer;
         
         &:hover {
             border: c.$gray 1px solid;
@@ -79,6 +80,7 @@
 
         &--number {
             @include v.inputArea(4.4rem);
+            cursor: pointer;
         }
     
         &--wide {
@@ -103,6 +105,7 @@
         border: v.$borderSolid;
         accent-color: c.$bluePrimary;
         color: white;
+        cursor: pointer;
 
         &:hover {
             accent-color: c.$bluePrimary-hover;

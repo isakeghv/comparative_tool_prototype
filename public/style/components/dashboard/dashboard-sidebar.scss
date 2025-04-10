@@ -1,6 +1,8 @@
 @use '../../variables/_colors.scss' as c;
 
 .study {
+    cursor: pointer;
+
     &__plus {
         height: 1.4rem;
         width: 1.4rem;
@@ -27,6 +29,7 @@
         padding: 1rem 2rem;
         background-color: transparent;
         border: none;
+        cursor: pointer;
 
         &:hover {
             background-color: c.$white-active;

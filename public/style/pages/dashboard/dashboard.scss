@@ -5,6 +5,10 @@
     display: flex;
 }
 
+button{
+    cursor: pointer;
+}
+
 
 // need to be fixed later zzz
 .main {
@@ -61,6 +65,7 @@
 
         &:hover {
             background-color: c.$white-active;
+            cursor: pointer;
         }
     }
 }

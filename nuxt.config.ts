@@ -4,8 +4,8 @@ export default defineNuxtConfig({
   ssr: false,
   runtimeConfig: {
     private: {
-      mongoURI: process.env.MONGO_URI,
-      secretJWT: process.env.SECRET_JWT
+      mongoURI: process.env.MONGO_URI || "mongodb://localhost:27017/project",
+      secretJWT: process.env.SECRET_JWT || "verysecretKey"
     }
   },
   compatibilityDate: '2024-11-01',

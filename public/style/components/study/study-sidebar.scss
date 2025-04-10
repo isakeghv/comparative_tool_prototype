@@ -52,6 +52,7 @@
         width: clamp(10rem, 7rem + 8vw, 14rem);
         padding-left: 1rem;
         @include sidebar-slab();
+        cursor: pointer;
     }
 }
 
@@ -63,6 +64,7 @@
         display: flex;
         justify-content: space-between;
         padding: 1.2rem 2rem 0.8rem;
+        cursor: pointer;
     }
 
     &__add {
