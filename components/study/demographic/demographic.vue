@@ -5,25 +5,27 @@
         <div class="demographic__row">
             <label for="demographic_request_checkbox" class="demographic__label">
                 <span class="demographic__span font-normal">Request demographics</span>
-                <span class="demographic__slider" :class="{'demographic__slider--active':requestModel}">
-                    <span class="demographic__thumbnail" :class="{'demographic__thumbnail--active':requestModel}"></span>
-                </span>
             </label>
-            <input type="checkbox" v-model="requestModel" name="" id="demographic__request_checkbox" class="demographic__checkbox" @change="update()">
+            <label class="demographic__slider" :disabled=isDisabled>
+                <input type="checkbox" v-model="requestModel" id="demographic__request_checkbox" class="demographic__checkbox" @change="updateRequest()">
+                <span class="demographic__thumbnail" :class="{'demographic__thumbnail--active': requestModel}"></span>
+            </label>
         </div>
-        <Demographic-row v-if="requestModel" @edit="(id) =>selectedId = id" :index="i" :config="config" v-for="(config, i) in configs"/>
-        <Demographic-add @newQuestion="(id) =>selectedId = id"/>
+        <DemographicRow v-if="requestModel" @edit="(id) => selectedId = id" :index="i" :config="config" v-for="(config, i) in configs"/>
+        <DemographicAdd @newQuestion="(id) => selectedId = id"/>
         </div>
     </div>
-    <Demographic-aside :id="selectedId" v-if="requestModel"/>
+    <DemographicAside :id="selectedId" v-if="requestModel"/>
 </template>
 
 <script setup>
 import { study } from '~/public/script/reactive';
-const requestModel = ref(true);
+const isDisabled = inject('disabled');
+
+const requestModel = ref(study.demographicReq);
 
 //updating if demographics should be requested or not
-const update = ()=>{
+const updateRequest = () => {
     study.demographicReq = requestModel.value;
 }
 
@@ -38,19 +40,14 @@ const defaultQuestions = [
         responseType: 'number',
         required: true,
         text: {
-            maxWords: 0
+            maxChar: 0
         },
         radio: {
-            options: []
+            options: ['']
         },
         number: {
             min: 0,
             max: 100
-        },
-        date: {
-            year: true,
-            month: false,
-            day: false
         }
     },
     {
@@ -60,19 +57,14 @@ const defaultQuestions = [
         responseType: 'radio',
         required: true,
         text: {
-            maxWords: 0
+            maxChar: ''
         },
         radio: {
             options: ['Male', 'Female']
         },
         number: {
-            min: 0,
-            max: 100
-        },
-        date: {
-            year: true,
-            month: false,
-            day: false
+            min: '',
+            max: ''
         }
     },
     {
@@ -82,19 +74,14 @@ const defaultQuestions = [
         responseType: 'text',
         required: true,
         text: {
-            maxWords: 0
+            maxChar: 200
         },
         radio: {
-            options: []
+            options: ['']
         },
         number: {
-            min: 0,
-            max: 100
-        },
-        date: {
-            year: true,
-            month: false,
-            day: false
+            min: '',
+            max: ''
         }
     },
     {
@@ -104,27 +91,21 @@ const defaultQuestions = [
         responseType: 'text',
         required: true,
         text: {
-            maxWords: 0
+            maxChar: ''
         },
         radio: {
-            options: []
+            options: ['']
         },
         number: {
-            min: 0,
-            max: 100
-        },
-        date: {
-            year: true,
-            month: false,
-            day: false
+            min: '',
+            max: ''
         }
     }
 ];
 
-
 //initiating: if there is nothing in demographics questions, load with default setup
-const initiateConfig = ()=>{
-    if (study.demographic.length <= 0) study.demographic = defaultQuestions;
+const initiateConfig = () =>{
+    if (study.demographic.length === 0) study.demographic = defaultQuestions;
 }
 
 initiateConfig();

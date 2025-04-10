@@ -1,12 +1,11 @@
 import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import { useRuntimeConfig, setCookie } from '#imports';
-import { connDb } from "../utils/connDb.js";
-import { userCredential } from '../models/user.js';
 import validator from "validator";
 import { readBody, setResponseStatus } from "h3";
-
 const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
+import { connDb } from '~/server/services/connDb.js';
+import { UserCredential } from '../schemas/userSchema.js';
 
 // need to add functionality for token-checking, prevent brute-forcing etc. so this is temporary
 const checkPassword = async (email, pwd, event) => {
@@ -15,7 +14,7 @@ const checkPassword = async (email, pwd, event) => {
         const config = useRuntimeConfig();
 
         // retrieve the user by its email; if it doesn't exist, return a message indicating error
-        const user = await userCredential
+        const user = await UserCredential
                     .findOne({ email })
                     .lean();
 

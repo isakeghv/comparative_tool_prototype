@@ -5,21 +5,28 @@
     display: flex;
 }
 
+button{
+    cursor: pointer;
+}
+
 
 // need to be fixed later zzz
 .main {
     display: flex;
     flex-direction: column;
     flex: 1;
-    padding: 1rem;
-    gap: 1rem;
+    padding: 2rem;
 
     &__grid {
-        flex: 1 1 auto;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
         gap: 1rem;
+        row-gap: 2rem;
         grid-auto-rows: auto;
+    }
+
+    &__headline {
+        margin-bottom: 1.4rem;
     }
 }
 
@@ -58,6 +65,7 @@
 
         &:hover {
             background-color: c.$white-active;
+            cursor: pointer;
         }
     }
 }

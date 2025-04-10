@@ -9,10 +9,31 @@
 	color: c.$black;
 }
 
+html {
+	scrollbar-gutter: stable;
+}
+
+body {
+	background-color: c.$white;
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+
+	&-track {
+		background-color: transparent;
+	}
+
+	&-thumb {
+		background: rgba(c.$gray, 0.5);
+		border-radius: 1rem;
+	}
+}
+
 .hide {
 	display: none;
 }
-
+  
 .font {
 	&-heavy {
 		font-weight: 800;

@@ -1,12 +1,11 @@
 import bcrypt from "bcryptjs";
-import { connDb } from "../utils/connDb.js";
-import { userCredential, userProfile } from '../models/user.js';
 import validator from "validator";
 import { readBody, setResponseStatus } from "h3";
+import { connDb } from '~/server/services/connDb.js';
+import { UserCredential, UserProfile } from '../schemas/userSchema.js';
 
-
-const checkEmail = async (email, event) => {
-	const existingUser = await userCredential.findOne({ email });
+const checkEmail = async (email) => {
+	const existingUser = await UserCredential.findOne({ email });
 
 	if (existingUser) {
 		// setting response to 200 to confirm that email was found
@@ -22,13 +21,13 @@ const createUser = async (fname, lname, email, pwd) => {
 	const hashedPassword = await bcrypt.hash(pwd, 12);
 
 	// split the user credentials and profile data from each other
-	const newUserP = new userProfile({
+	const newUserP = new UserProfile({
 		firstName: fname,
 		lastName: lname,
 	})
 
 	// create new user credentials using its schema
-	const newUserC = new userCredential({
+	const newUserC = new UserCredential({
 		email: email,
 		password: hashedPassword,
 		userProfile: newUserP._id

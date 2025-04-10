@@ -1,11 +1,12 @@
 <template>
-    <button class="demographic__button font-small font-semi" @click="newDemogrQuestion()">
+    <button v-if="!isDisabled" class="demographic__button font-small font-semi" @click="newDemogrQuestion()">
         Add new question
     </button>
 </template>
 
 <script setup>
 import { study } from '~/public/script/reactive';
+const isDisabled = inject('disabled');
 
 const emit = defineEmits(['newQuestion'])
 
@@ -15,22 +16,17 @@ const newDemogrQuestion = () => {
         id: crypto.randomUUID(),
         question: 'New question',
         request: true,
-        responseType: '',
+        responseType: 'text',
         required: true,
         text: {
-            maxWords: 0
+            maxChar: ''
         },
         radio: {
-            options: []
+            options: ['']
         },
         number: { 
-            min: 0,
-            max: 100
-        },
-        date: {
-            year: true,
-            month: false,
-            day: false
+            min: '',
+            max: ''
         }
     }
 

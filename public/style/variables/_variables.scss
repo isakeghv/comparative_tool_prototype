@@ -3,23 +3,22 @@
 @mixin main-area {
     display: flex;
     flex-direction: column;
-    flex: 1 1 60%;
+    flex: 1 1 55%;
     padding: $areaPadding;
 }
 
-// this is left unused currently
 @mixin left-area {
     display: flex;
-    flex-direction: column;
-    flex: 1 1 20%;
+    flex-flow: column nowrap;
+    flex: 1 1 22%;
     padding: $areaPadding;
     border-right: $borderSolid;
 }
 
 @mixin right-area {
     display: flex;
-    flex-direction: column;
-    flex: 1 1 25%;
+    flex-flow: column nowrap;
+    flex: 1 1 23%;
     border-left: $borderSolid;
 }
 
@@ -39,14 +38,25 @@
 @mixin inputArea($width) {
     outline: none;
     width: $width;
-    height: 2.5rem;
+    height: 2.4rem;
     border: $borderSolid;
-    border-radius: 0.6rem;
+    border-radius: 0.5rem;
     padding: 0.5rem;
     
     &:hover {
         border: c.$gray 1px solid;
     }
+}
+
+@mixin overlay() {
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: none;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
 }
 
 $mainAreaWidth: clamp(20rem, -4rem + 48vw, 50rem);

@@ -3,7 +3,7 @@
         <div class="question__container">
             <span class="question__header">
                 <h2 class="question__title font-large">Questions</h2>
-                <button class="question__add" aria-label="add new question" @click="addQuestion">
+                <button v-if="!isDisabled" class="question__add" aria-label="add new question" @click="addQuestion">
                     <svg class="question__plus" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="16" cy="16" r="16" fill="url(#paint0_linear_172_144)" />
                         <path
@@ -22,7 +22,7 @@
         </div>
         <ul class="question__list" ref="listRef" id="question__list">
             <!-- pass specific question config to question item-->
-            <Study-item @select="(data) => selectQuestion(data)" parent="#question__list" :config="question" :index="i"
+            <StudyItem @select="(data) => selectQuestion(data)" parent="#question__list" :config="question" :index="i"
                 v-for="(question, i) in questions" />
         </ul>
     </div>
@@ -30,6 +30,7 @@
 
 <script setup>
 import { study } from '~/public/script/reactive';
+const isDisabled = inject('disabled');
 
 const listRef = ref('')
 const emit = defineEmits(['select', 'newQuestion'])
@@ -49,25 +50,21 @@ const addQuestion = () => {
     //blueprint for how the question-object is arranged
     const questionBp = {
             id: crypto.randomUUID(),
-            question: '',
+            question: 'Question',
             required: true,
-            responseType: null,
-            radio: {
-                options: []
-            },
+            responseType: 'radio',
             checkbox: {
-                options: [],
-                selectionMin: 1,
-                selectionMax: 1
+                selectionMin: '',
+                selectionMax: ''
             },
             range: {
-                min: 0,
-                max: 100,
+                min: '',
+                max: '',
                 startLabel: '',
                 endLabel: ''
             },
-            drag: {
-                dropBoxes: []
+            drop: {
+                dropBox: ['']
             },
             linear: {
                 startLabel: '',
@@ -83,9 +80,10 @@ const addQuestion = () => {
     //so the new question is displayed in the page when requested to be made
     selectQuestion({ query: 'question', number: questions.value.length - 1, id: question.id })
 }
-
 </script>
 
 <style scoped>
-    @import url('public/style/components/study/_study-sidebar.scss');
+    @import url('public/style/components/study/study-sidebar.scss');
 </style>
+
+

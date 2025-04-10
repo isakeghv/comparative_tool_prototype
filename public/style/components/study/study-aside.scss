@@ -16,7 +16,6 @@
         gap: 0.4rem;
 
         &--borderless {
-            padding-bottom: 0;
             border: none;
         }
     }
@@ -60,10 +59,11 @@
         resize: none;
         outline: none;
         width: 8rem;
-        height: 2.5rem;
+        height: 2.4rem;
         border: v.$borderSolid;
         border-radius: 5px;
         padding: 0.5rem;
+        cursor: pointer;
         
         &:hover {
             border: c.$gray 1px solid;
@@ -74,6 +74,20 @@
         }
     }
 
+    &__input {
+        @include v.inputArea(8.8rem);
+        height: 2rem;
+
+        &--number {
+            @include v.inputArea(4.4rem);
+            cursor: pointer;
+        }
+    
+        &--wide {
+            @include v.inputArea(12rem);
+        }
+    }
+
     &__paragraph {
         line-height: 1.5;
         margin-bottom: 0.8rem;
@@ -81,14 +95,7 @@
 
     &__label--headline {
         font-family: f.$kumbh-sans;
-    }
-
-    &__input--number {
-        @include v.inputArea(4.4rem);
-    }
-
-    &__input--wide {
-        @include v.inputArea(12rem);
+        // margin: 0.25rem 0;
     }
 
     &__checkbox, &__radio {
@@ -96,13 +103,79 @@
         // uh look at this later
         border-width: 1px;
         border: v.$borderSolid;
+        accent-color: c.$bluePrimary;
+        color: white;
+        cursor: pointer;
+
+        &:hover {
+            accent-color: c.$bluePrimary-hover;
+        }
+
+        &:active {
+            accent-color: c.$bluePrimary-active;
+        }
     }
 
     &__button {
+        cursor: pointer;
+        border-radius: 0.5rem;
+        border: none;
+        background: none;
+
         &--delete {
-            // add soomething here I guess
-            color: black;
+            padding: 0.5rem 1rem;
+            color: c.$white;
+            width: 16rem;
+            border: 2px c.$red solid;
+            color: c.$red;
+
+            &:hover {
+                background-color: rgba(154, 154, 154, 0.1);
+            }
         }
+        
+        &--add {
+            padding: 0.5rem 1rem;
+            margin-top: 0.8rem;
+            background-color: c.$bluePrimary;
+            color: c.$white;
+
+            &:hover {
+                background-color: c.$bluePrimary-hover;
+            }
+
+            &:active {
+                background-color: c.$bluePrimary-active;
+            }
+        }
+
+        &--remove {
+            margin-left: 0.5rem;
+        }
+    }
+
+    &__option {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.25rem;
+
+        &:first-of-type {
+            margin-top: 0.5rem;
+        }
+    }
+
+    &__cross {
+        fill: c.$gray;
+    }
+
+    &__identifier {
+        align-content: center;
+        display: flex;
+        width: 1.8rem;
+    }
+
+    &__box {
+        margin-right: 0.8rem;
     }
 
     &__fieldset {
@@ -121,5 +194,22 @@
         margin-top: 0.4rem;
         gap: 0.4rem;
     }
+
+    &__bottom {
+        padding-top: 0;
+    }
 }
 
+.input {
+    &__invalid {
+        outline: 2.5px solid c.$red;
+        border: none;
+
+        &:hover, 
+        &:focus, 
+        &:active {
+            outline: 2.5px solid c.$red;
+            border: none;
+        }
+    }
+}

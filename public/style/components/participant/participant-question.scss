@@ -1,0 +1,244 @@
+@use "../../variables/_colors.scss" as c;
+@use "../../variables/variables" as v;
+
+.question {
+    width: 100%;
+    height: 100%;
+}
+
+.participant {
+    &__cont {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 4rem);
+        width: 100%;
+        padding: 3rem 5rem;
+
+        &--alt {
+            padding: 3rem 5rem 0 5rem;
+        }
+    }
+}
+
+.question {
+    &__cont {
+        width: 100%;
+        height: 100%;
+
+        &--top {
+            display: flex;
+            flex: 1;
+            height: 75%;
+        }
+
+        &--btm {
+            border: v.$borderSolid;
+            flex: 2;
+            height: 25%;
+            padding: 1rem 0;
+            border-right: none;
+            border-left: none;
+        }
+    }
+
+    &__headline {
+        margin-bottom: 0.8rem;
+    }
+
+    &__panel {
+        padding: 0.5rem;
+        width: 50%;
+
+        &--left {
+            border-right: v.$borderSolid;
+            padding: 1.5rem 2.5rem;
+        }
+    }
+
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+    }
+}
+
+.artifact {
+    &__expand {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        aspect-ratio: 16 / 9;
+
+        &--img, &--video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        &--embed {
+            width: 100%;
+            height: 100%;
+        }
+
+        &--audio {
+            display: block;
+            width: 80%;
+        } 
+    }
+}
+
+.drop {
+    &_zone {
+        width: 100%;
+        padding: 0;
+        display: flex;
+        align-items: flex-start;
+        position: relative;
+    }
+
+    &__row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        border-top: v.$borderSolid;
+        border-bottom: v.$borderSolid;
+        padding: 0.5rem;
+    }
+
+    &_box {
+        height: 100%;
+        flex: 0 0 10rem;
+        position: relative;
+        // height: 9rem;
+        // width: 7rem;
+        padding: 0;
+        border: v.$borderSolid;
+        border-radius: 0.4rem;
+    }
+
+    &_text{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 2rem;
+        background-color: rgb(235, 235, 235);
+    }
+
+    &_relative{
+        position: relative;
+        cursor: default;
+        transition: margin 0.1s ease-in-out;
+
+        &:hover{
+            margin: 0 2rem;
+            border-radius: 0;
+            & .artifact__image{
+                border-radius: 0;
+            }
+
+            & .drop__button{
+                width: 2rem;
+                visibility: visible;
+            }
+            & .wrapper__button--radius{
+                border-radius: 0;
+            }
+        }
+    }
+
+    &_container{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        padding: 0.4rem;
+        
+        &--linear{
+            overflow-x: auto;
+            gap: 0.5rem;
+            height: 100%;
+            top: 0;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            padding: 2.5rem 0 0;
+            left: 0;
+            top: 0;
+        }
+
+        &--text{
+            padding: 0.25rem 1rem;
+            justify-content: space-between;
+            height: 2rem;
+        }
+
+        .wrapper {
+            display: none;
+        }
+    }
+
+    &__button{
+        position: absolute;
+        height: 100%;
+        top: 0;
+        width: 2rem;
+        background-color: rgba(0, 0, 0, 0.1);
+        border: none;
+        visibility: hidden;
+        overflow: hidden;
+        cursor: pointer;
+        transition: width 0.1s ease-in-out, background-color 0.1s ease-in-out;
+        width: 0;
+
+        &:hover{
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        &:active{
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        &--left{
+            right: 100%;
+            border-radius: 0.5rem 0 0 0.5rem;
+        }
+        &--right{
+            left: 100%;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+    }
+    &_arrow{
+        height: 2rem;
+    }
+}
+
+.artifact-container {
+    position: relative;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 4px;
+    box-sizing: border-box;
+  }
+  
+  .artifact--selected {
+    border-color: #54C0D1;
+  }
+  
+  .radio-overlay {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    z-index: 2;
+  }
+
+.embed__handle {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}

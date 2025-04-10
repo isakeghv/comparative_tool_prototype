@@ -12,6 +12,7 @@
     &__headline, &__paragraph, &__span {
         color: c.$bluePrimary;
     }
+
     &__container {
         display: flex;
         align-items: center;
@@ -24,6 +25,7 @@
         gap: 1rem;
         display: flex;
         margin-right: 1rem;
+        cursor: pointer;
     }
     
     &__publish {
@@ -44,6 +46,11 @@
 
         &:active {
             background-color: c.$blueSecondary-active;
+        }
+
+        &:disabled {
+            background-color: c.$gray;
+            color: c.$white;
         }
     }
 

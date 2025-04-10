@@ -33,5 +33,5 @@ const newStudy = async () => {
 </script>
 
 <style scoped>
-    @import url('public/style/pages/dashboard/dashboard.css');
+    @import url('public/style/pages/dashboard/dashboard.scss');
 </style>

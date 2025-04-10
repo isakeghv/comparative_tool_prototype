@@ -6,7 +6,7 @@
         </p>
         <div class="header__container" v-if="study.id">
             <div class="header__buttons">
-                <button class="header__button" data-tooltip="Save" @click="saveStudy()">
+                <button v-if="!isDisabled" class="header__button" data-tooltip="Save" @click="saveStudy()">
                     <svg class="header__icon" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
                         <path d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Z"/>
                     </svg>
@@ -16,144 +16,134 @@
                         <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z"/>
                     </svg>
                 </button>
-                <button class="header__button" data-tooltip="Undo">
-                    <svg class="header__icon" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
-                        <path xmlns="http://www.w3.org/2000/svg" d="M280-200v-80h284q63 0 109.5-40T720-420q0-60-46.5-100T564-560H312l104 104-56 56-200-200 200-200 56 56-104 104h252q97 0 166.5 63T800-420q0 94-69.5 157T564-200H280Z"/>
-                    </svg>
-
-                </button>
-                <button class="header__button" data-tooltip="Redo">
-                    <svg class="header__icon" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
-                        <path xmlns="http://www.w3.org/2000/svg" d="M396-200q-97 0-166.5-63T160-420q0-94 69.5-157T396-640h252L544-744l56-56 200 200-200 200-56-56 104-104H396q-63 0-109.5 40T240-420q0 60 46.5 100T396-280h284v80H396Z"/>
-                    </svg>
-
-                </button>
+                <DashboardUndoRedo v-if="!isDisabled" />
                 <button class="header__button" data-tooltip="Link">
                     <svg class="header__icon" viewBox="0 -960 960 960" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path xmlns="http://www.w3.org/2000/svg" d="M680-80q-50 0-85-35t-35-85q0-6 3-28L282-392q-16 15-37 23.5t-45 8.5q-50 0-85-35t-35-85q0-50 35-85t85-35q24 0 45 8.5t37 23.5l281-164q-2-7-2.5-13.5T560-760q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-24 0-45-8.5T598-672L317-508q2 7 2.5 13.5t.5 14.5q0 8-.5 14.5T317-452l281 164q16-15 37-23.5t45-8.5q50 0 85 35t35 85q0 50-35 85t-85 35Z"/>
                     </svg>
                 </button>
             </div>
-            <button class="header__publish font-semi font-normal">Publish</button>
+            <button v-if="!isDisabled" class="header__publish font-semi font-normal" @click="publishStudy">Publish</button>
+            <!-- <button v-if="!isDisabled" class="header__publish font-semi font-normal" @click="publishStudy" :disabled="isPublishedDisabled">Publish</button> -->
         </div>
+        <slot></slot>
     </header>
 </template>
 
 <script setup>
 //importing reactive variable which holds the id of the study and where the study questions are stored
-import { user, study, initialStudy } from '~/public/script/reactive';
+import StudyService from '~/services/studyService';
+import { user, study, initialStudy, wasStudyCreated } from '~/public/script/reactive';
+import { compareStudies } from '~/utils/studyUtils';
+
+const isDisabled = inject('disabled'); 
+
 const props = defineProps({
     name: String,
     id: String,
+    isCreatingStudy: Boolean
 })
 
-// flag to prevent creating study when saving multiple times
-const isStudyCreated = ref(false);
+console.log(props.isCreatingStudy);
 
-// need to pass all the comparisons to pass it as true (probably should find a way to not repeat too much)
-const compareStudy = () => {
-    return JSON.stringify(study.questions) === JSON.stringify(initialStudy.questions) &&
-           JSON.stringify(study.demographicReq) === JSON.stringify(initialStudy.demographicReq) &&
-           JSON.stringify(study.demographic) === JSON.stringify(initialStudy.demographic) &&
-           JSON.stringify(study.description) === JSON.stringify(initialStudy.description) &&
-           JSON.stringify(study.title) === JSON.stringify(initialStudy.title)
-};
+//event to emit in case the study was unable to save
+const emit = defineEmits(['unableSave'])
 
+const isPublishDisabled = computed(() => !wasStudyCreated.value);
+
+//saves it to "study.initial": 
+// - The "back" button prevents user from going back if the initial study-configuration is not
+//      similar to the current. Saving updates so the "initial" has the current setup, so the user can go back
 const updateSaveHistory = () => {
-    //saves it to "study.initial": 
-    // - The "back" button prevents user from going back if the initial study-configuration is not
-    //      similar to the current. Saving updates so the "initial" has the current setup, so the user can go back
-    initialStudy.questions = JSON.parse(JSON.stringify(study.questions))
-    initialStudy.demographicReq = JSON.parse(JSON.stringify(study.demographicReq))
-    initialStudy.demographic = JSON.parse(JSON.stringify(study.demographic))
-    initialStudy.description = JSON.parse(JSON.stringify(study.description))
-    initialStudy.title = JSON.parse(JSON.stringify(study.title))
-}
+    // create an array of the study properties to loop through more efficiently
+    const properties = [
+        'questions',
+        'demographicReq',
+        'demographic',
+        'description',
+        'title',
+        'customTerms',
+        'desiredResponses',
+        'closingLimit',
+        'closingMethod'
+    ];
 
-// send a POST request to the 'study' endpoint, and pass the user/title/desc data for saving (temporarily)
-const createStudy = async () => {
-    const response = await fetch('/api/study', {
-        method: 'POST',
-        body: JSON.stringify({
-            'id': study.id,
-            // get the id from const 'user' that was set when user logged in, and send it to the API endpoint to reference the user as the creator
-            'user': user.info._id,
-            'title': study.title,
-            'description': study.description,
-            'demographic': study.demographic,
-            'demographicReq': study.demographicReq
-        }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
+    properties.forEach(property => {
+        initialStudy[property] = JSON.parse(JSON.stringify(study[property]));
     });
-
-    const result = await response.json();
-
-    if (result.created) {
-        const studyId = result.studyId;
-    } else {
-        console.log('Failed to create study');
-    }
-}
-
-const updateStudy = async () => {
-    const updatedData = {
-        title: study.title,
-        description: study.description,
-        demographic: study.demographic,
-        demographicReq: study.demographicReq
-    }
-
-    const response = await fetch('/api/study', {
-        method: 'PUT',
-        body: JSON.stringify({
-            'id': study.id,
-            updatedData
-        }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-
-    const result = await response.json();
-
-    if (result.updated) {
-        const studyId = result.studyId;
-    } else {
-        console.log('Failed to update study');
-    }
-}
+};
 
 // when clicking on 'save', update the tracking of changes and create new study if it hasn't been created yet
 const saveStudy = async () => {
-    const noChanges = compareStudy();
+    // compare the two study states to see if there has been no changes
+    const noChanges = compareStudies(study, initialStudy);
     console.log(noChanges);
 
-    // first update the tracking of the initial and current study
-    updateSaveHistory();
+    //returning if no changes have been made
+    if (noChanges) return;
 
-    // prevent doing unecessary calls to db if no data has been changed
-    if (isStudyCreated.value && !noChanges) {
-        return await updateStudy();
-    } else {
-        console.log('no need to save')
-    }
+    // if study gets created, update the flag to true; 'isCreatingStudy' prop sent from 'Dashboard' component also has to be true
+    if (!wasStudyCreated.value && props.isCreatingStudy) {
 
-    // if study gets created, update the flag to true
-    if (!isStudyCreated.value) {
-        isStudyCreated.value = true;
-        const newStudy = createStudy();
+        // pass in the data from the `study` reactive variable and the user id as a ref
+        const newStudy = await StudyService.createStudy(study, user.info._id);
+        console.log(newStudy);
 
-        // push it manually to the dashbaord overview instead of re-fetching it
-        // need to find out how to update it with its information (title, description etc.)
-        if (newStudy) {
-            user.studies.push(newStudy);
-        }
+        if (newStudy && newStudy.study) {
+            user.studies.push(JSON.parse(JSON.stringify(newStudy.study)));
+            wasStudyCreated.value = true;
+
+            // first update the tracking of the initial and current study
+            updateSaveHistory();
+
+        } else emit('unableSave');
+        
 
         return;
-    } else {
-        console.log('already exists');
+    } else if (!noChanges) {
+        // if changes have happened, send a PUT request with the study data as the body
+        const updatedStudy = await StudyService.updateStudy(study.id, study);
+
+        if (updatedStudy) {
+            // find index of the study that is currently in progress and display correct information if changes have happened to UI w/o reloading
+            const studyIndex = user.studies.findIndex(study => study.id === updatedStudy.study.id);
+
+            // first update the tracking of the initial and current study
+            updateSaveHistory();
+
+            // if updatedStudy id is found within user.studies
+            if (studyIndex !== -1) {
+                user.studies[studyIndex] = JSON.parse(JSON.stringify(updatedStudy.study));
+            }
+        } else emit('unableSave');
+
+        return;
+    } else emit('unableSave');
+};
+
+const publishStudy = async () => {
+    // return if it hasn't been saved yet -> should probably show a prompt box of sorts
+    const noChanges = compareStudies(study, initialStudy);
+
+    // if there is changes and it hasn't been created yet, show a prompt box telling them to save, else publish the study
+    // TODO: add more checks here omg
+    console.log(noChanges);
+    if (!noChanges) {
+        emit('unableSave', {reason: 'save'});
+        return;
+    }
+
+    const studyIndex = user.studies.findIndex(userStudy => userStudy.id === study.id);
+
+    // don't update if status is already 'ongoing'
+    if (user.studies[studyIndex].status === 'ongoing') return;
+
+    const updatedStudy = await StudyService.publishStudy(study.id);
+
+    // update status to publish, and set disabled to true
+    if (updatedStudy) {
+        user.studies[studyIndex].status = 'ongoing';
+        // isDisabled.value = true;
     }
 }
 </script>

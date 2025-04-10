@@ -1,16 +1,23 @@
 <!-- return main area of the created study based on the computed properties (showDetails, showDemographics, showQuestionMain) -->
 <template>
     <div class="container">
-        <Study-sidebar @swapDisplay="(data) => toggleDisplay(data.component, data.number, data.id)"/>
-        <Details v-if="showDetails"/>
-        <Demographic v-if="showDemographics"/>
-        <Study-main v-if="showQuestionMain" :index="questionIndex" :id="questionId"/>
-    </div>
+        <StudySidebar @swapDisplay="(data) => toggleDisplay(data.component, data.number, data.id)"/>
+        <Details v-if="showDetails" />
+        <Demographic v-if="showDemographics" />
+        <StudyTermsPrivacy v-if="showTerms" />
+        <StudyMain v-if="showQuestionMain" :index="questionIndex" :id="questionId" />
+	</div>
 </template>
 
 <script setup>
+const emit = defineEmits(['unableSave'])
 
-const displayComponent = ref('');
+// const forwardErrorMsg = (err) => {
+//     emit('unableSave', err);
+// };
+
+// show details as default when opening/creating a study
+const displayComponent = ref('details');
 const questionIndex = ref();
 const questionId = ref()
 
@@ -26,6 +33,10 @@ const showQuestionMain = computed(()=>{
     return displayComponent.value === 'question'
 })
 
+const showTerms = computed(()=>{
+    return displayComponent.value === 'terms'
+})
+
 //handles toggling of which component to display. "number = null" is responsible of handling which question to open
 const toggleDisplay = (component, number, id)=>{
     displayComponent.value = component;
@@ -37,6 +48,7 @@ const toggleDisplay = (component, number, id)=>{
     questionId.value = id;
 }
 
+// console.log("readonly prop in setup:", props.disabled);
 </script>
 
 <style scoped>
