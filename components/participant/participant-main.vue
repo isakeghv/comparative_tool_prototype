@@ -69,6 +69,17 @@ const prevQuestion = () => {
     }
 };
 
+/* Participant-radio-checkbox
+const sendForm = async () => {
+  try {
+    // Structure
+    const participantResponse = {
+      answers: {},
+      demographic: participantAnswer.demographic || {}
+    }
+
+*/
+
 // TODO: send form if required fields are filled etc.
 const sendForm = async () => {
     //turning into array, so response can be iterated; map so it fits structure of schema
@@ -92,10 +103,32 @@ const sendForm = async () => {
     //making sure that it has "questions"
     if (!participantResponse.questions) participantResponse.questions = [];
 
-    //inserting demographics-reply into demographics
-    participantResponse.demographic = participantAnswer.demographic
 
-    //iterating array created earlier. Used to make sure response is given in the correct format
+/*
+    for (const [key, value] of Object.entries(participantAnswer)) {
+      if (key !== 'demographic') {
+        participantResponse.answers[key] = value
+      }
+    }
+
+    await $fetch('/api/participants', {
+      method: 'POST',
+      body: {
+        studyId: props.study.id,
+        answers: participantResponse.answers,
+        demographic: participantResponse.demographic
+      }
+    })
+
+    console.log('Submitted')
+  } catch (err) {
+    console.error('Error submitting response:', err)
+    alert('Something went wrong while submitting your answers.')
+  }
+
+*/
+
+//iterating array created earlier. Used to make sure response is given in the correct format
     questions.forEach(question =>{
         //only inserting if it is not demographics
         if (question.key !== 'demographic') participantResponse.questions[question.id] = question.value
@@ -114,7 +147,6 @@ const sendForm = async () => {
         emit('participantDone');
     }
 }
-
 </script>
 
 <style scoped>

@@ -218,6 +218,25 @@
     }
 }
 
+.artifact-container {
+    position: relative;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 4px;
+    box-sizing: border-box;
+  }
+  
+  .artifact--selected {
+    border-color: #54C0D1;
+  }
+  
+  .radio-overlay {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    z-index: 2;
+  }
+
 .embed__handle {
     width: 100%;
     height: 100%;
