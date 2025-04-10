@@ -12,6 +12,7 @@
     &__headline, &__paragraph, &__span {
         color: c.$bluePrimary;
     }
+
     &__container {
         display: flex;
         align-items: center;
@@ -44,6 +45,11 @@
 
         &:active {
             background-color: c.$blueSecondary-active;
+        }
+
+        &:disabled {
+            background-color: c.$gray;
+            color: c.$white;
         }
     }
 

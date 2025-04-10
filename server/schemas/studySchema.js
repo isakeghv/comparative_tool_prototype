@@ -91,8 +91,7 @@ const DemographicSchema = new Schema({
 		max: {
 			type: Number,
 		},
-	},
-	// date: { type: Boolean }
+	}
 });
 
 // saving study schema with relevant questions, settings, and participant/study information

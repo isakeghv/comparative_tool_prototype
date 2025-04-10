@@ -44,7 +44,7 @@
 			@moveup="(index) => linear_orderUp(currentQuestion.id, index)"
 			@movedown="(index) => linear_orderDown(currentQuestion.id, index)" @insertAt="(index) => linear_insertAt = index"
 			@expand="(artifact) => selectMedia(artifact.source, artifact.id)"/>
-		<div class="drop__row">
+		<div v-if="currentQuestion.responseType === 'drop'" class="drop__row">
 			<ArtifactDropBox @mouseover="box_mouseover()" @mouseleave="box_mouseleave()"
 				@dropped="box_drop(currentQuestion.id, index, box, currentQuestion.question)" :box="box" v-if="responseType === 'drop'"
 				v-for="(box, index) in currentQuestion.drop.dropBox" :key="index"

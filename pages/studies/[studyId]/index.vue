@@ -1,6 +1,6 @@
 <template>
     <DashboardHeader>
-        <div v-if="start" class="progress">
+        <div v-if="start && showProgressBar" class="progress">
         <div class="progress__container">
             <div class="progress__bar">
                 <div class="progress__bar--fill" :style="{ width: progressFill + '%' }">
@@ -21,18 +21,22 @@
         <p>{{ message }}</p>
     </main>
 
-    <ParticipantMain v-if="study && isOpen && start" :study="study" @updateProgress="updateProgress" @totalSteps="getTotalSteps"/>
+    <ParticipantMain v-if="study && isOpen && start" :study="study" @updateProgress="updateProgress" @totalSteps="getTotalSteps" @participantDone="handleParticipantDone"/>
 </template>
 
 <script setup>
 import { validate as isValidUUID } from 'uuid';
+import { participantId } from '~/public/script/participant';
 import StudyService from '~/services/studyService';
+import ParticipantService from '~/services/participantService';
+
 
 const studyId = ref(null);
 const study = ref(null);
 const isOpen = ref(false);
 const isValidId = ref(true);
 const message = ref('');
+const showProgressBar = ref(false);
 
 // to calculate the progress bar
 const progressFill = ref(0);
@@ -90,12 +94,16 @@ const loadStudy = async (studyId) => {
 const showIntro = computed(() => isOpen.value && currentView.value === 'intro');
 
 // when clicked on start, create a participant session
-const handleStart = () => {
+const handleStart = async () => {
     start.value = true;
+    showProgressBar.value = true;
 
     // show questions after clicking on start (this needs a bit more thinking... design-wise)
     currentView.value = "questions";
-    // console.log(questions.value);
+	const id = await ParticipantService.createParticipant(studyId.value);
+
+    // store id in global ref
+    participantId.id = id;
 }
 
 const updateProgress = (progress) => {
@@ -110,6 +118,11 @@ watch(() => useRoute().params.studyId, async (newStudyId) => {
     studyId.value = newStudyId;
     await loadStudy(newStudyId);
 }, { immediate: true });
+
+const handleParticipantDone = () => {
+    showProgressBar.value = false;
+}
+
 </script>
 
 <style scoped>

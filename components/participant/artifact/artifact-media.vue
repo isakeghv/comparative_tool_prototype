@@ -30,7 +30,6 @@ import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
 const props = defineProps({
     artifact: Object,
 })
-
 </script>
 
 <style scoped>

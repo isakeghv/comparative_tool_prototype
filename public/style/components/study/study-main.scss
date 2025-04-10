@@ -205,12 +205,6 @@
 		}
 	}
 
-	// &__embed {
-	// 	body::-webkit-scrollbar {
-	// 		display: none;
-	// 	}
-	// }
-
 	&__video {
 		pointer-events: none;
 	}
@@ -222,6 +216,10 @@
 		padding: 30%;
 		aspect-ratio: 1 / 1;
 		object-fit: cover;
+	}
+
+	&__media {
+		background-color: c.$white;
 	}
 
 	&__border {
@@ -338,7 +336,7 @@
 		border-radius: 0.25rem;
 		cursor: pointer;
 		border: none;
-		background-color: #4c68f0;
+		background-color: c.$blueSecondary;
 		color: white;
 		transition: background-color 0.1s ease-in-out;
 	}
@@ -357,3 +355,4 @@
 		opacity: 1;
 	}
 }
+
