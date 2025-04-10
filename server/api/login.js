@@ -1,11 +1,14 @@
 import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import { useRuntimeConfig, setCookie } from '#imports';
+import validator from "validator";
+import { readBody, setResponseStatus } from "h3";
+const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
 import { connDb } from '~/server/services/connDb.js';
 import { UserCredential } from '../schemas/userSchema.js';
 
 // need to add functionality for token-checking, prevent brute-forcing etc. so this is temporary
-const checkPassword = async (email, pwd, e) => {
+const checkPassword = async (email, pwd, event) => {
     try {
         // access runtime config variables
         const config = useRuntimeConfig();
@@ -16,7 +19,7 @@ const checkPassword = async (email, pwd, e) => {
                     .lean();
 
         if (!user) {
-            setResponseStatus(404)
+            setResponseStatus(event, 401)
             return { isValid: false, message: 'Incorrent email or password.' };
         } else {
             // check if password matches the found user using bcrypt in-built compare method
@@ -24,7 +27,7 @@ const checkPassword = async (email, pwd, e) => {
 
             if (!validPwd) {
                 // 422 error code for email was found, but password wasn't correct (wrong input)
-                setResponseStatus(422)
+                setResponseStatus(event, 422)
                 return { isValid: false, message: 'Incorrent email or password.' };
               }
         }
@@ -35,7 +38,7 @@ const checkPassword = async (email, pwd, e) => {
         const token = jwt.sign({ userId: userId }, config.private.secretJWT, { expiresIn: '1h'})
 
         //setting token when logging in instead of setting to header. including jwt token in cookie for secure cookie.
-        setCookie(e, 'token', token, {
+        setCookie(event, 'token', token, {
             //make sure it uses http
             httpOnly: true,
 
@@ -54,21 +57,45 @@ const checkPassword = async (email, pwd, e) => {
         });*/
 
         // set status to OK; return status and message that login operation was successful
-        setResponseStatus(200);
+        setResponseStatus(event, 200);
         return { isValid: true, message: "Login successfully.", token: token };
 
     } catch (err) {
-        setResponseStatus(500);
+        setResponseStatus(event, 500);
 
         // return false status and message that there was issue logging in
         return { isValid: false, message: "Issue while trying to login. Please try again." };
     }
 }
 
-export default defineEventHandler(async (e) => {
+export default defineEventHandler(async (event) => {
     await connDb();
-    const body = await readBody(e);
-    const { email, password } = body;
+    const body = await readBody(event);
+    const rawEmail = body.email?.toString() || "";
+    const rawPassword = body.password.toString() || "";
+    const turnstileToken = ""
 
-    return await checkPassword(email, password, e);
+    const captchaRes = await $fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+        method: "POST",
+        body: new URLSearchParams({
+          secret: TURNSTILE_SECRET_KEY,
+          response: turnstileToken,
+        }),
+      });
+    
+      if (!captchaRes.success) {
+        setResponseStatus(event, 403);
+        return { isValid: false, message: "CAPTCHA verification failed." };
+      }
+
+    // Validation for Email password remains as is for security
+    if (!rawEmail || !validator.isEmail(rawEmail) || !rawPassword) {
+        setResponseStatus (event, 400)
+        return { isValid: false, message: "Incorrent email or password."}
+    }
+
+    // Sanitize
+    const cleanEmail = validator.normalizeEmail(rawEmail);
+
+    return await checkPassword(cleanEmail, rawPassword, event);
 });
