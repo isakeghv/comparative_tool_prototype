@@ -56,29 +56,35 @@ const prevQuestion = () => {
     }
 };
 
-// TODO: send form if required fields are filled etc.
-const sendForm = () => {
-    //turning into array, so response can be iterated
-    const questions = Object.entries(participantAnswer).map(([key, value]) => ({ key, value }));
+const sendForm = async () => {
+  try {
+    // Structure
+    const participantResponse = {
+      answers: {},
+      demographic: participantAnswer.demographic || {}
+    }
 
-    //creating response-object
-    const participantResponse = {};
+    for (const [key, value] of Object.entries(participantAnswer)) {
+      if (key !== 'demographic') {
+        participantResponse.answers[key] = value
+      }
+    }
 
-    //making sure that it has "questions"
-    if (!participantResponse.questions) participantResponse.questions = {};
-
-    //inserting demographics-reply into demographics
-    participantResponse.demographic = participantAnswer.demographic
-
-    //iterating array created earlier. Used to make sure response is given in the correct format
-    questions.forEach(question =>{
-        //only inserting if it is not demographics
-        if (question.key !== 'demographic') participantResponse.questions[question.key] = question.value
+    await $fetch('/api/participants', {
+      method: 'POST',
+      body: {
+        studyId: props.study.id,
+        answers: participantResponse.answers,
+        demographic: participantResponse.demographic
+      }
     })
 
-    console.log("Should check if required fields are filled out, and seeeend. weewee wawoo")
+    console.log('Submitted')
+  } catch (err) {
+    console.error('Error submitting response:', err)
+    alert('Something went wrong while submitting your answers.')
+  }
 }
-
 </script>
 
 <style scoped>

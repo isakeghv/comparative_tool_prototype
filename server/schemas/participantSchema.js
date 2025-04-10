@@ -1,6 +1,12 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-// to be added later
+const participantSchema = new Schema({
+  study: { type: String, required: true },
+  answers: { type: Object, required: true },
+  demographic: { type: Object, default: {} },
+  status: { type: String, default: 'complete' },
+  submittedAt: { type: Date, default: Date.now }
+});
 
-export const Participant = mongoose.model("Participant", participantSchema);
+export default mongoose.models.Participant || mongoose.model('Participant', participantSchema);
