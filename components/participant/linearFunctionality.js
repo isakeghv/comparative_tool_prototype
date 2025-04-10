@@ -58,10 +58,10 @@ export const linear_drop = (id, question) => {
 
     //formatting what should be inserted so it shows the order, id of the artifacts and the question it is relative to
     const insert = {
-        number: linear_insertAt.value + 1,
+        // number: linear_insertAt.value + 1,
         id: linear_draggedArtifact.value.id,
         source: linear_draggedArtifact.value.source,
-        question: question
+        // question: question
     }
 
     //pushes to array of dropped artifacts, but only if the mouse if over the drop-area

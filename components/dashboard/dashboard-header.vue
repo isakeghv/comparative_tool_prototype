@@ -23,7 +23,8 @@
                     </svg>
                 </button>
             </div>
-            <button class="header__publish font-semi font-normal" @click="publishStudy" :disabled="wasStudyCreated.value">Publish</button>
+            <button v-if="!isDisabled" class="header__publish font-semi font-normal" @click="publishStudy">Publish</button>
+            <!-- <button v-if="!isDisabled" class="header__publish font-semi font-normal" @click="publishStudy" :disabled="isPublishedDisabled">Publish</button> -->
         </div>
         <slot></slot>
     </header>
@@ -47,6 +48,8 @@ console.log(props.isCreatingStudy);
 
 //event to emit in case the study was unable to save
 const emit = defineEmits(['unableSave'])
+
+const isPublishDisabled = computed(() => !wasStudyCreated.value);
 
 //saves it to "study.initial": 
 // - The "back" button prevents user from going back if the initial study-configuration is not
@@ -137,10 +140,10 @@ const publishStudy = async () => {
 
     const updatedStudy = await StudyService.publishStudy(study.id);
 
-    // update status to pushish, and set disabled to true
+    // update status to publish, and set disabled to true
     if (updatedStudy) {
         user.studies[studyIndex].status = 'ongoing';
-        isDisabled.value = true;
+        // isDisabled.value = true;
     }
 }
 </script>

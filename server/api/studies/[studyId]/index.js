@@ -27,7 +27,7 @@ const getStudy = async (e) => {
         // add future calculatiosn based on closing methods later
         const isOpen = study.status === "ongoing"
         
-        setResponseStatus(200);
+        setResponseStatus(201);
         return { found: true, message: "Study found successfully.", study, isOpen };
     } catch (err) {
         return { found: false, message: "Issue occured while fetching study.", error: err.message };

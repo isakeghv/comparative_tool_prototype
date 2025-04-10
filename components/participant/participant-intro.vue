@@ -48,10 +48,9 @@ const props = defineProps({
 // variable to disable the start button if the terms haven't been checked
 const isChecked = ref(false);
 const showPopup = ref(false);
-
 // toggle showing terms when clicking on the link
 const togglePopup = () => {
-  showPopup.value = !showPopup.value;
+	showPopup.value = !showPopup.value;
 };
 
 </script>

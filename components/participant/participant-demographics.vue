@@ -34,7 +34,7 @@ const formatQuestion = (question) =>{
 }
 
 //making sure that the demographics exists and is an object
-if (!participantAnswer.demographic) participantAnswer.demographic = {};
+if (!participantAnswer.demographic) participantAnswer.demographic = [];
 
 //updating the participant response in reactive variable
 const updateDemographics = (id, question, res) =>{

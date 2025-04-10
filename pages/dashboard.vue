@@ -1,5 +1,5 @@
 <template>
-	<DashboardHeader :name="displayName" :isCreatingStudy="isCreatingStudy" @unableSave="(reason) => displayUnableSaveBox(true, reason)" />
+	<DashboardHeader :name="displayName" :isCreatingStudy="isCreatingStudy" @unableSave="(reason) => displayUnableSaveBox(true, reason)" :disabled="isReadOnly" />
 	<div class="container" v-if="showMain && !study.id">
 		<DashboardMain
             @newStudy="(id) => onNewStudy(id)" 

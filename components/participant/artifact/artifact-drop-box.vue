@@ -1,6 +1,6 @@
 <template>
 
-    <div class="question__cont--btm drop_box" @mouseover="mouseover" @mouseleave="mouseleave" @mouseup="mouseup">
+    <div class="drop_box" @mouseover="mouseover" @mouseleave="mouseleave" @mouseup="mouseup">
         <p class="drop_text">{{ box }}</p>
         <div class="drop_container">
             <div class="artifact__container artifact__container--small artifact__borderless">
@@ -13,7 +13,7 @@
                     v-if="hasArtifact && isPdf(artifact.source)" />
                 <audio :src="artifact.source" :alt="artifact.id" :class="classname"
                     v-if="hasArtifact && isAudioFile(artifact.source)" />
-                <video :src="artifact" :alt="artifact.id" :class="classname"
+                <video :src="artifact" :alt="artifact.id" :class="classname"nu
                     v-if="hasArtifact && isVideoFile(artifact.source)" />
             </div>
         </div>

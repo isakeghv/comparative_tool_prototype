@@ -18,7 +18,7 @@
 <script setup>
 const props = defineProps({
     errors: Array,
-    reason: String
+    // reason: String
 });
 
 const emit = defineEmits(['exit']);
