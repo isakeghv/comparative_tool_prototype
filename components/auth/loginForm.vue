@@ -71,10 +71,10 @@ onMounted(() => {
 
 
   const renderCaptcha = () => {
-    window.turnstile?.render(`#${containerId}`, {
-      sitekey: '0x4AAAAAABDiqhbcAnsx6S1V',
-      theme: 'auto'
-    });
+	window.turnstile?.render(`#${containerId}`, {
+		sitekey: '0x4AAAAAABDiqhbcAnsx6S1V',
+		theme: 'light'
+	});
   };
 
   if (!window.turnstile) {

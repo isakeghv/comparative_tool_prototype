@@ -169,7 +169,7 @@ onMounted(() => {
     const renderCaptcha = () => {
         window.turnstile?.render(`#${containerId}`, {
             sitekey: '0x4AAAAAABDiqhbcAnsx6S1V',
-            theme: 'auto',
+            theme: 'light',
             callback: (token) => {
                 console.log("Turnstile token:", token);
             },

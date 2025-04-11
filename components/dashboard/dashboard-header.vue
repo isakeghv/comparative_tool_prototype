@@ -23,7 +23,7 @@
                     </svg>
                 </button>
             </div>
-            <button v-if="!isDisabled" class="header__publish font-semi font-normal" @click="publishStudy">Publish</button>
+            <button v-if="!isDisabled" class="header__publish font-semi font-normal" @click="publishStudy" :disabled=isCreatingStudy>Publish</button>
             <!-- <button v-if="!isDisabled" class="header__publish font-semi font-normal" @click="publishStudy" :disabled="isPublishedDisabled">Publish</button> -->
         </div>
         <slot></slot>
@@ -36,20 +36,17 @@ import StudyService from '~/services/studyService';
 import { user, study, initialStudy, wasStudyCreated } from '~/public/script/reactive';
 import { compareStudies } from '~/utils/studyUtils';
 
-const isDisabled = inject('disabled'); 
+const isDisabled = inject('disabled', false); 
 
 const props = defineProps({
     name: String,
     id: String,
+    // newStudy: Boolean,
     isCreatingStudy: Boolean
 })
 
-console.log(props.isCreatingStudy);
-
 //event to emit in case the study was unable to save
-const emit = defineEmits(['unableSave'])
-
-const isPublishDisabled = computed(() => !wasStudyCreated.value);
+const emit = defineEmits(['unableSave', 'updateNewStudyStatus'])
 
 //saves it to "study.initial": 
 // - The "back" button prevents user from going back if the initial study-configuration is not
@@ -93,6 +90,9 @@ const saveStudy = async () => {
             user.studies.push(JSON.parse(JSON.stringify(newStudy.study)));
             wasStudyCreated.value = true;
 
+            // toggle it off
+            emit('updateNewStudyStatus', false);
+
             // first update the tracking of the initial and current study
             updateSaveHistory();
 
@@ -104,7 +104,7 @@ const saveStudy = async () => {
         // if changes have happened, send a PUT request with the study data as the body
         const updatedStudy = await StudyService.updateStudy(study.id, study);
 
-        if (updatedStudy) {
+        if (updatedStudy && updatedStudy.study) {
             // find index of the study that is currently in progress and display correct information if changes have happened to UI w/o reloading
             const studyIndex = user.studies.findIndex(study => study.id === updatedStudy.study.id);
 
@@ -136,7 +136,10 @@ const publishStudy = async () => {
     const studyIndex = user.studies.findIndex(userStudy => userStudy.id === study.id);
 
     // don't update if status is already 'ongoing'
-    if (user.studies[studyIndex].status === 'ongoing') return;
+    if (user.studies[studyIndex].status === 'ongoing') {
+        // isDisabled.value = true;
+        return;
+    };
 
     const updatedStudy = await StudyService.publishStudy(study.id);
 

@@ -14,7 +14,7 @@ const optionModel = ref('');
 const emit = defineEmits(['update']);
 
 const input = () =>{
-    emit('update', optionModel.value)
+    emit('update', optionModel.value);
 }
 </script>
 

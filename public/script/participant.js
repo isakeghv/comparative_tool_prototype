@@ -5,6 +5,7 @@ export const participantId = reactive({
 
 //used to store the answers of the participant
 export const participantAnswer = reactive({
-    // demographic: [],
-    // question: []
+    demographic: [],
+    // planning to fix later...
+    // questions: []
 })

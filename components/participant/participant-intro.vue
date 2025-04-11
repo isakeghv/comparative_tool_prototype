@@ -28,9 +28,7 @@
 						<p>{{ study.customTerms.terms }}</p>
 					</div>
 				</div>
-
 			</div>
-
 		</section>
 		<div>
 			<button @click="handleStart" :disabled="!isChecked && study.customTerms.request" class="participant__button participant__button--start font-small font-semi">Start</button>

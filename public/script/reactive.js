@@ -34,7 +34,7 @@ export const study = reactive({
         request: false,
         terms: ''
     },
-    questions: []
+    questions: [],
 })
 
 // to hold the initial configuration. used to compare if user is trying to return and changes have been made.
@@ -55,7 +55,7 @@ export const initialStudy = reactive({
         request: false,
         terms: ''
     },
-    questions: []
+    questions: [],
 })
 
 // export const initialStudy = reactive({ ...study });

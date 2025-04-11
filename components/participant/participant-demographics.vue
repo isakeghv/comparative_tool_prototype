@@ -33,16 +33,21 @@ const formatQuestion = (question) =>{
 	return question.replace('Request', 'Your');
 }
 
-//making sure that the demographics exists and is an object
-if (!participantAnswer.demographic) participantAnswer.demographic = [];
+// //making sure that the demographics exists and is an array
+// if (!participantAnswer.demographic) participantAnswer.demographic = [];
 
 //updating the participant response in reactive variable
+if (!participantAnswer.demographic) participantAnswer.demographic = [];
+
 const updateDemographics = (id, question, res) =>{
 	const demographic = participantAnswer.demographic;
 
+	// set an object with id
 	if (!demographic[id]) demographic[id] = {};
-	if (!demographic[id].question) demographic[id].question = question;
-	demographic[id].response = res
+	// if (!demographic[id].question) demographic[id].question = question;
+
+	// only store answer response
+	demographic[id] = res;
 }
 
 // store the demographic array

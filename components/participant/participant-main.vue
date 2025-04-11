@@ -10,10 +10,14 @@
             <button @click="nextQuestion" v-else class="participant__button participant__button--next font-small font-semi">Next</button>
         </div>
     </main>
-    <main v-else class="participant__cont">
-        <!-- <h1 class="font-h5 font-semi">Thank you for filling the study.</h1> -->
-        <p>Thank you for completing the study! Your participation is greatly appreciated, and your input will help us move forward with our research.</p>
-        <button @click="downloadData" class="participant__button">Download your answers</button>
+    <main v-else class="participant__cont participant__cont--intro">
+        <div class="participant__section">
+            <h2 class="participant__title font-h4 font-semi">Thank you for completing the study.</h2>
+            <p>Your participation is greatly appreciated, and your input will help us move forward with our research.</p>
+        </div>
+        <div class="participant__section">      
+            <button @click="downloadData" class="participant__button participant__button--start font-small font-semi">Download your answers</button>
+        </div>
     </main>
 </template>
 
@@ -29,6 +33,7 @@ const props = defineProps({
 });
 
 const isSent = ref(false);
+const participantResult = ref(null);
 
 // store the questions array
 const questions = computed(() => props.study?.questions || []);
@@ -52,7 +57,6 @@ const totalSteps = computed(() => {
 
 // have to adjust the question indexing based on `demographicReq` (starts on -1 if it's true)
 const adjustedQuestionIdx = computed(() => {
-    console.log(showDemographics);
     return (showDemographics.value && props.study?.demographicReq) ? questionIndex.value - 1 : questionIndex.value;
 });
 
@@ -97,55 +101,38 @@ const sendForm = async () => {
         };
     });
 
-    console.log(Object.entries(participantAnswer));
-
     //creating response-object
     const participantResponse = {};
 
     //making sure that it has "questions"
     if (!participantResponse.questions) participantResponse.questions = [];
 
-
-/*
-    for (const [key, value] of Object.entries(participantAnswer)) {
-      if (key !== 'demographic') {
-        participantResponse.answers[key] = value
-      }
-    }
-
-    await $fetch('/api/participants', {
-      method: 'POST',
-      body: {
-        studyId: props.study.id,
-        answers: participantResponse.answers,
-        demographic: participantResponse.demographic
-      }
-    })
-
-    console.log('Submitted')
-  } catch (err) {
-    console.error('Error submitting response:', err)
-    alert('Something went wrong while submitting your answers.')
-  }
-
-*/
-
-//iterating array created earlier. Used to make sure response is given in the correct format
+    //iterating array created earlier. Used to make sure response is given in the correct format
     questions.forEach(question =>{
         //only inserting if it is not demographics
-        if (question.key !== 'demographic') participantResponse.questions[question.id] = question.value
+        participantResponse.questions[question.id] = question.value;
     })
 
-    const questionsObject = { questions: questions }
+
+    // also need to map the demographic queestions
+    const demographic = Object.entries(participantAnswer.demographic).map(([id, demographicAnswer]) => {
+        return { id: id, answer: toRaw(demographicAnswer) };
+    });
+
+    // combine demographic answers with main questions
+    participantResponse.demographic = demographic;
+    participantResponse.questions = questions;
 
     // send participant study and update participant ->  should status to 'completed brb
-    const updateSession = await ParticipantService.updateParticipant(participantId.id, questionsObject);
+    const updateSession = await ParticipantService.updateParticipant(participantId.id, participantResponse);
 
     // if successful, switch to completion study page
     console.log(updateSession.updated);
-
+    console.log(updateSession);
+    
     if (updateSession.updated) {
         isSent.value = true;
+        participantResult.value = updateSession.result;
         emit('participantDone');
     }
 }
@@ -155,14 +142,11 @@ const downloadData = () => {
     // console.log(answers);
     // exportAsJson(answers);    
 
-    const rawData = toRaw(participantAnswer); 
-    const str = JSON.stringify(rawData);
+    const rawData = toRaw(participantResult.value); 
+    const str = JSON.stringify(rawData, null, 2);
     const blob = new Blob([str], { type: 'application/json' });
     const element = document.createElement('a');
-  
-
-    console.log(rawData, str);
-    
+      
     element.href = URL.createObjectURL(blob);
     element.download = "answers.json";
   

@@ -91,7 +91,7 @@ const defaultQuestions = [
         responseType: 'text',
         required: true,
         text: {
-            maxChar: ''
+            maxChar: 200
         },
         radio: {
             options: ['']

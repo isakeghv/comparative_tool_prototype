@@ -13,21 +13,23 @@ const updateParticipant = async (e, data) => {
 
     try {
         // find session by id, and update with the answers
-        const session = await Participant.findOneAndUpdate(
-            { _id: participantId }, 
+        const session = await Participant.findById(participantId);
 
-            // currently set the status to completed (we don't store partial answers currently)
-            { $set:
-                {'questions': data.questions, 
-                 'status': 'completed'}
-            }, 
-            { new: true, upsert: true });
+        if (!session) {
+            setResponseStatus(404);
+            return { updated: false, message: 'Participant not found' };
+        }
 
-        await session.save();
+        session.questions = data.questions;
+        session.demographic = data.demographic;
+        session.status = 'completed';
+
+        // cannot use 'findByIdAndUpdate' due to relying on a pre-hook to save `timeTaken` field
+        await session.save(); 
  
         console.log(session);
         setResponseStatus(200);
-        return { updated: true, message: 'Participant session updated successfully.', session};
+        return { updated: true, message: 'Participant session updated successfully.', result: session.toJSON() };
     } catch (err) {
         return { updated: false, message: 'Issue occurred while updating participant session.', error: err.message };
     }

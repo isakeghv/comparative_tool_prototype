@@ -36,7 +36,7 @@ export const box_drop = (id, index, box) => {
 
     participantAnswer[id][index] = {
         id: itemID,
-        // source: itemSource,
+        source: itemSource,
         label: boxLabel
     }
 

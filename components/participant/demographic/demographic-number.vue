@@ -17,7 +17,7 @@ const numberModel = ref();
 const emit = defineEmits(['update']);
 
 const input = () =>{
-    emit('update', numberModel.value)
+    emit('update', numberModel.value);
 }
 </script>
 

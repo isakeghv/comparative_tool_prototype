@@ -45,7 +45,7 @@
     width: 100%;
     color: c.$white;
     padding: 0.8rem;
-    margin: 3rem 0 1rem;
+    margin: 1.4rem 0 1rem;
     border-radius: 15px;
     border: none;
 
@@ -123,9 +123,6 @@
       transform: rotate(-45deg);
     }
   }
-  #turnstile-container {
-    margin: 1rem
-  }
 }
 
 
@@ -157,7 +154,11 @@
     }
 }
 
+#turnstile-container {
+  margin-top: 2rem;
+}
+
 // remove auto-fill color from Chrome browser: https://stackoverflow.com/questions/2781549/removing-input-background-colour-for-chrome-autocomplete
 input:-webkit-autofill { 
-  -webkit-background-clip: text;
+    -webkit-background-clip: text;
 }
