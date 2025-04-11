@@ -47,7 +47,7 @@ export default defineEventHandler(async (e) => {
     }
 
   //creating new completely unique file-name so no files have the same name by accident
-  const newName = `${randomUUID()}${extension}`
+  const newName = `${randomUUID()}.${extension}`
 
   //creating path for the uploaded file with correct, new, unique, file-name.
   const newPath = join(folderPath, newName)

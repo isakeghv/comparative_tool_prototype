@@ -13,6 +13,7 @@
     <main v-else class="participant__cont">
         <!-- <h1 class="font-h5 font-semi">Thank you for filling the study.</h1> -->
         <p>Thank you for completing the study! Your participation is greatly appreciated, and your input will help us move forward with our research.</p>
+        <button @click="downloadData" class="participant__button">Download your answers</button>
     </main>
 </template>
 
@@ -21,6 +22,7 @@
 const emit = defineEmits(['updateProgress', 'totalSteps', 'participantDone']);
 import ParticipantService from '~/services/participantService';
 import { participantId, participantAnswer } from '~/public/script/participant';
+// import { exportAsJson } from '#imports';
 
 const props = defineProps({
     study: Object
@@ -147,6 +149,29 @@ const sendForm = async () => {
         emit('participantDone');
     }
 }
+
+const downloadData = () => {
+    // const answers = Object.entries(participantAnswer);
+    // console.log(answers);
+    // exportAsJson(answers);    
+
+    const rawData = toRaw(participantAnswer); 
+    const str = JSON.stringify(rawData);
+    const blob = new Blob([str], { type: 'application/json' });
+    const element = document.createElement('a');
+  
+
+    console.log(rawData, str);
+    
+    element.href = URL.createObjectURL(blob);
+    element.download = "answers.json";
+  
+    // trigger the download, then remove the element after downloading
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+}
+
 </script>
 
 <style scoped>

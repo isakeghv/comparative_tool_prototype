@@ -4,32 +4,40 @@
 			<div class="question__panel question__panel--left">
 				<h2 class="question__headline font-h5 font-semi">{{ currentQuestion.question }}</h2>
 				<div class="question__list">
+
+					<!-- Radio buttons -->
+					<label v-if="responseType === 'radio'" v-for="artifact in artifactsArr" :key="artifact.id" class="question__option--radio">
+						<div class="artifact-container artifact__borderless">
+							<input type="radio" :name="currentQuestion.id" :value="artifact.id" v-model="selectedArtifact"
+									class="input-overlay"/>
+							<ArtifactMedia :artifact="artifact" :responseType="responseType" @selectMedia="selectMedia" :class="{ 'artifact--selected': participantAnswer[currentQuestion.id]?.includes(artifact.id) }"/>
+							<div class="wrapper wrapper--zero">
+								<ArtifactExpandButton @expand="() => selectMedia(artifact.source, artifact.id)" />
+							</div>
+						</div>
+					</label>
+
+					<!-- Checkbox -->
+					<label v-if="responseType === 'checkbox'"  v-for="artifact in artifactsArr" :key="artifact.id" class="question__options--horizontal">
+  						<div class="artifact-container artifact__borderless">
+							<input type="checkbox" :value="artifact.id" :checked="participantAnswer[currentQuestion.id]?.some(item => item.id === artifact.id)"
+								@change="toggleCheckbox(currentQuestion.id, artifact.id)" class="input-overlay"/>
+							<ArtifactMedia :artifact="artifact" :responseType="responseType" @selectMedia="selectMedia" :class="{ 'artifact--selected': participantAnswer[currentQuestion.id]?.some(item => item.id === artifact.id) }" />
+							<div class="wrapper wrapper--zero">
+								<ArtifactExpandButton @expand="() => selectMedia(artifact.source, artifact.id)" />
+							</div>
+  						</div>
+					</label>
+
+					<!-- linear -->
 					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id" :responseType="responseType"
 						:artifact="artifact" @selectMedia="selectMedia" @moving="(artifact) => linear_moving(artifact)"
 						@dropped="linear_drop(currentQuestion.id, currentQuestion.question)" v-if="responseType === 'linear'" />
 
+					<!-- drop -->
 					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id" :responseType="responseType"
 						:artifact="artifact" @selectMedia="selectMedia" @moving="(artifact) => box_moving(artifact)"
 						v-if="responseType === 'drop'" />
-
-						<!-- Radio buttns -->
-					<label v-for="artifact in artifactsArr" :key="artifact.id" class="question__option--radio">
-  						<div :class="['artifact-container', {'artifact--selected': participantAnswer[currentQuestion.id] === artifact.id}]">
-    						<input type="radio" :name="currentQuestion.id" :value="artifact.id" v-model="participantAnswer[currentQuestion.id]"
-								 class="radio-overlay"/>
-							<ArtifactDisplay :artifact="artifact" :responseType="responseType" @selectMedia="selectMedia"/>
-  						</div>
-					</label>
-
-					<!-- Checkbox -->
-					<div v-if="responseType === 'checkbox'" class="question__options--horizontal">
-  						<label v-for="artifact in artifactsArr" :key="artifact.id" class="artifact-container"
-							 :class="{ 'artifact--selected': participantAnswer[currentQuestion.id]?.includes(artifact.id) }">
-							<input type="checkbox" :value="artifact.id" :checked="participantAnswer[currentQuestion.id]?.includes(artifact.id)"
-								 @change="toggleCheckbox(currentQuestion.id, artifact.id)" class="input-overlay"/>
-    						<ArtifactDisplay :artifact="artifact" :responseType="responseType" @selectMedia="selectMedia"/>
-  						</label>
-					</div>
 				</div>
 			</div>
 
@@ -67,6 +75,9 @@ const props = defineProps({
 	questionIndex: Number
 });
 
+// ref for 'radio' option
+const selectedArtifact = ref('');
+
 // the response type of the question
 const currentQuestion = computed(() => props.questions?.[props.questionIndex] ?? {});
 const responseType = computed(() => currentQuestion.value?.responseType || '');
@@ -75,15 +86,12 @@ const responseType = computed(() => currentQuestion.value?.responseType || '');
 const selectedSource = ref('');
 const selectedId = ref('');
 
+const artifactsArr = ref([]);
+
 //randomize the order of the array, so that it is different each time
 const randOrder = (arr) => {
 	return arr.sort(() => Math.random() - 0.5);
 }
-
-const artifactsArr = computed(() => {
-	return randOrder(currentQuestion.value.artifacts)
-})
-
 
 const selectMedia = (source, id) => {
 	selectedSource.value = source;
@@ -92,13 +100,17 @@ const selectMedia = (source, id) => {
 
 const toggleCheckbox = (questionId, artifactId) => {
   const current = participantAnswer[questionId] || [];
-  if (current.includes(artifactId)) {
-    participantAnswer[questionId] = current.filter(id => id !== artifactId);
-  } else {
-    participantAnswer[questionId] = [...current, artifactId];
-  }
-};
+  
+  // check if the artifact already exists in the current selection
+  const artifactExists = current.some(item => item.id === artifactId);
 
+	if (artifactExists) {
+		// remove if unchecked to avoid adding the same artifact
+		participantAnswer[questionId] = current.filter(item => item.id !== artifactId);
+	} else {
+		participantAnswer[questionId] = [...current, { id: artifactId }];
+	}
+};
 
 // track changes when the index gets updated, and close expanded window of an artifact
 watch(() => props.questionIndex, () => {
@@ -106,6 +118,22 @@ watch(() => props.questionIndex, () => {
 	selectedId.value = '';
 }, { deep: true, immediate: true });
 
+
+
+// need to do do the randomization instantely to avoid bug delay
+watchEffect(() => {
+	if (currentQuestion.value.artifacts) {
+		artifactsArr.value = randOrder([...currentQuestion.value.artifacts]);
+	}
+});
+
+watch(selectedArtifact, (newValue) => {
+	if (newValue) {
+		participantAnswer[currentQuestion.value.id] = [{ id: newValue }];
+	} else {
+		participantAnswer[currentQuestion.value.id] = [];
+	}
+});
 </script>
 
 <style scoped>

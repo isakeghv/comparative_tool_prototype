@@ -219,12 +219,19 @@
 	}
 
 	&__media {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		background-color: c.$white;
 	}
 
 	&__border {
 		border: v.$borderSolid;
 		border-radius: calc(0.5rem - 1px);
+
+		&:active {
+			outline: c.$cyan 2px solid;
+		}
 	}
 
 	&__borderless {

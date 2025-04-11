@@ -63,10 +63,7 @@ const ParticipantSchema = new Schema({
 ParticipantSchema.pre('save', function (next) {
     if (this.status === 'completed') {
         const timeTaken = new Date() - this.startTime;
-
-        // store minutes in `timeTaken` fields, rounded down
-        this.timeTaken = Math.floor(timeTaken / 60000);
-        }
+    }
 
     next();
 });

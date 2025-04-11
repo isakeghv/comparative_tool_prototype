@@ -22,3 +22,22 @@ export const isVideoFile = (file) => {
     const extension = file.slice(file.lastIndexOf('.')).toLowerCase();
     return extensions.includes(extension);
 }
+
+// import { toRaw } from '@vue/reactivity';
+
+// // https://stackoverflow.com/questions/58054479/how-can-i-save-some-json-dataarray-on-button-click-as-somename-json-fil
+// export const exportAsJson = (data) => {
+//     const rawData = toRaw(data.value); 
+//     const str = JSON.stringify(rawData);
+//     const blob = new Blob([str], { type: 'application/json' });
+//     const element = document.createElement('a');
+  
+
+//     element.href = URL.createObjectURL(blob);
+//     element.download = "answers.json";
+  
+//     // trigger the download, then remove the element after downloading
+//     document.body.appendChild(element);
+//     element.click();
+//     document.body.removeChild(element);
+// }

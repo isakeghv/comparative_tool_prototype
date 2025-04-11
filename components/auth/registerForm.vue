@@ -73,45 +73,15 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { onMounted} from "vue";
-
 const lastName = ref("");
 const firstName = ref("")
 const email = ref("");
 const pwd = ref("");
 const showPassword = ref(false);
+
 // for the message modal
 const registerStatus = ref("");
 const statusMsg = ref("")
-
-
-onMounted(() => {
-  const containerId = 'turnstile-container';
-  const el = document.getElementById(containerId);
-  if (!el) return;
-
-
-  const renderCaptcha = () => {
-    window.turnstile?.render(`#${containerId}`, {
-      sitekey: '0x4AAAAAABDiqhbcAnsx6S1V',
-      theme: 'auto'
-    });
-  };
-
-  if (!window.turnstile) {
-    const script = document.createElement('script');
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
-    script.async = true;
-    script.defer = true;
-    document.body.appendChild(script);
-
-    script.onload = renderCaptcha;
-  } else {
-    renderCaptcha();
-  }
-});
-
 
 const emit = defineEmits(['toggle', 'userCreated'])
 
@@ -181,13 +151,6 @@ const registerUser = async () => {
         const login = await loginRes.json()
 
         if (login.isValid) location.reload();
-
-        // get token from header, and store the value in localStorage
-        // const token = loginRes.headers.get('Token');
-
-        // if (token) localStorage.setItem('token', token);
-        // if (token) console.log('Token has been set');
-
     } else {
         registerStatus.value = 'error';
         statusMsg.value = success.message
@@ -196,6 +159,39 @@ const registerUser = async () => {
     //returns from function to emit event which informs user with status and message
     return profileCreate(success.created, success.message);
 }
+
+onMounted(() => {
+    const containerId = 'turnstile-container';
+    const el = document.getElementById(containerId);
+    if (!el) return;
+
+
+    const renderCaptcha = () => {
+        window.turnstile?.render(`#${containerId}`, {
+            sitekey: '0x4AAAAAABDiqhbcAnsx6S1V',
+            theme: 'auto',
+            callback: (token) => {
+                console.log("Turnstile token:", token);
+            },
+            errorCallback: () => {
+                registerStatus.value = 'error';
+                statusMsg.value = 'Turnstile failed to load.';
+            }
+        });
+    };
+
+    if (!window.turnstile) {
+        const script = document.createElement('script');
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+        script.async = true;
+        script.defer = true;
+        document.body.appendChild(script);
+
+        script.onload = renderCaptcha;
+    } else {
+        renderCaptcha();
+    }
+});
 </script>
 
 <style scoped>

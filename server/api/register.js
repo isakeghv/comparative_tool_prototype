@@ -1,22 +1,25 @@
 import bcrypt from "bcryptjs";
 import validator from "validator";
 import { readBody, setResponseStatus } from "h3";
+import { useRuntimeConfig } from '#imports';
 import { connDb } from '~/server/services/connDb.js';
 import { UserCredential, UserProfile } from '../schemas/userSchema.js';
+
+const config = useRuntimeConfig();
 
 const checkEmail = async (email) => {
 	const existingUser = await UserCredential.findOne({ email });
 
 	if (existingUser) {
 		// setting response to 200 to confirm that email was found
-		setResponseStatus(event, 200);
+		setResponseStatus(e, 200);
 		return { created: false, message: "User with this email already exists." };
 	}
 
 	return null;
 }
 
-const createUser = async (fname, lname, email, pwd) => {
+const createUser = async (fname, lname, email, pwd, e) => {
 	//hashing password so that it is secure. "12" is for the salt rounds it will do: 12-14= safer
 	const hashedPassword = await bcrypt.hash(pwd, 12);
 
@@ -40,48 +43,53 @@ const createUser = async (fname, lname, email, pwd) => {
 			newUserP.save()
 		]);
 
-		setResponseStatus(event, 201);
+		setResponseStatus(e, 201);
 		
 		//return status and message that account has been created
 		return { created: true, message: "Account successfully created." };
 	} catch (err) {
 		console.log(err);
-		setResponseStatus(event, 500);
+		setResponseStatus(e, 500);
 
 		//return false status and message that there was issue creating the account
 		return { created: false, message: "Issue occured while creating account." };
 	}
 }
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (e) => {
 	// connect to db
 	await connDb();
-	const body = await readBody(event);
+	const body = await readBody(e);
 	const { firstname, lastname, email, password, turnstileToken } = body;
 
-	// Verify Turnstile token
+	const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
+	
+
+// Verify Turnstile token
 const captchaRes = await $fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
 	method: 'POST',
 	body: new URLSearchParams({
-	  secret: TURNSTILE_SECRET_KEY,
-	  response: turnstileToken
-	})
-  });
-  
-  if (!captchaRes.success) {
-	setResponseStatus(event, 403);
-	return { created: false, message: 'CAPTCHA verification failed.' };
-  }
+		secret: TURNSTILE_SECRET_KEY,
+		response: turnstileToken
+		})
+	});
 
+	console.log(turnstileToken);
+	console.log('CAPTCHA result:', captchaRes);
+
+	if (!captchaRes.success) {
+		setResponseStatus(e, 403);
+		return { created: false, message: 'CAPTCHA verification failed.' };
+	}
 
 	//validation
 	if (!firstname || !lastname || !email || !password) {
-		setResponseStatus(event, 400)
+		setResponseStatus(e, 400)
 		return { created: false, message: "All fields are required."}
 	}
 	// Email validation
 	if (!validator.isEmail(email)){
-		setResponseStatus(event, 400)
+		setResponseStatus(e, 400)
 		return {created: false, message: "Invalid email format."}
 	}
 	// Password validation must meet criteria
@@ -90,10 +98,9 @@ const captchaRes = await $fetch('https://challenges.cloudflare.com/turnstile/v0/
 		minUppercase: 1,
 		minNumbers: 1
 	})) {
-		setResponseStatus(event, 400)
+		setResponseStatus(e, 400)
 		return { created:false, message: "Password must be at least 8 characters long and include, uppercase letter and a number."}
 	}
-
 
 	//Sanitize
 	const cleanFirstName = validator.escape(firstname.trim());
@@ -102,11 +109,11 @@ const captchaRes = await $fetch('https://challenges.cloudflare.com/turnstile/v0/
 	const cleanPassword = password.trim();
 
 	// if checkEmail returns a value, return and don't continue executing the rest of the code
-	const emailExist = await checkEmail(cleanEmail, event);
+	const emailExist = await checkEmail(cleanEmail, e);
 	
 	if (emailExist) {		
 		return emailExist;
 	}	
 
-	return await createUser(cleanFirstName, cleanLastName, cleanEmail, cleanPassword, event);
+	return await createUser(cleanFirstName, cleanLastName, cleanEmail, cleanPassword, e);
 });

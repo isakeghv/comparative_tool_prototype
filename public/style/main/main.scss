@@ -95,3 +95,12 @@ body {
 		font-size: clamp(0.619rem, 0.4974rem + 0.5194vw, 0.9rem);
 	}
 }
+
+input[type="radio"] {
+	accent-color: c.$bluePrimary;
+}
+
+input[type="checkbox"] {
+	accent-color: c.$bluePrimary;
+    color: c.$white;
+}

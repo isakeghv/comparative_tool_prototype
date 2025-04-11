@@ -3,16 +3,15 @@ import jwt from 'jsonwebtoken';
 import { useRuntimeConfig, setCookie } from '#imports';
 import validator from "validator";
 import { readBody, setResponseStatus } from "h3";
-const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
 import { connDb } from '~/server/services/connDb.js';
 import { UserCredential } from '../schemas/userSchema.js';
 
+// access runtime config variables
+const config = useRuntimeConfig();
+      
 // need to add functionality for token-checking, prevent brute-forcing etc. so this is temporary
 const checkPassword = async (email, pwd, event) => {
     try {
-        // access runtime config variables
-        const config = useRuntimeConfig();
-
         // retrieve the user by its email; if it doesn't exist, return a message indicating error
         const user = await UserCredential
                     .findOne({ email })
@@ -51,10 +50,6 @@ const checkPassword = async (email, pwd, event) => {
             //cookie is accessible to all pages
             path: '/',
         })
-        // set token in response header
-        /*setHeaders(e, {
-            'token': token
-        });*/
 
         // set status to OK; return status and message that login operation was successful
         setResponseStatus(event, 200);
@@ -73,7 +68,9 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event);
     const rawEmail = body.email?.toString() || "";
     const rawPassword = body.password.toString() || "";
-    const turnstileToken = ""
+    const turnstileToken = body.turnstileToken || "";
+    
+    const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
 
     const captchaRes = await $fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
         method: "POST",
