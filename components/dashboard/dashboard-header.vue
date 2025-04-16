@@ -17,14 +17,10 @@
                     </svg>
                 </button>
                 <DashboardUndoRedo v-if="!isDisabled" />
-                <button class="header__button" data-tooltip="Link">
-                    <svg class="header__icon" viewBox="0 -960 960 960" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path xmlns="http://www.w3.org/2000/svg" d="M680-80q-50 0-85-35t-35-85q0-6 3-28L282-392q-16 15-37 23.5t-45 8.5q-50 0-85-35t-35-85q0-50 35-85t85-35q24 0 45 8.5t37 23.5l281-164q-2-7-2.5-13.5T560-760q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-24 0-45-8.5T598-672L317-508q2 7 2.5 13.5t.5 14.5q0 8-.5 14.5T317-452l281 164q16-15 37-23.5t45-8.5q50 0 85 35t35 85q0 50-35 85t-85 35Z"/>
-                    </svg>
-                </button>
+                <DashboardLink :study="study" />
             </div>
-            <button v-if="!isDisabled" class="header__publish font-semi font-normal" @click="publishStudy" :disabled=isCreatingStudy>Publish</button>
-            <!-- <button v-if="!isDisabled" class="header__publish font-semi font-normal" @click="publishStudy" :disabled="isPublishedDisabled">Publish</button> -->
+            <button v-if="!isDisabled" class="header__btn header__btn--publish font-semi font-normal" @click="publishStudy" :disabled=isCreatingStudy>Publish</button>
+            <button v-if="study && study.status === 'ongoing'" class="header__btn header__btn--close font-semi font-normal" @click="closeStudy" :disabled="study.status === 'completed'">Close</button>
         </div>
         <slot></slot>
     </header>
@@ -36,7 +32,7 @@ import StudyService from '~/services/studyService';
 import { user, study, initialStudy, wasStudyCreated } from '~/public/script/reactive';
 import { compareStudies } from '~/utils/studyUtils';
 
-const isDisabled = inject('disabled', false); 
+const isDisabled = inject('disabled', ref(false));
 
 const props = defineProps({
     name: String,
@@ -127,7 +123,6 @@ const publishStudy = async () => {
 
     // if there is changes and it hasn't been created yet, show a prompt box telling them to save, else publish the study
     // TODO: add more checks here omg
-    console.log(noChanges);
     if (!noChanges) {
         emit('unableSave', {reason: 'save'});
         return;
@@ -136,17 +131,33 @@ const publishStudy = async () => {
     const studyIndex = user.studies.findIndex(userStudy => userStudy.id === study.id);
 
     // don't update if status is already 'ongoing'
-    if (user.studies[studyIndex].status === 'ongoing') {
-        // isDisabled.value = true;
-        return;
-    };
+    if (study.status === 'ongoing') return;
 
     const updatedStudy = await StudyService.publishStudy(study.id);
 
     // update status to publish, and set disabled to true
     if (updatedStudy) {
-        user.studies[studyIndex].status = 'ongoing';
-        // isDisabled.value = true;
+        study.status = 'ongoing';
+        isDisabled.value = true;
+    }
+}
+
+
+// close stud
+const closeStudy = async () => {
+    const noChanges = compareStudies(study, initialStudy);
+
+    if (!noChanges) {
+        emit('unableSave', {reason: 'save'});
+        return;
+    }
+
+    if (study.status === 'closed') return;
+
+    // const updatedStudy = await StudyService.createStudy(study.id);
+
+    if (updatedStudy) {
+        study.status = 'completed';
     }
 }
 </script>

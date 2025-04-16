@@ -124,6 +124,8 @@ const populateStudy = (id) => {
 
 const onNewStudy = (id) => {
     study.id = id;
+    // manually set it status to 'draft' when study is created locally first
+    study.status = 'draft';
     isReadOnly.value = false;
     isCreatingStudy.value = true;
 }

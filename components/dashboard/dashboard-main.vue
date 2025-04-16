@@ -2,7 +2,7 @@
 	<aside class="aside">
 		<div class="aside__container">
 			<DashboardNewStudy @newStudy="(id) => emitNewStudy(id)" />
-			<DashboardFilter @filter="(study) => (filter = study)" />
+			<DashboardFilter @filter="(study) => (filter = study)" :activeFilter="filter" />
 		</div>
 		<div class="aside__container aside__container--small">
 			<button class="aside__button font-normal">Settings</button>

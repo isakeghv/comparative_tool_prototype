@@ -19,6 +19,7 @@ export const user = reactive({
 //reactive variable to hold the selected study-id and questions
 export const study = reactive({
     id: null,
+    // status: null,
     title: null,
     description: null,
     closingMethod: [],

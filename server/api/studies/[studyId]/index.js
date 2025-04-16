@@ -24,8 +24,8 @@ const getStudy = async (e) => {
         }
         ).lean();
 
-        // add future calculatiosn based on closing methods later
-        const isOpen = study.status === "ongoing"
+        // add future calculations based on closing methods later
+        const isOpen = study.status === 'ongoing';
         
         setResponseStatus(201);
         return { found: true, message: "Study found successfully.", study, isOpen };
