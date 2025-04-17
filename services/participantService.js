@@ -1,3 +1,22 @@
+// load all participants with a specific study
+const getParticipants = async (studyId) => {
+    try {
+        const response = await fetch(`/api/studies/${studyId}/participants`, {
+            method: 'GET'
+        })
+
+        if (!response.ok) {
+            throw new Error(`Failed to get participant sessions: ${response.statusText}`);
+        }
+
+        const participants = await response.json();
+        return participants; 
+    } catch (err) {
+        console.error('Error getting participant sessions', err);
+        throw err;
+    }
+}
+
 // initial 'Participant' only need id as the other relevant data is default
 const createParticipant = async (studyId) => {
     try {
@@ -20,7 +39,7 @@ const createParticipant = async (studyId) => {
         // return id of participant for storing answers later
         return participant.id; 
     } catch (err) {
-        console.log(err);
+        console.error(err);
         throw err;
     }
 }
@@ -41,7 +60,7 @@ const updateParticipant = async (participantId, data) => {
 
         return await response.json();
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
 }
 
@@ -51,7 +70,8 @@ const deleteParticipant = async () => {
 
 const ParticipantService = {
     createParticipant,
-    updateParticipant
+    updateParticipant,
+    getParticipants
 }
 
 export default ParticipantService;

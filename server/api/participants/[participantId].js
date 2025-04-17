@@ -1,6 +1,6 @@
 import { connDb } from '~/server/services/connDb.js';
 import { verifyToken } from '~/server/services/jwt.js';
-import { Participant } from "../../../schemas/participantSchema";
+import { Participant } from "../../schemas/participantSchema";
 
 const updateParticipant = async (e, data) => {
     const participantId = e.context.params?.participantId;

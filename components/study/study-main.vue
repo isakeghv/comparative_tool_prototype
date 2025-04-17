@@ -2,12 +2,27 @@
     <div class="study__container">
         <div class="study__main">
             <div class="study__header">
-                <label for="study_question_input" class="study__label study__headline font-h5 font-semi">Question</label>
-                <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question" :disabled=isDisabled>
+                <!-- responses -->
+                <div v-if="isDisabled" class="study__row study__headline">
+                    <div class="study__titles">
+                        <h2 class="font-h5 font-semi">Question</h2>
+                        <h3 class="font-h6 font-semi">Responses</h3>        
+                    </div>           
+                    <div class="study__options">
+                        <ResponsesSelection v-model="selectedView" :respondents="answers.length" />
+                    </div>
+                </div>
+                <!-- END -->
+
+                <label for="study_question_input" class="study__headline font-h5 font-semi" :class="{'hide': isDisabled}">Question</label>
+                <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question" :class="{'hide': isDisabled}">
             </div>
             
-        <!-- {{ study }} -->
-
+            <!-- responses -->
+             <ResponsesAll v-if="isDisabled && selectedView === 'all'" :question="config" :answers="currentAnswers"/>
+             <ResponsesIndividual v-else-if="isDisabled && selectedView === 'individual'" :question="config" :answers="currentAnswers"/>
+             <ResponsesGraphs v-else-if="isDisabled && selectedView === 'graphs'" :question="config" :answers="currentAnswers"/>
+            <!-- END -->
         <div class="artifact">
             <h3 class="artifact__headline font-h5 font-medium">Artifacts</h3>
             <div class="artifact__container" v-for="(artifact, i) in config.artifacts">
@@ -28,7 +43,7 @@
                                 fill="#444444" />
                         </svg>
                     </button>
-                    <button class="wrapper__button wrapper__button--radius">
+                    <button v-if=!isDisabled class="wrapper__button wrapper__button--radius">
                         <svg class="wrapper__icon" viewBox="0 0 15 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <mask id="path-1-inside-1_0_1" fill="white">
                                 <path d="M2 3H13V18H2V3Z" />
@@ -67,26 +82,24 @@
 
                 <div class="artifact__footer">
                     <p class="artifact__absolute" v-if="showInfo === i">
-                        All artifacts must have a unique identifier. You can set one yourself (recomended),
-                        use the file-name of the uploaded file (recomended if unique), or generate one by
-                        clicking the "generate unique id" button
+                        Each artifact needs a unique ID. You can set it manually, use the file name (if unique), or click 'Generate ID'.
                     </p>
                     <div class="artifact__row">
                         <p class="artifact__id" v-if="showArtifactId === i">{{ artifact.id }}</p>
                         <label :for="`artifact_id-${i}_input`" class="artifact__label">
-                            <span class="artifact__span">Id:</span>
+                            <span class="artifact__span">ID:</span>
                         </label>
-                        <span class="artifact__info" @mouseover="showInfo = i" @mouseleave="showInfo = null"
+                        <span v-if=!isDisabled class="artifact__info" @mouseover="showInfo = i" @mouseleave="showInfo = null"
                             aria-label="information about id">?</span>
                         <input type="text" :id="`artifact_id-${i}_input`" class="artifact__input artifact__input--small"
                             v-model="artifact.id" :placeholder="!artifact.id ? 'Id is required' : ''" @mouseover="showArtifactId = i" @mouseleave="showArtifactId = null">
                     </div>
                 </div>
-                <button class="artifact__button" @click="artifact.id = JSON.stringify(Date.now())">
-                    Generate unique id
+                <button v-if=!isDisabled class="artifact__button" @click="artifact.id = JSON.stringify(Date.now())">
+                    Generate ID
                 </button>
             </div>
-                <div class="artifact__container artifact__container--square">
+                <div v-if=!isDisabled class="artifact__container artifact__container--square">
                     <label for="study_file_input" class="artifact__add" aria-label="Choose file">
                         <svg class="artifact__plus" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 39.5H76M38 0V76" stroke="#444444" stroke-width="6" />
@@ -124,12 +137,19 @@ const isDisabled = inject('disabled');
 const props = defineProps({
     index: Number,
     id: String,
+    answers: Object,
+    // studyResponses: Array
 })
+
+console.log(props.answerMap);
 
 const showInfo = ref(null)
 const selectedSource = ref('');
 const selectedId = ref('');
 const showArtifactId = ref(false);
+
+// default view mode for responses
+const selectedView = ref('all'); 
 
 const selectMedia = (source, id) => {
     selectedSource.value = source;
@@ -156,6 +176,13 @@ const config = computed(() => {
     // neither with index nor id), if the one located with index is incorrect
     return iterateArr(props.id)
 })
+
+// send current answer information of question to be rendered
+const currentAnswers = computed(() => {
+    // console.log(config.value.id);
+    console.log(props.answers);
+    // return props.answerMap[config.value.id];
+});
 
 const uploadFile = async (e) => {
     const file = e.target.files[0];

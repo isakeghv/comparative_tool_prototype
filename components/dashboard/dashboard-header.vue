@@ -135,8 +135,9 @@ const publishStudy = async () => {
 
     const updatedStudy = await StudyService.publishStudy(study.id);
 
-    // update status to publish, and set disabled to true
+    // update status to publish, and set disabled to true; to insert the status to ongoing for the client-side
     if (updatedStudy) {
+        user.studies[studyIndex].status = 'ongoing';
         study.status = 'ongoing';
         isDisabled.value = true;
     }
@@ -157,6 +158,7 @@ const closeStudy = async () => {
     // const updatedStudy = await StudyService.createStudy(study.id);
 
     if (updatedStudy) {
+        user.studies[studyIndex].status === 'completed'
         study.status = 'completed';
     }
 }

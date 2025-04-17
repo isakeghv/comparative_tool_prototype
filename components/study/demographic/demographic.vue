@@ -7,7 +7,7 @@
                 <span class="demographic__span font-normal">Request demographics</span>
             </label>
             <label class="demographic__slider" :disabled=isDisabled>
-                <input type="checkbox" v-model="requestModel" id="demographic__request_checkbox" class="demographic__checkbox" @change="updateRequest()">
+                <input type="checkbox" v-model="requestModel" id="demographic__request_checkbox" class="demographic__checkbox" @change="updateRequest()" :disabled="isDisabled">
                 <span class="demographic__thumbnail" :class="{'demographic__thumbnail--active': requestModel}"></span>
             </label>
         </div>

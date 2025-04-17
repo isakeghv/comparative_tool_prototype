@@ -9,7 +9,7 @@
         />
 	</div>
     <!-- show study editor if id has been passed in, and show as read only/disabled if opened with select (read operation) -->
-    <StudyEditor v-if="study.id" :disabled="isReadOnly" />
+    <StudyEditor v-if="study.id" :disabled="isReadOnly" :studyResponses="studyResponses"/>
 
     <!--Prompt box informing user that study cannot be saved due to missing fields-->
     <DashboardUnableSave @exit="displayUnableSaveBox(false)" v-if="showUnableSaveBox && study.id" />
@@ -27,11 +27,15 @@
 <script setup>
 import { user, study, initialStudy } from '~/public/script/reactive';
 import StudyService from '~/services/studyService';
+import ParticipantService from '~/services/participantService';
 
 const showMain = ref(true);
 const displayName = ref('');
 const isReadOnly = ref(false);
 const status = ref('');
+
+// load study responses when 'onEdit' if it isn't a draft
+const studyResponses = ref([]);
 
 // reason why it wasn't possible to save
 const unableSaveReason = ref('');
@@ -89,28 +93,6 @@ const populateStudy = (id) => {
 
     // load the study with the data of selected study if it exists
     if (selectedStudy) {
-        // study.id = selectedStudy.id;
-        // study.title = selectedStudy.title;
-        // study.description = selectedStudy.description;
-        // study.demographicReq = selectedStudy.demographicReq;
-        // study.demographic = selectedStudy.demographic;
-        // study.customTerms = selectedStudy.customTerms;
-        // study.questions = selectedStudy.questions;
-        // study.desiredResponses = selectedStudy.desiredResponses;
-        // study.closingMethod = selectedStudy.closingMethod;
-        // study.closingLimit = selectedStudy.closingLimit;
-
-        // // use deep copy to avoid sharing references
-        // initialStudy.title = JSON.parse(JSON.stringify(selectedStudy.title));
-        // initialStudy.description = JSON.parse(JSON.stringify(selectedStudy.description));
-        // initialStudy.demographicReq = JSON.parse(JSON.stringify(selectedStudy.demographicReq));
-        // initialStudy.demographic = JSON.parse(JSON.stringify(selectedStudy.demographic));
-        // initialStudy.customTerms = JSON.parse(JSON.stringify(selectedStudy.customTerms));
-        // initialStudy.questions = JSON.parse(JSON.stringify(selectedStudy.questions));
-        // initialStudy.desiredResponses = JSON.parse(JSON.stringify(selectedStudy.desiredResponses));
-        // initialStudy.closingMethod = JSON.parse(JSON.stringify(selectedStudy.closingMethod));
-        // initialStudy.closingLimit = JSON.parse(JSON.stringify(selectedStudy.closingLimit));
-
         study.id = selectedStudy.id;
 
         // // use deep copy to avoid sharing references
@@ -130,11 +112,18 @@ const onNewStudy = (id) => {
     isCreatingStudy.value = true;
 }
 
-const onEditStudy = (id) => {
+const onEditStudy = async (id) => {
     populateStudy(id);
 
     // set 'isReadOnly' to false if current study is true
     isReadOnly.value = status.value !== 'draft';
+
+    if (status.value !== 'draft') {
+        // fetch all responses, and store in `studyResponses` ref
+        studyResponses.value = await ParticipantService.getParticipants(id);
+        console.log(studyResponses.value);
+    }
+
     isCreatingStudy.value = false;
 }
 

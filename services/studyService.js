@@ -19,7 +19,7 @@ const createStudy = async (data, userId) => {
 
         return await response.json();
     } catch (err) {
-        console.log(err); // update later am zzz
+        console.error(err); // update later am zzz
     }
 }
 
@@ -36,7 +36,7 @@ const fetchStudy = async (studyId) => {
 
     return await response.json();
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
 }
 
@@ -46,7 +46,6 @@ const updateStudy = async (studyId, questions) => {
         const response = await fetch(`/api/studies/${studyId}`, {
             method: 'PUT',
             body: JSON.stringify({
-                // demographic,
                 questions
             }),
             headers: {
@@ -60,7 +59,7 @@ const updateStudy = async (studyId, questions) => {
 
         return await response.json();
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
 }
 
@@ -74,7 +73,7 @@ const deleteStudy = async (studyId) => {
             throw new Error(`Failed to delete study: ${response.statusText}`);
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
 }
 
@@ -93,7 +92,7 @@ const publishStudy = async (studyId) => {
 
         return await response.json();
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
 }
 
@@ -112,7 +111,7 @@ const closeStudy = async (studyId) => {
 
         return await response.json();
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
 }
 

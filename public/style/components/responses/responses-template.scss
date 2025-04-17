@@ -1,0 +1,17 @@
+@use "../../variables/variables" as v;
+@use "../../variables/colors" as c;
+
+.responses {
+    &__cont {
+        // background-color: c.$white;
+        padding: 1.4rem 1.2rem;
+        display: flex;
+        z-index: 1;
+        border-radius: 0.5rem;
+        gap: 0.6rem;
+        border: v.$borderSolid;
+        margin-bottom: 3rem;
+        justify-content: flex-end;
+        flex-direction: column;
+    }
+}

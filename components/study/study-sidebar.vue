@@ -5,11 +5,11 @@
         <button class="sidebar__button font-normal" @click="changeDisplay('details')">
             Study details
         </button>
-        <button class="sidebar__button font-normal" @click="changeDisplay('demographics')">
+        <button class="sidebar__button font-normal" @click="changeDisplay('demographics')" :disabled="disableDemographics">
             Demographics
         </button>
         <button class="sidebar__button font-normal" @click="changeDisplay('terms')">
-            Terms and policy
+            Consent form
         </button>
         </div>
         <StudyList @select="(data)=>changeDisplay(data.query, data.number, data.id)"/>
@@ -18,6 +18,13 @@
 
 <script setup>
 import { study, initialStudy } from '~/public/script/reactive';
+const isDisabled = inject('disabled');
+
+// console.log(study.status);
+// console.log(study.demographicReq);
+const disableDemographics = computed(() => {
+    return study.status !== 'draft' && !study.demographicReq;
+});
 
 const currentConfig = computed(()=>{
     return {

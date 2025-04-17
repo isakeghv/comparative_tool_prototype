@@ -43,7 +43,6 @@ const studyLink = ref(null);
 const baseUrl = window.location.origin;
 const studyUrl = computed(() => `${baseUrl}/studies/${props.study.id}`);
 
-
 // show alert when successfully copied url
 const copyLink = () => {
   navigator.clipboard.writeText(studyUrl.value)
@@ -51,7 +50,6 @@ const copyLink = () => {
     .catch(_err => console.error('Failed to copy link. Please try again.'));
 };
 
-console.log(props.study);
 </script>
 
 <style scoped>

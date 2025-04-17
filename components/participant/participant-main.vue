@@ -127,9 +127,6 @@ const sendForm = async () => {
     const updateSession = await ParticipantService.updateParticipant(participantId.id, participantResponse);
 
     // if successful, switch to completion study page
-    console.log(updateSession.updated);
-    console.log(updateSession);
-    
     if (updateSession.updated) {
         isSent.value = true;
         participantResult.value = updateSession.result;

@@ -1,12 +1,12 @@
 
 import { connDb } from '~/server/services/connDb.js';
 import { verifyToken } from '~/server/services/jwt.js';
-import { Participant } from "../../schemas/participantSchema";
+import { Participant } from '~/server/schemas/participantSchema';
 
 const getResponsesByStudyId = async (e) => {
-    const studyId = e.context.params?.studytId;
+    const studyId = e.context.params?.studyId;
     try {
-        // find all participants that answered the study, and exclude uneccessary fields
+        // find all participants that answered the study in anscending order, and exclude uneccessary fields
         const participants = await Participant.find(
             { study: studyId },
             {
@@ -14,7 +14,7 @@ const getResponsesByStudyId = async (e) => {
                 study: 0,
                 _v: 0
             }
-        ).lean();
+        ).sort({ startTime: 1 }).lean();
         
         setResponseStatus(200);
         return participants;
@@ -24,7 +24,6 @@ const getResponsesByStudyId = async (e) => {
 }
 
 // add filtering for partial / completed responses idk
-
 export default defineEventHandler(async (e) => {
     verifyToken(e);
     await connDb();
