@@ -1,5 +1,7 @@
 <template>
-  <NuxtPage/>
+  <div class="app__wrapper">
+    <NuxtPage />
+  </div>
 </template>
 
 <script setup>

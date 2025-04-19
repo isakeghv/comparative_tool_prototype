@@ -3,7 +3,7 @@
     <div class="container">
         <StudySidebar @swapDisplay="(data) => toggleDisplay(data.component, data.number, data.id)"/>
         <Details v-if="showDetails" />
-        <Demographic v-if="showDemographics" :demographicMap="demographicMap"/>
+        <Demographic v-if="showDemographics" />
         <StudyConsentForm v-if="showTerms" />
         <StudyMain v-if="showQuestionMain" :index="questionIndex" :id="questionId" :answers="studyResponses" />
 	</div>

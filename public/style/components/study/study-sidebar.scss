@@ -4,7 +4,7 @@
 @mixin sidebar-slab {
     height: 2.4rem;
     border-radius: 10px;
-    border: solid #A4A4A4 1px;
+    border: solid  c.$gray 1px;
     background-color: transparent;
     box-shadow: 0 2px 1px 1px rgba(50, 50, 93, 0.25);
     margin-bottom: 0.8rem;
@@ -14,7 +14,7 @@
     display: flex;
     flex-flow: column;
     align-items: center;
-    width: clamp(14rem, 10rem + 8vw, 18rem);
+    width: clamp(14rem, 10rem + 8vw, 20rem);
     min-height: calc(100vh - 4rem);
     max-height: 100%;
     border-right: v.$borderSolid;
@@ -23,6 +23,8 @@
         display: flex;
         flex-flow: column;
         align-items: center;
+        width: 100%;
+        padding: 0 calc((100% - clamp(10rem, 7rem + 8vw, 15rem)) / 2);
     }
 
     &__return, &__button {
@@ -37,8 +39,8 @@
         background-color: transparent;
         border: none;
 
-        :hover {
-            color: gray;
+        &:hover {
+            background-color: c.$white-active;
         }
     }
 
@@ -49,10 +51,18 @@
     }
 
     &__button {
-        width: clamp(10rem, 7rem + 8vw, 14rem);
+        width: 100%;
         padding-left: 1rem;
         @include sidebar-slab();
         cursor: pointer;
+
+        &--active {
+            background-color: c.$blue-sidebar !important;
+        }
+
+        &:hover {
+            background-color: c.$white-active;
+        }
     }
 }
 
@@ -63,7 +73,7 @@
     &__header {
         display: flex;
         justify-content: space-between;
-        padding: 1.2rem 2rem 0.8rem;
+        padding: 1.2rem calc((100% - clamp(10rem, 7rem + 8vw, 14rem)) / 2);
         cursor: pointer;
     }
 
@@ -90,7 +100,7 @@
         flex-flow: column wrap;
         justify-content: center;
         align-items: center;
-        padding: 0 calc((100% - clamp(10rem, 7rem + 8vw, 14rem)) / 2);
+        padding: 0 calc((100% - clamp(10rem, 7rem + 8vw, 15rem)) / 2);
         text-decoration: none;
     }
 
@@ -100,7 +110,12 @@
         margin-bottom: 0.5rem;
         width: 100%;
         @include sidebar-slab;
+
+        &:hover {
+            background-color: c.$white-active;
+        }
     }
+    
     &__text {
         white-space: nowrap;
         overflow: hidden;

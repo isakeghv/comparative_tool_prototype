@@ -104,3 +104,10 @@ input[type="checkbox"] {
 	accent-color: c.$bluePrimary;
     color: c.$white;
 }
+
+.app__wrapper {
+	max-width: 2000px;
+	margin: 0 auto;
+	width: 100%;
+	height: 100%;
+}

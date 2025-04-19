@@ -7,18 +7,10 @@
     padding: $areaPadding;
 }
 
-@mixin left-area {
-    display: flex;
-    flex-flow: column nowrap;
-    flex: 1 1 22%;
-    padding: $areaPadding;
-    border-right: $borderSolid;
-}
-
 @mixin right-area {
     display: flex;
     flex-flow: column nowrap;
-    flex: 1 1 23%;
+    flex: 1 1 20%;
     border-left: $borderSolid;
 }
 
@@ -59,11 +51,24 @@
     left: 0;
 }
 
+@mixin circleHover() {
+    content: '';
+    position: absolute;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
 $mainAreaWidth: clamp(20rem, -4rem + 48vw, 50rem);
 $borderSolid: solid c.$lightGray 1px;
 $areaPadding: 2.4rem 2.2rem;
 $easeAnimation: all 0.3s ease-out;
-
+$hoverShadow: 0 0 15px 3px rgba(0, 0, 0, 0.2);
 
 
 

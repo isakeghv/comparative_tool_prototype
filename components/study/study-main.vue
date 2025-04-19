@@ -9,25 +9,27 @@
                         <h3 class="font-h6 font-semi">Responses</h3>        
                     </div>           
                     <div class="study__options">
-                        <ResponsesSelection v-model="selectedView" :respondents="answers.length" />
+                        <ResponsesSelection v-model="selectedView" :respondents="answers.length" @participantNum="handleParticipantUpdate" />
                     </div>
                 </div>
-                <!-- END -->
 
                 <label for="study_question_input" class="study__headline font-h5 font-semi" :class="{'hide': isDisabled}">Question</label>
                 <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question" :class="{'hide': isDisabled}">
             </div>
             
             <!-- responses -->
-             <ResponsesAll v-if="isDisabled && selectedView === 'all'" :question="config" :answers="currentAnswers"/>
-             <ResponsesIndividual v-else-if="isDisabled && selectedView === 'individual'" :question="config" :answers="currentAnswers"/>
-             <ResponsesGraphs v-else-if="isDisabled && selectedView === 'graphs'" :question="config" :answers="currentAnswers"/>
+             <div v-if="isDisabled">
+                <ResponsesAll v-if="selectedView === 'all'" :question="config" :answers="currentAnswers"/>
+                <ResponsesIndividual v-else-if="selectedView === 'individual'" :question="config" :participantData="currentAnswers"/>
+                <ResponsesGraphs v-else-if="selectedView === 'graphs'" :question="config" :answers="currentAnswers"/>
+             </div>
+
             <!-- END -->
         <div class="artifact">
             <h3 class="artifact__headline font-h5 font-medium">Artifacts</h3>
             <div class="artifact__container" v-for="(artifact, i) in config.artifacts">
                 <div class="wrapper">
-                    <button class="wrapper__button" @click="selectMedia(artifact.source, artifact.id)">
+                    <button class="wrapper__button" :class="{'wrapper__button--radius': isDisabled}" @click="selectMedia(artifact.source, artifact.id)">
                         <svg class="wrapper__icon" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M13.1899 7.99435C12.9946 8.18961 12.9946 8.50619 13.1899 8.70145C13.3852 8.89672 13.7017 8.89672 13.897 8.70145L13.1899 7.99435ZM21.3914 0.999988C21.3914 0.723846 21.1675 0.499988 20.8914 0.499988L16.3914 0.499989C16.1152 0.499989 15.8914 0.723846 15.8914 0.999989C15.8914 1.27613 16.1152 1.49999 16.3914 1.49999L20.3914 1.49999L20.3914 5.49999C20.3914 5.77613 20.6152 5.99999 20.8914 5.99999C21.1675 5.99999 21.3914 5.77613 21.3914 5.49999L21.3914 0.999988ZM13.897 8.70145L21.2449 1.35354L20.5378 0.646435L13.1899 7.99435L13.897 8.70145Z"
@@ -61,24 +63,8 @@
                         </svg>
                     </button>
                 </div>
-
-                <img :src="artifact.source" :alt="artifact.id" class="artifact__image" v-if="isImage(artifact.source)">
-                <svg class="artifact__icon" v-if="isAudioFile(artifact.source)" viewBox="0 0 88 72" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path d="M16 24L40 0V72L16 48H7C3.13401 48 0 44.866 0 41V36V31C0 27.134 3.13401 24 7 24H16Z"
-                        fill="black" />
-                    <path
-                        d="M71.7145 71.8564C81.7224 62.7135 88.0003 49.5561 88.0003 34.9324C88.0003 21.8353 82.9646 9.91431 74.7238 1L69.7461 5.97769C76.1583 13.884 80.0003 23.9596 80.0003 34.9324C80.0003 47.434 75.0132 58.7708 66.9199 67.0619L71.7145 71.8564Z"
-                        fill="black" />
-                    <path
-                        d="M61.5131 60.5592C67.9758 54.3701 72.0001 45.6551 72.0001 36.0002C72.0001 27.4139 68.8173 19.571 63.5672 13.5869L57.8944 19.2597C61.7044 23.7828 64.0001 29.6234 64.0001 36.0002C64.0001 43.446 60.8703 50.1607 55.8545 54.9006L61.5131 60.5592Z"
-                        fill="black" />
-                    <path
-                        d="M50.4646 49.5113C53.8976 45.846 55.9997 40.9187 55.9997 35.5005C55.9997 31.4142 54.8041 27.6072 52.7437 24.4102L46.8649 30.289C47.5934 31.8754 47.9997 33.6405 47.9997 35.5005C47.9997 38.7095 46.7904 41.6361 44.8027 43.8495L50.4646 49.5113Z"
-                        fill="black" />
-                </svg>
-                <embed :src="artifact.source" class="artifact__embed" type="application/pdf" v-if="isPdf(artifact.source)">
-                <video :src="artifact.source" class="artifact__video" preload="metadata" muted v-if="isVideoFile(artifact.source)"></video>
+                
+                <StudyArtifact :source="artifact.source" :id="artifact.id" />
 
                 <div class="artifact__footer">
                     <p class="artifact__absolute" v-if="showInfo === i">
@@ -125,7 +111,14 @@
 
         </div>
     <!-- forward id/index of a specific question to e.g. update its response format -->
-    <StudyAside :index="props.index" :id="props.id" />
+    <aside class="aside" v-if="!isDisabled">
+        <StudyAside :index="props.index" :id="props.id"/>
+    </aside>
+
+    <aside class="aside no-border" v-else>
+        <StudyAside :index="props.index" :id="props.id" @toggle="showSidebar = false" :class="{'slide__transform--out': showSidebar, 'slide__transform--in': !showSidebar}" />
+        <StudyAsideExports @toggle="showSidebar = true" />
+    </aside>
 </template>
 
 <script setup>
@@ -141,15 +134,16 @@ const props = defineProps({
     // studyResponses: Array
 })
 
-console.log(props.answerMap);
 
 const showInfo = ref(null)
 const selectedSource = ref('');
 const selectedId = ref('');
 const showArtifactId = ref(false);
+const showSidebar = ref(false);
 
 // default view mode for responses
 const selectedView = ref('all'); 
+const participantNum = ref(props.answers.length > 0 ? 1 : 0);
 
 const selectMedia = (source, id) => {
     selectedSource.value = source;
@@ -172,18 +166,49 @@ const config = computed(() => {
     //returning question if found
     if (question.id === props.id) return question
 
-    //returning question (or null if question cannot be found at all, 
-    // neither with index nor id), if the one located with index is incorrect
+    //returning question (or null if question cannot be found at all, neither with index nor id), if the one located with index is incorrect
     return iterateArr(props.id)
 })
 
+// store the participant number in a ref on emit, and use it to access the `studyResponses` array
+const handleParticipantUpdate = (number) => {
+    participantNum.value = number;
+}
+
+const formatAnswers = () => {
+    const map = {};
+
+    const rawResponses = toRaw(selectedResponse);
+    rawResponses?.value.demographic?.forEach((d) => {
+        if (d.id) map[d.id] = d.value;
+    });
+
+}
+
 // send current answer information of question to be rendered
 const currentAnswers = computed(() => {
-    // console.log(config.value.id);
+    if (selectedView.value === 'individual') {
+        if (participantNum.value < 1 || participantNum.value > props.answers.length) return;
+
+        // get the correct participant asked for, -1 due to zero-indexing
+        const selected = props.answers?.[participantNum.value - 1].questions;
+        console.log(selected);
+
+        // map it to a hashtable, and access it with `props.id` (if it exists)
+        const map = {};
+
+        selected.forEach((q) => {
+            if (q.id) map[q.id] = q.answer;
+        });
+
+        return map[props.id] ? map[props.id] : [];
+    }
+
     console.log(props.answers);
-    // return props.answerMap[config.value.id];
 });
 
+
+// [ { "id": "3708fdcf-a7b0-4df4-a8b9-bf380cc1f25f", "answer": [ { "id": "1.jpeg" } ] }, { "id": "d17f8c42-c2fa-4c63-926b-3ea06e93ded6", "answer": [ { "id": "03-Client-Server-Architecture (2).pdf" }, { "id": "lol.jpg" } ] }, { "id": "53b056c2-ad7b-42d1-9f13-0488b08aafb3", "answer": [ { "id": "1.jpeg", "label": "cute" }, { "id": "squeaky-toy-1-6059.mp3", "label": "perf" } ] }, { "id": "b362d530-fb3d-476c-8519-20796fad64df", "answer": [ { "id": "5534284-hd_1080_1920_30fps.mp4" } ] } ]
 const uploadFile = async (e) => {
     const file = e.target.files[0];
 

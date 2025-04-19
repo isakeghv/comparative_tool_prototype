@@ -76,6 +76,7 @@
         border: none;
         cursor: pointer;
         transition: background-color 0.1s ease-in-out;
+        display: flex;
 
         &[data-tooltip]::after {
             visibility: hidden; 
@@ -86,11 +87,12 @@
             left: 50%;
             transform: translateX(-50%);
             padding: 5px 10px;
-            background-color: c.$gray;
+            background-color: c.$darkGray;
             color: white;
             border-radius: 5px;
             font-size: 12px;
             white-space: nowrap;
+            z-index: 5;
             transition: opacity 0.3s ease-in-out;
         }
     
@@ -99,13 +101,17 @@
             opacity: 1;
         }
 
-        &:hover{
-            background-color: c.$white-active;
+        &:before {
+            @include v.circleHover();
         }
-        
-        &:active{
-            background-color: c.$gray;
+
+        &:hover:before {
+            background-color: rgba(c.$gray, 0.1);
         }
+    }
+
+    &__svg {
+        fill: c.$gray;
     }
 
     &__icon {
@@ -113,7 +119,7 @@
         height: 1.7rem;
 
         path {
-            fill: rgb(86, 86, 86);
+            fill: c.$darkGray;
         }
     }
 }
@@ -136,7 +142,7 @@
         border-radius: 0.5rem;
         gap: 0.6rem;
         border: v.$borderSolid;
-        box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.1);
+        box-shadow: v.$hoverShadow;
         z-index: 12;
     }
 

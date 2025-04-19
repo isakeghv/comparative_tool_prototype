@@ -23,7 +23,7 @@
         <ul class="question__list" ref="listRef" id="question__list">
             <!-- pass specific question config to question item-->
             <StudyItem @select="(data) => selectQuestion(data)" parent="#question__list" :config="question" :index="i"
-                v-for="(question, i) in questions" />
+                v-for="(question, i) in questions" :isActive="activeQuestionId === question.id" />
         </ul>
     </div>
 </template>
@@ -31,6 +31,10 @@
 <script setup>
 import { study } from '~/public/script/reactive';
 const isDisabled = inject('disabled');
+
+const props = defineProps({
+    activeQuestionId: String
+})
 
 const listRef = ref('')
 const emit = defineEmits(['select', 'newQuestion'])

@@ -1,7 +1,12 @@
 <template>
-    <aside class="aside">
-        <div class="aside__container">
+    <div :class="{'slide__cont--two': isDisabled}">
+        <div class="aside__container" :class="{'slide__cont': isDisabled}">
             <p class="font-large font-semi">Response format</p>
+            <button v-if=isDisabled class="slide__btn" @click="$emit('toggle')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="slide__svg">
+                    <path d="M500-640v320l160-160-160-160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm120-80v-560H200v560h120Zm80 0h360v-560H400v560Zm-80 0H200h120Z"/>
+                </svg>
+            </button>
         </div>
 
         <StudyResponseOption
@@ -35,7 +40,7 @@
                 Delete question
             </button>
         </div>
-    </aside>
+    </div>
 </template>
 
 <script setup>
@@ -47,7 +52,7 @@ const props = defineProps({
     id: String
 });
 
-const emit = defineEmits(['update:modelValue', 'deleteQuestion']);
+const emit = defineEmits(['update:modelValue', 'deleteQuestion', 'hideSidebar', 'toggle']);
 
 // only need to store if the question is required as ref due to response/question being handled by computed properties
 const requiredModel = ref(false);
@@ -77,6 +82,10 @@ const options = [
     { text: "Drag and drop", value: "drop" },
     { text: "Linear sorting", value: "linear" },
 ];
+
+const exit = () => {
+    emit('hideSidebar');
+}
 
 // update the response type when selected
 const updateResponseType = (newValue) => {

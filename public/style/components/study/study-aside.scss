@@ -1,9 +1,11 @@
 @use '../../variables/_colors.scss' as c;
 @use '../../variables/variables' as v;
 @use '../../variables/fonts' as f;
-
+  
 .aside {
     @include v.right-area;
+    position: relative;
+    overflow-x: hidden;
 
     &__container {
         display: flex;
@@ -17,6 +19,15 @@
 
         &--borderless {
             border: none;
+        }
+
+        &--end {
+            align-items: flex-end;
+            padding-right: 4.4rem;
+        }
+
+        &--exports {
+            padding-bottom: 0.8rem;
         }
     }
 
@@ -213,3 +224,93 @@
         }
     }
 }
+
+.slide {
+    &__cont {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        &--one {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            right: 0;
+            transition: transform 2s ease;
+        }
+
+        &--two {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            right: -100%;
+            background-color: c.$white;
+            z-index: 2;
+            transition: transform 0.2s ease;
+            border-left: v.$borderSolid;
+            height: 100%;
+        }
+    }
+
+    &__transform--out {
+        transform: translateX(-100%);
+    }    
+
+    &__transform--in {
+        transform: translateX(0);
+    }
+
+    &__btn {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        align-self: flex-end;
+        width: 1.6rem;
+        height: 1.6rem;
+        border: none;
+        background: none;
+        position: relative;
+
+        &:before {
+            @include v.circleHover();
+        }
+
+        &:hover:before {
+            background-color: rgba(c.$blueSecondary, 0.1);
+        }
+
+        &:hover .exit__svg {
+            fill: c.$blueSecondary-hover;
+        }
+    }
+
+    &__svg {
+        fill: c.$blueSecondary;
+    }
+}
+
+
+.exports {
+    &__cont {
+        display: flex;
+        flex-direction: column;
+        padding-right: 1.8rem;
+        margin: 0;
+        min-width: 0;
+        gap: 0.4rem;
+    }
+
+    &__options {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        text-decoration: underline;
+        gap: 0.4rem;
+    }
+}
+
+.no-border {
+    border: none;
+}
+

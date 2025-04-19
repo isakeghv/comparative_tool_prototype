@@ -14,7 +14,6 @@
 				class="select__number font-normal"
 				type="number"
 				v-model="participantModel"
-				@blur="onBlur"
 				:min='1'
 				:max='respondents'/>
 			<span class="font-normal">of</span>
@@ -41,10 +40,12 @@ const participantModel = ref(1);
 const isIndividualOption = computed(() => model.value === 'individual');
 
 // emit the number selected to parent to update the individual participant on blur (instead of everytime the value updates)
-const onBlur = () => {
-	emit('participantNum', participantModel.value);
-	console.log(participantModel.value);
-};
+watch(participantModel, (newVal) => {
+    if (newVal >= 1 && newVal <= (props.respondents ?? 1)) {
+        emit('participantNum', newVal);
+        console.log(newVal);
+    }
+});
 </script>
   
 <style scoped>

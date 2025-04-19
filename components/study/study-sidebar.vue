@@ -2,29 +2,26 @@
     <aside class="sidebar">
         <StudyReturn :current="currentConfig" :initial="initialStudy"/>
         <div class="sidebar__top">
-        <button class="sidebar__button font-normal" @click="changeDisplay('details')">
+        <button class="sidebar__button font-normal" :class="{ 'sidebar__button--active': activeTab === 'details' }" @click="changeDisplay('details')">
             Study details
         </button>
-        <button class="sidebar__button font-normal" @click="changeDisplay('demographics')" :disabled="disableDemographics">
+        <button v-if=isDisabled class="sidebar__button font-normal" :class="{ 'sidebar__button--active': activeTab === 'data' }" @click="changeDisplay('data')">
+            Study data
+        </button>
+        <button class="sidebar__button font-normal" :class="{ 'sidebar__button--active': activeTab === 'demographics' }" @click="changeDisplay('demographics')">
             Demographics
         </button>
-        <button class="sidebar__button font-normal" @click="changeDisplay('terms')">
+        <button class="sidebar__button font-normal"  :class="{ 'sidebar__button--active': activeTab === 'terms' }" @click="changeDisplay('terms')">
             Consent form
         </button>
         </div>
-        <StudyList @select="(data)=>changeDisplay(data.query, data.number, data.id)"/>
+        <StudyList @select="(data) => changeDisplay(data.query, data.number, data.id)" :activeQuestionId="activeQuestionId" />
     </aside>
 </template>
 
 <script setup>
 import { study, initialStudy } from '~/public/script/reactive';
 const isDisabled = inject('disabled');
-
-// console.log(study.status);
-// console.log(study.demographicReq);
-const disableDemographics = computed(() => {
-    return study.status !== 'draft' && !study.demographicReq;
-});
 
 const currentConfig = computed(()=>{
     return {
@@ -47,14 +44,20 @@ const currentConfig = computed(()=>{
     }
 })
 
+const activeTab = ref('details');
+const activeQuestionId = ref(null);
+
 const emit = defineEmits(['swapDisplay'])
 
 //emitting, so the correct component is displayed in "study-create"
 const changeDisplay = (component, number = null, id = null) => {
-    emit('swapDisplay', { component, number, id })
-}
+    activeTab.value = component;
 
+    // used to detect which question to give an active color to
+    component === 'question' ? activeQuestionId.value = id : activeQuestionId.value = null;
 
+    emit('swapDisplay', { component, number, id });
+};
 </script>
 
 <style scoped>

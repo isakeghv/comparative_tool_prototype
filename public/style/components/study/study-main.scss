@@ -4,6 +4,8 @@
 .study {
 	&__container {
 		@include v.main-area;
+		padding-right: 4.4rem;
+		position: relative;
 	}
 
 	&__main {
@@ -160,7 +162,7 @@
 		border: v.$borderSolid;
 		flex: 1 0 19%;
 		width: 9rem;
-		max-width: 12rem;
+		max-width: 10rem;
 		border-radius: 0.5rem;
 		position: relative;
 
@@ -213,6 +215,11 @@
 		max-height: 80vh;
 	}
 
+	&__embed--hoverable {
+		position: relative;
+		z-index: -2;
+	}
+
 	&__image{
 		&--transition{
 			transition: border-radius 0.1s ease-in-out;
@@ -220,7 +227,7 @@
 
 		&--round{
 			border: none;
-			border-radius: 0.5rem;
+			border-radius: calc(0.5rem - 1px);
 		}
 	}
 
@@ -336,7 +343,7 @@
 		left: 100%;
 		z-index: 1;
 		transform: translateX(-50%);
-		box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.3);
+		box-shadow: v.$hoverShadow;
 	}
 
 	&__id {
@@ -351,8 +358,9 @@
 		left: 50%;
 		z-index: 1;
 		transform: translateX(-50%);
-		box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.3);
+		box-shadow: v.$hoverShadow;
 		animation: animateId 1s ease-in-out forwards;
+		min-height: 2.4rem;
 	}
 
 	&__button {
@@ -382,3 +390,19 @@
 	}
 }
 
+.embed {
+	&__wrapper {
+		overflow: hidden;
+	}
+
+	&__cont {
+		width: calc(100% + 17px);
+		// width: 100%;
+	}
+}
+
+.center {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}

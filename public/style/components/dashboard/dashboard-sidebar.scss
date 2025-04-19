@@ -24,12 +24,13 @@
         align-items: center;
 
         &--active {
-            background-color: c.$cyan-active !important;
+            background-color: c.$blue-sidebar !important;
         }
     }
 
     &__new, &__filter {
-        width: clamp(14rem, calc(10rem + 8vw), 18rem);
+        // width: clamp(14rem, calc(10rem + 8vw), 18rem);
+        width: 100%;
         padding: 1rem 2rem;
         background-color: transparent;
         border: none;

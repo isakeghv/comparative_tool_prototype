@@ -36,6 +36,7 @@ button{
     min-height: calc(100vh - 4rem);
     height: 100%;
     border-right: v.$borderSolid;
+    width: clamp(14rem, 10rem + 8vw, 20rem);
 
     &__container {
         display: flex;
@@ -58,7 +59,7 @@ button{
     &__button {
         display: flex;
         align-items: center;
-        width: clamp(14rem, calc(10rem + 6vw), 18rem);
+        // width: clamp(14rem, calc(10rem + 6vw), 18rem);
         padding: 1.2rem 2rem;
         background-color: transparent;
         border: none;
