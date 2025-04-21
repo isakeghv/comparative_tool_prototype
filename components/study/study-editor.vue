@@ -2,10 +2,11 @@
 <template>
     <div class="container">
         <StudySidebar @swapDisplay="(data) => toggleDisplay(data.component, data.number, data.id)"/>
+        <ResponsesData v-if="showStudyData" />
         <Details v-if="showDetails" />
         <Demographic v-if="showDemographics" />
         <StudyConsentForm v-if="showTerms" />
-        <StudyMain v-if="showQuestionMain" :index="questionIndex" :id="questionId" :answers="studyResponses" />
+        <StudyMain v-if="showQuestionMain" :index="questionIndex" :id="questionId" />
 	</div>
 </template>
 
@@ -38,16 +39,16 @@ const selectedResponse = computed(() => props.studyResponses?.[0] ?? {});
 //     return map;
 // });
 
-const demographicMap = computed(() => {
-    const map = {};
+// const demographicMap = computed(() => {
+//     const map = {};
 
-    const rawResponses = toRaw(selectedResponse);
-    rawResponses?.value.demographic?.forEach((d) => {
-        if (d.id) map[d.id] = d.value;
-    });
+//     const rawResponses = toRaw(selectedResponse);
+//     rawResponses?.value.demographic?.forEach((d) => {
+//         if (d.id) map[d.id] = d.value;
+//     });
 
-    return map;
-});
+//     return map;
+// });
 
 // show details as default when opening/creating a study
 const displayComponent = ref('details');
@@ -56,6 +57,11 @@ const questionId = ref()
 
 const showDetails = computed(()=>{
     return displayComponent.value === 'details'
+})
+
+
+const showStudyData = computed(()=>{
+    return displayComponent.value === 'data'
 })
 
 const showDemographics = computed(()=>{

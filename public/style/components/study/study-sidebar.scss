@@ -51,20 +51,28 @@
     }
 
     &__button {
+        @include sidebar-slab();
         width: 100%;
         padding-left: 1rem;
-        @include sidebar-slab();
         cursor: pointer;
-
-        &--active {
-            background-color: c.$blue-sidebar !important;
-        }
 
         &:hover {
             background-color: c.$white-active;
         }
+
+        &--active {
+            background-color: c.$blue-sidebar !important;
+        }
     }
 }
+
+// background-image: linear-gradient(to bottom, #4C68F0, #54C0D1);
+// transition: background 0.3s ease;
+// }
+
+// .study__new:hover {
+// filter: brightness(1.05);
+// }
 
 .question {
     width: 100%;

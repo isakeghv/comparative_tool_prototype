@@ -7,7 +7,7 @@
                 </svg>
             </button>
         </div>
-        <div class="exports__cont no-border">
+        <div v-if="isDisabled" class="exports__cont no-border">
             <div class="exports__options">
                 <a href="#" @click="exportData('json')">Export JSON</a>
                 <a href="#" @click="exportData('csv')">Export CSV</a>
@@ -17,6 +17,8 @@
 </template>
 
 <script setup>
+import { showResponses } from '~/public/script/reactive';
+const isDisabled = inject('disabled');
 const props = defineProps({
 });
 

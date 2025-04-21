@@ -4,7 +4,7 @@
     <div class="demographic demographic__container">
         <div class="details__main">
             <h2 class="demographic__headline font-h5 font-semi">Consent form</h2>
-            <div class="demographic__row demographic__row--remove">
+            <div class="demographic__row">
                 <span class="demographic__span font-normal">Include a custom consent form</span>
                 <label for="terms__request_checkbox" class="demographic__slider">
                     <input type="checkbox" v-model="requestModel" id="terms__request_checkbox" class="demographic__checkbox" @change="updateRequest()" :disabled=isDisabled>

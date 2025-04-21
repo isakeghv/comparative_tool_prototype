@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { study, initialStudy } from '~/public/script/reactive';
+import { study, initialStudy, showResponses } from '~/public/script/reactive';
 const isDisabled = inject('disabled');
 
 const currentConfig = computed(()=>{
@@ -46,6 +46,7 @@ const currentConfig = computed(()=>{
 
 const activeTab = ref('details');
 const activeQuestionId = ref(null);
+const responseMode = ref(false);
 
 const emit = defineEmits(['swapDisplay'])
 
@@ -58,6 +59,10 @@ const changeDisplay = (component, number = null, id = null) => {
 
     emit('swapDisplay', { component, number, id });
 };
+
+const toggleResponseMode = () => {
+    responseMode.value = !responseMode.value;
+}
 </script>
 
 <style scoped>

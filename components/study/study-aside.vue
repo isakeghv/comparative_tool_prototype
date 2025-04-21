@@ -1,8 +1,8 @@
 <template>
-    <div :class="{'slide__cont--two': isDisabled}">
-        <div class="aside__container" :class="{'slide__cont': isDisabled}">
+    <div class="slide__cont--two">
+        <div class="aside__container slide__cont">
             <p class="font-large font-semi">Response format</p>
-            <button v-if=isDisabled class="slide__btn" @click="$emit('toggle')">
+            <button class="slide__btn" @click="$emit('toggle')">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="slide__svg">
                     <path d="M500-640v320l160-160-160-160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm120-80v-560H200v560h120Zm80 0h360v-560H400v560Zm-80 0H200h120Z"/>
                 </svg>
@@ -44,7 +44,7 @@
 </template>
 
 <script setup>
-import { study } from '~/public/script/reactive';
+import { study, showResponses } from '~/public/script/reactive';
 const isDisabled = inject('disabled');
 
 const props = defineProps({

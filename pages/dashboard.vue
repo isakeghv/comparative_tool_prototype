@@ -9,7 +9,7 @@
         />
 	</div>
     <!-- show study editor if id has been passed in, and show as read only/disabled if opened with select (read operation) -->
-    <StudyEditor v-if="study.id" :disabled="isReadOnly" :studyResponses="studyResponses"/>
+    <StudyEditor v-if="study.id" :disabled="isReadOnly" />
 
     <!--Prompt box informing user that study cannot be saved due to missing fields-->
     <DashboardUnableSave @exit="displayUnableSaveBox(false)" v-if="showUnableSaveBox && study.id" />
@@ -34,8 +34,12 @@ const displayName = ref('');
 const isReadOnly = ref(false);
 const status = ref('');
 
-// load study responses when 'onEdit' if it isn't a draft
+// load study responses when 'onEdit' if it isn't a draft, and provide it to pass it within the subtree w/o prop-drilling too much
 const studyResponses = ref([]);
+provide('studyResponses', studyResponses);
+
+// provide the 'disabled' state to all child components as some of them are deeply nested instead of sending it as a prop to avoid prop drilling
+provide('disabled', isReadOnly);
 
 // reason why it wasn't possible to save
 const unableSaveReason = ref('');
@@ -49,9 +53,6 @@ const displayUnableSaveBox = (display, reason = '') => {
     showUnableSaveBox.value = display;
     unableSaveReason.value = reason;
 }
-
-// provide the 'disabled' state to all child components as some of them are deeply nested instead of sending it as a prop to avoid prop drilling
-provide('disabled', isReadOnly);
 
 const getUserInfo = async () => {
 	try {

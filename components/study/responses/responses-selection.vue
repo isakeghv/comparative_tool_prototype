@@ -8,7 +8,7 @@
 				<option value="graphs">graphs</option>
 			</select>
 		</div>
-		<div class="select__row" :class="{'select__hide': !isIndividualOption}">
+		<div class="select__row" :class="{'select__hide': !isIndividualOption || (respondents ?? 0) < 1}">
 			<label for="participant_number">{{ }}</label> 
 			<input id="participant_number"
 				class="select__number font-normal"
@@ -36,14 +36,15 @@ const model = computed({
 	set: (val) => emit('update:modelValue', val)
 })
 
+// set participantModel to the value in localStorage to remember latest participant checked when hiding/showing responses
 const participantModel = ref(1);
+
 const isIndividualOption = computed(() => model.value === 'individual');
 
-// emit the number selected to parent to update the individual participant on blur (instead of everytime the value updates)
+// emit to parent the new participant number, and persist the number so it is saved between re-rendering of components
 watch(participantModel, (newVal) => {
     if (newVal >= 1 && newVal <= (props.respondents ?? 1)) {
         emit('participantNum', newVal);
-        console.log(newVal);
     }
 });
 </script>

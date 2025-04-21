@@ -10,9 +10,10 @@
 </template>
 
 <script setup>
-import { study, initialStudy, wasStudyCreated } from '~/public/script/reactive'
+import { study, initialStudy, wasStudyCreated, showResponses } from '~/public/script/reactive'
 import { compareStudies } from '~/utils/studyUtils';
 const isDisabled = inject('disabled');
+const studyResponses = inject('studyResponses');
 
 const props = defineProps({
     current: Object,
@@ -94,8 +95,11 @@ const resetVariables = () => {
 }
 
 const goBack = () => {
-    // no need to check if study isn't editable anymore
+    // no need to check if study isn't editable anymore; delete item from localStorage that tracks which participant the researcher checks the result of
     if (isDisabled.value) {
+        localStorage.removeItem('latestParticipantNum');
+        studyResponses.value = [];
+        showResponses.value = false;
         return resetVariables();
     }
 

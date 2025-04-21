@@ -8,7 +8,7 @@
 				
 				<div v-for="question in questions">
 					<div v-if="question.request" class="participant__box">
-						<h3 class="participant__sub font-normal font-medium">{{ formatQuestion(question.question) }} <span v-if="question.required">*</span></h3>
+						<h3 class="participant__sub font-large font-medium">{{ formatQuestion(question.question) }} <span v-if="question.required">*</span></h3>
 						<component :is="getResponseComponent(question.responseType)" :question="question" @update="(response) => updateDemographics(question.id, question.question, response)"/>
 					</div>
 				</div>

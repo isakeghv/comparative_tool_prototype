@@ -75,17 +75,6 @@ const prevQuestion = () => {
     }
 };
 
-/* Participant-radio-checkbox
-const sendForm = async () => {
-  try {
-    // Structure
-    const participantResponse = {
-      answers: {},
-      demographic: participantAnswer.demographic || {}
-    }
-
-*/
-
 // TODO: send form if required fields are filled etc.
 const sendForm = async () => {
     //turning into array, so response can be iterated; map so it fits structure of schema

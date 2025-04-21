@@ -30,11 +30,7 @@
         margin-top: 0.4rem
     }
 
-    &__number {
-        @include v.inputArea(12rem);
-    }
-
-    &__date {
+    &__number, &__date {
         @include v.inputArea(12rem);
     }
 }

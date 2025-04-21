@@ -11,14 +11,17 @@
     }
 
     &__headline {
-        margin-bottom: 1.4rem;
-
         &::after {
             content: '';
             border-bottom: v.$borderSolid;
             width: 100%;
+            // width: clamp(20rem, -4rem + 48vw, 50rem);
             display: block;
             margin-top: 0.8rem;
+        }
+
+        &--margin {
+            margin-bottom: 1.4rem;
         }
     }
 
@@ -46,6 +49,7 @@
     &__svg {
         height: 1.6rem;
         cursor: pointer;
+        fill: rgb(131, 130, 130);
     }
 
     &__button {
@@ -114,3 +118,8 @@
         }
     }
 }    
+
+.aside-temp {
+	@include v.right-area;
+    visibility: hidden;
+}

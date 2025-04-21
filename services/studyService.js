@@ -77,36 +77,20 @@ const deleteStudy = async (studyId) => {
     }
 }
 
-const publishStudy = async (studyId) => {
+const updateStudyStatus = async (studyId, status) => {
     try {
-        const response = await fetch(`/api/studies/${studyId}/publish`, {
+        const response = await fetch(`/api/studies/${studyId}/status`, {
             method: 'PATCH',
+            body: JSON.stringify({
+                status: status
+            }),
             headers: {
                 'Content-Type': 'application/json',
             }
         })
 
         if (!response.ok) {
-            throw new Error(`Failed to publish study: ${response.statusText}`);
-        }
-
-        return await response.json();
-    } catch (err) {
-        console.error(err);
-    }
-}
-
-const closeStudy = async (studyId) => {
-    try {
-        const response = await fetch(`/api/studies/${studyId}/close`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-
-        if (!response.ok) {
-            throw new Error(`Failed to close study: ${response.statusText}`);
+            throw new Error(`Failed to update study status: ${response.statusText}`);
         }
 
         return await response.json();
@@ -120,8 +104,7 @@ const StudyService = {
     fetchStudy,
     updateStudy,
     deleteStudy,
-    publishStudy,
-    closeStudy
+    updateStudyStatus
 };
 
 

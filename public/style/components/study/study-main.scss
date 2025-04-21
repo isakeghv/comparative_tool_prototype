@@ -4,7 +4,6 @@
 .study {
 	&__container {
 		@include v.main-area;
-		padding-right: 4.4rem;
 		position: relative;
 	}
 
@@ -103,7 +102,7 @@
 	padding: 2.5rem 0.25rem 0.125rem;
 	background-color: white;
 	border: v.$borderSolid;
-	z-index: 3;
+	z-index: 12;
 	border-radius: 0.5rem;
 
 	&__img {
@@ -405,4 +404,9 @@
 	display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.aside-temp {
+	@include v.right-area;
+	visibility: hidden;
 }

@@ -43,7 +43,8 @@ const updateStudy = async(e, data) => {
     try {
         // find one with matching study id, update it, and return the updated version of the study
         const study = await Study.findOneAndUpdate({ id: studyId }, updateFields, { new: true });
-        // setResonseStatus here (someday)
+
+        setResponseStatus(200);
         return { updated: true, message: "Study updated successfully.", study};
     } catch (err) {
         console.log(err);
@@ -54,11 +55,11 @@ const updateStudy = async(e, data) => {
 const deleteStudy = async (e) => {
     const studyId = e.context.params?.studyId;
 
-    // use one of MongoDB's CRUD function to delete a study by its id
-    const study = await Study.findOneAndDelete({ id: studyId });
+    // use one of MongoDB's CRUD functions to delete a study by its id
+    await Study.findOneAndDelete({ id: studyId });
 
     try {
-        setResponseStatus(200);
+        setResponseStatus(204);
         return { found: true, message: "Study deleted successfully." };
     } catch (err) {
         return { found: false, message: "Issue occured while deleting study.", error: err.message };

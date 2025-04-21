@@ -2,29 +2,34 @@
     <div class="study__container">
         <div class="study__main">
             <div class="study__header">
-                <!-- responses -->
-                <div v-if="isDisabled" class="study__row study__headline">
+                <!-- responses header -->
+                <div v-if="showResponses" class="study__row study__headline">
                     <div class="study__titles">
                         <h2 class="font-h5 font-semi">Question</h2>
                         <h3 class="font-h6 font-semi">Responses</h3>        
                     </div>           
                     <div class="study__options">
-                        <ResponsesSelection v-model="selectedView" :respondents="answers.length" @participantNum="handleParticipantUpdate" />
+                        <ResponsesSelection v-model="selectedView" :respondents="studyResponses.length" @participantNum="handleParticipantUpdate" />
                     </div>
                 </div>
 
-                <label for="study_question_input" class="study__headline font-h5 font-semi" :class="{'hide': isDisabled}">Question</label>
-                <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question" :class="{'hide': isDisabled}">
+                <label for="study_question_input" class="study__headline font-h5 font-semi" :class="{'hide': showResponses}">Question</label>
+                <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question" :class="{'hide': showResponses}" :disabled="isDisabled">
             </div>
             
-            <!-- responses -->
-             <div v-if="isDisabled">
-                <ResponsesAll v-if="selectedView === 'all'" :question="config" :answers="currentAnswers"/>
-                <ResponsesIndividual v-else-if="selectedView === 'individual'" :question="config" :participantData="currentAnswers"/>
-                <ResponsesGraphs v-else-if="selectedView === 'graphs'" :question="config" :answers="currentAnswers"/>
-             </div>
+            <!-- responses options -->
+            <div v-if="showResponses">
+                <ResponsesAll v-show="selectedView === 'all' || selectedView === 'graphs'"
+                    :question="config"
+                    :respondents="studyResponses.length"
+                />
+                <ResponsesIndividual v-show="selectedView === 'individual'"
+                    :question="config"
+                    :participantData="questionResponse"
+                    :respondents="studyResponses.length"
+                />
+            </div>
 
-            <!-- END -->
         <div class="artifact">
             <h3 class="artifact__headline font-h5 font-medium">Artifacts</h3>
             <div class="artifact__container" v-for="(artifact, i) in config.artifacts">
@@ -108,42 +113,39 @@
             </audio>
             <video :src="selectedSource" controls class="expand__img" v-if="isVideoFile(selectedSource)"></video>
         </div>
-
-        </div>
-    <!-- forward id/index of a specific question to e.g. update its response format -->
-    <aside class="aside" v-if="!isDisabled">
-        <StudyAside :index="props.index" :id="props.id"/>
-    </aside>
-
-    <aside class="aside no-border" v-else>
+    </div>
+    
+    <aside class="aside no-border">
         <StudyAside :index="props.index" :id="props.id" @toggle="showSidebar = false" :class="{'slide__transform--out': showSidebar, 'slide__transform--in': !showSidebar}" />
         <StudyAsideExports @toggle="showSidebar = true" />
     </aside>
 </template>
 
 <script setup>
-import { study } from '~/public/script/reactive';
+import { study, showResponses, selectionData } from '~/public/script/reactive';
 import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
 
 const isDisabled = inject('disabled');
+const studyResponses = inject('studyResponses');
 
 const props = defineProps({
     index: Number,
     id: String,
-    answers: Object,
-    // studyResponses: Array
 })
 
+// make the 'id' prop reactive so it can be used in the function to get the individual response within the composable
+const idRef = toRef(props, 'id');
+
+// use a composable to export reactive functions (instead of having to repeat it both here and in `Demographics`)
+const { selectedView, handleParticipantUpdate, questionResponse } = useResponsesSelection(studyResponses.value, idRef);
 
 const showInfo = ref(null)
 const selectedSource = ref('');
 const selectedId = ref('');
 const showArtifactId = ref(false);
-const showSidebar = ref(false);
 
-// default view mode for responses
-const selectedView = ref('all'); 
-const participantNum = ref(props.answers.length > 0 ? 1 : 0);
+// show initially if study is ongoing
+const showSidebar = ref(true);
 
 const selectMedia = (source, id) => {
     selectedSource.value = source;
@@ -170,45 +172,6 @@ const config = computed(() => {
     return iterateArr(props.id)
 })
 
-// store the participant number in a ref on emit, and use it to access the `studyResponses` array
-const handleParticipantUpdate = (number) => {
-    participantNum.value = number;
-}
-
-const formatAnswers = () => {
-    const map = {};
-
-    const rawResponses = toRaw(selectedResponse);
-    rawResponses?.value.demographic?.forEach((d) => {
-        if (d.id) map[d.id] = d.value;
-    });
-
-}
-
-// send current answer information of question to be rendered
-const currentAnswers = computed(() => {
-    if (selectedView.value === 'individual') {
-        if (participantNum.value < 1 || participantNum.value > props.answers.length) return;
-
-        // get the correct participant asked for, -1 due to zero-indexing
-        const selected = props.answers?.[participantNum.value - 1].questions;
-        console.log(selected);
-
-        // map it to a hashtable, and access it with `props.id` (if it exists)
-        const map = {};
-
-        selected.forEach((q) => {
-            if (q.id) map[q.id] = q.answer;
-        });
-
-        return map[props.id] ? map[props.id] : [];
-    }
-
-    console.log(props.answers);
-});
-
-
-// [ { "id": "3708fdcf-a7b0-4df4-a8b9-bf380cc1f25f", "answer": [ { "id": "1.jpeg" } ] }, { "id": "d17f8c42-c2fa-4c63-926b-3ea06e93ded6", "answer": [ { "id": "03-Client-Server-Architecture (2).pdf" }, { "id": "lol.jpg" } ] }, { "id": "53b056c2-ad7b-42d1-9f13-0488b08aafb3", "answer": [ { "id": "1.jpeg", "label": "cute" }, { "id": "squeaky-toy-1-6059.mp3", "label": "perf" } ] }, { "id": "b362d530-fb3d-476c-8519-20796fad64df", "answer": [ { "id": "5534284-hd_1080_1920_30fps.mp4" } ] } ]
 const uploadFile = async (e) => {
     const file = e.target.files[0];
 

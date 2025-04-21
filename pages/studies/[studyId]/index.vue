@@ -79,7 +79,7 @@ const loadStudy = async (studyId) => {
         isOpen.value = response.isOpen;
 
         if (!isOpen.value) {
-            message.value = "The study is not open for participation.";
+            message.value = "The study is not open for participation anymore.";
         }
 
     } catch (error) {

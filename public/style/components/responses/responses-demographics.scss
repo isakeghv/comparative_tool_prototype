@@ -1,0 +1,39 @@
+@use "../../variables/variables" as v;
+@use "../../variables/colors" as c;
+
+.demo {
+    &__cont {
+        @include v.blockContainer();
+        gap: 1.4rem;
+    }
+
+    &__headline {
+        margin-bottom: 0.6rem;
+    }
+
+    &__option {
+        margin-bottom: 0.5rem;   
+        pointer-events: none;
+    }
+
+    &__textarea {
+        text-align: left;
+    }
+
+    &__textarea {
+        @include v.textArea(10rem);
+        width: 100%;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    &__number, &__date {
+        @include v.inputArea(12rem);
+    }
+}
+
+.greyed-out {
+    color: rgb(150, 150, 150);
+}
