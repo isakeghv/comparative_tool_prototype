@@ -41,12 +41,12 @@ const fetchStudy = async (studyId) => {
 }
 
 // send a PUT request to update the existing resource by replacing it
-const updateStudy = async (studyId, questions) => {
+const updateStudy = async (studyId, data) => {
     try {
         const response = await fetch(`/api/studies/${studyId}`, {
             method: 'PUT',
             body: JSON.stringify({
-                questions
+                ...data
             }),
             headers: {
                 'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ const updateStudy = async (studyId, questions) => {
 
         return await response.json();
     } catch (err) {
-        console.error(err);
+        console.log(err);
     }
 }
 

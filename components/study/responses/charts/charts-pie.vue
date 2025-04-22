@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
     <apexchart :type="type" :options="options" :series="series" width="380"></apexchart>
 </template>
   
@@ -85,4 +85,4 @@ export default {
         apexchart: VueApexCharts,
     }
 };
-</script> -->
+</script>

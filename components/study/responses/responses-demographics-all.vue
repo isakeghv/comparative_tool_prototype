@@ -72,10 +72,10 @@
                     <span class="demo__subheadline font-small">{{ questionCounts[q.id] || 0 }} responses</span>
                 </div>
                 <div class="charts__cont">
-                    <!-- <ChartsPie
+                    <ChartsPie
                         :type="'pie'"
                         :dataObj="countAnswers(q.answers, q.responseFormat.options)"
-                    /> -->
+                    />
                 </div>
             </div>
         </div>
