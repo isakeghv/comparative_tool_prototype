@@ -2,6 +2,7 @@
     <div class="responses__cont">
         <h2 class="responses__headline font-h5 font-medium">{{ question.question }} {{ question.required ? '*' : '' }}</h2>
 
+        <!-- {{ selectedResponse }} -->
         <div v-if="respondents === 0">
             No participant records available at the moment.
         </div>

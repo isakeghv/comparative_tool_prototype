@@ -3,15 +3,6 @@
         <div style="display: flex; gap: 0.8rem; justify-content: space-between;">
             <div>
                 <h2 class="demographic__headline font-h5 font-semi" :class="{'demographic__headline--margin': showResponses}">Demographics</h2>
-
-                <div v-show="showResponses">
-                    <ResponsesDemographics
-                        :respondents="studyResponses.length"
-                        :demographicReq="study.demographicReq"
-                        :demographic="study.demographic"
-                        :demographicData="demoResponse" />
-                </div>
-
                 <div v-if="!showResponses" class="demographic__main">
                     <div class="demographic__row">
                         <label for="demographic_request_checkbox" class="demographic__label">
@@ -27,7 +18,20 @@
                     <DemographicAdd @newQuestion="(id) => selectedId = id"/>
                 </div>
                 <div v-else class="demographic__main">
-   
+                    <ResponsesDemographicsAll v-if="selectedView === 'all' || selectedView === 'graphs'"
+                        :respondents="studyResponses.length"
+                        :demographicReq="study.demographicReq"
+                        :demographic="study.demographic"
+                        :selectedView="selectedView"
+                        :studyResponses="studyResponses"
+                    />
+                    <ResponsesDemographics
+                        v-else-if="selectedView === 'individual'"
+                        :respondents="studyResponses.length"
+                        :demographicReq="study.demographicReq"
+                        :demographic="study.demographic"
+                        :demographicData="demoResponse"
+                    />
                 </div>
             </div>
                 <ResponsesSelection v-if="showResponses" v-model="selectedView" :respondents="studyResponses.length" @participantNum="handleParticipantUpdate" />
@@ -35,7 +39,7 @@
         </div>
         
     <div class="aside-temp" v-if="selectedId === ''"></div>
-    <DemographicAside :id="selectedId" v-if="requestModel" />
+    <DemographicAside :id="selectedId" v-if="requestModel && !showResponses" />
 </template>
 
 <script setup>
@@ -137,8 +141,14 @@ const configs = computed(()=>{
     if (!study.demographicReq) return [];
     return study.demographic;
 })
-</script>
 
+// reset selectedId when not in 'individual' view
+watch(selectedView, (newValue) => {
+if (newValue !== 'individual') {
+    selectedId.value = ''; 
+    }
+});
+</script>
 <style scoped>
     @import url('public/style/components/demographics/demographics.scss');
 

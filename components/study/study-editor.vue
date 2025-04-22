@@ -19,37 +19,6 @@ const emit = defineEmits(['unableSave'])
 //     emit('unableSave', err);
 // };
 
-const props = defineProps({
-    studyResponses: Array
-});
-
-// compute the `studyResponses` props, and check if it has at least one response
-const selectedResponse = computed(() => props.studyResponses?.[0] ?? {});
-
-// for aggregated results ('all/graphs'): map both the `demographic` and `questions` of each participant to an object
-// in the format { questionId_1: [answers], questionId_2: [answers] }
-// const answerMap = computed(() => {
-//     const map = {};
-
-//     const rawResponses = toRaw(selectedResponse);
-//     rawResponses?.value.questions?.forEach((q) => {
-//         if (q.id) map[q.id] = q.answer;
-//     });
-
-//     return map;
-// });
-
-// const demographicMap = computed(() => {
-//     const map = {};
-
-//     const rawResponses = toRaw(selectedResponse);
-//     rawResponses?.value.demographic?.forEach((d) => {
-//         if (d.id) map[d.id] = d.value;
-//     });
-
-//     return map;
-// });
-
 // show details as default when opening/creating a study
 const displayComponent = ref('details');
 const questionIndex = ref();
@@ -86,8 +55,6 @@ const toggleDisplay = (component, number, id)=>{
     questionIndex.value = number
     questionId.value = id;
 }
-
-// console.log("readonly prop in setup:", props.disabled);
 </script>
 
 <style scoped>

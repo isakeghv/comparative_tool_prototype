@@ -139,6 +139,12 @@ const onDeleteStudy = (id) => {
     }
 }
 
+// remove items used to track what response type the user is viewing when the page is set up again (on reload)
+onMounted(() => {
+    sessionStorage.removeItem('participantNum');
+    sessionStorage.removeItem('selectedView');
+});
+
 </script>
 
 <style scoped>

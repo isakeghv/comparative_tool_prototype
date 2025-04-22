@@ -36,8 +36,8 @@ const model = computed({
 	set: (val) => emit('update:modelValue', val)
 })
 
-// set participantModel to the value in localStorage to remember latest participant checked when hiding/showing responses
-const participantModel = ref(1);
+// set participantModel to the value in sessionStorage to remember latest participant checked when hiding/showing responses
+const participantModel = ref(Number(sessionStorage.getItem('participantNum')) || 1);
 
 const isIndividualOption = computed(() => model.value === 'individual');
 

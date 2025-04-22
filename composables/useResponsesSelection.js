@@ -1,14 +1,14 @@
 export function useResponsesSelection(responses, idRef, initialView = 'all') {
-    // default view mode for responses
-    const selectedView = ref(initialView);
-    const participantNum = ref(responses?.length > 0 ? 1 : 0);
+    // store ref value in sessionStorage to get the latest updated value between demographic/questions
+    const selectedView = ref(sessionStorage.getItem('selectedView') || initialView);
+    const participantNum = ref(sessionStorage.getItem('participantNum') || 1);
 
     // store the participant number in a ref on emit, and use it to access the `studyResponses` array
     const handleParticipantUpdate = (number) => {
         participantNum.value = number;
     }
 
-    // send current answer information of question to be rendered
+    // send current answer information of question to be rendered, and change which response is viewed depending on `participantNum`
     const questionResponse = computed(() => {
         if (selectedView.value !== 'individual') return null;
         if (participantNum.value < 1 || participantNum.value > responses.length) return null;
@@ -43,6 +43,15 @@ export function useResponsesSelection(responses, idRef, initialView = 'all') {
         return map;
     });
     
+    // react to updated value, and updae the sessionStorage item
+    watch(selectedView, (newView) => {
+        sessionStorage.setItem('selectedView', newView);
+    });
+
+    watch(participantNum, (newParticipantNum) => {
+        sessionStorage.setItem('participantNum', newParticipantNum.toString());
+    });
+
     return {
         selectedView,
         handleParticipantUpdate,

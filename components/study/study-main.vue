@@ -19,11 +19,11 @@
             
             <!-- responses options -->
             <div v-if="showResponses">
-                <ResponsesAll v-show="selectedView === 'all' || selectedView === 'graphs'"
+                <ResponsesAll v-if="selectedView === 'all' || selectedView === 'graphs'"
                     :question="config"
                     :respondents="studyResponses.length"
                 />
-                <ResponsesIndividual v-show="selectedView === 'individual'"
+                <ResponsesIndividual v-if="selectedView === 'individual'"
                     :question="config"
                     :participantData="questionResponse"
                     :respondents="studyResponses.length"
@@ -122,7 +122,7 @@
 </template>
 
 <script setup>
-import { study, showResponses, selectionData } from '~/public/script/reactive';
+import { study, showResponses } from '~/public/script/reactive';
 import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
 
 const isDisabled = inject('disabled');

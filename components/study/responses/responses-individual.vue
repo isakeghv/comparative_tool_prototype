@@ -1,7 +1,7 @@
 <template>
     <!-- how the base question is structured -->
     <div class="responses__cont">
-        <h2 class="responses__headline font-h5 font-medium">{{ question.question }} {{ question.required ? '*' : '' }}</h2>
+        <h2 class="responses__headline font-h5 font-medium">{{ question.question }}</h2>
 
         <div v-if="respondents === 0">
             No participant records available at the moment.

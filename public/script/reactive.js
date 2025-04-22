@@ -12,12 +12,6 @@ export const wasStudyCreated = reactive({
 // show responses version of question/demographics section 
 export const showResponses = ref(false);
 
-// share selected responses view between demographics and questions
-export const selectionData = reactive({
-    participantNum: null,
-    selectionView: null
-})
-
 //to store information to display in ui. "info" for user-info: name etc, 
 // "studies" for the studies that is saved to user-id
 export const user = reactive({
