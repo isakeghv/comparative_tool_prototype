@@ -4,6 +4,7 @@ import { readBody, setResponseStatus } from "h3";
 import { useRuntimeConfig } from '#imports';
 import { connDb } from '~/server/services/connDb.js';
 import { UserCredential, UserProfile } from '../schemas/userSchema.js';
+import { checkRateLimit } from '../services/rateLimiter';
 
 const config = useRuntimeConfig();
 
@@ -63,16 +64,27 @@ export default defineEventHandler(async (e) => {
 	const { firstname, lastname, email, password, turnstileToken } = body;
 
 	const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
+
+	// RateLimiter
+	const ip = getRequestHeader(e, 'x-forwarded-for') || e.node.req.socket.remoteAddress;
+	const { allowed, retryAfter } = await checkRateLimit(ip, '/api/register');
+	if (!allowed) {
+ 		setResponseStatus(e, 429);
+		return {
+			created: false,
+			message: `Too many registration attempts. Try again in ${Math.ceil(retryAfter / 60000)} minutes.`
+		};
+	}
 	
 
-// Verify Turnstile token
-const captchaRes = await $fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-	method: 'POST',
-	body: new URLSearchParams({
-		secret: TURNSTILE_SECRET_KEY,
-		response: turnstileToken
-		})
-	});
+	// Verify Turnstile token
+	const captchaRes = await $fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+		method: 'POST',
+		body: new URLSearchParams({
+			secret: TURNSTILE_SECRET_KEY,
+			response: turnstileToken
+			})
+		});
 
 	console.log(turnstileToken);
 	console.log('CAPTCHA result:', captchaRes);
