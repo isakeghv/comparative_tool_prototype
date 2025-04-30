@@ -57,7 +57,7 @@ const cloneConfig = () => {
 cloneConfig();
 
 //function for handling if the current change is being done not at the beginning of the array
-const manageMiddleDiff =()=>{
+const manageMiddleDiff = () => {
     //copy the current config
     const currentConfig = JSON.parse(JSON.stringify(study));
 
@@ -76,19 +76,19 @@ const manageMiddleDiff =()=>{
 
 //handles changing which item in the "configurations" array is currently displayed
 const controller = (change) => {
-    
+
     const currentConfig = JSON.stringify(study);
 
     //purpose: To make sure the current config is backed up if going back before the 
     // config has been saved: so that current config can be returned to
     if (change > 0 && currentConfig !== lastConfig && hasChanged) {
-        configs.value.unshift({time: Date.now(), study: JSON.parse(JSON.stringify(study))});
+        configs.value.unshift({ time: Date.now(), study: JSON.parse(JSON.stringify(study)) });
     }
 
     //makes sure that user cannot go back, make a change before a backup is done and click redo to get the config before clicking "undo"
     if (change < 0 && currentConfig !== lastConfig && hasChanged) return;
 
-    
+
     const i = currentConfigIndex.value + change;
 
     //return if item does not exist
@@ -118,8 +118,13 @@ watch(
 );
 
 
-//Every 5 seconds, it checks if there has been made any change to the configuration
-setInterval(() => {
+//Every 3 seconds, it checks if there has been made any change to the configuration
+const interval = setInterval(() => {
+    if (!study?.id) {
+        clearInterval(interval)
+        return;
+    };
+
     if (hasChanged) {
         //saved for comparisment
         const currentConfig = JSON.stringify(study);
