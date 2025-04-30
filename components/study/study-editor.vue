@@ -12,6 +12,7 @@
 
 <script setup>
 import StudyConsentForm from './study-consent-form.vue';
+import { allUploadedArtifacts, study } from '~/public/script/reactive';
 
 const emit = defineEmits(['unableSave'])
 
@@ -44,6 +45,22 @@ const showQuestionMain = computed(()=>{
 const showTerms = computed(()=>{
     return displayComponent.value === 'terms'
 })
+
+//resets it when the editor page is loaded: to avoid any potential issues
+
+
+const trackExistingArtifacts = () =>{
+    allUploadedArtifacts.value = [];
+
+    study.questions.forEach(q => {
+    q.artifacts.forEach(a => {
+      const isInArr = allUploadedArtifacts.value.some(b => JSON.stringify(b) === JSON.stringify(a));
+      if (!isInArr) allUploadedArtifacts.value.push(a);
+    });
+  });
+}
+
+trackExistingArtifacts();
 
 //handles toggling of which component to display. "number = null" is responsible of handling which question to open
 const toggleDisplay = (component, number, id)=>{

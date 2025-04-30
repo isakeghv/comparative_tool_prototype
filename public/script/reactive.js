@@ -44,6 +44,9 @@ export const study = reactive({
 export const configs = ref([])
 export const currentConfigIndex = ref(0);
 
+//used for tracking all artifacts that have been uploaded;
+export const allUploadedArtifacts = ref([]);
+
 // to hold the initial configuration. used to compare if user is trying to return and changes have been made.
 //     to make sure user cannot return and lose changes
 export const initialStudy = reactive({

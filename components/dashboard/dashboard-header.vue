@@ -44,7 +44,7 @@
 <script setup>
 //importing reactive variable which holds the id of the study and where the study questions are stored
 import StudyService from '~/services/studyService';
-import { user, study, configs, currentConfigIndex, initialStudy, wasStudyCreated, showResponses } from '~/public/script/reactive';
+import { user, study, configs, currentConfigIndex, allUploadedArtifacts, initialStudy, wasStudyCreated, showResponses } from '~/public/script/reactive';
 import { compareStudies } from '~/utils/studyUtils';
 
 const isDisabled = inject('disabled', ref(false));
@@ -81,6 +81,29 @@ const updateSaveHistory = () => {
     });
 };
 
+const trackCurrentArtifacts = () => {
+    const currentUsedArtifacts = [];
+    const unusedArtifact = []
+
+    study.questions.forEach(q => {
+        q.artifacts.forEach(a => {
+            const isInArr = currentUsedArtifacts.some(b => JSON.stringify(b) === JSON.stringify(a));
+            if (!isInArr) currentUsedArtifacts.push(a);
+        });
+    });
+    allUploadedArtifacts.value.forEach(a => {
+        const isUsed = currentUsedArtifacts.find(b => a.source === b.source);
+        if (!isUsed) unusedArtifact.push(a.source);
+    })
+
+    return unusedArtifact;
+}
+
+//create logic here to delete from server
+const deleteUploads = async (unused) =>{
+    console.log(unused);
+}
+
 // when clicking on 'save', update the tracking of changes and create new study if it hasn't been created yet
 const saveStudy = async () => {
     // compare the two study states to see if there has been no changes
@@ -91,7 +114,11 @@ const saveStudy = async () => {
     // - because artifacts might get deleted when saving
     configs.value = []
     currentConfigIndex.value = 0;
-    
+
+    //this has to be above returning if "noChanges", because someone might upload, then remove an image.
+    // - If returning before this runs, it wont delete from the server
+    deleteUploads(trackCurrentArtifacts())
+
     //returning if no changes have been made
     if (noChanges) return;
 
