@@ -14,14 +14,13 @@
 </template>
 
 <script setup>
-import { study } from '~/public/script/reactive';
+import { study, configs, currentConfigIndex } from '~/public/script/reactive';
 
-const currentIndex = ref(0);
 let hasChanged = false;
 let lastConfig = JSON.stringify(study);
 
 //used for keeping track of the previous configs
-const configurations = ref([]);
+configs.value = [];
 
 //used for checking if a change has been made
 const equal = (a, b) => JSON.stringify(a) === JSON.stringify(b);
@@ -43,13 +42,13 @@ const cloneConfig = () => {
     const currentConfig = JSON.parse(JSON.stringify(study));
 
     //make sure that it does not push into beginning of the array if the current config is the same as the first item in the array
-    if (configurations.value[0] && equal(configurations.value[0].study, currentConfig)) return;
+    if (configs.value[0] && equal(configs.value[0].study, currentConfig)) return;
 
     //create a backup
     const backup = { time: Date.now(), study: JSON.parse(JSON.stringify(study)) };
 
     //input to front of array
-    configurations.value.unshift(backup)
+    configs.value.unshift(backup)
 
     //set to false as change has been made
     hasChanged = false;
@@ -63,13 +62,13 @@ const manageMiddleDiff =()=>{
     const currentConfig = JSON.parse(JSON.stringify(study));
 
     //remove earlier items in the array
-    configurations.value.splice(0, currentIndex.value);
+    configs.value.splice(0, currentConfigIndex.value);
 
     //reset number of the index used
-    currentIndex.value = 0;
+    currentConfigIndex.value = 0;
 
     //check that there has been done a change
-    if (!equal(configurations.value[0]?.study, currentConfig)) configurations.value.unshift({ time: Date.now(), study: currentConfig });
+    if (!equal(configs.value[0]?.study, currentConfig)) configs.value.unshift({ time: Date.now(), study: currentConfig });
 
     //set to false as the change has been done now
     hasChanged = false;
@@ -83,23 +82,23 @@ const controller = (change) => {
     //purpose: To make sure the current config is backed up if going back before the 
     // config has been saved: so that current config can be returned to
     if (change > 0 && currentConfig !== lastConfig && hasChanged) {
-        configurations.value.unshift({time: Date.now(), study: JSON.parse(JSON.stringify(study))});
+        configs.value.unshift({time: Date.now(), study: JSON.parse(JSON.stringify(study))});
     }
 
     //makes sure that user cannot go back, make a change before a backup is done and click redo to get the config before clicking "undo"
     if (change < 0 && currentConfig !== lastConfig && hasChanged) return;
 
     
-    const i = currentIndex.value + change;
+    const i = currentConfigIndex.value + change;
 
     //return if item does not exist
-    if (!configurations.value[i]) return;
+    if (!configs.value[i]) return;
 
     //update the index
-    currentIndex.value += change;
+    currentConfigIndex.value += change;
 
     //copy the other other configuration (the one to swap to)
-    const otherConfig = JSON.parse(JSON.stringify(configurations.value[i]));
+    const otherConfig = JSON.parse(JSON.stringify(configs.value[i]));
 
     //call function to change into other config
     if (otherConfig && otherConfig?.study) changer(otherConfig?.study);
@@ -126,7 +125,7 @@ setInterval(() => {
         const currentConfig = JSON.stringify(study);
 
         //if it is at the latest version, call "cloneConfig" to push to the front of the array
-        if (currentIndex.value === 0) cloneConfig();
+        if (currentConfigIndex.value === 0) cloneConfig();
 
         //if it is not at the latest version/config item in the configArray, it 
         // check if changes have been made, and calls "manageMiddleDiff" if true

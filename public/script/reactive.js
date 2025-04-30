@@ -40,6 +40,10 @@ export const study = reactive({
     questions: [],
 })
 
+//for keeping track of the configs for undo/redo functionality
+export const configs = ref([])
+export const currentConfigIndex = ref(0);
+
 // to hold the initial configuration. used to compare if user is trying to return and changes have been made.
 //     to make sure user cannot return and lose changes
 export const initialStudy = reactive({
