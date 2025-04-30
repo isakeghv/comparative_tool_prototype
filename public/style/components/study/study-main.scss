@@ -346,21 +346,10 @@
 	}
 
 	&__id {
-		position: absolute;
-		width: 15rem;
-		word-break: break-all;
-		padding: 0.5rem;
-		border-radius: 0.5rem;
-		background-color: white;
-		border: v.$borderSolid;
-		bottom: 100%;
-		left: 50%;
-		z-index: 1;
-		transform: translateX(-50%);
-		box-shadow: v.$hoverShadow;
+		@include v.tooltipBox;
 		animation: animateId 1s ease-in-out forwards;
-		min-height: 2.4rem;
 	}
+	
 
 	&__button {
 		width: calc(100% - 1rem);
@@ -372,6 +361,10 @@
 		background-color: c.$blueSecondary;
 		color: white;
 		transition: background-color 0.1s ease-in-out;
+	}
+
+	&__round {
+		border-radius: 0.5rem;
 	}
 }
 

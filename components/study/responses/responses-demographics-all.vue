@@ -3,7 +3,7 @@
         This study did not request any demographic information.
      </div>
 
-    <div v-else-if="respondents === 0" class="demo__cont">
+    <div v-else-if="respondents === 0 || formattedDemoData.length === 0" class="demo__cont">
         No participant records available at the moment.
     </div>
 
@@ -24,12 +24,12 @@
                     <thead class="table__thead">
                         <tr class="table__row table__row--head">
                         <th class="table__cell table__cell--head">Option</th>
-                        <th class="table__cell table__cell--head">Total</th>
+                        <th class="table__cell table__cell--head table__cell--total">Total</th>
                         </tr>
                     </thead>
                     <tbody class="table__tbody">
-                        <tr v-for="(count, option) in countAnswers(q.answers, q.responseFormat.options)" :key="option" class="table__row">
-                        <td class="table__cell">{{ option }}</td>
+                        <tr v-for="(count, option) in demoAnswerCounts[q.id]" :key="option" class="table__row">
+                        <td class="table__cell font-semi">{{ option }}</td>
                         <td class="table__cell">{{ count }}</td>
                         </tr>
                     </tbody>
@@ -72,10 +72,7 @@
                     <span class="demo__subheadline font-small">{{ questionCounts[q.id] || 0 }} responses</span>
                 </div>
                 <div class="charts__cont">
-                    <ChartsPie
-                        :type="'pie'"
-                        :dataObj="countAnswers(q.answers, q.responseFormat.options)"
-                    />
+                    <ChartsPie :dataObj="countAnswers(q.answers, q.responseFormat.options)" />
                 </div>
             </div>
         </div>
@@ -83,6 +80,8 @@
 </template>
 
 <script setup>
+import { countAnswers } from '~/utils/responseUtils.js';
+
 const props = defineProps({
     respondents: Number,
     demographicReq: Boolean,
@@ -90,6 +89,9 @@ const props = defineProps({
     selectedView: String,
     studyResponses: Array
 });
+
+// compute number of times an answers has been picked
+const counts = computed(() => countAnswers(answers, props.question.artifacts))
 
 // object to store how many respondents have answered each question
 const questionCounts = {};
@@ -129,12 +131,24 @@ const formattedDemoData = computed(() => {
 });
 
 
+// compute the count of how many time a question has been answered for each `radio` question
+console.log(formattedDemoData.value);
+
+const demoAnswerCounts = computed(() => {
+    const counts = {};
+    formattedDemoData.value.forEach((q) => {
+        if (q.responseType === 'radio') {
+            counts[q.id] = countAnswers(q.answers, q.responseFormat.options);
+        }
+    });
+    return counts;
+});
+
 // use built-in `reduce` to loop through and get the total, then get the average
 const calculateAverage = (arr) => {
     const total = arr.reduce((acc, num) => acc + Number(num), 0);
     return (total / arr.length).toFixed(2);
 }
-
 
 // calculate median of `Number` type questions
 const calculateMedian = (arr) => {
@@ -150,26 +164,6 @@ const calculateMedian = (arr) => {
     if (length % 2 !== 0) return numericArr[mid];
     return (numericArr[mid - 1] + numericArr[mid]) / 2;
 };
-
-
-// get the count of how many answered x option for `Radio` type questions
-const countAnswers = (answersArr, optionsArr) => {
-    const result = {};
-
-    // initializing a key for each answer option, and give all a starting value of 0
-    optionsArr.forEach((option) => {
-        result[option] = 0;
-    });
-
-    // loop over the answers, check if the answer is a valid property within `result` object, then increment
-    answersArr.forEach((answer) => {
-        if (result.hasOwnProperty(answer)) {
-            result[answer]++;
-        }
-    });
-
-    return result;
-}
 
 // loop through dates with the structure 'YYYY-MM-DD', set properties of years, months, and days, and count how many times each date appears
 const groupedDates = (arr) => {

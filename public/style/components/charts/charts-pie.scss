@@ -1,0 +1,44 @@
+@use '../../variables/_colors.scss' as c;
+@use '../../variables/_variables.scss' as v;
+
+.chart {
+    &__cont {
+        display: flex;
+        gap: 0.4rem;
+        align-items: flex-start;
+    }
+}
+
+.legend {
+    &__cont {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    &__item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    
+    &__dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    
+    &__text {
+        max-width: 20ch;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: default;
+    }
+
+}
+
+.tooltip {
+    @include v.tooltipBox;
+}

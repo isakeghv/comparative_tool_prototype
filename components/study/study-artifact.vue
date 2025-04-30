@@ -1,7 +1,7 @@
 <template>
     <div class="center">
-        <img v-if="isImage(source)" :src="source" :alt="id" :class="{'artifact__image--round': rounded}" class="artifact__image" />
-        <svg v-else-if="isAudioFile(source)" class="artifact__icon" :class="{'artifact__image--round': rounded}" viewBox="0 0 88 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <img v-if="isImage(source)" :src="source" :alt="id" :class="{'artifact__round': isRounded}" class="artifact__image" />
+        <svg v-else-if="isAudioFile(source)" class="artifact__icon" :class="{'artifact__round': isRounded}" viewBox="0 0 88 72" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M16 24L40 0V72L16 48H7C3.13401 48 0 44.866 0 41V36V31C0 27.134 3.13401 24 7 24H16Z"
                 fill="black" />
             <path
@@ -14,11 +14,8 @@
                 d="M50.4646 49.5113C53.8976 45.846 55.9997 40.9187 55.9997 35.5005C55.9997 31.4142 54.8041 27.6072 52.7437 24.4102L46.8649 30.289C47.5934 31.8754 47.9997 33.6405 47.9997 35.5005C47.9997 38.7095 46.7904 41.6361 44.8027 43.8495L50.4646 49.5113Z"
                 fill="black" />
         </svg>
-        <embed v-else-if="isPdf(source)" :src="source" class="artifact__embed articfact__embed--hoverable" :class="{'artifact__image--round': rounded}" type="application/pdf" />
-        <!-- <div v-else-if="isPdf(source)" class="artifact__embed--wrapper">
-            <embed :src="source" class="artifact__embed" :class="{'artifact__image--round': rounded}" type="application/pdf" />
-        </div> -->
-        <video v-else-if="isVideoFile(source)" :src="source" class="artifact__video" :class="{'artifact__image--round': rounded}" preload="metadata" muted></video>
+        <embed v-else-if="isPdf(source)" :src="source" class="artifact__embed articfact__embed--hoverable" :class="{'artifact__round': isRounded}" type="application/pdf" />
+        <video v-else-if="isVideoFile(source)" :src="source" class="artifact__video" :class="{'artifact__round': isRounded}" preload="metadata" muted></video>
     </div>
 </template>
 
@@ -28,7 +25,7 @@ import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
 defineProps({
     source: String,
     id: String,
-    rounded: Boolean // just to check if the whole artifact container should have rounded corners
+    isRounded: Boolean // just to check if the whole artifact container should have rounded corners
 });
 </script>
   

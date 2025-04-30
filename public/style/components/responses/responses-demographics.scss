@@ -99,12 +99,19 @@ $lighterGray: #f1f1f1;
 }
 
 .table {
+    position: relative;
+
     &__cont {
         width: 100%;
         border-collapse: collapse;
         border-radius: 0.3rem;
         overflow: hidden;
         background-color: c.$white;  
+
+        &--matrix {
+            width: initial;
+            border: v.$borderSolid;
+        }
     }
 
     &__thead {
@@ -117,10 +124,6 @@ $lighterGray: #f1f1f1;
         &:nth-child(even) {
             background-color: c.$white-active;
         }
-
-        &:hover {
-            background-color: rgba(0, 0, 0, 0.03);
-        }
     }
   
     &__cell {
@@ -131,9 +134,22 @@ $lighterGray: #f1f1f1;
         &--head {
             color: c.$white;
         }
+
+        &--artifact {
+            white-space: nowrap;
+            width: 1px;
+        }
+
+        &--total {
+            width: 20%;
+        }
+
+        &--matrix {
+            text-align: center;
+            border: v.$borderSolid;
+        }
     }
 }
-  
   
   
 .greyed-out {

@@ -34,8 +34,26 @@ const props = defineProps({
 });
 
 const hoveredIndex = ref(null);
-const labels = computed(() => Object.keys(props.dataObj));
-const series = computed(() => Object.values(props.dataObj));
+
+const labels = computed(() => {
+    // only unique labels are allowed for the chart
+    const labelSet = new Set();
+
+    Object.values(props.dataObj).forEach(obj => {
+        Object.keys(obj).forEach(k => labelSet.add(k));
+    });
+
+    return Array.from(labelSet);
+});
+
+const series = computed(() => {
+    return labels.value.map((label, idx) => ({
+        name: label,
+        data: Object.keys(props.dataObj).map(file => props.dataObj[file][label] || 0)
+    }));
+});
+
+const categories = computed(() => Object.keys(props.dataObj));
 
 // need to pick other colors later
 const colors = [
@@ -44,27 +62,34 @@ const colors = [
 ];
 
 const options = computed(() => ({
-	chart: {
-		type: 'pie',
-		animations: { enabled: false },
-		toolbar: { show: false }
-	},
-	labels: labels.value,
-	colors: colors,
-	tooltip: { enabled: true },
-	legend: { show: false },
-	plotOptions: {
-		pie: {
-			expandOnClick: false
-		}
-	}
+  chart: {
+        type: 'bar',
+        stacked: true,
+        animations: { enabled: false },
+        toolbar: { show: false }
+    },
+    xaxis: {
+        categories: categories.value
+    },
+    colors: colors,
+    tooltip: {
+        enabled: true
+    },
+    legend: {
+        show: false
+    },
+    plotOptions: {
+        bar: {
+            horizontal: false
+        }
+    }
 }));
 </script>
 
 <script>
 export default {
 	components: {
-		apexchart: VueApexCharts,
+		apexchart: VueApexCharts
 	}
 };
 </script>
