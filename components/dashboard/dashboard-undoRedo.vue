@@ -131,7 +131,7 @@ setInterval(() => {
         // check if changes have been made, and calls "manageMiddleDiff" if true
         else if (currentConfig !== lastConfig) manageMiddleDiff();
     }
-}, 5000);
+}, 3000);
 
 </script>
 
