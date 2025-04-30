@@ -84,6 +84,11 @@ const saveStudy = async () => {
     //returning if no changes have been made
     if (noChanges) return;
 
+    // ensuring study not duplicating in dashboard after changes
+    if (study.id && !wasStudyCreated.value) {
+    wasStudyCreated.value = true;
+    }
+
     // if study gets created, update the flag to true; 'isCreatingStudy' prop sent from 'Dashboard' component also has to be true
     if (!wasStudyCreated.value && props.isCreatingStudy) {
 
@@ -100,6 +105,9 @@ const saveStudy = async () => {
 
             // first update the tracking of the initial and current study
             updateSaveHistory();
+
+            localStorage.removeItem('unsavedStudy');
+            localStorage.removeItem('isEditingStudy');
 
         } else emit('unableSave');
         
@@ -120,6 +128,10 @@ const saveStudy = async () => {
             if (studyIndex !== -1) {
                 user.studies[studyIndex] = JSON.parse(JSON.stringify(updatedStudy.study));
             }
+
+            localStorage.removeItem('unsavedStudy');
+            localStorage.removeItem('isEditingStudy');
+
         } else emit('unableSave');
 
         return;
