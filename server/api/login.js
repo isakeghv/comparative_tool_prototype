@@ -5,6 +5,7 @@ import validator from "validator";
 import { readBody, setResponseStatus } from "h3";
 import { connDb } from '~/server/services/connDb.js';
 import { UserCredential } from '../schemas/userSchema.js';
+import { checkRateLimit } from '../services/rateLimiter';
 
 // access runtime config variables
 const config = useRuntimeConfig();
@@ -71,6 +72,18 @@ export default defineEventHandler(async (event) => {
     const turnstileToken = body.turnstileToken || "";
     
     const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
+
+    // RateLimiter
+    const ip = getRequestHeader(event, 'x-forwarded-for') || event.node.req.socket.remoteAddress;
+    const { allowed, retryAfter } = await checkRateLimit(ip, '/api/login');
+    if (!allowed) {
+        setResponseStatus(event, 429);
+        return {
+            isValid: false,
+            message: `Too many login attempts. Try again in ${Math.ceil(retryAfter / 60000)} minutes.`,
+        };
+    }
+
 
     const captchaRes = await $fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
         method: "POST",

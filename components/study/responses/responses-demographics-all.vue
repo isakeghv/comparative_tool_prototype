@@ -72,7 +72,7 @@
                     <span class="demo__subheadline font-small">{{ questionCounts[q.id] || 0 }} responses</span>
                 </div>
                 <div class="charts__cont">
-                    <ChartsPie :dataObj="countAnswers(q.answers, q.responseFormat.options)" />
+                    <ChartsPie :dataObj="demoAnswerCounts[q.id]" />
                 </div>
             </div>
         </div>
@@ -91,7 +91,7 @@ const props = defineProps({
 });
 
 // compute number of times an answers has been picked
-const counts = computed(() => countAnswers(answers, props.question.artifacts))
+// const counts = computed(() => countAnswers(answers, props.question.artifacts))
 
 // object to store how many respondents have answered each question
 const questionCounts = {};
@@ -130,10 +130,7 @@ const formattedDemoData = computed(() => {
     });
 });
 
-
 // compute the count of how many time a question has been answered for each `radio` question
-console.log(formattedDemoData.value);
-
 const demoAnswerCounts = computed(() => {
     const counts = {};
     formattedDemoData.value.forEach((q) => {
@@ -141,6 +138,7 @@ const demoAnswerCounts = computed(() => {
             counts[q.id] = countAnswers(q.answers, q.responseFormat.options);
         }
     });
+
     return counts;
 });
 
@@ -195,5 +193,5 @@ const groupedDates = (arr) => {
 </script>
 
 <style scoped>
-@import url('public/style/components/responses/responses-demographics.scss');
+    @import url('public/style/components/responses/responses-demographics.scss');
 </style>

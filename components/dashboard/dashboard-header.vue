@@ -57,7 +57,7 @@ const props = defineProps({
 })
 
 //event to emit in case the study was unable to save
-const emit = defineEmits(['unableSave', 'updateNewStudyStatus'])
+const emit = defineEmits(['unableSave', 'update:isCreatingStudy']);
 
 //saves it to "study.initial": 
 // - The "back" button prevents user from going back if the initial study-configuration is not
@@ -117,7 +117,7 @@ const deleteUploads = async (unused) => {
 const saveStudy = async () => {
     // compare the two study states to see if there has been no changes
     const noChanges = compareStudies(study, initialStudy);
-    console.log(noChanges);
+    console.log('has no changes happened?', noChanges);
 
     //So when "configs" is saved, used cannot undo/redo again: 
     // - because artifacts might get deleted when saving
@@ -128,25 +128,29 @@ const saveStudy = async () => {
     // - If returning before this runs, it wont delete from the server
     deleteUploads(trackCurrentArtifacts())
 
-    //returning if no changes have been made
+    // returning if no changes have been made
     if (noChanges) return;
+    console.log('props.icCreatingStudy', props.isCreatingStudy);
 
-    // if study gets created, update the flag to true; 'isCreatingStudy' prop sent from 'Dashboard' component also has to be true
-    if (!wasStudyCreated.value && props.isCreatingStudy) {
+     // if study gets created, update the flag to true
+    try {
+        if (props.isCreatingStudy) {
+            // pass in the data from the `study` reactive variable and the user id as a ref
+            const newStudy = await StudyService.createStudy(study, user.info._id);
 
-        // pass in the data from the `study` reactive variable and the user id as a ref
-        const newStudy = await StudyService.createStudy(study, user.info._id);
-        console.log(newStudy);
+            console.log(newStudy);
 
-        if (newStudy && newStudy.study) {
-            user.studies.push(JSON.parse(JSON.stringify(newStudy.study)));
-            wasStudyCreated.value = true;
+            if (newStudy && newStudy.study) {
+                user.studies.push(JSON.parse(JSON.stringify(newStudy.study)));
 
-            // toggle it off
-            emit('updateNewStudyStatus', false);
+                // toggle it off by emiting the updated boolean to parent
+                emit('update:isCreatingStudy', false);
 
             // first update the tracking of the initial and current study
             updateSaveHistory();
+
+            localStorage.removeItem('unsavedStudy');
+            localStorage.removeItem('isEditingStudy');
 
         } else emit('unableSave');
 
@@ -160,18 +164,51 @@ const saveStudy = async () => {
             // find index of the study that is currently in progress and display correct information if changes have happened to UI w/o reloading
             const studyIndex = user.studies.findIndex(study => study.id === updatedStudy.study.id);
 
-            // first update the tracking of the initial and current study
-            updateSaveHistory();
-
-            // if updatedStudy id is found within user.studies
-            if (studyIndex !== -1) {
-                user.studies[studyIndex] = JSON.parse(JSON.stringify(updatedStudy.study));
+                // first update the tracking of the initial and current study
+                updateSaveHistory();
+            } else {
+                console.log('Unable to save new study');
+                emit('unableSave');
             }
-        } else emit('unableSave');
 
-        return;
-    } else emit('unableSave');
+            return;
+        } else if (study && !noChanges) {
+            // if changes have happened, send a PUT request with the study data as the body
+            const updatedStudy = await StudyService.updateStudy(study.id, study);
+
+            if (updatedStudy && updatedStudy.study) {
+                // find index of the study that is currently in progress and display correct information if changes have happened to UI w/o reloading
+                const studyIndex = user.studies.findIndex(study => study.id === updatedStudy.study.id);
+
+                // first update the tracking of the initial and current study
+                updateSaveHistory();
+
+                // if updatedStudy id is found within user.studies
+                if (studyIndex !== -1) {
+                    user.studies[studyIndex] = JSON.parse(JSON.stringify(updatedStudy.study));
+                }
+            } else {
+                console.log('Unable to save updated study', updatedStudy, updatedStudy.study);
+                emit('unableSave');
+            }
+
+            return;
+        }
+    } catch (error) {
+        console.error('Error saving study:', error);
+        if (error && error.errors) {
+            console.error('Schema validation errors:');
+            for (const field in error.errors) {
+                console.error(`${field}: ${error.errors[field].message}`);
+            }
+
+            localStorage.removeItem('unsavedStudy');
+            localStorage.removeItem('isEditingStudy');
+
+        } else emit('unableSave');
+    }
 };
+
 
 // set status to either 'ongoing' or 'completed' depending on the publish/close button
 const setStudyStatus = async (status) => {

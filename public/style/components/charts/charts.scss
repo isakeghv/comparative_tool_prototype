@@ -4,7 +4,7 @@
 .chart {
     &__cont {
         display: flex;
-        gap: 0.4rem;
+        gap: 0.8rem;
         align-items: flex-start;
     }
 }
@@ -30,7 +30,7 @@
     }
     
     &__text {
-        max-width: 20ch;
+        width: 20ch;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

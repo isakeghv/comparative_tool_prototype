@@ -38,6 +38,20 @@
         }
     }
 
+    &__label {
+        max-width: calc(100% - 2.8rem);
+    }
+
+    &__span {
+        text-overflow: ellipsis;
+        word-break: break-all;
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 100%;
+        display: block;
+        margin-right: 2rem;
+    }
+    
     &__more {
         position: absolute;
         display: inline-flex;
@@ -77,7 +91,7 @@
     &__slider {
         position: relative;
         display: inline-block;
-        width: 2.8rem;
+        min-width: 2.8rem;
         height: 1.4rem;
         background: c.$gray;
         border-radius: 1rem;

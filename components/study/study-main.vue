@@ -118,8 +118,6 @@ const props = defineProps({
     id: String,
 })
 
-console.log(studyResponses);
-
 // make the 'id' prop reactive so it can be used in the function to get the individual response within the composable
 const idRef = toRef(props, 'id');
 

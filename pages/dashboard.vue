@@ -1,5 +1,5 @@
 <template>
-	<DashboardHeader :name="displayName" :isCreatingStudy="isCreatingStudy" @updateNewStudyStatus="isCreatingStudy = $event" @unableSave="(reason) => displayUnableSaveBox(true, reason)" :newStudy="onNewStudy" :disabled="isReadOnly" />
+	<DashboardHeader :name="displayName" v-model:isCreatingStudy="isCreatingStudy" @updateNewStudyStatus="isCreatingStudy = $event" @unableSave="(reason) => displayUnableSaveBox(true, reason)" :newStudy="onNewStudy" :disabled="isReadOnly" />
 	<div class="container" v-if="showMain && !study.id">
 		<DashboardMain
             @newStudy="(id) => onNewStudy(id)" 
@@ -85,6 +85,23 @@ const getUserInfo = async () => {
 
 await getUserInfo();
 
+// Saving to localStorage
+// Restore unsaved study draft if present
+const draft = localStorage.getItem('unsavedStudy');
+if (draft && !study.id) {
+    const parsedDraft = JSON.parse(draft);
+    Object.assign(study, parsedDraft);
+    isReadOnly.value = false;
+    isCreatingStudy.value = true;
+}
+
+watch(study, (newVal) => {
+    if (newVal.id) {
+        localStorage.setItem('unsavedStudy', JSON.stringify(newVal));
+        localStorage.setItem('isEditingStudy', isCreatingStudy.value ? 'false' : 'true');
+    }
+}, { deep: true });
+
 const populateStudy = (id) => {
     // find study with matching id that is stored when user loads dashboard
     const selectedStudy = user.studies.find(study => study.id === id);
@@ -122,7 +139,6 @@ const onEditStudy = async (id) => {
     if (status.value !== 'draft') {
         // fetch all responses, and store in `studyResponses` ref
         studyResponses.value = await ParticipantService.getParticipants(id);
-        console.log(studyResponses.value);
     }
 
     isCreatingStudy.value = false;
