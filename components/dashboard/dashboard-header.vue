@@ -79,7 +79,7 @@ const updateSaveHistory = () => {
 const saveStudy = async () => {
     // compare the two study states to see if there has been no changes
     const noChanges = compareStudies(study, initialStudy);
-    console.log(noChanges);
+    console.log('has no changes happened?', noChanges);
 
     //returning if no changes have been made
     if (noChanges) return;

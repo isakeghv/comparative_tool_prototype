@@ -1,27 +1,8 @@
 <template>
     <div class="chart__cont">
-      <apexchart :options="options" :series="series" width="380" />
-  
-      <div class="legend__cont">
-            <div
-                v-for="(label, idx) in labels"
-                :key="idx"
-                class="legend__item"
-                @mouseenter="hoveredIndex = idx"
-                @mouseleave="hoveredIndex = null"
-            >
-
-            <span :style="{ backgroundColor: colors[idx] }" class="legend__dot"></span>
-    
-            <span class="legend__text">{{ label }}</span>
-    
-            <div v-if="hoveredIndex === idx" class="tooltip font-small">
-                {{ label }}
-            </div>
-        </div>
-      </div>
+		<apexchart :options="options" :series="series" width="500" />
     </div>
-  </template>
+</template>
   
 <script setup>
 import VueApexCharts from 'vue3-apexcharts';
@@ -33,7 +14,6 @@ const props = defineProps({
 	}
 });
 
-const hoveredIndex = ref(null);
 const labels = computed(() => Object.keys(props.dataObj));
 const series = computed(() => Object.values(props.dataObj));
 
@@ -47,12 +27,14 @@ const options = computed(() => ({
 	chart: {
 		type: 'pie',
 		animations: { enabled: false },
-		toolbar: { show: false }
+		toolbar: { show: false },
 	},
 	labels: labels.value,
 	colors: colors,
 	tooltip: { enabled: true },
-	legend: { show: false },
+	legend: {
+		show: true
+	},
 	plotOptions: {
 		pie: {
 			expandOnClick: false
@@ -64,11 +46,20 @@ const options = computed(() => ({
 <script>
 export default {
 	components: {
-		apexchart: VueApexCharts,
+		apexchart: VueApexCharts
 	}
 };
 </script>
   
 <style scoped>
-	@import url('public/style/components/charts/charts-pie.scss');
+	@import url('public/style/components/charts/charts.scss');
+
+	:deep(.apexcharts-legend-text) {
+		display: inline-block;
+		min-width: 20ch;
+		max-width: 20ch;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+}
 </style>

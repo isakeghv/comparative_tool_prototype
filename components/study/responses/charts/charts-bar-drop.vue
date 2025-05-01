@@ -1,25 +1,6 @@
 <template>
     <div class="chart__cont">
-      <apexchart :options="options" :series="series" width="380" />
-  
-      <div class="legend__cont">
-            <div
-                v-for="(label, idx) in labels"
-                :key="idx"
-                class="legend__item"
-                @mouseenter="hoveredIndex = idx"
-                @mouseleave="hoveredIndex = null"
-            >
-
-            <span :style="{ backgroundColor: colors[idx] }" class="legend__dot"></span>
-    
-            <span class="legend__text">{{ label }}</span>
-    
-            <div v-if="hoveredIndex === idx" class="tooltip font-small">
-                {{ label }}
-            </div>
-        </div>
-      </div>
+      <apexchart :options="options" :series="series" height="400" width="380" />
     </div>
   </template>
   
@@ -32,8 +13,6 @@ const props = defineProps({
 		required: true
 	}
 });
-
-const hoveredIndex = ref(null);
 
 const labels = computed(() => {
     // only unique labels are allowed for the chart
@@ -76,13 +55,13 @@ const options = computed(() => ({
         enabled: true
     },
     legend: {
-        show: false
+        show: true
     },
     plotOptions: {
         bar: {
             horizontal: false
         }
-    }
+    },
 }));
 </script>
 
@@ -95,5 +74,5 @@ export default {
 </script>
   
 <style scoped>
-	@import url('public/style/components/charts/charts-pie.scss');
+	@import url('public/style/components/charts/charts.scss');
 </style>
