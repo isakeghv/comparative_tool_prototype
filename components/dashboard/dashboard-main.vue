@@ -17,7 +17,7 @@
 				@select="(study) => emitSelectStudy(study)"
 				@edit="(study) => emitEditStudy(study)"
 				@delete="(study) => emitDeleteStudy(study)"
-				@duplicate="(study) => console.log(study)" :status="study.status" :filter="filter"
+				@duplicate="(study) => console.log(study)" :study="study" :status="study.status" :filter="filter"
 				@export="(study) => console.log(study)" :id="study.id" :title="study.title"
 				:startDate="study.created" />
 		</div>

@@ -17,7 +17,7 @@
             <!-- only show 'edit' button if study is a draft -->
             <button v-if="status === 'draft'" class="popup__button font-normal" @click="studyEdit(id)">Edit</button>
             <button class="popup__button font-normal" @click="studyDelete(id)">Delete</button>
-            <button class="popup__button font-normal" @click="studyDuplicate(id)">Duplicate</button>
+            <button class="popup__button font-normal" @click="studyDuplicate(study)">Duplicate</button>
             <button class="popup__button font-normal" @click="studyExport(id, 'json')">Export JSON</button>
             <button class="popup__button font-normal"  @click="studyExport(id, 'cvs')">Export CVS</button>
         </div>
@@ -26,6 +26,7 @@
 
 <script setup>
 const props = defineProps({
+    study: Object,
     title: String,
     startDate: String,
     id: String,
@@ -73,9 +74,9 @@ const studyEdit = (id) =>{
 }
 
 //emitting study id with "duplicate" event
-const studyDuplicate = (id) =>{
+const studyDuplicate = (study) =>{
     showPopUp.value = false
-    emit('duplicate', id);
+    emit('duplicate', study);
 }
 
 //emitting study id and format with "export" event

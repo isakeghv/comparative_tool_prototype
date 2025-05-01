@@ -51,23 +51,7 @@
                                 fill="#444444" />
                         </svg>
                     </button>
-                    <button v-if=!isDisabled class="wrapper__button wrapper__button--radius">
-                        <svg class="wrapper__icon" viewBox="0 0 15 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <mask id="path-1-inside-1_0_1" fill="white">
-                                <path d="M2 3H13V18H2V3Z" />
-                            </mask>
-                            <path d="M2 3H13V18H2V3Z" fill="white" />
-                            <path
-                                d="M13 18V19H14V18H13ZM2 18H1V19H2V18ZM12 3V18H14V3H12ZM13 17H2V19H13V17ZM3 18V3H1V18H3Z"
-                                fill="#444444" mask="url(#path-1-inside-1_0_1)" />
-                            <line y1="2.5" x2="15" y2="2.5" stroke="#444444" />
-                            <mask id="path-4-inside-2_0_1" fill="white">
-                                <path d="M4 0H11V3H4V0Z" />
-                            </mask>
-                            <path d="M4 0V-1H3V0H4ZM11 0H12V-1H11V0ZM4 1H11V-1H4V1ZM10 0V3H12V0H10ZM5 3V0H3V3H5Z"
-                                fill="#444444" mask="url(#path-4-inside-2_0_1)" />
-                        </svg>
-                    </button>
+                    <StudyArtifactDelete :artifact="artifact" :questionID="config.id" />
                 </div>
                 
                 <StudyArtifact :source="artifact.source" :id="artifact.id" />
@@ -123,7 +107,7 @@
 </template>
 
 <script setup>
-import { study, showResponses } from '~/public/script/reactive';
+import { study, showResponses, allUploadedArtifacts } from '~/public/script/reactive';
 import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
 
 const isDisabled = inject('disabled');
@@ -189,6 +173,11 @@ const uploadFile = async (e) => {
 
     //pushing the content to the "artifacts" array
     config.value.artifacts.push({
+        id: response.id,
+        source: response.source
+    })
+
+    allUploadedArtifacts.value.push({
         id: response.id,
         source: response.source
     })

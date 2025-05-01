@@ -8,28 +8,34 @@
             <div class="header__buttons">
                 <button v-if="!isDisabled" class="header__button" data-tooltip="Save" @click="saveStudy()">
                     <svg class="header__icon" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Z"/>
+                        <path
+                            d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Z" />
                     </svg>
                 </button>
                 <button v-if="isDisabled" class="header__button" data-tooltip="Export">
                     <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                        <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
+                        <path
+                            d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
                     </svg>
                 </button>
                 <button class="header__button" data-tooltip="Preview">
                     <svg class="header__icon" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z"/>
+                        <path
+                            d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
                     </svg>
                 </button>
                 <DashboardUndoRedo v-if="!isDisabled" />
                 <DashboardLink :study="study" />
             </div>
-            <button v-if="!isDisabled" class="header__btn header__btn--publish font-semi font-normal" @click="setStudyStatus('ongoing')" :disabled=isCreatingStudy>Publish</button>
+            <button v-if="!isDisabled" class="header__btn header__btn--publish font-semi font-normal"
+                @click="setStudyStatus('ongoing')" :disabled=isCreatingStudy>Publish</button>
             <button v-if="study && (study.status === 'ongoing' || study.status === 'completed')"
                 class="header__btn header__btn--publish header__btn--toggle font-semi font-normal"
                 @click="showResponses = !showResponses">{{ showResponses ? 'Hide' : 'Show' }} responses
             </button>
-            <button v-if="study && study.status === 'ongoing'" class="header__btn header__btn--close font-semi font-normal" @click="setStudyStatus('completed')">Close</button>
+            <button v-if="study && study.status === 'ongoing'"
+                class="header__btn header__btn--close font-semi font-normal"
+                @click="setStudyStatus('completed')">Close</button>
         </div>
         <slot></slot>
     </header>
@@ -38,7 +44,7 @@
 <script setup>
 //importing reactive variable which holds the id of the study and where the study questions are stored
 import StudyService from '~/services/studyService';
-import { user, study, initialStudy, showResponses } from '~/public/script/reactive';
+import { user, study, configs, currentConfigIndex, allUploadedArtifacts, initialStudy, wasStudyCreated, showResponses } from '~/public/script/reactive';
 import { compareStudies } from '~/utils/studyUtils';
 
 const isDisabled = inject('disabled', ref(false));
@@ -75,11 +81,52 @@ const updateSaveHistory = () => {
     });
 };
 
+const trackCurrentArtifacts = () => {
+    const currentUsedArtifacts = [];
+    const unusedArtifact = []
+
+    study.questions.forEach(q => {
+        q.artifacts.forEach(a => {
+            const isInArr = currentUsedArtifacts.some(b => JSON.stringify(b) === JSON.stringify(a));
+            if (!isInArr) currentUsedArtifacts.push(a);
+        });
+    });
+    allUploadedArtifacts.value.forEach(a => {
+        const isUsed = currentUsedArtifacts.find(b => a.source === b.source);
+        if (!isUsed) unusedArtifact.push(a.source);
+    })
+
+    return unusedArtifact;
+}
+
+//create logic here to delete from server
+const deleteUploads = async (unused) => {
+
+    if (unused && unused.length > 0) {
+        const request = await fetch('/api/artifact-delete', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(unused)
+        })
+
+        if (!request.ok) return console.error('Unable to delete unused artifacts');
+    }
+}
+
 // when clicking on 'save', update the tracking of changes and create new study if it hasn't been created yet
 const saveStudy = async () => {
     // compare the two study states to see if there has been no changes
     const noChanges = compareStudies(study, initialStudy);
     console.log('has no changes happened?', noChanges);
+
+    //So when "configs" is saved, used cannot undo/redo again: 
+    // - because artifacts might get deleted when saving
+    configs.value = []
+    currentConfigIndex.value = 0;
+
+    //this has to be above returning if "noChanges", because someone might upload, then remove an image.
+    // - If returning before this runs, it wont delete from the server
+    deleteUploads(trackCurrentArtifacts())
 
     // returning if no changes have been made
     if (noChanges) return;
@@ -106,7 +153,7 @@ const saveStudy = async () => {
             localStorage.removeItem('isEditingStudy');
 
         } else emit('unableSave');
-        
+
 
         return;
     } else if (!noChanges) {
@@ -171,7 +218,7 @@ const setStudyStatus = async (status) => {
     // if there is changes and it hasn't been created yet, show a prompt box telling them to save, else publish the study
     // TODO: add more checks here omg
     if (!noChanges) {
-        emit('unableSave', {reason: 'save'});
+        emit('unableSave', { reason: 'save' });
         return;
     }
 
@@ -192,5 +239,5 @@ const setStudyStatus = async (status) => {
 </script>
 
 <style scoped>
-    @import url('public/style/components/dashboard/dashboard-header.scss');
+@import url('public/style/components/dashboard/dashboard-header.scss');
 </style>
