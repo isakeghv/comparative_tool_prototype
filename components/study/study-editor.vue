@@ -1,13 +1,13 @@
 <!-- return main area of the created study based on the computed properties (showDetails, showDemographics, showQuestionMain) -->
 <template>
     <div class="container">
-        <StudySidebar @swapDisplay="(data) => toggleDisplay(data.component, data.number, data.id)"/>
+        <StudySidebar @swapDisplay="(data) => toggleDisplay(data.component, data.number, data.id)" />
         <ResponsesData v-if="showStudyData" />
         <Details v-if="showDetails" />
         <Demographic v-if="showDemographics" />
         <StudyConsentForm v-if="showTerms" />
         <StudyMain v-if="showQuestionMain" :index="questionIndex" :id="questionId" />
-	</div>
+    </div>
 </template>
 
 <script setup>
@@ -25,45 +25,46 @@ const displayComponent = ref('details');
 const questionIndex = ref();
 const questionId = ref()
 
-const showDetails = computed(()=>{
+const showDetails = computed(() => {
     return displayComponent.value === 'details'
 })
 
 
-const showStudyData = computed(()=>{
+const showStudyData = computed(() => {
     return displayComponent.value === 'data'
 })
 
-const showDemographics = computed(()=>{
+const showDemographics = computed(() => {
     return displayComponent.value === 'demographics'
 })
 
-const showQuestionMain = computed(()=>{
+const showQuestionMain = computed(() => {
     return displayComponent.value === 'question'
 })
 
-const showTerms = computed(()=>{
+const showTerms = computed(() => {
     return displayComponent.value === 'terms'
 })
 
 //resets it when the editor page is loaded: to avoid any potential issues
 
 
-const trackExistingArtifacts = () =>{
+const trackExistingArtifacts = () => {
     allUploadedArtifacts.value = [];
 
     study.questions.forEach(q => {
-    q.artifacts.forEach(a => {
-      const isInArr = allUploadedArtifacts.value.some(b => JSON.stringify(b) === JSON.stringify(a));
-      if (!isInArr) allUploadedArtifacts.value.push(a);
+        q.artifacts.forEach(a => {
+            const isInArr = allUploadedArtifacts.value.some(b => JSON.stringify(b) === JSON.stringify(a));
+            if (!isInArr) allUploadedArtifacts.value.push(a);
+        });
     });
-  });
+    console.log(allUploadedArtifacts.value);
 }
 
 trackExistingArtifacts();
 
 //handles toggling of which component to display. "number = null" is responsible of handling which question to open
-const toggleDisplay = (component, number, id)=>{
+const toggleDisplay = (component, number, id) => {
     displayComponent.value = component;
 
     //to use in order to know which question to get from array. 
@@ -75,5 +76,5 @@ const toggleDisplay = (component, number, id)=>{
 </script>
 
 <style scoped>
-    @import url('public/style/pages/study/study.scss');
+@import url('public/style/pages/study/study.scss');
 </style>

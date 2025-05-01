@@ -100,8 +100,17 @@ const trackCurrentArtifacts = () => {
 }
 
 //create logic here to delete from server
-const deleteUploads = async (unused) =>{
-    console.log(unused);
+const deleteUploads = async (unused) => {
+
+    if (unused && unused.length > 0) {
+        const request = await fetch('/api/artifact-delete', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(unused)
+        })
+
+        if (!request.ok) return console.error('Unable to delete unused artifacts');
+    }
 }
 
 // when clicking on 'save', update the tracking of changes and create new study if it hasn't been created yet

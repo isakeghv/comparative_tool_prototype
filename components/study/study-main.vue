@@ -107,7 +107,7 @@
 </template>
 
 <script setup>
-import { study, showResponses } from '~/public/script/reactive';
+import { study, showResponses, allUploadedArtifacts } from '~/public/script/reactive';
 import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
 
 const isDisabled = inject('disabled');
@@ -175,6 +175,11 @@ const uploadFile = async (e) => {
 
     //pushing the content to the "artifacts" array
     config.value.artifacts.push({
+        id: response.id,
+        source: response.source
+    })
+
+    allUploadedArtifacts.value.push({
         id: response.id,
         source: response.source
     })
