@@ -4,11 +4,6 @@ export const form = reactive({
     type: null,
 })
 
-// had to move here because dashboard doesn't know when it should reset after clicking out of study
-export const wasStudyCreated = reactive({
-    value: false
-});
-
 // show responses version of question/demographics section 
 export const showResponses = ref(false);
 

@@ -1,5 +1,5 @@
 <template>
-	<DashboardHeader :name="displayName" :isCreatingStudy="isCreatingStudy" @updateNewStudyStatus="isCreatingStudy = $event" @unableSave="(reason) => displayUnableSaveBox(true, reason)" :newStudy="onNewStudy" :disabled="isReadOnly" />
+	<DashboardHeader :name="displayName" v-model:isCreatingStudy="isCreatingStudy" @updateNewStudyStatus="isCreatingStudy = $event" @unableSave="(reason) => displayUnableSaveBox(true, reason)" :newStudy="onNewStudy" :disabled="isReadOnly" />
 	<div class="container" v-if="showMain && !study.id">
 		<DashboardMain
             @newStudy="(id) => onNewStudy(id)" 
@@ -139,7 +139,6 @@ const onEditStudy = async (id) => {
     if (status.value !== 'draft') {
         // fetch all responses, and store in `studyResponses` ref
         studyResponses.value = await ParticipantService.getParticipants(id);
-        console.log(studyResponses.value);
     }
 
     isCreatingStudy.value = false;

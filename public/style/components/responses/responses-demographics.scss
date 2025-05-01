@@ -99,41 +99,74 @@ $lighterGray: #f1f1f1;
 }
 
 .table {
+    position: relative;
+
     &__cont {
         width: 100%;
         border-collapse: collapse;
         border-radius: 0.3rem;
         overflow: hidden;
         background-color: c.$white;  
+        border: v.$borderSolid;
+
+        // need to deal with layout shift later
+        &--matrix {
+            width: initial;
+
+            // tr:nth-child(even) td:nth-child(odd),
+            // tr:nth-child(odd) td:nth-child(even) {
+            // background-color: #d4cdcd;
+            // }
+
+            // td:not(:last-child),
+            // th:not(:last-child) {
+            // border-left: 1px solid #ccc; /* or your desired color */
+            // }
+        }
     }
 
     &__thead {
         background-color: c.$bluePrimary;
+
+        &--matrix {
+            th:nth-child(even) {
+                background-color: c.$bluePrimary-active;
+              } 
+        }       
     }
   
     &__row {
-        transition: background-color 0.2s ease;
+        border: v.$borderSolid;
         
         &:nth-child(even) {
             background-color: c.$white-active;
-        }
-
-        &:hover {
-            background-color: rgba(0, 0, 0, 0.03);
         }
     }
   
     &__cell {
         padding: 12px 16px;
         text-align: left;
-        border-bottom: #e4e4e4 solid 2px;
+        // border-bottom: #e4e4e4 solid 2px;
     
         &--head {
             color: c.$white;
         }
+
+        &--artifact {
+            white-space: nowrap;
+            width: 1px;
+        }
+
+        &--total {
+            width: 20%;
+        }
+
+        &--matrix {
+            text-align: center;
+            border: v.$borderSolid
+        }
     }
 }
-  
   
   
 .greyed-out {

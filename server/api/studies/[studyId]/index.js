@@ -42,7 +42,11 @@ const updateStudy = async(e, data) => {
 
     try {
         // find one with matching study id, update it, and return the updated version of the study
-        const study = await Study.findOneAndUpdate({ id: studyId }, updateFields, { new: true });
+        // require to run the validators again (iin case 'title' has been removed)
+        const study = await Study.findOneAndUpdate(
+            { id: studyId },
+            updateFields,
+            { runValidators: true, new: true });
 
         setResponseStatus(200);
         return { updated: true, message: "Study updated successfully.", study};

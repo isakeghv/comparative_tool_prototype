@@ -27,12 +27,12 @@ const exit = () => {
     emit('exit');
 }
 
-// const message = computed(() => {
-//     if (props.reason === 'save') {
-//         return 'You need to save your changes before publishing';
-//     } else {
-//         return 'Some required fields are missing. Please ensure that the study details include a title for example.';
-// }});
+const message = computed(() => {
+    if (props.reason === 'save') {
+        return 'You need to save your changes before publishing';
+    } else {
+        return 'Some required fields are missing. Please ensure that the study details include a title for example.';
+}});
 
 // need to override the body styling due to scrollbar gutter
 onMounted(() => {

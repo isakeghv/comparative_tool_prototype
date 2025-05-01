@@ -141,4 +141,31 @@ const StudySchema = new Schema({
 	},
 });
 
+// when publishing a study, if it's ongoing but no questions prevent it from updating status and throw error
+// not this doesnt work yet
+// StudySchema.pre('findOneAndUpdate', async function (next) {
+// 	console.log('Check...');
+  
+// 	const update = this.getUpdate();
+// 	const newStatus = update?.status;
+  
+// 	// check if status is being set to 'ongoing'
+// 	if (newStatus === 'ongoing') {
+// 		// retrieves the id used to get the study
+// 		const studyId = this.getQuery().id;
+// 		const currentStudy = await this.model.findOne({ id: studyId });
+	
+// 		if (!currentStudy) {
+// 			return next(new Error('Study not found.'));
+// 		}
+	
+// 		// check if it has no questions
+// 		if (!currentStudy.questions || currentStudy.questions.length === 0) {
+// 			return next(new Error('At least one question is required to publish the study.'));
+// 		}
+// 	}
+  
+// 	next();
+// });  
+
 export const Study = mongoose.model('Study', StudySchema);

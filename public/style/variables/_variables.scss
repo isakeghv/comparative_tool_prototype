@@ -54,7 +54,7 @@
     box-shadow: 1px 1px 0px rgba(50, 50, 50, 0.1);
 }
 
-@mixin overlay() {
+@mixin overlay {
     height: 100vh;
     width: 100vw;
     background-color: rgba(0, 0, 0, 0.3);
@@ -65,7 +65,7 @@
     left: 0;
 }
 
-@mixin circleHover() {
+@mixin circleHover {
     content: '';
     position: absolute;
     width: 2.4rem;
@@ -77,6 +77,26 @@
     z-index: 0;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
+
+@mixin tooltipBox {
+	position: absolute;
+	display: inline-block;
+	max-width: 12rem;
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+	background-color: white;
+	border: $borderSolid;
+	bottom: 100%;
+	left: 50%;
+	z-index: 1;
+	transform: translateX(-50%);
+	box-shadow: $hoverShadow;
+	min-height: 2.4rem;
+	white-space: normal;      
+	word-break: break-all;
+	width: max-content;
+}
+
 
 $mainAreaWidth: clamp(20rem, -4rem + 48vw, 50rem);
 $borderSolid: solid c.$lightGray 1px;

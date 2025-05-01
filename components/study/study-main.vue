@@ -17,11 +17,12 @@
                 <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question" :class="{'hide': showResponses}" :disabled="isDisabled">
             </div>
             
-            <!-- responses options -->
             <div v-if="showResponses">
                 <ResponsesAll v-if="selectedView === 'all' || selectedView === 'graphs'"
                     :question="config"
                     :respondents="studyResponses.length"
+                    :selectedView="selectedView"
+                    :studyResponses="studyResponses"
                 />
                 <ResponsesIndividual v-if="selectedView === 'individual'"
                     :question="config"
@@ -30,7 +31,7 @@
                 />
             </div>
 
-        <div class="artifact">
+        <div class="artifact" v-if="!showResponses">
             <h3 class="artifact__headline font-h5 font-medium">Artifacts</h3>
             <div class="artifact__container" v-for="(artifact, i) in config.artifacts">
                 <div class="wrapper">
@@ -76,13 +77,13 @@
                         Each artifact needs a unique ID. You can set it manually, use the file name (if unique), or click 'Generate ID'.
                     </p>
                     <div class="artifact__row">
-                        <p class="artifact__id" v-if="showArtifactId === i">{{ artifact.id }}</p>
+                        <p class="artifact__id" v-if="artifact.id && showArtifactId === i">{{ artifact.id }}</p>
                         <label :for="`artifact_id-${i}_input`" class="artifact__label">
                             <span class="artifact__span">ID:</span>
                         </label>
                         <span v-if=!isDisabled class="artifact__info" @mouseover="showInfo = i" @mouseleave="showInfo = null"
                             aria-label="information about id">?</span>
-                        <input type="text" :id="`artifact_id-${i}_input`" class="artifact__input artifact__input--small"
+                        <input type="text" :id="`artifact_id-${i}_input`" class="artifact__input artifact__input--small font-small" :readonly="isDisabled"
                             v-model="artifact.id" :placeholder="!artifact.id ? 'Id is required' : ''" @mouseover="showArtifactId = i" @mouseleave="showArtifactId = null">
                     </div>
                 </div>
