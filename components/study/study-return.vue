@@ -61,14 +61,13 @@ const updateStudyUI = () =>{
 
 const goBack = () => {
 
-    updateStudyUI();
-
     // no need to check if study isn't editable anymore; delete item from sessionStorage that tracks which participant the researcher checks the result of
     if (isDisabled.value) {
         sessionStorage.removeItem('participantNum');
         sessionStorage.removeItem('selectedView');
         studyResponses.value = [];
         showResponses.value = false;
+        updateStudyUI();
         return resetVariables();
     }
 
@@ -76,10 +75,15 @@ const goBack = () => {
     const isAlike = compareStudies(props.current, props.initial);
 
     if (isAlike) {
+        updateStudyUI();
+        localStorage.removeItem('unsavedStudy');
+        localStorage.removeItem('isEditingStudy');
         resetVariables();
     } else if (!isDisabled.value) {
         const userChoice = confirm('Changes have not been saved. Do you want to discard changes and return to the dashboard?');
         if (userChoice) {
+            localStorage.removeItem('unsavedStudy');
+            localStorage.removeItem('isEditingStudy');
             resetVariables();
         }
     }
