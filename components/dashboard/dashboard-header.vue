@@ -99,6 +99,24 @@ const saveStudy = async () => {
                 // toggle it off by emiting the updated boolean to parent
                 emit('update:isCreatingStudy', false);
 
+            // first update the tracking of the initial and current study
+            updateSaveHistory();
+
+            localStorage.removeItem('unsavedStudy');
+            localStorage.removeItem('isEditingStudy');
+
+        } else emit('unableSave');
+        
+
+        return;
+    } else if (!noChanges) {
+        // if changes have happened, send a PUT request with the study data as the body
+        const updatedStudy = await StudyService.updateStudy(study.id, study);
+
+        if (updatedStudy && updatedStudy.study) {
+            // find index of the study that is currently in progress and display correct information if changes have happened to UI w/o reloading
+            const studyIndex = user.studies.findIndex(study => study.id === updatedStudy.study.id);
+
                 // first update the tracking of the initial and current study
                 updateSaveHistory();
             } else {
@@ -136,9 +154,11 @@ const saveStudy = async () => {
             for (const field in error.errors) {
                 console.error(`${field}: ${error.errors[field].message}`);
             }
-        }
 
-        emit('unableSave');
+            localStorage.removeItem('unsavedStudy');
+            localStorage.removeItem('isEditingStudy');
+
+        } else emit('unableSave');
     }
 };
 

@@ -85,6 +85,23 @@ const getUserInfo = async () => {
 
 await getUserInfo();
 
+// Saving to localStorage
+// Restore unsaved study draft if present
+const draft = localStorage.getItem('unsavedStudy');
+if (draft && !study.id) {
+    const parsedDraft = JSON.parse(draft);
+    Object.assign(study, parsedDraft);
+    isReadOnly.value = false;
+    isCreatingStudy.value = true;
+}
+
+watch(study, (newVal) => {
+    if (newVal.id) {
+        localStorage.setItem('unsavedStudy', JSON.stringify(newVal));
+        localStorage.setItem('isEditingStudy', isCreatingStudy.value ? 'false' : 'true');
+    }
+}, { deep: true });
+
 const populateStudy = (id) => {
     // find study with matching id that is stored when user loads dashboard
     const selectedStudy = user.studies.find(study => study.id === id);

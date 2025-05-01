@@ -50,6 +50,12 @@
         margin-right: 0.4rem;
     }
 
+    &__duplicate {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
     &__button {
         @include sidebar-slab();
         width: 100%;
