@@ -122,7 +122,6 @@ const onEditStudy = async (id) => {
     if (status.value !== 'draft') {
         // fetch all responses, and store in `studyResponses` ref
         studyResponses.value = await ParticipantService.getParticipants(id);
-        console.log(studyResponses.value);
     }
 
     isCreatingStudy.value = false;
