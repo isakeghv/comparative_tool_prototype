@@ -11,6 +11,7 @@
 
 <script setup>
 import { study, initialStudy, showResponses } from '~/public/script/reactive'
+import { user } from '~/public/script/reactive';
 import { compareStudies } from '~/utils/studyUtils';
 const isDisabled = inject('disabled');
 const studyResponses = inject('studyResponses');
@@ -20,44 +21,7 @@ const props = defineProps({
     initial: Object,
 })
 
-// //looping over arrays, and checking if they are the same, to make sure unsaved changed are not lost
-// const compareArray = (arr1, arr2) => {
-//     for (let i = 0; i < arr1.length; i++) {
-//         const item1 = arr1[i]
-//         const item2 = arr2[i]
-//         if (item1 !== item2) return false
-//     }
-//     return true;
-// }
 
-// //flattens array so objects can be compared correctly.
-// const flattenArray = (arr) => {
-//     //make sure it is an array
-//     if (!Array.isArray(arr)) return [];
-
-//     //if all good, continue flattening array
-//     return arr.flatMap(obj =>
-//         Object.values(obj || {}).flatMap(v => (typeof v === 'object' && v !== null) ? flattenArray([v]) : v)
-//     );
-// };
-
-// //comparing the current update with last saved to make sure unsaved changes are not ost
-// const compareStudy = () => {
-//     const similarArrays = compareArray(flattenArray(props.current.questions), flattenArray(props.initial.questions)) &&
-//                           compareArray(flattenArray(props.current.demographic), flattenArray(props.initial.demographic));
-                          
-//     // console.log(props.current.questions, props.initial.questions)
-//     return props.current.demographicReq === props.initial.demographicReq &&
-//         props.current.description === props.initial.description &&
-//         props.current.title === props.initial.title &&
-//         JSON.stringify(props.current.demographic) === JSON.stringify(props.initial.demographic) &&
-//         JSON.stringify(props.current.questions) === JSON.stringify(props.initial.questions) &&
-//         JSON.stringify(props.current.customTerms) === JSON.stringify(props.initial.customTerms) &&
-//         JSON.stringify(props.current.closingMethod) === JSON.stringify(props.initial.closingMethod) &&
-//         JSON.stringify(props.current.closingLimit) === JSON.stringify(props.initial.closingLimit) &&
-//         props.current.desiredResponses === props.initial.desiredResponses &&
-//         similarArrays;
-// };
 
 //resetting variables there is no issue incorrect information being displayed when opening different study
 const resetVariables = () => {
@@ -89,7 +53,16 @@ const resetVariables = () => {
     initialStudy.desiredResponses = '';
 }
 
+//fixes so the UI is updated with correct title etc in dashboard
+const updateStudyUI = () =>{
+    const i = user.studies.findIndex(us => us.id === study.id);
+    user.studies[i] = JSON.parse(JSON.stringify(study));
+}
+
 const goBack = () => {
+
+    updateStudyUI();
+
     // no need to check if study isn't editable anymore; delete item from sessionStorage that tracks which participant the researcher checks the result of
     if (isDisabled.value) {
         sessionStorage.removeItem('participantNum');

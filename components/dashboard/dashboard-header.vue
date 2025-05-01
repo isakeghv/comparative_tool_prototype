@@ -44,7 +44,7 @@
 <script setup>
 //importing reactive variable which holds the id of the study and where the study questions are stored
 import StudyService from '~/services/studyService';
-import { user, study, configs, currentConfigIndex, allUploadedArtifacts, initialStudy, wasStudyCreated, showResponses } from '~/public/script/reactive';
+import { user, study, configs, currentConfigIndex, allUploadedArtifacts, initialStudy, showResponses } from '~/public/script/reactive';
 import { compareStudies } from '~/utils/studyUtils';
 
 const isDisabled = inject('disabled', ref(false));
@@ -128,6 +128,8 @@ const saveStudy = async () => {
     // - If returning before this runs, it wont delete from the server
     deleteUploads(trackCurrentArtifacts())
 
+    localStorage.removeItem('unsavedStudy');
+    localStorage.removeItem('isEditingStudy');
     // returning if no changes have been made
     if (noChanges) return;
     console.log('props.icCreatingStudy', props.isCreatingStudy);
@@ -148,9 +150,6 @@ const saveStudy = async () => {
 
             // first update the tracking of the initial and current study
             updateSaveHistory();
-
-            localStorage.removeItem('unsavedStudy');
-            localStorage.removeItem('isEditingStudy');
 
         } else emit('unableSave');
 
