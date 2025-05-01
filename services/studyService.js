@@ -42,11 +42,14 @@ const fetchStudy = async (studyId) => {
 
 // send a PUT request to update the existing resource by replacing it
 const updateStudy = async (studyId, data) => {
+    // need to remove `_id` from the rest of the fields due to it being immutable
+    const { _id, ...studyData} = data;
+
     try {
         const response = await fetch(`/api/studies/${studyId}`, {
             method: 'PUT',
             body: JSON.stringify({
-                ...data
+                ...studyData
             }),
             headers: {
                 'Content-Type': 'application/json',
