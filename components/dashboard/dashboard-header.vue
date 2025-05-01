@@ -135,8 +135,13 @@ const saveStudy = async () => {
     console.log('props.icCreatingStudy', props.isCreatingStudy);
 
      // if study gets created, update the flag to true
+
+
+     //checks if user already has a study with the selected id
+    const studyAlreadyExists = user.studies.find(us => us.id === study.id)
+
     try {
-        if (props.isCreatingStudy) {
+        if (props.isCreatingStudy && !studyAlreadyExists) {
             // pass in the data from the `study` reactive variable and the user id as a ref
             const newStudy = await StudyService.createStudy(study, user.info._id);
 
