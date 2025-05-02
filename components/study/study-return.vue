@@ -1,5 +1,5 @@
 <template>
-    <button class="sidebar__return font-normal" @click="goBack()">
+    <button class="sidebar__return font-normal" @click="goBack()" id="study-return">
         <svg class="sidebar__arrow" viewBox="0 0 8 13" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M5.79062 12.3633L0.183037 6.77236C0.116478 6.7058 0.0694431 6.6337 0.0419321 6.55605C0.0139774 6.4784 0 6.3952 0 6.30645C0 6.21771 0.0139774 6.13451 0.0419321 6.05686C0.0694431 5.9792 0.116478 5.9071 0.183037 5.84054L5.79062 0.232956C5.94592 0.0776519 6.14005 0 6.37301 0C6.60597 0 6.80564 0.0831986 6.97204 0.249596C7.13844 0.415993 7.22164 0.610123 7.22164 0.831986C7.22164 1.05385 7.13844 1.24798 6.97204 1.41438L2.07996 6.30645L6.97204 11.1985C7.12734 11.3538 7.205 11.5451 7.205 11.7723C7.205 11.9999 7.1218 12.1969 6.9554 12.3633C6.789 12.5297 6.59487 12.6129 6.37301 12.6129C6.15115 12.6129 5.95702 12.5297 5.79062 12.3633Z"
@@ -20,8 +20,6 @@ const props = defineProps({
     current: Object,
     initial: Object,
 })
-
-
 
 //resetting variables there is no issue incorrect information being displayed when opening different study
 const resetVariables = () => {
