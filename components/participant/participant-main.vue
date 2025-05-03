@@ -24,8 +24,10 @@
 <script setup>
 // need to emit progress so progress bar know which question you're at, and to calculate the percentage of each step
 const emit = defineEmits(['updateProgress', 'totalSteps', 'participantDone']);
-import ParticipantService from '~/services/participantService';
-import { participantId, participantAnswer } from '~/public/script/participant';
+import ParticipantService from '../../services/participantService';
+import { participantId, participantAnswer } from '../../public/script/participant';
+import { ref, computed, toRaw } from 'vue'
+
 // import { exportAsJson } from '#imports';
 
 const props = defineProps({

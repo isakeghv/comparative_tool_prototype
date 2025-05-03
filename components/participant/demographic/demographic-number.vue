@@ -3,17 +3,20 @@
     <input type="number"
         :id="`response_number_${question.id}`"
         :name="`response_number_${question.id}`"
-        v-model="numberModel" :min="question.number.min"
-        :max="question.number.max" class="response__number font-small"
+        v-model="numberModel" 
+        :min="question.number?.min"
+        :max="question.number?.max" class="response__number font-small"
         :required="question.required"
-        @input="input"/>
+        @input="input"
+        v-if="question.number"/>
 
-    <span class="response__gray font-small">
+    <span class="response__gray font-small" v-if="question.number">
         Enter a number between {{ question.number.min }} and {{ question.number.max }}
     </span>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 const props = defineProps({
     question: Object
 })

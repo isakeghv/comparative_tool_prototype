@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { participantAnswer } from "~/public/script/participant";
+import { participantAnswer } from "/public/script/participant";
 
 // ref of artifacts dropped in drop zone
 export const box_draggedArtifact = ref('');
