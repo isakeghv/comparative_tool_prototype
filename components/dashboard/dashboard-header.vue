@@ -6,7 +6,7 @@
         </p>
         <div class="header__container" v-if="study.id">
             <div class="header__buttons">
-                <button v-if="!isDisabled" class="header__button" data-tooltip="Save" @click="saveStudy()" id="save-btn">
+                <button v-if="!isDisabled" class="header__button" data-tooltip="Save" @click="saveStudy()" id="header-save-btn">
                     <svg class="header__icon" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Z" />
@@ -27,10 +27,11 @@
                 <DashboardUndoRedo v-if="!isDisabled" />
                 <DashboardLink :study="study" />
             </div>
-            <button v-if="!isDisabled" class="header__btn header__btn--publish font-semi font-normal"
+            <button v-if="!isDisabled" class="header__btn header__btn--publish font-semi font-normal" id="header-publish-btn"
                 @click="setStudyStatus('ongoing')" :disabled=isCreatingStudy>Publish</button>
             <button v-if="study && (study.status === 'ongoing' || study.status === 'completed')"
                 class="header__btn header__btn--publish header__btn--toggle font-semi font-normal"
+                id="header-btn-responses"
                 @click="showResponses = !showResponses">{{ showResponses ? 'Hide' : 'Show' }} responses
             </button>
             <button v-if="study && study.status === 'ongoing'"
@@ -113,6 +114,11 @@ const deleteUploads = async (unused) => {
     }
 }
 
+const localStorageCleanup = () => {
+    localStorage.removeItem('unsavedStudy');
+    localStorage.removeItem('isEditingStudy');
+}
+
 // when clicking on 'save', update the tracking of changes and create new study if it hasn't been created yet
 const saveStudy = async () => {
     // compare the two study states to see if there has been no changes
@@ -127,9 +133,7 @@ const saveStudy = async () => {
     //this has to be above returning if "noChanges", because someone might upload, then remove an image.
     // - If returning before this runs, it wont delete from the server
     deleteUploads(trackCurrentArtifacts())
-
-    localStorage.removeItem('unsavedStudy');
-    localStorage.removeItem('isEditingStudy');
+    
     // returning if no changes have been made
     if (noChanges) return;
     console.log('props.icCreatingStudy', props.isCreatingStudy);
@@ -148,6 +152,7 @@ const saveStudy = async () => {
             console.log(newStudy);
 
             if (newStudy && newStudy.study) {
+                localStorageCleanup();
                 user.studies.push(JSON.parse(JSON.stringify(newStudy.study)));
 
                 // toggle it off by emiting the updated boolean to parent
@@ -165,8 +170,10 @@ const saveStudy = async () => {
         const updatedStudy = await StudyService.updateStudy(study.id, study);
 
         if (updatedStudy && updatedStudy.study) {
-            // find index of the study that is currently in progress and display correct information if changes have happened to UI w/o reloading
-            const studyIndex = user.studies.findIndex(study => study.id === updatedStudy.study.id);
+                localStorageCleanup();
+
+                // find index of the study that is currently in progress and display correct information if changes have happened to UI w/o reloading
+                const studyIndex = user.studies.findIndex(study => study.id === updatedStudy.study.id);
 
                 // first update the tracking of the initial and current study
                 updateSaveHistory();
@@ -235,6 +242,9 @@ const setStudyStatus = async (status) => {
 
     // update status, set disabled to true; insert the status for the client-side as well
     if (updatedStudy) {
+        // remove the saved study from localStorage
+        localStorageCleanup();
+
         user.studies[studyIndex].status = status;
         study.status = status;
         isDisabled.value = true;
@@ -243,5 +253,5 @@ const setStudyStatus = async (status) => {
 </script>
 
 <style scoped>
-@import url('public/style/components/dashboard/dashboard-header.scss');
+    @import url('public/style/components/dashboard/dashboard-header.scss');
 </style>

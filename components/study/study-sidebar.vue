@@ -11,7 +11,7 @@
         <button class="sidebar__button font-normal" :class="{ 'sidebar__button--active': activeTab === 'demographics' }" @click="changeDisplay('demographics')">
             Demographics
         </button>
-        <button class="sidebar__button font-normal"  :class="{ 'sidebar__button--active': activeTab === 'terms' }" @click="changeDisplay('terms')">
+        <button class="sidebar__button font-normal"  :class="{ 'sidebar__button--active': activeTab === 'terms' }" @click="changeDisplay('terms')" id="consent-form-button">
             Consent form
         </button>
         </div>

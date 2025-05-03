@@ -96,7 +96,7 @@ if (draft && !study.id) {
 }
 
 watch(study, (newVal) => {
-    if (newVal.id) {
+    if (newVal.id && newVal.status == 'draft') {
         localStorage.setItem('unsavedStudy', JSON.stringify(newVal));
         localStorage.setItem('isEditingStudy', isCreatingStudy.value ? 'false' : 'true');
     }

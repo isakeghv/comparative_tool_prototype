@@ -4,10 +4,10 @@
         <ParticipantQuestions  v-else-if="adjustedQuestionIdx >= 0 && adjustedQuestionIdx < questions.length" :questions="questions" :questionIndex="adjustedQuestionIdx" />
 
         <div class="participant__navigation">
-            <button @click="prevQuestion" v-if="questionIndex !== 0" class="participant__button participant__button--back font-small font-semi">Back</button>
+            <button @click="prevQuestion" v-if="questionIndex !== 0" class="participant__button participant__button--back font-small font-semi" id="participant-back-btn">Back</button>
             <!-- show 'send' button if question index is at the last step -->
-            <button @click="sendForm"  v-if="questionIndex === totalSteps - 1" class="participant__button participant__button--send font-small font-semi">Send</button>
-            <button @click="nextQuestion" v-else class="participant__button participant__button--next font-small font-semi">Next</button>
+            <button @click="sendForm"  v-if="questionIndex === totalSteps - 1" class="participant__button participant__button--send font-small font-semi" id="participant-send-btn">Send</button>
+            <button @click="nextQuestion" v-else class="participant__button participant__button--next font-small font-semi" id="participant-next-btn">Next</button>
         </div>
     </main>
     <main v-else class="participant__cont participant__cont--intro">
