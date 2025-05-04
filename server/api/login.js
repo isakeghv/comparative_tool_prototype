@@ -2,10 +2,10 @@ import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import { useRuntimeConfig, setCookie } from '#imports';
 import validator from "validator";
-import { readBody, setResponseStatus } from "h3";
+import { readBody, setResponseStatus, getRequestHeader, defineEventHandler } from "h3";
 import { connDb } from '~/server/services/connDb.js';
-import { UserCredential } from '../schemas/userSchema.js';
-import { checkRateLimit } from '../services/rateLimiter';
+import { UserCredential } from '~server/services/schemas/userSchema.js';
+import { checkRateLimit } from '~server/services/rateLimiter.js';
 import { $fetch } from 'ofetch';
 
 // access runtime config variables
@@ -21,7 +21,7 @@ const checkPassword = async (email, pwd, event) => {
 
         if (!user) {
             setResponseStatus(event, 401)
-            return { isValid: false, message: 'Incorrent email or password.' };
+            return { isValid: false, message: 'Incorrect email or password.' };
         } else {
             // check if password matches the found user using bcrypt in-built compare method
             const validPwd = await bcrypt.compare(pwd, user.password);
@@ -29,7 +29,7 @@ const checkPassword = async (email, pwd, event) => {
             if (!validPwd) {
                 // 422 error code for email was found, but password wasn't correct (wrong input)
                 setResponseStatus(event, 422)
-                return { isValid: false, message: 'Incorrent email or password.' };
+                return { isValid: false, message: 'Incorrect email or password.' };
             }
         }
 
@@ -66,11 +66,23 @@ const checkPassword = async (email, pwd, event) => {
 }
 
 //moved code into function that can be exported: So testing can be preformed
-export async function loginLogic(event){
+export async function loginLogic(event) {
+    if (!event) {
+        setResponseStatus(event, 401)
+        return { isValid: false, message: 'Invalid/incomplete input provided' }
+    }
     await connDb();
     const body = await readBody(event);
+
+    if (!body) {
+        setResponseStatus(event, 401)
+        return { isValid: false, message: 'Invalid/incomplete input provided' }
+    }
+
     const rawEmail = body.email?.toString() || "";
-    const rawPassword = body.password.toString() || "";
+
+    //updated to check if password exists before attemptint to turn into string
+    const rawPassword = body.password?.toString() || "";
     const turnstileToken = body.turnstileToken || "";
 
     const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
@@ -103,7 +115,7 @@ export async function loginLogic(event){
     // Validation for Email password remains as is for security
     if (!rawEmail || !validator.isEmail(rawEmail) || !rawPassword) {
         setResponseStatus(event, 400)
-        return { isValid: false, message: "Incorrent email or password." }
+        return { isValid: false, message: "Incorrect email or password." }
     }
 
     // Sanitize
@@ -112,4 +124,4 @@ export async function loginLogic(event){
     return await checkPassword(cleanEmail, rawPassword, event);
 }
 
-export default defineEventHandler(async (event) => await loginLogic(event));
+export default defineEventHandler(async (event) => { return loginLogic(event) });

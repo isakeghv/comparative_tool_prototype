@@ -4,12 +4,12 @@ beforeAll(async () => await setup({ testDir: __dirname }))
 
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 
-import { loginLogic } from '../../server/api/login_testLogic';
+import { loginLogic } from '../../server/api/login';
 import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import { useRuntimeConfig, setCookie } from '#imports';
 import validator from "validator";
-import { readBody, setResponseStatus, getRequestHeader } from "h3";
+import { readBody, setResponseStatus, getRequestHeader, defineEventHandler } from "h3";
 import { connDb } from '~/server/services/connDb.js';
 import { UserCredential } from '~server/services/schemas/userSchema.js';
 import { checkRateLimit } from '~server/services/rateLimiter.js';
@@ -42,7 +42,15 @@ vi.mock('#imports', () => ({
 vi.mock('validator', () => ({ default: { isEmail: vi.fn(), normalizeEmail: vi.fn() } }))
 
 //mockup for setting response body, being able to read event body and get req header
-vi.mock('h3', () => ({ setResponseStatus: vi.fn(), readBody: vi.fn(), getRequestHeader: vi.fn(() => '127.0.0.1') }))
+vi.mock('h3', () => ({
+    setResponseStatus: vi.fn(),
+    readBody: vi.fn(),
+    getRequestHeader: vi.fn(() => '127.0.0.1'),
+
+    //bypassing the default eventHandler: to run the logic in "loginLogic" directly 
+    // instead of passing via eventhandler: as this is not integration testing
+    defineEventHandler: (fn) => fn
+}))
 
 //mockup for db connection
 vi.mock('~/server/services/connDb.js', () => ({ connDb: vi.fn() }))
@@ -128,7 +136,7 @@ describe('Testing login functionality', () => {
             //expected result for if password is empty
             await expect(loginLogic({})).resolves.toEqual({
                 isValid: false,
-                message: "Missing/invalid email or password."
+                message: "Incorrect email or password."
             });
         })
     });
@@ -148,7 +156,7 @@ describe('Testing login functionality', () => {
             //expected result for if password is empty
             await expect(loginLogic({})).resolves.toEqual({
                 isValid: false,
-                message: "Missing/invalid email or password."
+                message: "Incorrect email or password."
             });
         })
     })
@@ -170,7 +178,7 @@ describe('Testing login functionality', () => {
             //expected result for if email is empty
             await expect(loginLogic({})).resolves.toEqual({
                 isValid: false,
-                message: "Missing/invalid email or password."
+                message: "Incorrect email or password."
             });
         })
     });
@@ -192,11 +200,11 @@ describe('Testing login functionality', () => {
             //expected result for it email is missing
             await expect(loginLogic({})).resolves.toEqual({
                 isValid: false,
-                message: "Missing/invalid email or password."
+                message: "Incorrect email or password."
             });
         })
     });
-    //NOTE this is designed for the test to fail if the logic does not check that body(event) has been passed as parameter
+    //NOTE this is designed for the test to fail if the logic does not check that body (event) has been passed as parameter
     describe('Testing response for missing body', () => {
         it('Fails body is missing', async () => {
             //setting mockup-data to be read as event when readBody is called
@@ -205,7 +213,7 @@ describe('Testing login functionality', () => {
             //expected result for if body is missing
             await expect(loginLogic({})).resolves.toEqual({
                 isValid: false,
-                message: "Missing/invalid email or password."
+                message: 'Invalid/incomplete input provided'
             });
         })
     });
@@ -307,7 +315,7 @@ describe('Testing login functionality', () => {
     });
 
     describe('Testing case: rate-limiting returned false', () => {
-        it('Succeeds when email, password and turnstile key is correct', async () => {
+        it('Fails when rate-limiting returns false', async () => {
             const event = { turnstileToken: token.empty, email: email.valid, password: pwd.valid };
 
             readBody.mockImplementationOnce(() => Promise.resolve(event))
