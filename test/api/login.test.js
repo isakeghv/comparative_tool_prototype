@@ -303,7 +303,7 @@ describe('Testing login functionality', () => {
 
     describe('Testing case: credentials are passed but captcha token is missing', () => {
         it('Succeeds when email, password and turnstile key is correct', async () => {
-            const event = { turnstileToken: token.empty, email: email.valid, password: pwd.valid };
+            const event = { email: email.valid, password: pwd.valid };
 
             readBody.mockImplementationOnce(() => Promise.resolve(event))
 
