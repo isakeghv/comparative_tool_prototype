@@ -2,10 +2,10 @@ import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import { useRuntimeConfig, setCookie } from '#imports';
 import validator from "validator";
-import { readBody, setResponseStatus } from "h3";
+import { readBody, setResponseStatus, getRequestHeader } from "h3";
 import { connDb } from '~/server/services/connDb.js';
-import { UserCredential } from '../schemas/userSchema.js';
-import { checkRateLimit } from '../services/rateLimiter';
+import { UserCredential } from '~server/services/schemas/userSchema.js';
+import { checkRateLimit } from '~server/services/rateLimiter.js';
 import { $fetch } from 'ofetch';
 
 // access runtime config variables
@@ -18,18 +18,16 @@ const checkPassword = async (email, pwd, event) => {
         const user = await UserCredential
             .findOne({ email })
             .lean();
-
         if (!user) {
             setResponseStatus(event, 401)
-            return { isValid: false, message: 'Incorrent email or password.' };
+            return { isValid: false, message: 'Incorrect email or password.' };
         } else {
             // check if password matches the found user using bcrypt in-built compare method
             const validPwd = await bcrypt.compare(pwd, user.password);
-
             if (!validPwd) {
                 // 422 error code for email was found, but password wasn't correct (wrong input)
                 setResponseStatus(event, 422)
-                return { isValid: false, message: 'Incorrent email or password.' };
+                return { isValid: false, message: 'Incorrect email or password.' };
             }
         }
 
@@ -75,9 +73,12 @@ export async function loginLogic(event){
 
     const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
 
+
     // RateLimiter
     const ip = getRequestHeader(event, 'x-forwarded-for') || event.node.req.socket.remoteAddress;
+
     const { allowed, retryAfter } = await checkRateLimit(ip, '/api/login');
+
     if (!allowed) {
         setResponseStatus(event, 429);
         return {
@@ -103,7 +104,7 @@ export async function loginLogic(event){
     // Validation for Email password remains as is for security
     if (!rawEmail || !validator.isEmail(rawEmail) || !rawPassword) {
         setResponseStatus(event, 400)
-        return { isValid: false, message: "Incorrent email or password." }
+        return { isValid: false, message: "Missing/invalid email or password." }
     }
 
     // Sanitize
@@ -111,5 +112,3 @@ export async function loginLogic(event){
 
     return await checkPassword(cleanEmail, rawPassword, event);
 }
-
-export default defineEventHandler(async (event) => await loginLogic(event));
