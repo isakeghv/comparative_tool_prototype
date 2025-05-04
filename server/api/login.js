@@ -126,6 +126,11 @@ export async function loginLogic(event) {
         return { isValid: false, message: "Incorrect email or password." }
     }
 
+    if (rawEmail.length >= 100 || rawPassword.length >= 100){
+        setResponseStatus(event, 401)
+        return { isValid: false, message: "Email or password is too long" }
+    }
+
     // Sanitize
     const cleanEmail = validator.normalizeEmail(rawEmail);
 

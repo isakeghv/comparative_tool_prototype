@@ -72,10 +72,18 @@ const email = {
     cleaned: {
         valid: () => validator.normalizeEmail.mockReturnValue('valid@email.com'),
         invalid: () => validator.normalizeEmail.mockReturnValue('invalid@email.com')
-    }
+    },
+    long: 'emailaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@email.email'
 };
-const pwd = { valid: 'validPassword', invalid: 'invalidPassword', empty: '' };
-const token = { valid: 'validTestingToken', invalid: 'invalidTestingToken', empty: '', mocked: () => jwt.sign.mockReturnValue('testing-mocked-jwt-token') };
+const pwd = { 
+    valid: 'validPassword', 
+    invalid: 'invalidPassword', 
+    empty: '', 
+    long: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaAA12123!!!!###' };
+const token = { valid: 'validTestingToken', 
+    invalid: 'invalidTestingToken', 
+    empty: '', 
+    mocked: () => jwt.sign.mockReturnValue('testing-mocked-jwt-token') };
 
 
 //mockup to use for setting true/false respons from validator.isEmail
@@ -99,7 +107,8 @@ beforeEach(() => {
     process.env.TURNSTILE_SECRET_KEY = 'mock-testing-secret-key'
 })
 
-//preset for when a user is found and when a user is not found: to simplify and not have to write everything each time
+//preset for when a user is found and when a user is 
+// not found: to simplify and not have to write everything each time
 const findUser = {
     //returns mockup user for when the user is found
     isFound: () => {
@@ -122,253 +131,319 @@ const pwdCompare = {
     invalid: () => bcrypt.compare.mockResolvedValue(false)
 }
 
-describe('Testing login functionality', () => {
-    describe('Testing for case: empty password', () => {
-        it('Fails when pwd is empty', async () => {
-            //creating mockup data to be passed as event content, and be read as body (using readBody)
-            const event = { turnstileToken: token.valid, email: email.valid, password: pwd.empty };
+//#1
+describe('Testing for case: empty password', () => {
+    it('Fails when pwd is empty', async () => {
+        //creating mockup data to be passed as event content, and be read as body (using readBody)
+        const event = { turnstileToken: token.valid, email: email.valid, password: pwd.empty };
 
-            //setting mockup-data to be read as event when readBody is called
-            readBody.mockImplementationOnce(() => Promise.resolve(event))
+        //setting mockup-data to be read as event when readBody is called
+        readBody.mockImplementationOnce(() => Promise.resolve(event))
 
-            findUser.isFound()
+        findUser.isFound()
 
-            //expected result for if password is empty
-            await expect(loginLogic({})).resolves.toEqual({
-                isValid: false,
-                message: "Incorrect email or password."
-            });
-        })
-    });
-
-    //NOTE: this is designed for the test to fail if the logic does not check that password has been passed as parameter
-    describe('Testing for case: missing password', () => {
-        it('Fails when pwd is missing', async () => {
-            //creating mockup data to be passed as event content, and be read as body (using readBody)
-            const event = { turnstileToken: token.valid, email: email.valid };
-
-            //setting mockup-data to be read as event when readBody is called
-            readBody.mockImplementationOnce(() => Promise.resolve(event))
-
-            //setting mockup for that the user is found: returns a mockup user
-            findUser.isFound()
-
-            //expected result for if password is empty
-            await expect(loginLogic({})).resolves.toEqual({
-                isValid: false,
-                message: "Incorrect email or password."
-            });
-        })
+        //expected result for if password is empty. 
+        // Using "toEqual" due to the response format used in the function
+        await expect(loginLogic({})).resolves.toEqual({
+            isValid: false,
+            message: "Incorrect email or password."
+        });
     })
+});
 
-    describe('Testing for case: empty email', () => {
-        it('Fails when email is empty', async () => {
-            //creating mockup data to be passed as event content, and be read as body (using readBody)
-            const event = { turnstileToken: token.valid, email: email.empty, password: pwd.valid };
+//#2
+describe('Testing for case: missing password', () => {
+    it('Fails when pwd is missing', async () => {
+        //creating mockup data to be passed as event content, and be read as body (using readBody)
+        const event = { turnstileToken: token.valid, email: email.valid };
 
-            //setting mockup-data to be read as event when readBody is called
-            readBody.mockImplementationOnce(() => Promise.resolve(event))
+        //setting mockup-data to be read as event when readBody is called
+        readBody.mockImplementationOnce(() => Promise.resolve(event))
 
-            //setting that user is not found
-            findUser.isNotFound()
+        //setting mockup for that the user is found: returns a mockup user
+        findUser.isFound()
 
-            //setting that password is compared and correct: For edgecase testing: make sure that it is not possible to bypass any way
-            pwdCompare.valid()
-
-            //expected result for if email is empty
-            await expect(loginLogic({})).resolves.toEqual({
-                isValid: false,
-                message: "Incorrect email or password."
-            });
-        })
-    });
-
-    describe('Testing for case: missing email', () => {
-        it('Fails when email is missing', async () => {
-            //creating mockup data to be passed as event content, and be read as body (using readBody)
-            const event = { turnstileToken: token.valid, password: pwd.valid };
-
-            //setting mockup-data to be read as event when readBody is called
-            readBody.mockImplementationOnce(() => Promise.resolve(event))
-
-            //setting that user is not found
-            findUser.isNotFound()
-
-            //setting that password is compared and correct: For edgecase testing: make sure that it is not possible to bypass any way
-            pwdCompare.valid()
-
-            //expected result for it email is missing
-            await expect(loginLogic({})).resolves.toEqual({
-                isValid: false,
-                message: "Incorrect email or password."
-            });
-        })
-    });
-    //NOTE this is designed for the test to fail if the logic does not check that body (event) has been passed as parameter
-    describe('Testing response for missing body', () => {
-        it('Fails body is missing', async () => {
-            //setting mockup-data to be read as event when readBody is called
-            readBody.mockImplementationOnce(() => Promise.resolve())
-
-            //expected result for if body is missing
-            await expect(loginLogic({})).resolves.toEqual({
-                isValid: false,
-                message: 'Invalid/incomplete input provided'
-            });
-        })
-    });
-
-    describe('Testing when email is incorrect', () => {
-        it('Fails when email is incorrect', async () => {
-            //creating mockup data to be passed as event content, and be read as body (using readBody)
-            const event = { turnstileToken: token.valid, email: email.invalid, password: pwd.valid };
-
-            //setting mockup-data to be read as event when readBody is called
-            readBody.mockImplementationOnce(() => Promise.resolve(event))
-
-            email.cleaned.invalid();
-            //setting that user is not found
-            findUser.isNotFound()
-            validEmail.valid()
-
-            //Expected result for if email is incorrect
-            await expect(loginLogic({})).resolves.toEqual({
-                isValid: false,
-                message: 'Incorrect email or password.'
-            });
-        })
-    });
-
-    describe('Testing when email is invaid format', () => {
-        it('Fails when email (validator.isEmail) is invalid', async () => {
-            //creating mockup data to be passed as event content, and be read as body (using readBody)
-            const event = { turnstileToken: token.valid, email: email.invalid, password: pwd.valid };
-
-            //setting mockup-data to be read as event when readBody is called
-            readBody.mockImplementationOnce(() => Promise.resolve(event))
-
-            //mock for when email is invalid
-            validEmail.invalid()
-
-            //Expected result for if email is incorrect
-            await expect(loginLogic({})).resolves.toEqual({
-                isValid: false,
-                message: 'Incorrect email or password.'
-            });
-        })
-    });
-
-    describe('Testing when password is incorrect', () => {
-        it('Fails when password is incorrect', async () => {
-            //creating mockup data to be passed as event content, and be read as body (using readBody)
-            const event = { turnstileToken: token.valid, email: email.valid, password: pwd.invalid };
-
-            //setting mockup-data to be read as event when readBody is called
-            readBody.mockImplementationOnce(() => Promise.resolve(event))
-
-            //setting mockup for this instance
-            email.cleaned.valid(); //setting mockup for cleaned email
-            findUser.isFound(); //setting mockup: user is found
-            validEmail.valid(); //mockup for valid email
-            pwdCompare.invalid(); //mock for when password is incorrect
-
-            //Expected result for if email is incorrect
-            await expect(loginLogic({})).resolves.toEqual({ isValid: false, message: 'Incorrect email or password.' });
-        })
-    });
-
-    describe('Testing when all credentials are passed', () => {
-        it('Succeeds when email, password and turnstile key is correct', async () => {
-            const event = { turnstileToken: token.valid, email: email.valid, password: pwd.valid };
-
-            readBody.mockImplementationOnce(() => Promise.resolve(event))
-
-            //setting mockdata
-            email.cleaned.valid();
-            findUser.isFound();
-            validEmail.valid();
-            pwdCompare.valid();
-            token.mocked();
-
-            await expect(loginLogic({})).resolves.toEqual({ isValid: true, message: 'Login successfully.', token: 'testing-mocked-jwt-token' });
-        })
+        //expected result for if password is empty
+        await expect(loginLogic({})).resolves.toEqual({
+            isValid: false,
+            message: "Incorrect email or password."
+        });
     })
+})
 
-    describe('Testing case: credentials are passed but captcha failed', () => {
-        it('Succeeds when email, password and turnstile key is correct', async () => {
-            const event = { turnstileToken: token.invalid, email: email.valid, password: pwd.valid };
+//#3
+describe('Testing for case: empty email', () => {
+    it('Fails when email is empty', async () => {
+        //creating mockup data to be passed as event content, and be read as body (using readBody)
+        const event = { turnstileToken: token.valid, email: email.empty, password: pwd.valid };
 
-            readBody.mockImplementationOnce(() => Promise.resolve(event))
+        //setting mockup-data to be read as event when readBody is called
+        readBody.mockImplementationOnce(() => Promise.resolve(event))
 
-            //setting that captcha should faild
-            $fetch.mockResolvedValue({ success: false })
+        //setting that user is not found
+        findUser.isNotFound()
 
-            await expect(loginLogic({})).resolves.toEqual({ isValid: false, message: "CAPTCHA verification failed." });
-        })
-    });
+        //setting that password is compared and correct: For edgecase 
+        // testing: make sure that it is not possible to bypass any way
+        pwdCompare.valid()
 
-    describe('Testing case: credentials are passed but captcha token is empty', () => {
-        it('Succeeds when email, password and turnstile key is correct', async () => {
-            const event = { turnstileToken: token.empty, email: email.valid, password: pwd.valid };
-
-            readBody.mockImplementationOnce(() => Promise.resolve(event))
-
-            //setting that captcha should faild
-            $fetch.mockResolvedValue({ success: false })
-
-            await expect(loginLogic({})).resolves.toEqual({ isValid: false, message: "CAPTCHA verification failed." });
-        })
-    });
-
-    describe('Testing case: credentials are passed but captcha token is missing', () => {
-        it('Succeeds when email, password and turnstile key is correct', async () => {
-            const event = { email: email.valid, password: pwd.valid };
-
-            readBody.mockImplementationOnce(() => Promise.resolve(event))
-
-            //setting that captcha should faild
-            $fetch.mockResolvedValue({ success: false })
-
-            await expect(loginLogic({})).resolves.toEqual({ isValid: false, message: "CAPTCHA verification failed." });
-        })
-    });
-
-    describe('Testing case: rate-limiting returned false', () => {
-        it('Fails when rate-limiting returns false', async () => {
-            const event = { turnstileToken: token.empty, email: email.valid, password: pwd.valid };
-
-            readBody.mockImplementationOnce(() => Promise.resolve(event))
-
-            checkRateLimit.mockResolvedValueOnce({ allowed: false, retryAfter: 60000 })
-
-            //setting that captcha should succeeds
-            $fetch.mockResolvedValue({ success: true })
-
-            await expect(loginLogic({})).resolves.toEqual({
-                isValid: false,
-                message: `Too many login attempts. Try again in 1 minutes.`,
-            });
-        })
+        //expected result for if email is empty.
+        await expect(loginLogic({})).resolves.toEqual({
+            isValid: false,
+            message: "Incorrect email or password."
+        });
     })
+});
 
-    describe('Testing for case: Unable to connect to database', () => {
-        it('Fails unable to connect to database', async () => {
-            const event = { turnstileToken: token.empty, email: email.valid, password: pwd.valid };
+//#4
+describe('Testing for case: missing email', () => {
+    it('Fails when email is missing', async () => {
+        //creating mockup data to be passed as event content, and be read as body (using readBody)
+        const event = { turnstileToken: token.valid, password: pwd.valid };
 
-            readBody.mockImplementationOnce(() => Promise.resolve(event))
+        //setting mockup-data to be read as event when readBody is called
+        readBody.mockImplementationOnce(() => Promise.resolve(event))
 
-            checkRateLimit.mockResolvedValueOnce({ allowed: true, retryAfter: 0 })
+        //setting that user is not found
+        findUser.isNotFound()
 
-            //setting that captcha should succeeds
-            $fetch.mockResolvedValue({ success: true })
+        //setting that password is compared and correct: For edgecase testing: 
+        // make sure that it is not possible to bypass any way
+        pwdCompare.valid()
 
-            //test for when database connection failed
-            connDb.mockImplementationOnce(() => { throw new Error('DB connection failed') })
+        //expected result for it email is missing
+        await expect(loginLogic({})).resolves.toEqual({
+            isValid: false,
+            message: "Incorrect email or password."
+        });
+    })
+});
 
-            await expect(loginLogic({})).resolves.toEqual({
-                isValid: false,
-                message: 'Unable to connect to database',
-            });
-        })
+//#5
+describe('Testing response for missing body', () => {
+    it('Fails body is missing', async () => {
+        //setting mockup-data to be read as event when readBody is called
+        readBody.mockImplementationOnce(() => Promise.resolve())
+
+        //expected result for if body is missing
+        await expect(loginLogic({})).resolves.toEqual({
+            isValid: false,
+            message: 'Invalid/incomplete input provided'
+        });
+    })
+});
+
+//#6
+describe('Testing when email is incorrect', () => {
+    it('Fails when email is incorrect', async () => {
+        //creating mockup data to be passed as event content, and be read as body (using readBody)
+        const event = { turnstileToken: token.valid, email: email.invalid, password: pwd.valid };
+
+        //setting mockup-data to be read as event when readBody is called
+        readBody.mockImplementationOnce(() => Promise.resolve(event))
+
+        email.cleaned.invalid();
+        //setting that user is not found
+        findUser.isNotFound()
+        validEmail.valid()
+
+        //Expected result for if email is incorrect
+        await expect(loginLogic({})).resolves.toEqual({
+            isValid: false,
+            message: 'Incorrect email or password.'
+        });
+    })
+});
+
+//#7
+describe('Testing when email is invaid format', () => {
+    it('Fails when email (validator.isEmail) is invalid', async () => {
+        //creating mockup data to be passed as event content, and be read as body (using readBody)
+        const event = { turnstileToken: token.valid, email: email.invalid, password: pwd.valid };
+
+        //setting mockup-data to be read as event when readBody is called
+        readBody.mockImplementationOnce(() => Promise.resolve(event))
+
+        //mock for when email is invalid
+        validEmail.invalid()
+
+        //Expected result for if email is incorrect
+        await expect(loginLogic({})).resolves.toEqual({
+            isValid: false,
+            message: 'Incorrect email or password.'
+        });
+    })
+});
+
+//#8
+describe('Testing when password is incorrect', () => {
+    it('Fails when password is incorrect', async () => {
+        //creating mockup data to be passed as event content, and be read as body (using readBody)
+        const event = { turnstileToken: token.valid, email: email.valid, password: pwd.invalid };
+
+        //setting mockup-data to be read as event when readBody is called
+        readBody.mockImplementationOnce(() => Promise.resolve(event))
+
+        //setting mockup for this instance
+        email.cleaned.valid();
+        findUser.isFound();
+        validEmail.valid();
+        pwdCompare.invalid();
+
+        //Expected result for if email is incorrect
+        await expect(loginLogic({})).resolves.toEqual({ isValid: false, message: 'Incorrect email or password.' });
+    })
+});
+
+//#9
+describe('Testing when all credentials are passed', () => {
+    it('Succeeds when email, password and turnstile key is correct', async () => {
+        const event = { turnstileToken: token.valid, email: email.valid, password: pwd.valid };
+
+        readBody.mockImplementationOnce(() => Promise.resolve(event))
+
+        //setting mockdata
+        email.cleaned.valid();
+        findUser.isFound();
+        validEmail.valid();
+        pwdCompare.valid();
+        token.mocked();
+
+        await expect(loginLogic({})).resolves.toEqual({ 
+            isValid: true, 
+            message: 'Login successfully.', 
+            token: 'testing-mocked-jwt-token' });
+    })
+})
+
+//#10
+describe('Testing case: credentials are passed but captcha failed', () => {
+    it('Succeeds when email, password and turnstile key is correct', async () => {
+        const event = { turnstileToken: token.invalid, email: email.valid, password: pwd.valid };
+
+        readBody.mockImplementationOnce(() => Promise.resolve(event))
+
+        //setting that captcha should faild
+        $fetch.mockResolvedValue({ success: false })
+
+        await expect(loginLogic({})).resolves.toEqual({ isValid: false, message: "CAPTCHA verification failed." });
+    })
+});
+
+//#11
+describe('Testing case: captcha token is empty', () => {
+    it('Succeeds when email, password and turnstile key is correct', async () => {
+        const event = { turnstileToken: token.empty, email: email.valid, password: pwd.valid };
+
+        readBody.mockImplementationOnce(() => Promise.resolve(event))
+
+        //setting that captcha should faild
+        $fetch.mockResolvedValue({ success: false })
+
+        await expect(loginLogic({})).resolves.toEqual({ isValid: false, message: "CAPTCHA verification failed." });
+    })
+});
+
+//#12
+describe('Testing case: credentials are passed but captcha token is missing', () => {
+    it('Succeeds when email, password and turnstile key is correct', async () => {
+        const event = { email: email.valid, password: pwd.valid };
+
+        readBody.mockImplementationOnce(() => Promise.resolve(event))
+
+        //setting that captcha should faild
+        $fetch.mockResolvedValue({ success: false })
+
+        await expect(loginLogic({})).resolves.toEqual({ isValid: false, message: "CAPTCHA verification failed." });
+    })
+});
+
+//#13
+describe('Testing case: rate-limiting returned false', () => {
+    it('Fails when rate-limiting returns false', async () => {
+        const event = { turnstileToken: token.empty, email: email.valid, password: pwd.valid };
+
+        readBody.mockImplementationOnce(() => Promise.resolve(event))
+
+        checkRateLimit.mockResolvedValueOnce({ allowed: false, retryAfter: 60000 })
+
+        //setting that captcha should succeeds
+        $fetch.mockResolvedValue({ success: true })
+
+        await expect(loginLogic({})).resolves.toEqual({
+            isValid: false,
+            message: `Too many login attempts. Try again in 1 minutes.`,
+        });
+    })
+})
+
+//#14
+describe('Testing for case: Unable to connect to database', () => {
+    it('Fails unable to connect to database', async () => {
+        const event = { turnstileToken: token.empty, email: email.valid, password: pwd.valid };
+
+        readBody.mockImplementationOnce(() => Promise.resolve(event))
+
+        checkRateLimit.mockResolvedValueOnce({ allowed: true, retryAfter: 0 })
+
+        //setting that captcha should succeeds
+        $fetch.mockResolvedValue({ success: true })
+
+        //test for when database connection failed
+        connDb.mockImplementationOnce(() => { throw new Error('DB connection failed') })
+
+        await expect(loginLogic({})).resolves.toEqual({
+            isValid: false,
+            message: 'Unable to connect to database',
+        });
+    })
+});
+
+//#15
+describe('Testing for case: email is too long', () => {
+    it('Fails email is too long', async () => {
+
+        //using the long password, which should throw boundary case
+        const event = { turnstileToken: token.valid, email: email.long, password: pwd.valid };
+
+        readBody.mockImplementationOnce(() => Promise.resolve(event))
+
+        checkRateLimit.mockResolvedValueOnce({ allowed: true, retryAfter: 0 })
+
+        //mock for when email is valid
+        validEmail.valid()
+
+        //setting that captcha should succeeds
+        $fetch.mockResolvedValue({ success: true })
+
+        await expect(loginLogic({})).resolves.toEqual({
+            isValid: false,
+            message: 'Email or password is too long',
+        });
+    })
+})
+
+//#16
+describe('Testing for case: password is too long', () => {
+    it('Fails password is too long', async () => {
+
+        //using the long password, which should throw boundary case
+        const event = { turnstileToken: token.valid, email: email.valid, password: pwd.long };
+
+        readBody.mockImplementationOnce(() => Promise.resolve(event))
+
+        checkRateLimit.mockResolvedValueOnce({ allowed: true, retryAfter: 0 })
+
+        //mock for when email is valid
+        validEmail.valid()
+
+        //setting that captcha should succeeds
+        $fetch.mockResolvedValue({ success: true })
+
+        //setting what response it should expect back
+        await expect(loginLogic({})).resolves.toEqual({
+            isValid: false,
+            message: 'Email or password is too long',
+        });
     })
 })
