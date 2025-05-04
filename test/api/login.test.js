@@ -133,7 +133,7 @@ describe('Testing login functionality', () => {
         })
     });
 
-
+    //NOTE: this is designed for the test to fail if the logic does not check that password has been passed as parameter
     describe('Testing for case: missing password', () => {
         it('Fails when pwd is missing', async () => {
             //creating mockup data to be passed as event content, and be read as body (using readBody)
@@ -196,7 +196,7 @@ describe('Testing login functionality', () => {
             });
         })
     });
-
+    //NOTE this is designed for the test to fail if the logic does not check that body(event) has been passed as parameter
     describe('Testing response for missing body', () => {
         it('Fails body is missing', async () => {
             //setting mockup-data to be read as event when readBody is called
