@@ -8,55 +8,55 @@ const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 let browser, page;
 
 describe('Testing study editor functionality', () => {  
-    // describe('Saving study', () => {
-    //     beforeAll(async () => {
-    //         try {
-    //             const result = await setupBrowserWithLogin();
-    //             browser = result.browser;
-    //             page = result.page;
-    //           } catch (err) {
-    //             console.error('setup failed:', err);
-    //           }
-    //     });
+    describe('Saving study', () => {
+        beforeAll(async () => {
+            try {
+                const result = await setupBrowserWithLogin();
+                browser = result.browser;
+                page = result.page;
+              } catch (err) {
+                console.error('setup failed:', err);
+              }
+        });
 
-    //     it('Saving without using a title', async () => {
-    //         await page.waitForSelector('#new-study');
-    //         await page.click('#new-study');
-    //         await page.type('#details__textarea', 'This is a description.');
-    //         await page.click('#header-save-btn');
-    //         await page.click('#unable-save-exit');
+        it('Saving without using a title', async () => {
+            await page.waitForSelector('#new-study');
+            await page.click('#new-study');
+            await page.type('#details__textarea', 'This is a description.');
+            await page.click('#header-save-btn');
+            await page.click('#unable-save-exit');
         
-    //         page.on('dialog', async dialog => {
-    //             await dialog.dismiss();
-    //         }, 30000);
+            page.on('dialog', async dialog => {
+                await dialog.dismiss();
+            }, 30000);
         
-    //         await page.click('#study-return');
-    //         await page.type('#details__title_input', 'Perfect title');
-    //         await page.click('#header-save-btn');
-    //         await page.click('#study-return');
-    //     }, 30000);
+            await page.click('#study-return');
+            await page.type('#details__title_input', 'Perfect title');
+            await page.click('#header-save-btn');
+            await page.click('#study-return');
+        }, 30000);
 
-    //     it('Deleting example study', async () => {
-    //         await page.click('.card__button');
-    //         await page.waitForSelector('#popup-delete-btn');
-    //         await page.click('#popup-delete-btn');
-    //     }, 20000);
+        it('Deleting example study', async () => {
+            await page.click('.card__button');
+            await page.waitForSelector('#popup-delete-btn');
+            await page.click('#popup-delete-btn');
+        }, 20000);
     
-    //     it('Reload without saving', async () => {
-    //         await page.waitForSelector('#new-study');
-    //         await page.click('#new-study');
-    //         await page.type('#details__title_input', 'New study');
-    //         await page.click('#header-undo-btn');
+        it('Reload without saving', async () => {
+            await page.waitForSelector('#new-study');
+            await page.click('#new-study');
+            await page.type('#details__title_input', 'New study');
+            await page.click('#header-undo-btn');
 
-    //         await page.type('#details__title_input', 'cool study');
-    //         await page.reload({ waitUntil: 'networkidle0' });
-    //     }, 30000);
+            await page.type('#details__title_input', 'cool study');
+            await page.reload({ waitUntil: 'networkidle0' });
+        }, 30000);
 
-    //     // close after sub-suite
-    //     afterAll(async () => {
-    //         await browser.close();
-    //     });
-    // });
+        // close after sub-suite
+        afterAll(async () => {
+            await browser.close();
+        });
+    });
 
     describe('Create, publish and see responses of study', () => {
         beforeAll(async () => {
