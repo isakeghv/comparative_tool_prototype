@@ -1,4 +1,4 @@
-import { checkRateLimit } from '../services/rateLimiter';
+import { checkRateLimit } from '../server/services/rateLimiter';
 
 export default defineEventHandler(async (event) => {
   const ip = getRequestHeader(event, 'x-forwarded-for') || event.node.req.socket.remoteAddress;
