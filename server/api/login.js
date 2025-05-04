@@ -71,7 +71,15 @@ export async function loginLogic(event) {
         setResponseStatus(event, 401)
         return { isValid: false, message: 'Invalid/incomplete input provided' }
     }
-    await connDb();
+
+    //updated to use try/catch for database, so errors can be caught and returned
+    try {
+        await connDb();
+    } catch (err) {
+        setResponseStatus(event, 500);
+        return { isValid: false, message: 'Unable to connect to database' }
+    }
+
     const body = await readBody(event);
 
     if (!body) {

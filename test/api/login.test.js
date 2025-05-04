@@ -239,6 +239,25 @@ describe('Testing login functionality', () => {
         })
     });
 
+    describe('Testing when email is invaid format', () => {
+        it('Fails when email (validator.isEmail) is invalid', async () => {
+            //creating mockup data to be passed as event content, and be read as body (using readBody)
+            const event = { turnstileToken: token.valid, email: email.invalid, password: pwd.valid };
+
+            //setting mockup-data to be read as event when readBody is called
+            readBody.mockImplementationOnce(() => Promise.resolve(event))
+
+            //mock for when email is invalid
+            validEmail.invalid()
+
+            //Expected result for if email is incorrect
+            await expect(loginLogic({})).resolves.toEqual({
+                isValid: false,
+                message: 'Incorrect email or password.'
+            });
+        })
+    });
+
     describe('Testing when password is incorrect', () => {
         it('Fails when password is incorrect', async () => {
             //creating mockup data to be passed as event content, and be read as body (using readBody)
@@ -322,12 +341,33 @@ describe('Testing login functionality', () => {
 
             checkRateLimit.mockResolvedValueOnce({ allowed: false, retryAfter: 60000 })
 
-            //setting that captcha should faild
+            //setting that captcha should succeeds
             $fetch.mockResolvedValue({ success: true })
 
             await expect(loginLogic({})).resolves.toEqual({
                 isValid: false,
                 message: `Too many login attempts. Try again in 1 minutes.`,
+            });
+        })
+    })
+
+    describe('Testing for case: Unable to connect to database', () => {
+        it('Fails unable to connect to database', async () => {
+            const event = { turnstileToken: token.empty, email: email.valid, password: pwd.valid };
+
+            readBody.mockImplementationOnce(() => Promise.resolve(event))
+
+            checkRateLimit.mockResolvedValueOnce({ allowed: true, retryAfter: 0 })
+
+            //setting that captcha should succeeds
+            $fetch.mockResolvedValue({ success: true })
+
+            //test for when database connection failed
+            connDb.mockImplementationOnce(() => { throw new Error('DB connection failed') })
+
+            await expect(loginLogic({})).resolves.toEqual({
+                isValid: false,
+                message: 'Unable to connect to database',
             });
         })
     })
