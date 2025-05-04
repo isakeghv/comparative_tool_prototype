@@ -28,7 +28,7 @@ describe('Testing study editor functionality', () => {
         
             page.on('dialog', async dialog => {
                 await dialog.dismiss();
-            }, 30000);
+            });
         
             await page.click('#study-return');
             await page.type('#details__title_input', 'Perfect title');
