@@ -11,12 +11,12 @@ import { useRuntimeConfig, setCookie } from '#imports';
 import validator from "validator";
 import { readBody, setResponseStatus, getRequestHeader, defineEventHandler } from "h3";
 import { connDb } from '~/server/services/connDb.js';
-import { UserCredential } from '~server/services/schemas/userSchema.js';
-import { checkRateLimit } from '~server/services/rateLimiter.js';
+import { UserCredential } from '~/server/schemas/userSchema.js';
+import { checkRateLimit } from '~/server/services/rateLimiter.js';
 import { $fetch } from 'ofetch';
 
 //mockup for returning a user: So it does not need to make a real call
-vi.mock('~server/services/schemas/userSchema.js', () => ({ UserCredential: { findOne: vi.fn() } }));
+vi.mock('~/server/schemas/userSchema.js', () => ({ UserCredential: { findOne: vi.fn() } }));
 
 //mockup for comparing password: So it does not need to be actually compared, 
 // instead the mockup can be set to return the desired response
@@ -56,7 +56,7 @@ vi.mock('h3', () => ({
 vi.mock('~/server/services/connDb.js', () => ({ connDb: vi.fn() }))
 
 //mockup for checking rate limiter
-vi.mock('~server/services/rateLimiter.js', () => ({
+vi.mock('~/server/services/rateLimiter.js', () => ({
     checkRateLimit: vi.fn(() => Promise.resolve({ allowed: true, retryAfter: 0 })),
     default: { checkRateLimit: vi.fn(() => Promise.resolve({ allowed: true, retryAfter: 0 })) }
 }))

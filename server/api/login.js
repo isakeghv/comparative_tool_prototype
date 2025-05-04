@@ -4,8 +4,8 @@ import { useRuntimeConfig, setCookie } from '#imports';
 import validator from "validator";
 import { readBody, setResponseStatus, getRequestHeader, defineEventHandler } from "h3";
 import { connDb } from '~/server/services/connDb.js';
-import { UserCredential } from '~server/services/schemas/userSchema.js';
-import { checkRateLimit } from '~server/services/rateLimiter.js';
+import { UserCredential } from '~/server/schemas/userSchema.js';
+import { checkRateLimit } from '~/server/services/rateLimiter.js';
 import { $fetch } from 'ofetch';
 
 // access runtime config variables
