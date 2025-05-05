@@ -12,7 +12,7 @@
                 </label>
             </div>
             <label v-if="study.customTerms.request" for="terms__textarea" class="details__label font-h6 font-medium hide">Terms of Service and Privacy Policy: </label>
-            <textarea v-if="study.customTerms.request" id="terms__textarea" class="details__textarea font-normal" v-model="study.customTerms.terms" :disabled=isDisabled>
+            <textarea v-if="study.customTerms.request" id="terms__textarea" class="details__textarea font-normal" v-model="study.customTerms.terms" :disabled=isDisabled maxlength="10000">
             </textarea>
         </div>
     </div>

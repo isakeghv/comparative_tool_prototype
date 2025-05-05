@@ -8,17 +8,24 @@
 				</svg>
             </button>
         </div>
-        <p class="modal__paragraph">
+      
+        <div v-if="errorMsgs.length">
+            <div v-for="(msg, index) in errorMsgs" :key="index">
+                {{ msg }}
+            </div>
+        </div>
+        <p v-else class="modal__paragraph">
             {{  message }}
         </p>
     </div>
-
 </template>
 
 <script setup>
+import { errorMsgs } from '~/public/script/reactive';
+
 const props = defineProps({
     errors: Array,
-    // reason: String
+    info: Object
 });
 
 const emit = defineEmits(['exit']);
@@ -28,24 +35,25 @@ const exit = () => {
 }
 
 const message = computed(() => {
-    if (props.reason === 'save') {
-        return 'You need to save your changes before publishing';
-    } else {
-        return 'Some required fields are missing. Please ensure that the study details include a title for example.';
-}});
+    if (props.info.reason === 'save') {
+        return 'Save changes before publishing.';
+    }
+
+    if (props.info.reason === 'noQuestions') {
+        return 'At least one question is required to publish the study.';
+    }
+
+    return 'Some required fields are missing. Please ensure that the study details include a title for example.';
+});
 
 // need to override the body styling due to scrollbar gutter
 onMounted(() => {
-    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-
     document.body.style.overflow = 'hidden';
-    document.body.style.paddingRight = `${scrollBarWidth}px`; 
 });
 
 // restore scrolling
 onBeforeUnmount(() => {
     document.body.style.overflow = '';
-    document.body.style.paddingRight = '';
 });
 </script>
 

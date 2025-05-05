@@ -28,7 +28,7 @@
                 <DashboardLink :study="study" />
             </div>
             <button v-if="!isDisabled" class="header__btn header__btn--publish font-semi font-normal" id="header-publish-btn"
-                @click="setStudyStatus('ongoing')" :disabled=isCreatingStudy>Publish</button>
+                @click="setStudyStatus('ongoing')" :disabled="isCreatingStudy && !isEditingStudy">Publish</button>
             <button v-if="study && (study.status === 'ongoing' || study.status === 'completed')"
                 class="header__btn header__btn--publish header__btn--toggle font-semi font-normal"
                 id="header-btn-responses"
@@ -36,7 +36,8 @@
             </button>
             <button v-if="study && study.status === 'ongoing'"
                 class="header__btn header__btn--close font-semi font-normal"
-                @click="setStudyStatus('completed')">Close</button>
+                @click="setStudyStatus('completed')">Close
+            </button>
         </div>
         <slot></slot>
     </header>
@@ -45,7 +46,7 @@
 <script setup>
 //importing reactive variable which holds the id of the study and where the study questions are stored
 import StudyService from '~/services/studyService';
-import { user, study, configs, currentConfigIndex, allUploadedArtifacts, initialStudy, showResponses } from '~/public/script/reactive';
+import { user, study, configs, currentConfigIndex, allUploadedArtifacts, initialStudy, showResponses, errorMsgs } from '~/public/script/reactive';
 import { compareStudies } from '~/utils/studyUtils';
 
 const isDisabled = inject('disabled', ref(false));
@@ -53,12 +54,13 @@ const isDisabled = inject('disabled', ref(false));
 const props = defineProps({
     name: String,
     id: String,
-    // newStudy: Boolean,
     isCreatingStudy: Boolean
 })
 
 //event to emit in case the study was unable to save
 const emit = defineEmits(['unableSave', 'update:isCreatingStudy']);
+// need to check if publish button should be disabled or not
+const isEditingStudy = ref(localStorage.getItem('isEditingStudy') === 'true');
 
 //saves it to "study.initial": 
 // - The "back" button prevents user from going back if the initial study-configuration is not
@@ -141,8 +143,11 @@ const saveStudy = async () => {
      // if study gets created, update the flag to true
 
 
-     //checks if user already has a study with the selected id
+    //checks if user already has a study with the selected id
     const studyAlreadyExists = user.studies.find(us => us.id === study.id)
+
+    // return and show 'unableSave' modal if global ref `errorMsgs` has any errors
+    if (errorMsgs.value.length > 0) return emit('unableSave');
 
     try {
         if (props.isCreatingStudy && !studyAlreadyExists) {
@@ -206,7 +211,7 @@ const saveStudy = async () => {
             return;
         }
     } catch (error) {
-        console.error('Error saving study:', error);
+        // console.error('Error saving study:', error);
         if (error && error.errors) {
             console.error('Schema validation errors:');
             for (const field in error.errors) {
@@ -228,26 +233,40 @@ const setStudyStatus = async (status) => {
 
     // if there is changes and it hasn't been created yet, show a prompt box telling them to save, else publish the study
     // TODO: add more checks here omg
-    if (!noChanges) {
-        emit('unableSave', { reason: 'save' });
-        return;
-    }
+    if (!noChanges) return emit('unableSave', { reason: 'save' });
 
     const studyIndex = user.studies.findIndex(userStudy => userStudy.id === study.id);
 
     // don't update if status is already 'ongoing' or 'completed' (depending on set status)
     if (study.status === status) return;
 
-    const updatedStudy = await StudyService.updateStudyStatus(study.id, status);
+    // if study has zero question, emit reason and return
+    // if (study.questions.length === 0) {
+    //     return emit('unableSave', { reason: 'noQuestions' });
+    // }  else {
+    //     study.questions.map(q => {
+    //         if (q.artifacts.length === 0) {
+    //             return emit('unableSave')
+    //         }
+    //     })
+    // }
+ 
+    try {
+        const updatedStudy = await StudyService.updateStudyStatus(study.id, status);
 
-    // update status, set disabled to true; insert the status for the client-side as well
-    if (updatedStudy) {
-        // remove the saved study from localStorage
-        localStorageCleanup();
-
-        user.studies[studyIndex].status = status;
-        study.status = status;
-        isDisabled.value = true;
+        // update status, set disabled to true; insert the status for the client-side as well
+        if (updatedStudy.updated) {
+            // remove the saved study from localStorage
+            localStorageCleanup();
+            user.studies[studyIndex].status = status;
+            study.status = status;
+            isDisabled.value = true;
+        } else {
+            emit('unableSave', { reason: 'noQuestions' });
+        }
+    } catch (err) {
+        console.error('Failed to update study status:', err);
+        emit('unableSave', { reason: 'error' });
     }
 }
 </script>

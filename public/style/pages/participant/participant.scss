@@ -3,6 +3,7 @@
 
 .participant {
     &__title {
+        max-width: 50rem;
         margin-bottom: 1.4rem;
 
         &::after {
@@ -20,6 +21,7 @@
 
     &__desc {
         line-height: 1.5;
+        word-break: break-word;
     }
 
     &__sub {

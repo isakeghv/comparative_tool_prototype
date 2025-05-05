@@ -94,6 +94,10 @@
         &:active {
             opacity: 1;
         }
+
+        &:disabled {
+            opacity: 0.6;
+        }
     }
 
     &__plus {
@@ -153,5 +157,11 @@
 
     &__svg {
         height: 1.6rem;
+    }
+
+    &__duplicate {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }

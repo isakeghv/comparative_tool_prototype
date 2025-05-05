@@ -186,7 +186,10 @@
     }
 
     &__box {
+        width: 1.2rem;
         margin-right: 0.8rem;
+        display: flex;
+        justify-content: center;
     }
 
     &__fieldset {
@@ -250,6 +253,7 @@
             transition: transform 0.2s ease;
             border-left: v.$borderSolid;
             height: 100%;
+            overflow: auto;
         }
     }
 

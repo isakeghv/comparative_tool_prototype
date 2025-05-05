@@ -51,7 +51,7 @@
                                 fill="#444444" />
                         </svg>
                     </button>
-                    <StudyArtifactDelete :artifact="artifact" :questionID="config.id" />
+                    <StudyArtifactDelete v-if="!isDisabled":artifact="artifact" :questionID="config.id" />
                 </div>
                 
                 <StudyArtifact :source="artifact.source" :id="artifact.id" />

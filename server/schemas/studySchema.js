@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import * as validator from '@/validators/studyValidator.js';
 const { Schema } = mongoose;
 
 // each schema below will be embedded directly into the 'StudySchema' document
@@ -24,9 +25,7 @@ const QuestionSchema = new Schema({
 		],
 		required: true,
 	},
-	// radio: { type: String },
 	checkbox: {
-		// options: [{ type: String }],
 		selectionMin: { type: Number },
 		selectionMax: { type: Number }
 	},
@@ -105,10 +104,20 @@ const StudySchema = new Schema({
 	},
 	customTerms: {
 		request: { type: Boolean, default: false},
-		terms: { type: String }
+		terms: {
+			type: String,
+			maxlength: [10000, 'Consent form exceeds 10000 characters.']
+		}
 	},
-	title: { type: String, required: true },
-	description: String,
+	title: {
+		type: String,
+		required: true,
+		maxlength: [75, 'Title exceeds 75 characters.']
+	},
+	description: {
+		type: String,
+		maxlength: [3000, 'Description exceeds 3000 characters.']
+	},
 	currentReplies: { type: Number, default: 0 },
 	status: {
 		type: String,
@@ -123,9 +132,27 @@ const StudySchema = new Schema({
 		responses: { type: Number },
 	},
 	desiredResponses: { type: Number },
-	questions: [QuestionSchema],
+	questions: {
+		type: [QuestionSchema],
+		default: [],
+		validate: {
+			validator: function(val) {
+				return val.length <= 40;
+			},
+			message: 'A study cannot have more than 40 questions.'
+		}
+	},
 	demographicReq: { type: Boolean, required: true, default: false },
-	demographic: [DemographicSchema],
+	demographic: {
+		type: [DemographicSchema],
+		default: [],
+		validate: {
+			validator: function(val) {
+				return val.length <= 20;
+			},
+			message: 'Demographics cannot have more than 20 questions'
+		}
+	},
 	created: {
 		type: Date,
 		immutable: true,
@@ -139,33 +166,6 @@ const StudySchema = new Schema({
 		type: Date,
 		default: null, // will set when study has been published
 	},
-});
-
-// when publishing a study, if it's ongoing but no questions prevent it from updating status and throw error
-// not this doesnt work yet
-// StudySchema.pre('findOneAndUpdate', async function (next) {
-// 	console.log('Check...');
-  
-// 	const update = this.getUpdate();
-// 	const newStatus = update?.status;
-  
-// 	// check if status is being set to 'ongoing'
-// 	if (newStatus === 'ongoing') {
-// 		// retrieves the id used to get the study
-// 		const studyId = this.getQuery().id;
-// 		const currentStudy = await this.model.findOne({ id: studyId });
-	
-// 		if (!currentStudy) {
-// 			return next(new Error('Study not found.'));
-// 		}
-	
-// 		// check if it has no questions
-// 		if (!currentStudy.questions || currentStudy.questions.length === 0) {
-// 			return next(new Error('At least one question is required to publish the study.'));
-// 		}
-// 	}
-  
-// 	next();
-// });  
+}); 
 
 export const Study = mongoose.model('Study', StudySchema);

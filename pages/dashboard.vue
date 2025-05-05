@@ -1,5 +1,5 @@
 <template>
-	<DashboardHeader :name="displayName" v-model:isCreatingStudy="isCreatingStudy" @updateNewStudyStatus="isCreatingStudy = $event" @unableSave="(reason) => displayUnableSaveBox(true, reason)" :newStudy="onNewStudy" :disabled="isReadOnly" />
+	<DashboardHeader :name="displayName" v-model:isCreatingStudy="isCreatingStudy" @updateNewStudyStatus="isCreatingStudy = $event" @unableSave="(info) => displayUnableSaveBox(true, info)" :newStudy="onNewStudy" :disabled="isReadOnly" />
 	<div class="container" v-if="showMain && !study.id">
 		<DashboardMain
             @newStudy="(id) => onNewStudy(id)" 
@@ -12,7 +12,8 @@
     <StudyEditor v-if="study.id" :disabled="isReadOnly" />
 
     <!--Prompt box informing user that study cannot be saved due to missing fields-->
-    <DashboardUnableSave @exit="displayUnableSaveBox(false)" v-if="showUnableSaveBox && study.id" />
+    <DashboardUnableSave v-if="showUnableSaveBox && study.id" @exit="displayUnableSaveBox(false)" :info="unableSaveReason" 
+    />
 
 	<!--Display message if issues fetting user-info-->
 	<div class="container" v-if="!showMain && !study.id">
@@ -49,9 +50,9 @@ const isCreatingStudy = ref(false);
 const showUnableSaveBox = ref(false);
 
 //toggles the prompt-box providing user message that study cannot be saved, and a reason (if included)
-const displayUnableSaveBox = (display, reason = '') => {
+const displayUnableSaveBox = (display, info = {}) => {
     showUnableSaveBox.value = display;
-    unableSaveReason.value = reason;
+    unableSaveReason.value = info;
 }
 
 const getUserInfo = async () => {
