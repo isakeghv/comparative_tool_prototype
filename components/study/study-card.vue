@@ -74,10 +74,11 @@ const studyEdit = (id) =>{
 }
 
 //emitting study id with "duplicate" event
-const studyDuplicate = (study) =>{
-    showPopUp.value = false
+const studyDuplicate = (study) => {
+    showPopUp.value = false;
     emit('duplicate', study);
-}
+};
+
 
 //emitting study id and format with "export" event
 const studyExport = (id, format) =>{
