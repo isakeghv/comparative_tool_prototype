@@ -75,8 +75,6 @@ const props = defineProps({
 	questionIndex: Number
 });
 
-console.log(participantAnswer);
-
 // ref for 'radio' option
 const selectedArtifact = ref('');
 
