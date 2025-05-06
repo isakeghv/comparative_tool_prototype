@@ -7,12 +7,14 @@
         <Demographic v-if="showDemographics" />
         <StudyConsentForm v-if="showTerms" />
         <StudyMain v-if="showQuestionMain" :index="questionIndex" :id="questionId" />
+        <StudyPreview :study="study" v-if="showPreview"/>
     </div>
 </template>
 
 <script setup>
 import StudyConsentForm from './study-consent-form.vue';
-import { allUploadedArtifacts, study } from '~/public/script/reactive';
+import { allUploadedArtifacts, study, showPreview } from '~/public/script/reactive';
+import StudyPreview from './preview/study-preview.vue';
 
 const emit = defineEmits(['unableSave'])
 

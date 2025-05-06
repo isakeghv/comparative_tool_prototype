@@ -14,6 +14,8 @@ export const user = reactive({
     studies: null,
 })
 
+export const showPreview = ref(false);
+
 //reactive variable to hold the selected study-id and questions
 export const study = reactive({
     id: null,
