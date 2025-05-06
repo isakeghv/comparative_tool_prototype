@@ -1,4 +1,5 @@
-import { checkRateLimit } from '../services/rateLimiter';
+//modified path so it is functional and works with db
+import { checkRateLimit } from '~/server/services/rateLimiter';
 
 export default defineEventHandler(async (event) => {
   const ip = getRequestHeader(event, 'x-forwarded-for') || event.node.req.socket.remoteAddress;
