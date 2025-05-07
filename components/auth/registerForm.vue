@@ -109,6 +109,10 @@ const registerUser = async () => {
   if (!token) {
     registerStatus.value = 'error';
     statusMsg.value = 'CAPTCHA verification failed.';
+
+    if (window.turnstile) {
+    window.turnstile.reset();
+  }
     return;
   }
 
@@ -139,9 +143,11 @@ const registerUser = async () => {
         //if account was succesfully created, it logs the user in automatically
         const loginRes = await fetch('/api/login', {
             method: 'POST',
+            credentials: 'include',
             body: JSON.stringify({
                 email: email.value,
-                password: pwd.value
+                password: pwd.value,
+                skipCaptcha: true
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -150,11 +156,17 @@ const registerUser = async () => {
 
         const login = await loginRes.json()
 
-        if (login.isValid) location.reload();
-    } else {
-        registerStatus.value = 'error';
-        statusMsg.value = success.message
-    }
+        if (login.isValid) {
+            if (window.turnstile) window.turnstile.reset();
+            location.reload();}
+        } else{
+            registerStatus.value = 'error';
+            statusMsg.value = success.message;
+
+            if (window.turnstile) {
+            window.turnstile.reset();
+            }
+        }
     
     //returns from function to emit event which informs user with status and message
     return profileCreate(success.created, success.message);
