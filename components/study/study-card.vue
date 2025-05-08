@@ -6,6 +6,8 @@
         <h3 class="card__title font-medium">{{ title }}</h3>
         <p class="card__paragraph font-small">Started: {{ formattedStartDate }}</p>
         <button class="card__select" aria-label="Open study" @click="studyEdit(id)"></button>
+
+        <div class="popup-container" ref="popupRef">
         <button class="card__button" aria-label="Open toolbar" @click="showPopUp = !showPopUp">
             <div class="card__dot">
                 <svg xmlns="http://www.w3.org/2000/svg" class="card__svg" viewBox="0 -960 960 960">
@@ -20,11 +22,14 @@
             <button class="popup__button font-normal" @click="studyDuplicate(study)">Duplicate</button>
             <button class="popup__button font-normal" @click="studyExport(id, 'json')">Export JSON</button>
             <button class="popup__button font-normal"  @click="studyExport(id, 'cvs')">Export CVS</button>
+         </div>
         </div>
     </div>
 </template>
 
 <script setup>
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+
 const props = defineProps({
     study: Object,
     title: String,
@@ -36,6 +41,22 @@ const props = defineProps({
 
 //statemanager. Setting if the pop-up menu should be displayed or not.
 const showPopUp = ref(false);
+const popupRef = ref(null);
+
+// close popup if click outside the component
+const handleClickOutside = (event) => {
+    if (popupRef.value && !popupRef.value.contains(event.target)) {
+        showPopUp.value = false;
+    }
+};
+
+onMounted(() => {
+    document.addEventListener('click', handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener('click', handleClickOutside);
+});
 
 //computed property returning a boolean. Checking if "status" is either "all" or same as "props.status". 
 // if true, it is used to display the studyblock
