@@ -67,23 +67,30 @@ const trackExistingArtifacts = () => {
 
 trackExistingArtifacts();
 
-const displayDetails = () =>{
-
-}
-
+//deletes questions and updates UI accordingly
 const deleteQuestion = (id, i) =>{
+
+    //if index of deleted question is 0, update which question that is highlighted in list,
+    // make "study.questions" empty and set UI to display details of study
     if (i === 0) {
         newActiveId.value = null;
         study.questions = [];
         return displayComponent.value = 'details'
     };
 
+    //get id of previous question
     const previousID = study.questions[i - 1].id;
+
+    //get index of previous question
     questionIndex.value = i - 1;
+
+    //set current displayed question by updating questionID
     questionId.value = previousID;
 
+    //control which question is highlighted in study-list
     newActiveId.value = previousID;
 
+    //remove question from array only after all ui etc has been updated to avoid errors
     study.questions = study.questions.filter(q => q.id !== id);
 }
 
