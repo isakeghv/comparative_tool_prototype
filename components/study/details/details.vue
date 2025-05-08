@@ -35,23 +35,23 @@ const initiateContent = () => {
 //calling function when component is displayed
 initiateContent();
 
-watch(() => titleModel.value, (newVal) => {
-    const msg = 'Study title is required.';
+// watch(() => titleModel.value, (newVal) => {
+//     const msg = 'Study title is required.';
 
-    // if title is empty, store the message if it doesn't exist already
-    if (!newVal || newVal.trim() === '') {      
-        if (!errorMsgs.value.includes(msg)) {
-            errorMsgs.value.push(msg);
-        }
-    } else {
-        // else remove it
-        const index = errorMsgs.value.indexOf(msg);
+//     // if title is empty, store the message if it doesn't exist already
+//     if (!newVal || newVal.trim() === '') {      
+//         if (!errorMsgs.value.includes(msg)) {
+//             errorMsgs.value.push(msg);
+//         }
+//     } else {
+//         // else remove it
+//         const index = errorMsgs.value.indexOf(msg);
 
-        if (index !== -1) {
-            errorMsgs.value.splice(index, 1);
-        }
-    }
-}, { immediate: true });
+//         if (index !== -1) {
+//             errorMsgs.value.splice(index, 1);
+//         }
+//     }
+// }, { immediate: true });
 </script>
 
 <style scoped>

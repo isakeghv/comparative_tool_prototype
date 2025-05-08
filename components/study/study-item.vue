@@ -1,5 +1,5 @@
 <template>
-    <li class="question__item" ref="itemRef" :class="{ 'sidebar__button--active': isActive }" :draggable="draggableItem" @drop="drop" @dragstart="dragStart"
+    <li class="question__item" ref="itemRef" :class="{ 'sidebar__button--active': isActive, 'error': errorQuestions[props.config.id] && errorQuestions[props.config.id].length !== 0}" :draggable="draggableItem" @drop="drop" @dragstart="dragStart"
         @dragover.prevent>
         <button class="question__button font-normal" @click="displayQuestion">
             <span class="question__number">{{ number }}</span>
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { study } from '~/public/script/reactive';
+import { study, errorQuestions } from '~/public/script/reactive';
 const isDisabled = inject('disabled');
 
 const props = defineProps({
@@ -102,6 +102,9 @@ const duplicateQuestion = () => {
 
     // Insert the clone right after the original
     study.questions.splice(props.index + 1, 0, clone);
+
+    // add it to the `errorQuestions` obj to track errors
+    errorQuestions[clone.id] = [];
 };
 
 </script>

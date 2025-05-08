@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { study, initialStudy, showResponses } from '~/public/script/reactive'
+import { study, initialStudy, showResponses,  errorMsgs, errorQuestions } from '~/public/script/reactive'
 import { user } from '~/public/script/reactive';
 import { compareStudies } from '~/utils/studyUtils';
 const isDisabled = inject('disabled');
@@ -49,6 +49,12 @@ const resetVariables = () => {
     initialStudy.closingLimit.duration = '';
     initialStudy.closingLimit.responses = '';
     initialStudy.desiredResponses = '';
+
+    // reset error information too
+    errorMsgs.value = [];
+    Object.keys(errorQuestions).forEach(key => {
+        delete errorQuestions[key];
+    });
 }
 
 //fixes so the UI is updated with correct title etc in dashboard

@@ -107,7 +107,7 @@
 </template>
 
 <script setup>
-import { study, showResponses, allUploadedArtifacts } from '~/public/script/reactive';
+import { study, showResponses, allUploadedArtifacts, errorQuestions } from '~/public/script/reactive';
 import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
 
 const isDisabled = inject('disabled');
@@ -188,6 +188,25 @@ const uploadFile = async (e) => {
 const switchQuestion = (nextQuestionId) => {
     // should switch to next question when deleting a question
 };
+
+// watch current question, and remove error indication for the specific question if it has a title
+watch(
+	() => config.value.question,
+	(newTitle) => {
+        if (newTitle && newTitle.trim()) {
+            errorQuestions[props.id] = false;
+        }
+    }
+);
+
+watch(
+    () => config.value.artifacts.length,
+    (length) => {
+        if (length > 0) {
+            errorQuestions[props.id] = false;
+        }
+    }
+)
 </script>
 
 <style scoped>

@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { user, study, initialStudy } from '~/public/script/reactive';
+import { user, study, initialStudy, errorMsgs, errorQuestions } from '~/public/script/reactive';
 import StudyService from '~/services/studyService';
 import ParticipantService from '~/services/participantService';
 
@@ -35,6 +35,7 @@ const displayName = ref('');
 const isReadOnly = ref(false);
 const status = ref('');
 
+console.log(errorMsgs.value, errorQuestions);
 // load study responses when 'onEdit' if it isn't a draft, and provide it to pass it within the subtree w/o prop-drilling too much
 const studyResponses = ref([]);
 provide('studyResponses', studyResponses);
@@ -96,13 +97,6 @@ if (draft && !study.id) {
     isCreatingStudy.value = true;
 }
 
-watch(study, (newVal) => {
-    if (newVal.id && newVal.status == 'draft') {
-        localStorage.setItem('unsavedStudy', JSON.stringify(newVal));
-        localStorage.setItem('isEditingStudy', isCreatingStudy.value ? 'false' : 'true');
-    }
-}, { deep: true });
-
 const populateStudy = (id) => {
     // find study with matching id that is stored when user loads dashboard
     const selectedStudy = user.studies.find(study => study.id === id);
@@ -155,6 +149,13 @@ const onDeleteStudy = (id) => {
         user.studies.splice(studyIndex, 1);
     }
 }
+
+watch(study, (newVal) => {
+    if (newVal.id && newVal.status == 'draft') {
+        localStorage.setItem('unsavedStudy', JSON.stringify(newVal));
+        localStorage.setItem('isEditingStudy', isCreatingStudy.value ? 'false' : 'true');
+    }
+}, { deep: true });
 
 // remove items used to track what response type the user is viewing when the page is set up again (on reload)
 onMounted(() => {

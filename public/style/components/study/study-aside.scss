@@ -158,6 +158,11 @@
             &:active {
                 background-color: c.$bluePrimary-active;
             }
+
+            &:disabled {
+                background-color: c.$gray;
+                color: c.$white;
+            }
         }
 
         &--remove {

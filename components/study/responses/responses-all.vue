@@ -41,7 +41,7 @@
                 <thead class="table__thead table__thead--matrix">
                     <tr class="table__row table__row--head">
                         <th class="table__cell table__cell--head table__cell--artifact">Artifact</th>
-                        <th v-for="(dropBox, idx) in question.drop.dropBox"
+                        <th v-for="(dropBox, idx) in question.drop.dropBox.filter(box => box !== '')"
                             :key="idx" class="table__cell table__cell--head table__cell--matrix">
                             {{ dropBox }}
                         </th>
@@ -175,11 +175,13 @@ const createMatrix = computed(() => {
         if (!obj[id]) obj[id] = {};
     
         if (q.responseType === 'drop') {
-            q.drop.dropBox.forEach((label) => {
-                if (!obj[id][label]) {
-                    obj[id][label] = 0;
-                }
-            })
+            q.drop.dropBox
+                .filter(label => label !== '')
+                .forEach((label) => {
+                    if (!obj[id][label]) {
+                        obj[id][label] = 0;
+                    }
+                });
         }
 
         // if linear sort, create a label for each numeric position possible instead
@@ -207,7 +209,10 @@ const dropAnswers = computed(() =>  {
 
     // deconstruct id and label from each object (representing a participant answer), then increment the correct placement in the matrix
     answers.value.forEach(({ id, label }) => {
-        matrix[id][label]++;
+        // don't include empty boxes
+        if (label !== '') {
+            matrix[id][label]++;
+        }
     })
 
     return matrix;
@@ -252,6 +257,6 @@ const calcPos = computed(() => {
 
 <style scoped>
     @import url('public/style/components/responses/responses-template.scss');
-@import url('public/style/components/responses/responses-demographics.scss');
+    @import url('public/style/components/responses/responses-demographics.scss');
 </style>
     

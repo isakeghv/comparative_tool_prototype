@@ -46,8 +46,9 @@
 <script setup>
 //importing reactive variable which holds the id of the study and where the study questions are stored
 import StudyService from '~/services/studyService';
-import { user, study, configs, currentConfigIndex, allUploadedArtifacts, initialStudy, showResponses, errorMsgs } from '~/public/script/reactive';
+import { user, study, configs, currentConfigIndex, allUploadedArtifacts, initialStudy, showResponses, errorQuestions } from '~/public/script/reactive';
 import { compareStudies } from '~/utils/studyUtils';
+import { validateStudy, validateDemographics } from '@/validators/studyValidator';
 
 const isDisabled = inject('disabled', ref(false));
 
@@ -147,7 +148,22 @@ const saveStudy = async () => {
     const studyAlreadyExists = user.studies.find(us => us.id === study.id)
 
     // return and show 'unableSave' modal if global ref `errorMsgs` has any errors
-    if (errorMsgs.value.length > 0) return emit('unableSave');
+    // if (errorMsgs.value.length > 0) return emit('unableSave');
+
+    // check if any question is missing a title
+    let hasErrors = false;
+
+    for (const q of study.questions) {
+        const title = q.question;
+        if (!title || !title.trim()) {
+            errorQuestions[q.id] = true;
+            hasErrors = true;
+        }
+    }
+
+    if (hasErrors) {
+        return emit('unableSave', { reason: 'noQuestionTitle' });
+    }
 
     try {
         if (props.isCreatingStudy && !studyAlreadyExists) {
@@ -167,7 +183,6 @@ const saveStudy = async () => {
             updateSaveHistory();
 
         } else emit('unableSave');
-
 
         return;
     } else if (!noChanges) {
@@ -232,7 +247,6 @@ const setStudyStatus = async (status) => {
     const noChanges = compareStudies(study, initialStudy);
 
     // if there is changes and it hasn't been created yet, show a prompt box telling them to save, else publish the study
-    // TODO: add more checks here omg
     if (!noChanges) return emit('unableSave', { reason: 'save' });
 
     const studyIndex = user.studies.findIndex(userStudy => userStudy.id === study.id);
@@ -241,16 +255,20 @@ const setStudyStatus = async (status) => {
     if (study.status === status) return;
 
     // if study has zero question, emit reason and return
-    // if (study.questions.length === 0) {
-    //     return emit('unableSave', { reason: 'noQuestions' });
-    // }  else {
-    //     study.questions.map(q => {
-    //         if (q.artifacts.length === 0) {
-    //             return emit('unableSave')
-    //         }
-    //     })
+    if (study.questions.length === 0) {
+        return emit('unableSave', { reason: 'noQuestions' });
+    }  
+
+    // uhm fix these later
+    // validateDemographics(study);
+    validateStudy(study);
+    
+    // // if there is any validation error, emit the appropriate error message
+    // if (errorQuestions) {
+    //     console.log(errorQuestions)
+    //     return emit('unableSave');
     // }
- 
+
     try {
         const updatedStudy = await StudyService.updateStudyStatus(study.id, status);
 

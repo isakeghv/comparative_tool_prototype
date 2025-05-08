@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import { study } from '~/public/script/reactive';
+import { study, errorQuestions } from '~/public/script/reactive';
 const isDisabled = inject('disabled');
 
 const props = defineProps({
@@ -87,6 +87,7 @@ const addQuestion = () => {
 
     const question = JSON.parse(JSON.stringify(questionBp));
     study.questions.push(question);
+    errorQuestions[questionBp.id] = [];
 
     //so the new question is displayed in the page when requested to be made
     selectQuestion({ query: 'question', number: questions.value.length - 1, id: question.id })

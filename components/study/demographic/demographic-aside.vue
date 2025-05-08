@@ -41,12 +41,12 @@
             <div class="aside__options" v-if="isRadioResponse">
                 <div class="aside__option" v-for="(option, i) in optionsModel" :key="i">
                     <label :for="`option_${option}_${i}_txt`" class="aside__label aside__identifier">{{ i + 1 }}</label>
-                    <input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="optionsModel[i]" :disabled=isDisabled>
+                    <input type="text" :id="`option_${option}_${i}_txt`" class="aside__input" v-model="optionsModel[i]" maxlength="20" :disabled=isDisabled>
                     <button v-if="!isDisabled && optionsLength" class="aside__button aside__button--remove font-small font-medium" @click="deleteOption(i)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="aside__cross" height="24px" viewBox="0 -960 960 960" width="24px"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
                     </button>
                 </div>
-                <button v-if="!isDisabled" class="aside__button aside__button--add" @click="addOption">Add option</button>
+                <button v-if="!isDisabled" class="aside__button aside__button--add" @click="addOption" :disabled="optionsModel.length >= 15">Add option</button>
             </div>
         </div>
         <div class="aside__container">
@@ -148,6 +148,7 @@ const initiateConfig = (id)=>{
 }
 
 const addOption = () => {
+    if (optionsModel.value.length >= 15) return;
     addNewOption(selectedQuestion.value.radio.options, optionsModel.value);
 };
 

@@ -44,7 +44,7 @@
 </template>
 
 <script setup>
-import { study, showResponses } from '~/public/script/reactive';
+import { study, errorQuestions } from '~/public/script/reactive';
 const isDisabled = inject('disabled');
 
 const props = defineProps({
@@ -114,6 +114,9 @@ const updateRequired = ()=>{
 const deleteQuestion = () => {
     const thisQuestion = getQuestion(props.id);
     study.questions = study.questions.filter(q => q !== thisQuestion);
+
+    // delete tracking of errors
+    delete errorQuestions[props.id];
 
     // emit('deleteQuestion', nextQuestion.id);
 }

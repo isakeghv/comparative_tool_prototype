@@ -26,21 +26,48 @@ const QuestionSchema = new Schema({
 		required: true,
 	},
 	checkbox: {
-		selectionMin: { type: Number },
-		selectionMax: { type: Number }
+		selectionMin: {
+			type: Number,
+			min: 1
+		},
+		selectionMax: { type: Number },
 	},
 	range: {
-		min: { type: Number },
-		max: { type: Number },
-		startLabel: { type: String },
-		endLabel: { type: String }
+		min: {
+			type: Number,
+			min: 1,
+			max: 100
+		},
+		max: {
+			type: Number,
+			min: 1,
+			max: 100
+		},
+		startLabel: {
+			type: String,
+			maxlength: [20, 'Start label exceeds 20 characters.']
+		},
+		endLabel: {
+			type: String,
+			maxlength: [20, 'End label exceeds 20 characters.']
+		}
 	},
 	drop: {
-		dropBox: [{ type: String }]
+		dropBox: [{
+			type: String,
+			maxlength: [20, 'Drop box exceeds 20 characters.']
+		}]
 	},
 	linear: {
-		startLabel: { type: String },
-		endLabel: { type: String }
+		startLabel: {
+			type: String,
+			maxlength: [40, 'Start label exceeds 40 characters.']
+
+		},
+		endLabel: {
+			type: String,
+			maxlength: [40, 'End label exceeds 40 characters.']
+		}
 	},
 	artifacts: [ArtifactSchema],
 });
@@ -75,6 +102,7 @@ const DemographicSchema = new Schema({
 	text: {
 		maxChar: {
 			type: Number,
+			max: 3000
 		},
 	},
 	radio: {
