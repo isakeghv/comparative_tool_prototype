@@ -5,6 +5,12 @@
 	&__container {
 		@include v.main-area;
 		position: relative;
+		transition: flex 0.2s ease;
+
+		&--wide{
+			width: auto;
+			flex: 1 0 70%;
+		}
 	}
 
 	&__main {

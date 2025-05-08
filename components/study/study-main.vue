@@ -1,5 +1,5 @@
 <template>
-    <div class="study__container">
+    <div class="study__container" :class="{'study__container--wide': !showSidebar}">
         <div class="study__main">
             <div class="study__header">
                 <!-- responses header -->
