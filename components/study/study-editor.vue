@@ -1,12 +1,12 @@
 <!-- return main area of the created study based on the computed properties (showDetails, showDemographics, showQuestionMain) -->
 <template>
     <div class="container">
-        <StudySidebar @swapDisplay="(data) => toggleDisplay(data.component, data.number, data.id)" />
+        <StudySidebar @swapDisplay="(data) => toggleDisplay(data.component, data.number, data.id)" :newActiveQuestionID="newActiveId"/>
         <ResponsesData v-if="showStudyData" />
         <Details v-if="showDetails" />
         <Demographic v-if="showDemographics" />
         <StudyConsentForm v-if="showTerms" />
-        <StudyMain v-if="showQuestionMain" :index="questionIndex" :id="questionId" />
+        <StudyMain v-if="showQuestionMain" :index="questionIndex" :id="questionId" @deleteQuestion="deleteQuestion"/>
         <StudyPreview :study="study" v-if="showPreview"/>
     </div>
 </template>
@@ -25,7 +25,9 @@ const emit = defineEmits(['unableSave'])
 // show details as default when opening/creating a study
 const displayComponent = ref('details');
 const questionIndex = ref();
-const questionId = ref()
+const questionId = ref();
+
+const newActiveId = ref('');
 
 const showDetails = computed(() => {
     return displayComponent.value === 'details'
@@ -64,6 +66,26 @@ const trackExistingArtifacts = () => {
 }
 
 trackExistingArtifacts();
+
+const displayDetails = () =>{
+
+}
+
+const deleteQuestion = (id, i) =>{
+    if (i === 0) {
+        newActiveId.value = null;
+        study.questions = [];
+        return displayComponent.value = 'details'
+    };
+
+    const previousID = study.questions[i - 1].id;
+    questionIndex.value = i - 1;
+    questionId.value = previousID;
+
+    newActiveId.value = previousID;
+
+    study.questions = study.questions.filter(q => q.id !== id);
+}
 
 //handles toggling of which component to display. "number = null" is responsible of handling which question to open
 const toggleDisplay = (component, number, id) => {

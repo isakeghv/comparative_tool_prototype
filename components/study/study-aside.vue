@@ -52,7 +52,7 @@ const props = defineProps({
     id: String
 });
 
-const emit = defineEmits(['update:modelValue', 'deleteQuestion', 'hideSidebar', 'toggle']);
+const emit = defineEmits(['update:modelValue', 'delete', 'hideSidebar', 'toggle']);
 
 // only need to store if the question is required as ref due to response/question being handled by computed properties
 const requiredModel = ref(false);
@@ -112,10 +112,9 @@ const updateRequired = ()=>{
 
 // should switch to next question when deleting a question
 const deleteQuestion = () => {
-    const thisQuestion = getQuestion(props.id);
-    study.questions = study.questions.filter(q => q !== thisQuestion);
+    const i = study.questions.findIndex(q => q.id === props.id);
 
-    // emit('deleteQuestion', nextQuestion.id);
+    emit('delete', props.id, i);
 }
 
 // similar to the child component, initialize required model when id changes

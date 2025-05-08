@@ -139,9 +139,15 @@
             width: 16rem;
             border: 2px c.$red solid;
             color: c.$red;
+            transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out, filter 0.15s ease-in-out;
 
             &:hover {
                 background-color: rgba(154, 154, 154, 0.1);
+                background-color: c.$red;
+                color: c.$white;
+            }
+            &:active {
+                filter: brightness(0.8);
             }
         }
         

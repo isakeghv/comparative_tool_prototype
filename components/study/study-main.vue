@@ -101,7 +101,7 @@
     </div>
     
     <aside class="aside no-border">
-        <StudyAside :index="props.index" :id="props.id" @toggle="showSidebar = false" :class="{'slide__transform--out': showSidebar, 'slide__transform--in': !showSidebar}" />
+        <StudyAside :index="props.index" :id="props.id" @toggle="showSidebar = false" :class="{'slide__transform--out': showSidebar, 'slide__transform--in': !showSidebar}" @delete="deleteQuestion"/>
         <StudyAsideExports @toggle="showSidebar = true" />
     </aside>
 </template>
@@ -117,6 +117,8 @@ const props = defineProps({
     index: Number,
     id: String,
 })
+
+const emit = defineEmits(['deleteQuestion']);
 
 // make the 'id' prop reactive so it can be used in the function to get the individual response within the composable
 const idRef = toRef(props, 'id');
@@ -156,6 +158,8 @@ const config = computed(() => {
     //returning question (or null if question cannot be found at all, neither with index nor id), if the one located with index is incorrect
     return iterateArr(props.id)
 })
+
+const deleteQuestion = (id, i) => emit('deleteQuestion', id, i)
 
 const uploadFile = async (e) => {
     const file = e.target.files[0];

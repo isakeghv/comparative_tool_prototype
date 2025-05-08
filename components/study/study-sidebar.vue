@@ -1,21 +1,27 @@
 <template>
     <aside class="sidebar">
-        <StudyReturn :current="currentConfig" :initial="initialStudy"/>
+        <StudyReturn :current="currentConfig" :initial="initialStudy" />
         <div class="sidebar__top">
-        <button class="sidebar__button font-normal" :class="{ 'sidebar__button--active': activeTab === 'details' }" @click="changeDisplay('details')">
-            Study details
-        </button>
-        <button v-if=isDisabled class="sidebar__button font-normal" :class="{ 'sidebar__button--active': activeTab === 'data' }" @click="changeDisplay('data')">
-            Study data
-        </button>
-        <button class="sidebar__button font-normal" :class="{ 'sidebar__button--active': activeTab === 'demographics' }" @click="changeDisplay('demographics')">
-            Demographics
-        </button>
-        <button class="sidebar__button font-normal"  :class="{ 'sidebar__button--active': activeTab === 'terms' }" @click="changeDisplay('terms')">
-            Consent form
-        </button>
+            <button class="sidebar__button font-normal" :class="{ 'sidebar__button--active': activeTab === 'details' }"
+                @click="changeDisplay('details')">
+                Study details
+            </button>
+            <button v-if=isDisabled class="sidebar__button font-normal"
+                :class="{ 'sidebar__button--active': activeTab === 'data' }" @click="changeDisplay('data')">
+                Study data
+            </button>
+            <button class="sidebar__button font-normal"
+                :class="{ 'sidebar__button--active': activeTab === 'demographics' }"
+                @click="changeDisplay('demographics')">
+                Demographics
+            </button>
+            <button class="sidebar__button font-normal" :class="{ 'sidebar__button--active': activeTab === 'terms' }"
+                @click="changeDisplay('terms')">
+                Consent form
+            </button>
         </div>
-        <StudyList @select="(data) => changeDisplay(data.query, data.number, data.id)" :activeQuestionId="activeQuestionId" />
+        <StudyList @select="(data) => changeDisplay(data.query, data.number, data.id)"
+            :activeQuestionId="activeQuestionId" />
     </aside>
 </template>
 
@@ -23,7 +29,7 @@
 import { study, initialStudy, showResponses } from '~/public/script/reactive';
 const isDisabled = inject('disabled');
 
-const currentConfig = computed(()=>{
+const currentConfig = computed(() => {
     return {
         title: study.title,
         description: study.description,
@@ -37,11 +43,15 @@ const currentConfig = computed(()=>{
         demographicReq: study.demographicReq,
         demographic: study.demographic,
         customTerms: {
-			request: study.customTerms.request,
-			terms: study.customTerms.terms,
-		},
+            request: study.customTerms.request,
+            terms: study.customTerms.terms,
+        },
         questions: study.questions
     }
+})
+
+const props = defineProps({
+    newActiveQuestionID: {type: String, default: undefined},
 })
 
 const activeTab = ref('details');
@@ -60,11 +70,17 @@ const changeDisplay = (component, number = null, id = null) => {
     emit('swapDisplay', { component, number, id });
 };
 
-const toggleResponseMode = () => {
-    responseMode.value = !responseMode.value;
-}
+watch(
+    () => props.newActiveQuestionID,
+    (id) => { 
+        if (id !== undefined) activeQuestionId.value = id; 
+        else activeQuestionId.value = null;
+    },
+    { deep: true }
+)
+
 </script>
 
 <style scoped>
-    @import url('public/style/components/study/study-sidebar.scss');
+@import url('public/style/components/study/study-sidebar.scss');
 </style>
