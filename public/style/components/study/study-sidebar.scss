@@ -155,4 +155,10 @@
     &__svg {
         height: 1.6rem;
     }
+
+    &__duplicate{
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+    }
 }
