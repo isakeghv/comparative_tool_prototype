@@ -38,6 +38,15 @@
 					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id" :responseType="responseType"
 						:artifact="artifact" @selectMedia="selectMedia" @moving="(artifact) => box_moving(artifact)"
 						v-if="responseType === 'drop'" />
+
+					<!-- range -->
+					<ArtifactRange
+						v-if="responseType === 'range'"
+						:question-id="currentQuestion.id"
+						:artifacts="artifactsArr"
+						@update:responses="val => updateResponses(currentQuestion.id, val)"
+					/>
+
 				</div>
 			</div>
 
@@ -66,9 +75,11 @@
 import ArtifactPreview from './artifact/artifact-preview.vue';
 import ArtifactDropLinear from './artifact/artifact-drop-linear.vue';
 import ArtifactDropBox from './artifact/artifact-drop-box.vue';
+import ArtifactRange from './artifact/artifact-range.vue';
 import { linear_moving, linear_artifactIsOver, linear_artifactOver, linear_drop, linear_orderUp, linear_orderDown, linear_insertAt } from './linearFunctionality'
 import { box_moving, box_mouseover, box_drop, box_mouseleave } from './dropboxFunctionality'
 import { participantAnswer } from '~/public/script/participant';
+import { ref, computed, watch, watchEffect } from 'vue';
 
 const props = defineProps({
 	questions: Array,
