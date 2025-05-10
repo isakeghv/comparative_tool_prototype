@@ -109,10 +109,6 @@ const registerUser = async () => {
   if (!token) {
     registerStatus.value = 'error';
     statusMsg.value = 'CAPTCHA verification failed.';
-
-    if (window.turnstile) {
-    window.turnstile.reset();
-  }
     return;
   }
 
@@ -131,6 +127,9 @@ const registerUser = async () => {
         }
     });
 
+    // Reset captcha after submit
+    if (window.turnstile) window.turnstile.reset();
+
     //collecting response from backend
     const success = await response.json();
 
@@ -139,36 +138,19 @@ const registerUser = async () => {
         registerStatus.value = 'success';
         statusMsg.value = success.message;
 
+        // If registration was successful the user is already authenticated via the JWT cookie
+        location.reload();
+        } else {
+        //  Registration failed and shows error
+        registerStatus.value = 'error';
+        statusMsg.value = success.message;
 
-        //if account was succesfully created, it logs the user in automatically
-        const loginRes = await fetch('/api/login', {
-            method: 'POST',
-            credentials: 'include',
-            body: JSON.stringify({
-                email: email.value,
-                password: pwd.value,
-                skipCaptcha: true
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        const login = await loginRes.json()
-
-        if (login.isValid) {
-            if (window.turnstile) window.turnstile.reset();
-            location.reload();}
-        } else{
-            registerStatus.value = 'error';
-            statusMsg.value = success.message;
-
-            if (window.turnstile) {
+        // Reset Captcha so the user can try again
+        if (window.turnstile) {
             window.turnstile.reset();
-            }
         }
-    
-    //returns from function to emit event which informs user with status and message
+    }
+
     return profileCreate(success.created, success.message);
 }
 
@@ -177,14 +159,14 @@ onMounted(() => {
     const el = document.getElementById(containerId);
     if (!el) return;
 
-
+    // Render the CAPTCHA using the site key
     const renderCaptcha = () => {
         window.turnstile?.render(`#${containerId}`, {
             sitekey: '0x4AAAAAABDiqhbcAnsx6S1V',
             theme: 'light'
         });
     };
-
+    // If the script is not loaded, inject it to the page
     if (!window.turnstile) {
         const script = document.createElement('script');
         script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
@@ -192,8 +174,10 @@ onMounted(() => {
         script.defer = true;
         document.body.appendChild(script);
 
+        // Once the script has loaded, render the CAPTCHA
         script.onload = renderCaptcha;
     } else {
+        // If already loaded render it immediately
         renderCaptcha();
     }
 });

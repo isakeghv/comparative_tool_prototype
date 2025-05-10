@@ -69,7 +69,6 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event);
     const rawEmail = body.email?.toString() || "";
     const rawPassword = body.password.toString() || "";
-    const skipCaptcha = body.skipCaptcha === true;
     const turnstileToken = body.turnstileToken || "";
     
     const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
@@ -85,7 +84,7 @@ export default defineEventHandler(async (event) => {
         };
     }
 
-if(!skipCaptcha){
+
     const captchaRes = await $fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
         method: "POST",
         body: new URLSearchParams({
@@ -98,7 +97,7 @@ if(!skipCaptcha){
         setResponseStatus(event, 403);
         return { isValid: false, message: "CAPTCHA verification failed." };
       }
-}
+
     // Validation for Email password remains as is for security
     if (!rawEmail || !validator.isEmail(rawEmail) || !rawPassword) {
         setResponseStatus (event, 400)
