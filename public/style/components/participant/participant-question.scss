@@ -59,6 +59,12 @@
         flex-wrap: wrap;
         gap: 0.8rem;
     }
+
+    &__instructions{
+            color: c.$darkGray;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+    }
 }
 
 .artifact {

@@ -3,6 +3,9 @@
 		<div class="question__cont--top">
 			<div class="question__panel question__panel--left">
 				<h2 class="question__headline font-h5 font-semi">{{ currentQuestion.question }}</h2>
+				<p class="question__instructions font-body" v-if="instructionText">
+					{{ instructionText }}
+				</p>
 				<div class="question__list">
 
 					<!-- Radio buttons -->
@@ -145,6 +148,26 @@ watch(selectedArtifact, (newValue) => {
 		participantAnswer[currentQuestion.value.id] = [];
 	}
 });
+
+// instructions to different question types
+const instructionText = computed(() => {
+	switch (responseType.value) {
+		case 'radio':
+			return 'Select one of the artifacts by clicking on it.';
+		case 'checkbox':
+			return 'Select one or more artifacts by checking the boxes.';
+		case 'linear':
+			return 'Drag and drop the artifacts to rank them in order.';
+		case 'drop':
+			return 'Drag the artifacts into the boxes that what you belive it belongs in';
+		case 'range':
+			return 'Adjust the slider to reflect your rating about the artifact';
+		default:
+			return '';
+	}
+});
+
+
 </script>
 
 <style scoped>
