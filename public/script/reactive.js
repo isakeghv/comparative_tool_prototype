@@ -65,6 +65,8 @@ export const initialStudy = reactive({
     questions: [],
 })
 
+export const responses = ref(null);
+
 // export const initialStudy = reactive({ ...study });
 
 //used to handle which component should be displayed when creating a study (description, demographic etc).

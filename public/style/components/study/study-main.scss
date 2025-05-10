@@ -5,11 +5,13 @@
 	&__container {
 		@include v.main-area;
 		position: relative;
-		transition: flex 0.2s ease;
+		transition: flex 0.2s ease, padding 0.2s ease, margin 0.2s ease;
 
 		&--wide{
 			width: auto;
 			flex: 1 0 70%;
+			padding: 2.4rem 0rem 2.4rem 2.2rem;
+			margin: 0 0 0 1.2rem;
 		}
 	}
 

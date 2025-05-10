@@ -107,7 +107,7 @@
 </template>
 
 <script setup>
-import { study, showResponses, allUploadedArtifacts } from '~/public/script/reactive';
+import { study, showResponses, allUploadedArtifacts, responses } from '~/public/script/reactive';
 import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
 
 const isDisabled = inject('disabled');
@@ -117,6 +117,35 @@ const props = defineProps({
     index: Number,
     id: String,
 })
+
+//console.log(studyResponses.value);
+
+//for formatting the responses into a proper format
+const formatResponses = () =>{
+
+    //return if not displaying responses
+    if (!studyResponses.value || studyResponses.value.length === 0) return;
+
+    const allResponses = studyResponses.value;
+
+    //iterating over each response
+    allResponses.forEach(r => {
+        const allQuestions = r.questions;
+
+        //iterating over each question
+        allQuestions.forEach(q =>{
+
+            //getting the question-text for each question and inserting
+            const text = study.questions.find(sq => sq.id == q.id)?.question;
+            q.question = text;
+        })
+    })
+
+    //inserting response into global accessible response.
+    responses.value = JSON.parse(JSON.stringify(allResponses));
+}
+
+formatResponses();
 
 const emit = defineEmits(['deleteQuestion']);
 
