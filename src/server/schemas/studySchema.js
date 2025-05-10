@@ -80,7 +80,7 @@ const DemographicSchema = new Schema({
 	},
 	question: {
 		type: String,
-		required: true,
+		default: 'Question'
 	},
 	request: {
 		type: Boolean,

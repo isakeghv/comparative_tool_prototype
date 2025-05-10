@@ -51,10 +51,8 @@ const resetVariables = () => {
     initialStudy.desiredResponses = '';
 
     // reset error information too
-    errorMsgs.value = [];
-    Object.keys(errorQuestions).forEach(key => {
-        delete errorQuestions[key];
-    });
+    errorMsgs.length = 0;
+    Object.keys(errorQuestions).forEach(key => delete errorQuestions[key]);
 }
 
 //fixes so the UI is updated with correct title etc in dashboard
@@ -85,6 +83,7 @@ const goBack = () => {
         resetVariables();
     } else if (!isDisabled.value) {
         const userChoice = confirm('Changes have not been saved. Do you want to discard changes and return to the dashboard?');
+        
         if (userChoice) {
             localStorage.removeItem('unsavedStudy');
             localStorage.removeItem('isEditingStudy');

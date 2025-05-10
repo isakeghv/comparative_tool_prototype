@@ -1,6 +1,11 @@
 <template>
-    <li class="question__item" ref="itemRef" :class="{ 'sidebar__button--active': isActive, 'error': errorQuestions[props.config.id] && errorQuestions[props.config.id].length !== 0}" :draggable="draggableItem" @drop="drop" @dragstart="dragStart"
-        @dragover.prevent>
+    <li class="question__item"
+        ref="itemRef"
+        :class="{ 'sidebar__button--active': isActive, 'error': errorQuestions[props.config.id] && errorQuestions[props.config.id].length !== 0}"
+        :draggable="draggableItem"
+        @drop="drop"
+        @dragstart="dragStart"
+    @dragover.prevent>
         <button class="question__button font-normal" @click="displayQuestion">
             <span class="question__number">{{ number }}</span>
             <span class="question__text">{{ questionText }}</span>
@@ -107,6 +112,12 @@ const duplicateQuestion = () => {
     errorQuestions[clone.id] = [];
 };
 
+const removeErrOnClick = () => {
+    if (errorKey) return removeErr(true, errorKey);
+    if (errorKey && component === 'question') {
+        delete errorQuestions[id];
+    }
+}
 </script>
 
 <style scoped>

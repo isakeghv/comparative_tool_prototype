@@ -7,7 +7,7 @@ export const form = reactive({
 // show responses version of question/demographics section 
 export const showResponses = ref(false);
 
-export const errorMsgs = reactive({});
+export const errorMsgs = reactive([]);
 export const errorQuestions = reactive({});
 
 //to store information to display in ui. "info" for user-info: name etc, 

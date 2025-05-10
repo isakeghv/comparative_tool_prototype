@@ -46,9 +46,9 @@
 <script setup>
 //importing reactive variable which holds the id of the study and where the study questions are stored
 import StudyService from '~/services/studyService';
-import { user, study, configs, currentConfigIndex, allUploadedArtifacts, initialStudy, showResponses, errorQuestions } from '~/public/script/reactive';
+import { user, study, configs, currentConfigIndex, allUploadedArtifacts, initialStudy, showResponses, errorQuestions, errorMsgs } from '~/public/script/reactive';
 import { compareStudies } from '~/utils/studyUtils';
-import { validateStudy, validateDemographics } from '@/validators/studyValidator';
+import { validateStudy, validateDemographics, removeErr } from '@/validators/studyValidator';
 
 const isDisabled = inject('disabled', ref(false));
 
@@ -141,14 +141,16 @@ const saveStudy = async () => {
     if (noChanges) return;
     console.log('props.icCreatingStudy', props.isCreatingStudy);
 
-     // if study gets created, update the flag to true
-
-
     //checks if user already has a study with the selected id
     const studyAlreadyExists = user.studies.find(us => us.id === study.id)
 
-    // return and show 'unableSave' modal if global ref `errorMsgs` has any errors
-    // if (errorMsgs.value.length > 0) return emit('unableSave');
+    // if no title, retur error
+    if (!study.title || !study.title.trim()) {
+        errorMsgs.push('noTitle');
+        return emit('unableSave', { reason: 'noTitle' });
+    } else {
+        removeErr(true, 'noTitle');
+    }
 
     // check if any question is missing a title
     let hasErrors = false;
@@ -259,15 +261,21 @@ const setStudyStatus = async (status) => {
         return emit('unableSave', { reason: 'noQuestions' });
     }  
 
-    // uhm fix these later
-    // validateDemographics(study);
+    // call the validation functions that only validate before publishing a study
+    const invalidDemo = validateDemographics(study);
     validateStudy(study);
-    
-    // // if there is any validation error, emit the appropriate error message
-    // if (errorQuestions) {
-    //     console.log(errorQuestions)
-    //     return emit('unableSave');
-    // }
+
+    if (invalidDemo || Object.keys(errorQuestions).length > 0) {
+        // check here due to the check is part of the 'publish' validation        
+        if (invalidDemo) {
+            errorMsgs.push('demographics');
+            return emit('unableSave', { reason: 'demographics'});
+        } else {
+            removeErr(true, 'demographics');
+        }
+
+        return emit('unableSave');
+    }
 
     try {
         const updatedStudy = await StudyService.updateStudyStatus(study.id, status);

@@ -1,4 +1,4 @@
-import { errorQuestions } from '~/public/script/reactive';
+import { errorMsgs, errorQuestions } from '~/public/script/reactive';
 
 const validateCheckbox = (q) => {
     const min = parseInt(q.checkbox.selectionMin);
@@ -43,7 +43,7 @@ export const validateStudy = (study) => {
     study.questions.forEach((q) => {
         const qErrors = [];
 
-        // Check for artifacts errors
+        // check for artifacts errors
         if (!Array.isArray(q.artifacts) || q.artifacts.length === 0) {
             qErrors.push('artifacts');
         }
@@ -66,27 +66,44 @@ export const validateStudy = (study) => {
     });
 
     // return the error state and the errorQuestions object
-    return hasErrors ? { error: 'validationFailed' } : { error: null };
+    return hasErrors;
 };
 
+// return on first found error if invalid data within requested questions
 export const validateDemographics = (study) => {
-    let hasErrors = false;
+    // filter out non-requested questions to validate
+    const requestedQ = study.demographic.filter(field => field.request === true);
 
-    for (let field of study.demographic) {
-        if (field.requested === true) {
-            if (field.responseType === 'radio') {
-                if (!q.radio.options.some(item => item.trim() !== '')) {
-                    return errorQuestions['demographics'] = 'demographics';
-                }
+    // loop through each question
+    for (let field of requestedQ) {
+        // checks if each demographic question has a title
+        if (!field.question || field.question.trim() === '') {
+            return true;
+        }
+
+        if (field.responseType === 'radio') {
+            if (!field.radio.options.some(item => item.trim() !== '')) {
+                return true;
             }
+        }
 
-            if (field.responseType === 'number') {
-                const min = parseInt(field.range?.min);
-                const max = parseInt(field.range?.max);
-                if (min <= max) {
-                    return errorQuestions['demographics'] = 'demographics';
-                }
+        if (field.responseType === 'number') {
+            const min = parseInt(field.number?.min);
+            const max = parseInt(field.number?.max);
+
+            if (!(min >= 1 && max <= 100 && min <= max)) {
+                return true;
             }
         }
     }
+
+    return false;
 };
+
+// remove error on condition
+export const removeErr = (condition, word) => {
+    if (condition) {
+        const index = errorMsgs.indexOf(word);
+        if (index !== -1) errorMsgs.splice(index, 1);
+    }
+}

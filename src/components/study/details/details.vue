@@ -11,17 +11,17 @@
 </template>
 
 <script setup>
-import { study, errorMsgs } from '~/public/script/reactive';
+import { study } from '~/public/script/reactive';
 const isDisabled = inject('disabled'); 
 
 const titleModel = computed({
-  get: () => study.title,
-  set: (val) => study.title = val
+	get: () => study.title,
+	set: (val) => study.title = val
 });
 
 const descrModel = computed({
-  get: () => study.description,
-  set: (val) => study.description = val
+	get: () => study.description,
+	set: (val) => study.description = val
 });
 
 const emit = defineEmits(['validate']);
@@ -34,24 +34,6 @@ const initiateContent = () => {
 
 //calling function when component is displayed
 initiateContent();
-
-// watch(() => titleModel.value, (newVal) => {
-//     const msg = 'Study title is required.';
-
-//     // if title is empty, store the message if it doesn't exist already
-//     if (!newVal || newVal.trim() === '') {      
-//         if (!errorMsgs.value.includes(msg)) {
-//             errorMsgs.value.push(msg);
-//         }
-//     } else {
-//         // else remove it
-//         const index = errorMsgs.value.indexOf(msg);
-
-//         if (index !== -1) {
-//             errorMsgs.value.splice(index, 1);
-//         }
-//     }
-// }, { immediate: true });
 </script>
 
 <style scoped>
