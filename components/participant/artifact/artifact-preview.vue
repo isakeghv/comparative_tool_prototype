@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
+import { isImage, isPdf, isAudioFile, isVideoFile } from '/utils/fileUtils.js';
 
 const props = defineProps({
     selectedSource: String,

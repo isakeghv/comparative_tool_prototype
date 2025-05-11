@@ -81,8 +81,7 @@ import ArtifactDropBox from './artifact/artifact-drop-box.vue';
 import ArtifactRange from './artifact/artifact-range.vue';
 import { linear_moving, linear_artifactIsOver, linear_artifactOver, linear_drop, linear_orderUp, linear_orderDown, linear_insertAt } from './linearFunctionality'
 import { box_moving, box_mouseover, box_drop, box_mouseleave } from './dropboxFunctionality'
-import { participantAnswer } from '~/public/script/participant';
-import { ref, computed, watch, watchEffect } from 'vue';
+import { participantAnswer } from '../../public/script/participant';
 
 const props = defineProps({
 	questions: Array,

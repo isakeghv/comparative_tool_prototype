@@ -1,3 +1,5 @@
+import { reactive } from 'vue';
+
 // store id to know which participant to store id to
 export const participantId = reactive({
     id: null,

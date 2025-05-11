@@ -23,7 +23,8 @@ import DemographicRadio from './demographic/demographic-radio.vue';
 import DemographicText from './demographic/demographic-text.vue';
 import DemographicNumber from './demographic/demographic-number.vue';
 import DemographicDate from './demographic/demographic-date.vue';
-import { participantAnswer } from '~/public/script/participant';
+import { participantAnswer } from '../../public/script/participant';
+import { computed } from 'vue';
 
 const props = defineProps({
 	study: Object
