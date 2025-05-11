@@ -1,0 +1,180 @@
+@use "../../variables/variables" as v;
+@use "../../variables/colors" as c;
+
+$lighterGray: #f1f1f1;
+
+.demo {
+    &__cont {
+        @include v.blockContainer();
+        word-break: break-word;
+        margin-bottom: 1.4rem;
+        gap: 1.8rem;
+
+        &--compact {
+            gap: 1.2rem;
+        }
+    }
+
+    &__headline {
+        margin-bottom: 0.8rem;
+    }
+
+    &__subheadline {
+        display: block;
+        margin-top: 0.4rem;
+        color: c.$darkGray;
+    }
+
+    &__option {
+        margin-bottom: 0.6rem;   
+        pointer-events: none;
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+
+        &--input {
+            margin-right: 0.4rem;
+            transform: scale(1.2);
+        }
+    }
+
+    &__textarea {
+        text-align: left;
+    }
+
+    &__textarea {
+        @include v.textArea(10rem);
+        width: 100%;
+        height: 6rem;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    &__number, &__date {
+        @include v.inputArea(12rem);
+    }
+
+    &__txt {
+        display: block;
+        margin-bottom: 0.8rem;
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+    }
+
+    &__item {
+        background-color: $lighterGray;
+        padding: 0.4rem;
+        border-radius: 0.3rem;
+    }
+
+    &__list {
+        padding-right: 0.5rem;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+}
+
+.date {
+    &__list {
+        list-style: none;
+    }
+
+    &__month {
+        text-indent: 1.4rem;
+    }
+
+    &__day {
+        text-indent: 2.8rem;
+        margin-bottom: 0.2rem;
+    }
+
+    &__summary {
+        margin-bottom: 0.2rem;
+    }
+}
+
+.table {
+    position: relative;
+
+    &__cont {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 0.3rem;
+        overflow: hidden;
+        background-color: c.$white;  
+        border: v.$borderSolid;
+
+        // need to deal with layout shift later
+        &--matrix {
+            width: initial;
+
+            // tr:nth-child(even) td:nth-child(odd),
+            // tr:nth-child(odd) td:nth-child(even) {
+            // background-color: #d4cdcd;
+            // }
+
+            // td:not(:last-child),
+            // th:not(:last-child) {
+            // border-left: 1px solid #ccc; /* or your desired color */
+            // }
+        }
+    }
+
+    &__thead {
+        background-color: c.$bluePrimary;
+
+        &--matrix {
+            th:nth-child(even) {
+                background-color: c.$bluePrimary-active;
+              } 
+        }       
+    }
+  
+    &__row {
+        border: v.$borderSolid;
+        
+        &:nth-child(even) {
+            background-color: c.$white-active;
+        }
+    }
+  
+    &__cell {
+        padding: 12px 16px;
+        text-align: left;
+        // border-bottom: #e4e4e4 solid 2px;
+    
+        &--head {
+            color: c.$white;
+        }
+
+        &--artifact {
+            white-space: nowrap;
+            width: 1px;
+        }
+
+        &--total {
+            width: 20%;
+        }
+
+        &--matrix {
+            text-align: center;
+            border: v.$borderSolid
+        }
+    }
+}
+  
+  
+.greyed-out {
+    color: rgb(150, 150, 150);
+}
+
+.charts__cont {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}

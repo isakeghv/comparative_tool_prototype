@@ -1,0 +1,101 @@
+<template>
+    <div class="question">
+        <div class="question__container">
+            <span class="question__header">
+                <h2 class="question__title font-large">Questions</h2>
+                <button v-if="!isDisabled" class="question__add" aria-label="add new question" @click="addQuestion" :disabled="hasMaxQuestions">
+                    <svg class="question__plus" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="16" cy="16" r="16" fill="url(#paint0_linear_172_144)" />
+                        <path
+                            d="M16.3556 24.8889C16.0102 24.8889 15.7209 24.7719 15.4876 24.5378C15.2536 24.3046 15.1366 24.0153 15.1366 23.6699V17.5746H9.04131C8.69592 17.5746 8.40619 17.4576 8.17213 17.2236C7.93889 16.9903 7.82227 16.701 7.82227 16.3556C7.82227 16.0102 7.93889 15.7205 8.17213 15.4864C8.40619 15.2532 8.69592 15.1366 9.04131 15.1366H15.1366V9.04131C15.1366 8.69592 15.2536 8.40619 15.4876 8.17213C15.7209 7.93889 16.0102 7.82227 16.3556 7.82227C16.701 7.82227 16.9907 7.93889 17.2248 8.17213C17.458 8.40619 17.5746 8.69592 17.5746 9.04131V15.1366H23.6699C24.0153 15.1366 24.3046 15.2532 24.5378 15.4864C24.7719 15.7205 24.8889 16.0102 24.8889 16.3556C24.8889 16.701 24.7719 16.9903 24.5378 17.2236C24.3046 17.4576 24.0153 17.5746 23.6699 17.5746H17.5746V23.6699C17.5746 24.0153 17.458 24.3046 17.2248 24.5378C16.9907 24.7719 16.701 24.8889 16.3556 24.8889Z"
+                            fill="white" />
+                        <defs>
+                            <linearGradient id="paint0_linear_172_144" x1="16" y1="0" x2="16" y2="32"
+                                gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#4C68F0" />
+                                <stop offset="0.91" stop-color="#54C0D1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul class="question__list" ref="listRef" id="question__list">
+            <!-- pass specific question config to question item-->
+            <StudyItem @select="(data) => selectQuestion(data)" parent="#question__list" :config="question" :index="i"
+                v-for="(question, i) in questions" :isActive="activeQuestionId === question.id" />
+        </ul>
+    </div>
+</template>
+
+<script setup>
+import { study, errorQuestions } from '~/public/script/reactive';
+const isDisabled = inject('disabled');
+
+const props = defineProps({
+    activeQuestionId: String
+})
+
+const listRef = ref('')
+const emit = defineEmits(['select', 'newQuestion'])
+
+//returning the array of questions
+const questions = computed(() => {
+    return study.questions
+})
+
+//handling so the selected question is emitted and displayed in main-area
+const selectQuestion = (data) => {
+    emit('select', { query: data.query, number: data.number, id: data.id })
+}
+
+// add a max limit for questions (currently 40)
+const hasMaxQuestions = computed(() => {
+    return study.questions.length >= 40;
+});
+
+//function is responsible of adding question when button to do so is clicked
+const addQuestion = () => {
+    //blueprint for how the question-object is arranged
+    const questionBp = {
+            id: crypto.randomUUID(),
+            question: 'Question',
+            required: true,
+            responseType: 'radio',
+            checkbox: {
+                selectionMin: '',
+                selectionMax: ''
+            },
+            range: {
+                min: '',
+                max: '',
+                startLabel: '',
+                endLabel: ''
+            },
+            drop: {
+                dropBox: ['']
+            },
+            linear: {
+                startLabel: '',
+                endLabel: ''
+            },
+            artifacts: []
+        }
+
+    // return if more than 40 questions
+    if (hasMaxQuestions.value) return;
+
+    const question = JSON.parse(JSON.stringify(questionBp));
+    study.questions.push(question);
+    errorQuestions[questionBp.id] = [];
+
+    //so the new question is displayed in the page when requested to be made
+    selectQuestion({ query: 'question', number: questions.value.length - 1, id: question.id })
+}
+</script>
+
+<style scoped>
+    @import url('public/style/components/study/study-sidebar.scss');
+</style>
+
+
