@@ -86,6 +86,11 @@
             border: c.$bluePrimary-active 2px solid;
             color: c.$bluePrimary-active;
         }
+
+        &:disabled {
+            border-color: c.$gray;
+            color: c.$gray;
+        }
     }
 
     &__slider {

@@ -65,7 +65,6 @@
 
     <div v-else-if="selectedView === 'graphs'">
         <div v-for="(q, qIdx) in formattedDemoData" :key="qIdx">
-            <!-- Only render if q is defined and responseType is 'radio' -->
             <div v-if="q && q.responseType === 'radio'" class="demo__cont demo__cont--compact">
                 <div class="demo__header">
                     <h3 class="font-large font-medium">{{ q.title }}</h3>
@@ -134,8 +133,11 @@ const formattedDemoData = computed(() => {
 const demoAnswerCounts = computed(() => {
     const counts = {};
     formattedDemoData.value.forEach((q) => {
+        // remove empty radio options
+        const filteredOptions = q.responseFormat.options.filter(option => option.trim() !== '');
+
         if (q.responseType === 'radio') {
-            counts[q.id] = countAnswers(q.answers, q.responseFormat.options);
+            counts[q.id] = countAnswers(q.answers, filteredOptions);
         }
     });
 

@@ -3,7 +3,7 @@
         <div class="question__container">
             <span class="question__header">
                 <h2 class="question__title font-large">Questions</h2>
-                <button v-if="!isDisabled" class="question__add" aria-label="add new question" @click="addQuestion">
+                <button v-if="!isDisabled" class="question__add" aria-label="add new question" @click="addQuestion" :disabled="hasMaxQuestions">
                     <svg class="question__plus" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="16" cy="16" r="16" fill="url(#paint0_linear_172_144)" />
                         <path
@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import { study } from '~/public/script/reactive';
+import { study, errorQuestions } from '~/public/script/reactive';
 const isDisabled = inject('disabled');
 
 const props = defineProps({
@@ -48,6 +48,11 @@ const questions = computed(() => {
 const selectQuestion = (data) => {
     emit('select', { query: data.query, number: data.number, id: data.id })
 }
+
+// add a max limit for questions (currently 40)
+const hasMaxQuestions = computed(() => {
+    return study.questions.length >= 40;
+});
 
 //function is responsible of adding question when button to do so is clicked
 const addQuestion = () => {
@@ -77,9 +82,12 @@ const addQuestion = () => {
             artifacts: []
         }
 
-    const question = JSON.parse(JSON.stringify(questionBp));
+    // return if more than 40 questions
+    if (hasMaxQuestions.value) return;
 
+    const question = JSON.parse(JSON.stringify(questionBp));
     study.questions.push(question);
+    errorQuestions[questionBp.id] = [];
 
     //so the new question is displayed in the page when requested to be made
     selectQuestion({ query: 'question', number: questions.value.length - 1, id: question.id })

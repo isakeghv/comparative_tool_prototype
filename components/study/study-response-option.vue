@@ -12,7 +12,7 @@
         <div class="aside__row aside__row--toggle" v-if="isCheckboxResponse">
             <label for="question_selection_min" class="aside__label font-normal">Possible from </label>
             <input type="number" id="question_selection_min" class="aside__input--number font-small"
-                name="question_selection_min" min="0" step="1" v-model="selectionMinModel" @input="updateMinModel()" :disabled="isDisabled" />
+                name="question_selection_min" min="1" step="1" v-model="selectionMinModel" @input="updateMinModel()" :disabled="isDisabled"/>
             <label for="question_selection_max" class="aside__label font-normal">to</label>
             <input type="number" id="question_selection_max" class="aside__input--number font-small"
                 name="question_selection_max" step="1" v-model="selectionMaxModel" @input="updateMaxModel()" :disabled="isDisabled" />
@@ -24,27 +24,27 @@
                 Min
             </label>
             <input type="number" id="question_range_min" class="aside__input--number font-small"
-                name="question_range_min" step="1" v-model="minModel" @input="updateMinRange(minModel)" :disabled="isDisabled" />
+                name="question_range_min" step="1" v-model="minModel" @input="updateMinRange(minModel)" min="1" :disabled="isDisabled" />
             <label for="question_range_start" class="hide">Start label</label>
             <input type="text" id="question_range_start" class="aside__input--wide" name="question_range_start"
-                placeholder="Start label (optional)" v-model="rangeStartModel" @input="updateMinRangeLabel(rangeStartModel)" :disabled="isDisabled">
+                placeholder="Start label (optional)" v-model="rangeStartModel" @input="updateMinRangeLabel(rangeStartModel)" maxlength="20" :disabled="isDisabled">
         </div>
         <div class="aside__row" v-if="isRangeResponse">
             <label for="question_range_max" class="aside__label font-normal">
                 Max
             </label>
             <input type="number" id="question_range_max" class="aside__input--number font-small"
-                name="question_range_max" step="1" v-model="maxModel" @input="updateMaxRange(maxModel)" :disabled="isDisabled" />
+                name="question_range_max" step="1" v-model="maxModel" @input="updateMaxRange(maxModel)" max="100" :disabled="isDisabled" />
             <label for="question_range_end" class="hide">End label</label>
             <input type="text" id="question_range_end" class="aside__input--wide" name="question_range_end"
-                placeholder="End label (optional)" v-model="rangeEndModel" @input="updateMaxRangeLabel(rangeEndModel)" :disabled="isDisabled">
+                placeholder="End label (optional)" v-model="rangeEndModel" @input="updateMaxRangeLabel(rangeEndModel)" maxlength="20" :disabled="isDisabled">
         </div>
 
         <!-- drag and drop -->
         <div class="aside__options" v-if="isDropResponse">
             <div class="aside__option" v-for="(option, i) in dropBoxModel" :key="i">
                 <label :for="`option_${i}_txt`" class="aside__label aside__box">{{ i + 1}}</label>
-                <input type="text" :id="`option_${i}_txt`" class="aside__input" v-model="dropBoxModel[i]" @input="updateDropOption()" :disabled="isDisabled">
+                <input type="text" :id="`option_${i}_txt`" class="aside__input" v-model="dropBoxModel[i]" @input="updateDropOption()" maxlength="20" :disabled="isDisabled">
                 <button v-if="!isDisabled && dropBoxModel.length > 1" class="aside__button aside__button--remove" @click="deleteDropBox(i)">
                     <svg xmlns="http://www.w3.org/2000/svg" class="aside__cross" height="24px" viewBox="0 -960 960 960"
                         width="24px">
@@ -53,19 +53,19 @@
                     </svg>
                 </button>
             </div>
-            <button v-if="!isDisabled && dropBoxModel.length < 15" class="aside__button aside__button--add font-small" @click="addDropBox()">Add drop-box</button>
+            <button v-if="!isDisabled" class="aside__button aside__button--add font-small" @click="addDropBox()" :disabled="dropBoxModel.length >= 15">Add drop-box</button>
         </div>
 
         <!-- linear sorting -->
         <div class="aside__row aside__row--toggle" v-if="isLinearResponse">
             <label for="question_range_start_label" class="font-small">Start</label>
             <input type="text" id="question_range_start_label" class="aside__input--wide"
-                placeholder="Start label (optional)" v-model="linearStartModel" @input="updateMinLinear(linearStartModel)" :disabled="isDisabled">
+                placeholder="Start label (optional)" v-model="linearStartModel" @input="updateMinLinear(linearStartModel)" maxlength="50" :disabled="isDisabled">
         </div>
         <div class="aside__row" v-if="isLinearResponse">
             <label for="question_range_end_label" class="font-small">End</label>
             <input type="text" id="question_range_end_label" class="aside__input--wide"
-                placeholder="End label (optional)" v-model="linearEndModel" @input="updateMaxLinear(linearEndModel)" :disabled="isDisabled">
+                placeholder="End label (optional)" v-model="linearEndModel" @input="updateMaxLinear(linearEndModel)" maxlength="50" :disabled="isDisabled">
         </div>
     </div>
 </template>

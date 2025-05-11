@@ -5,6 +5,14 @@
 	&__container {
 		@include v.main-area;
 		position: relative;
+		transition: flex 0.2s ease, padding 0.2s ease, margin 0.2s ease;
+
+		&--wide{
+			width: auto;
+			flex: 1 0 70%;
+			padding: 2.4rem 0rem 2.4rem 2.2rem;
+			margin: 0 0 0 1.2rem;
+		}
 	}
 
 	&__main {
@@ -95,9 +103,8 @@
 .expand {
 	position: absolute;
 	transform: translate(-50%, -50%);
-	top: 50%;
+	top: calc(50% - 2rem);
 	left: 50%;
-	// width: clamp(20rem, 100vw, 65rem);
 	width: auto;
 	padding: 2.5rem 0.25rem 0.125rem;
 	background-color: white;
@@ -108,26 +115,24 @@
 	&__img {
 		width: auto;
 		border-radius: 0.25rem;
-		height: 45rem;
+		height: 40rem;
 		object-fit: contain;
 	}
 
 	&__embed {
 		width: 75vw;
 		border-radius: 0.25rem;
-		height: 45rem;
+		height: 40rem;
 	}
 	
 	&__video {
 		width: auto;
 		border-radius: 0.25rem;
-		height: 45rem;
+		height: 40rem;
 	}
 
 	&__audio {
 		display: block;
-		// height: 8rem;
-		// width: 100%;
 		margin-top: 0.4rem;
 	}
 

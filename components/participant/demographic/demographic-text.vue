@@ -4,28 +4,28 @@
         :id="`response_text_${question.id}`" 
         class="response__textarea font-small" 
         :name="`response_text_${question.id}`" 
-        :maxlength="question.text.maxChar" 
+        :maxlength="question.text.maxChar || 3000" 
         v-model="textModel" 
         :required="question.required" @input="input"
     />
     
     <span class="response__gray font-small">
-        {{ textModel.length }}/{{ question.text.maxChar }}
+        {{ textModel.length }}/{{ question.text.maxChar || 3000 }}
     </span>
 </template>
 <script setup>
 const props = defineProps({
-    question: Object
+    question: Object,
+    value: String
 })
 
-const textModel = ref('');
+const textModel = ref(props.value || '');
 
 const emit = defineEmits(['update']);
 
 const input = () =>{
-    emit('update', textModel.value)
+    emit('update', { val: textModel.value, isInvalid: false })
 }
-
 </script>
 
 <style scoped>

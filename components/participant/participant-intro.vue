@@ -31,7 +31,7 @@
 			</div>
 		</section>
 		<div>
-			<button @click="handleStart" :disabled="!isChecked && study.customTerms.request" class="participant__button participant__button--start font-small font-semi">Start</button>
+			<button @click="handleStart" :disabled="!isChecked && study.customTerms.request" class="participant__button participant__button--start font-small font-semi" id="participant-start-btn">Start</button>
 			<div v-if="showPopup" class="overlay" @click="showPopup = false"></div>
 		</div>
 	</main>
