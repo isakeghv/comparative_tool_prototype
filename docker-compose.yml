@@ -1,3 +1,17 @@
+services:
+  mongo:
+    image: mongo
+    container_name: compara_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: compara
+
+volumes:
+  mongo_data:
+
 # services:
 #   app:
 #     build:

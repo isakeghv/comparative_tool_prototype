@@ -1,6 +1,8 @@
 import { connDb } from '~/server/services/connDb.js';
 import { verifyToken } from '~/server/services/jwt.js';
 import { Study } from '../../../schemas/studySchema.js';
+import { defineEventHandler, readBody, setResponseStatus } from 'h3';
+
 
 const updateStudyStatus = async (e, data) => {
     const studyId = e.context.params?.studyId;

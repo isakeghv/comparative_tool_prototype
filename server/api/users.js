@@ -1,4 +1,4 @@
-import { connDb } from '~/server/services/connDb.js';
+import { connDb } from '../services/connDb.js';
 import { getCookie, useRuntimeConfig } from "#imports";
 import { UserCredential, UserProfile } from "../schemas/userSchema.js";
 import { Study } from "../schemas/studySchema.js";
