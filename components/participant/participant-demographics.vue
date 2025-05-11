@@ -3,14 +3,15 @@
 		<div class="participant__center">
 			<section v-if="study?.demographicReq" class="participant__section">
 				<h2 class="participant__headline font-h5 font-semi">Demographics</h2>
-				<p>{{ study.demographics }}</p>
 
-				
-				<div v-for="question in questions">
-					<div v-if="question.request" class="participant__box">
-						<h3 class="participant__sub font-large font-medium">{{ formatQuestion(question.question) }} <span v-if="question.required">*</span></h3>
-						<component :is="getResponseComponent(question.responseType)" :question="question" @update="(response) => updateDemographics(question.id, question.question, response)"/>
-					</div>
+				<div v-for="question in questions" class="participant__box">
+					<h3 class="participant__sub font-large font-medium">{{ formatQuestion(question.question) }} <span v-if="question.required">*</span></h3>
+					<component 
+						:is="getResponseComponent(question.responseType)"
+						:question="question"
+						:value="participantAnswer.demographic[question.id]"
+						@update="(response) => updateDemographics(question.id, response)"
+					/>
 				</div>
 			</section>
 		</div>
@@ -28,6 +29,15 @@ const props = defineProps({
 	study: Object
 });
 
+const invalidMap = ref({});
+
+const emit = defineEmits(['validated']);
+
+// store the demographic array that has been requested
+const questions = computed(() => {
+  return props.study.demographic?.filter(q => q.request);
+});
+
 //formats question, so that it asks "your..." instead of "request...."
 const formatQuestion = (question) =>{
 	return question.replace('Request', 'Your');
@@ -37,21 +47,18 @@ const formatQuestion = (question) =>{
 // if (!participantAnswer.demographic) participantAnswer.demographic = [];
 
 //updating the participant response in reactive variable
-if (!participantAnswer.demographic) participantAnswer.demographic = [];
+if (!participantAnswer.demographic) participantAnswer.demographic = {};
 
-const updateDemographics = (id, question, res) =>{
+const updateDemographics = (id, res) => {
 	const demographic = participantAnswer.demographic;
 
 	// set an object with id
 	if (!demographic[id]) demographic[id] = {};
-	// if (!demographic[id].question) demographic[id].question = question;
 
 	// only store answer response
-	demographic[id] = res;
+	demographic[id] = res.val;
+	invalidMap.value[id] = res.isInvalid;
 }
-
-// store the demographic array
-const questions = computed(() => props.study.demographic);
 
 // function that returns component depending on the response type of the current demographic question
 const getResponseComponent = (responseType) => {
@@ -65,6 +72,27 @@ const getResponseComponent = (responseType) => {
 	return map[responseType]
 };
 
+const validateDemographics = () => {
+	// filter the required questions, and keep track of questions that haven't been answered
+	const requiredQuestions = questions.value.filter(q => q.required);
+	const unansweredQuestions = requiredQuestions.filter(q => !participantAnswer.demographic[q.id]);
+	const isInvalid = Object.values(invalidMap.value).some(v => v);
+
+	// if all required answers has been answered, emit to parent to allow to click 'next'
+	if (unansweredQuestions.length === 0 && !isInvalid) {
+		emit('validated', true);
+	} else {
+		emit('validated', false);
+	}
+};
+
+watch(
+	() => participantAnswer.demographic,
+	(newValue) => {
+		validateDemographics();
+	},
+	{ deep: true }
+);
 </script>
 
 <style scoped>

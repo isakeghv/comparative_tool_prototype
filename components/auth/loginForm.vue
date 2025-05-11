@@ -90,8 +90,6 @@ onMounted(() => {
   }
 });
 
-
-
 const login = async () => {
 	const token = document.querySelector('[name="cf-turnstile-response"]')?.value;
 	if (!token) {

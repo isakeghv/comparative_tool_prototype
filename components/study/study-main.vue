@@ -1,5 +1,5 @@
 <template>
-    <div class="study__container">
+    <div class="study__container" :class="{'study__container--wide': !showSidebar}">
         <div class="study__main">
             <div class="study__header">
                 <!-- responses header -->
@@ -51,7 +51,7 @@
                                 fill="#444444" />
                         </svg>
                     </button>
-                    <StudyArtifactDelete :artifact="artifact" :questionID="config.id" />
+                    <StudyArtifactDelete v-if="!isDisabled":artifact="artifact" :questionID="config.id" />
                 </div>
                 
                 <StudyArtifact :source="artifact.source" :id="artifact.id" />
@@ -101,13 +101,13 @@
     </div>
     
     <aside class="aside no-border">
-        <StudyAside :index="props.index" :id="props.id" @toggle="showSidebar = false" :class="{'slide__transform--out': showSidebar, 'slide__transform--in': !showSidebar}" />
+        <StudyAside :index="props.index" :id="props.id" @toggle="showSidebar = false" :class="{'slide__transform--out': showSidebar, 'slide__transform--in': !showSidebar}" @delete="deleteQuestion"/>
         <StudyAsideExports @toggle="showSidebar = true" />
     </aside>
 </template>
 
 <script setup>
-import { study, showResponses, allUploadedArtifacts } from '~/public/script/reactive';
+import { study, showResponses, allUploadedArtifacts, responses } from '~/public/script/reactive';
 import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
 
 const isDisabled = inject('disabled');
@@ -117,6 +117,37 @@ const props = defineProps({
     index: Number,
     id: String,
 })
+
+//console.log(studyResponses.value);
+
+//for formatting the responses into a proper format
+const formatResponses = () =>{
+
+    //return if not displaying responses
+    if (!studyResponses.value || studyResponses.value.length === 0) return;
+
+    const allResponses = studyResponses.value;
+
+    //iterating over each response
+    allResponses.forEach(r => {
+        const allQuestions = r.questions;
+
+        //iterating over each question
+        allQuestions.forEach(q =>{
+
+            //getting the question-text for each question and inserting
+            const text = study.questions.find(sq => sq.id == q.id)?.question;
+            q.question = text;
+        })
+    })
+
+    //inserting response into global accessible response.
+    responses.value = JSON.parse(JSON.stringify(allResponses));
+}
+
+formatResponses();
+
+const emit = defineEmits(['deleteQuestion']);
 
 // make the 'id' prop reactive so it can be used in the function to get the individual response within the composable
 const idRef = toRef(props, 'id');
@@ -156,6 +187,8 @@ const config = computed(() => {
     //returning question (or null if question cannot be found at all, neither with index nor id), if the one located with index is incorrect
     return iterateArr(props.id)
 })
+
+const deleteQuestion = (id, i) => emit('deleteQuestion', id, i)
 
 const uploadFile = async (e) => {
     const file = e.target.files[0];

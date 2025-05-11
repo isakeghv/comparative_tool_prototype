@@ -7,12 +7,17 @@ export const form = reactive({
 // show responses version of question/demographics section 
 export const showResponses = ref(false);
 
+export const errorMsgs = reactive([]);
+export const errorQuestions = reactive({});
+
 //to store information to display in ui. "info" for user-info: name etc, 
 // "studies" for the studies that is saved to user-id
 export const user = reactive({
     info: null,
     studies: null,
 })
+
+export const showPreview = ref(false);
 
 //reactive variable to hold the selected study-id and questions
 export const study = reactive({
@@ -62,6 +67,8 @@ export const initialStudy = reactive({
     },
     questions: [],
 })
+
+export const responses = ref(null);
 
 // export const initialStudy = reactive({ ...study });
 

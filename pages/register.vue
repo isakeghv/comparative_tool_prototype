@@ -4,7 +4,7 @@
 </template>
 
 <script setup>
-import { form } from "public/script/reactive";
+import { form } from "~/public/script/reactive";
 
 const props = defineProps({
 	//in the initial index.vue page, when selecting "sign-up" or "sign-in" the "formType" will

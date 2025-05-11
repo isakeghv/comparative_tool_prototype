@@ -106,11 +106,11 @@ const registerUser = async () => {
     const lastname = nameToCapital(lastName.value);
     const token = document.querySelector('[name="cf-turnstile-response"]')?.value;
 
-  if (!token) {
-    registerStatus.value = 'error';
-    statusMsg.value = 'CAPTCHA verification failed.';
-    return;
-  }
+//   if (!token) {
+//     registerStatus.value = 'error';
+//     statusMsg.value = 'CAPTCHA verification failed.';
+//     return;
+//   }
 
     //calling backend function to create user
     const response = await fetch('/api/register', {
