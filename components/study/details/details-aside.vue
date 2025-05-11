@@ -124,13 +124,14 @@ const durationToMs = ()=>{
 
 //updates the date that closing should be done at
 const updateDate = ()=>{
-    const stop = !closingMethods.value.includes("date");
 
-    if (stop || !dateModel.value) {
-        study.closingLimit.date = '';
-        return;
-    }
+    //returns boolean if date is used as closing method or not
+    const dateIsClosingMethod = closingMethods.value.some(m => m === 'date');
 
+    //return and remove if date is not selected as closing method, and/or date is empty
+    if (!dateIsClosingMethod || !dateModel.value) return study.closingLimit.date = '';
+
+    //update object
     study.closingLimit.date = dateModel.value;
 }
 

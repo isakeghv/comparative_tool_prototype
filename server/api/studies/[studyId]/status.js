@@ -14,10 +14,27 @@ const updateStudyStatus = async (e, data) => {
     }
 
     try {
+        // validate in the backend as well; first check if the study itself has more than zero questions
+        const currentStudy = await Study.findOne({ id: studyId });
+        if (!currentStudy) return { updated: false, message: "Study not found." };
+        
+        if (status === 'ongoing' && currentStudy.questions.length === 0) {
+            return {
+                updated: false,
+                message: "At least one question is required to publish the study."
+            };
+        }
+
+        // if study is going to be published, set `publishedAt` date
+        const updateFields = { status: status };
+        if (status === 'ongoing') {
+            updateFields.publishedAt = Date.now();
+        }
+
         // find study, check if is not equal to 'ongoing', and update status
         const updatedStudy = await Study.findOneAndUpdate(
             { id: studyId, status: { $ne: status } },
-            { status: status }, 
+            updateFields, 
             { new: true }
         );
 

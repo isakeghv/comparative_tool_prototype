@@ -1,43 +1,57 @@
 <template>
-    {{ question.range }}
-
-    <div class="range-question">
-    <label v-if="question.rangeStartLabel">{{ question.rangeStartLabel }}</label>
-    <input 
-      type="range" 
-      :min="question.minModel" 
-      :max="question.maxModel" 
-      step="1" 
-      v-model="selectedValue"
+  <div v-for="(artifact, index) in artifacts" :key="artifact.id" class="artifact-range range-slider">
+    <label :for="`artifact-range-${index}`">
+      {{ artifact.name }}: {{ responses[index] }}
+    </label>
+    <input
+      type="range"
+      :id="`artifact-range-${index}`"
+      :min="rangeMin"
+      :max="rangeMax"
+      v-model.number="responses[index]"
+      @input="emitResponse(index)"
     />
-    <label v-if="question.rangeEndLabel">{{ question.rangeEndLabel }}</label>
-    <p>Valgt verdi: {{ selectedValue }}</p>
   </div>
-
 </template>
 
+
 <script setup>
-import { ref } from 'vue';
+import { ref, watch, computed } from 'vue';
+import { study } from '~/public/script/reactive';
+
 const props = defineProps({
-    question: Object
+    question: Object,
+    artifacts: Array,
 })
 
-// Ensures that min/max are actual values
-const minValue = computed(() => Math.max(0, props.question.minModel || 1));  // Set standard to 1, if undefined
-const maxValue = computed(() => Math.max(minValue.value + 1, props.question.maxModel || 10));  // At least 1 more than minValue
+const emit = defineEmits(['update:responses']);
 
-// Ensure that chosen value is inside the limit
-const selectedValue = ref(minValue.value);
+const question = computed(() =>
+  study.questions.find(q => q.id === props.questionId)
+);
+
+const rangeMin = computed(() => question.value?.range?.min ?? 1);
+const rangeMax = computed(() => question.value?.range?.max ?? 100);
+
+// Initialize responses array
+const responses = ref([]);
+
+watch(
+  () => props.artifacts,
+  (newArtifacts) => {
+    responses.value = newArtifacts.map(() => rangeMin.value);
+    emit('update:responses', [...responses.value]);
+  },
+  { immediate: true }
+);
+
+const emitResponse = (index) => {
+  emit('update:responses', [...responses.value]);
+};
 
 </script>
 
 <style scoped>
-.range-question {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-input[type="range"] {
-  width: 100%;
-}
+	@import url('public/style/components/study/study-main.scss');
+  @import url('public/style/components/participant/participant-question.scss');
 </style>

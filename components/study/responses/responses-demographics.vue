@@ -16,7 +16,7 @@
             </div>
 
             <div v-else>
-                <div v-if="q.responseType === 'radio'" v-for="(option, i) in q.responseFormat.options" class="demo__option" :key="i">
+                <div v-if="q.responseType === 'radio'" v-for="(option, i) in q.responseFormat.options.filter(option => option.trim() !== '')" class="demo__option" :key="i">
                     <label :for="`demo_radio-${qIdx}_option-${i}`" class="font-small" :class="{ 'greyed-out': option !== q.answer }">
                     <input :id="`demo_radio-${qIdx}_option-${i}`" class="demo__option--input" type="radio" :checked="option === q.answer" tabindex="-1">
                         {{ option }}

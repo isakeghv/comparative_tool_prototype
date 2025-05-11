@@ -59,6 +59,12 @@
         flex-wrap: wrap;
         gap: 0.8rem;
     }
+
+    &__instructions{
+            color: c.$darkGray;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+    }
 }
 
 .artifact {
@@ -230,6 +236,16 @@
     margin: 0.2rem;
     z-index: 2;
 }
+
+.range-slider{
+    display: flex;
+    align-items: left;
+    gap: 10px;
+}
+
+input[type="range"] {
+    width: 100%;
+  }
 
 // .embed__handle {
 //     width: 100%;

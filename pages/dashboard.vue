@@ -1,5 +1,5 @@
 <template>
-	<DashboardHeader :name="displayName" v-model:isCreatingStudy="isCreatingStudy" @updateNewStudyStatus="isCreatingStudy = $event" @unableSave="(reason) => displayUnableSaveBox(true, reason)" :newStudy="onNewStudy" :disabled="isReadOnly" />
+	<DashboardHeader :name="displayName" v-model:isCreatingStudy="isCreatingStudy" @updateNewStudyStatus="isCreatingStudy = $event" @unableSave="(info) => displayUnableSaveBox(true, info)" :newStudy="onNewStudy" :disabled="isReadOnly" />
 	<div class="container" v-if="showMain && !study.id">
 		<DashboardMain
             @newStudy="(id) => onNewStudy(id)" 
@@ -12,7 +12,8 @@
     <StudyEditor v-if="study.id" :disabled="isReadOnly" />
 
     <!--Prompt box informing user that study cannot be saved due to missing fields-->
-    <DashboardUnableSave @exit="displayUnableSaveBox(false)" v-if="showUnableSaveBox && study.id" />
+    <DashboardUnableSave v-if="showUnableSaveBox && study.id" @exit="displayUnableSaveBox(false)" :info="unableSaveReason" 
+    />
 
 	<!--Display message if issues fetting user-info-->
 	<div class="container" v-if="!showMain && !study.id">
@@ -25,7 +26,7 @@
 </template>
 
 <script setup>
-import { user, study, initialStudy } from '~/public/script/reactive';
+import { user, study, initialStudy, errorMsgs, errorQuestions } from '~/public/script/reactive';
 import StudyService from '~/services/studyService';
 import ParticipantService from '~/services/participantService';
 
@@ -34,6 +35,7 @@ const displayName = ref('');
 const isReadOnly = ref(false);
 const status = ref('');
 
+console.log(errorMsgs.value, errorQuestions);
 // load study responses when 'onEdit' if it isn't a draft, and provide it to pass it within the subtree w/o prop-drilling too much
 const studyResponses = ref([]);
 provide('studyResponses', studyResponses);
@@ -49,9 +51,9 @@ const isCreatingStudy = ref(false);
 const showUnableSaveBox = ref(false);
 
 //toggles the prompt-box providing user message that study cannot be saved, and a reason (if included)
-const displayUnableSaveBox = (display, reason = '') => {
+const displayUnableSaveBox = (display, info = {}) => {
     showUnableSaveBox.value = display;
-    unableSaveReason.value = reason;
+    unableSaveReason.value = info;
 }
 
 const getUserInfo = async () => {
@@ -94,13 +96,6 @@ if (draft && !study.id) {
     isReadOnly.value = false;
     isCreatingStudy.value = true;
 }
-
-watch(study, (newVal) => {
-    if (newVal.id) {
-        localStorage.setItem('unsavedStudy', JSON.stringify(newVal));
-        localStorage.setItem('isEditingStudy', isCreatingStudy.value ? 'false' : 'true');
-    }
-}, { deep: true });
 
 const populateStudy = (id) => {
     // find study with matching id that is stored when user loads dashboard
@@ -154,6 +149,13 @@ const onDeleteStudy = (id) => {
         user.studies.splice(studyIndex, 1);
     }
 }
+
+watch(study, (newVal) => {
+    if (newVal.id && newVal.status == 'draft') {
+        localStorage.setItem('unsavedStudy', JSON.stringify(newVal));
+        localStorage.setItem('isEditingStudy', isCreatingStudy.value ? 'false' : 'true');
+    }
+}, { deep: true });
 
 // remove items used to track what response type the user is viewing when the page is set up again (on reload)
 onMounted(() => {
