@@ -139,9 +139,15 @@
             width: 16rem;
             border: 2px c.$red solid;
             color: c.$red;
+            transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out, filter 0.15s ease-in-out;
 
             &:hover {
                 background-color: rgba(154, 154, 154, 0.1);
+                background-color: c.$red;
+                color: c.$white;
+            }
+            &:active {
+                filter: brightness(0.8);
             }
         }
         
@@ -280,6 +286,7 @@
         border: none;
         background: none;
         position: relative;
+        cursor: pointer;
 
         &:before {
             @include v.circleHover();
@@ -292,6 +299,28 @@
         &:hover .exit__svg {
             fill: c.$blueSecondary-hover;
         }
+        &[data-tooltip]::after {
+            visibility: hidden; 
+            opacity: 0;
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -30px;
+            right: -10px;
+            padding: 5px;
+            background-color: c.$darkGray;
+            color: c.$white;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 5;
+            transition: opacity 0.3s ease-in-out;
+        }
+    
+        &[data-tooltip]:hover::after {
+            visibility: visible; 
+            opacity: 1;
+        }
+
     }
 
     &__svg {

@@ -3,6 +3,7 @@
 		<div class="aside__container">
 			<DashboardNewStudy @newStudy="(id) => emitNewStudy(id)" />
 			<DashboardFilter @filter="(study) => (filter = study)" :activeFilter="filter" />
+			<DashboardSearch @search="(query) => searchStudy(query)" />
 		</div>
 		<div class="aside__container aside__container--small">
 			<button class="aside__button font-normal">Settings</button>
@@ -26,10 +27,20 @@
 
 <script setup>
 import { user } from '~/public/script/reactive';
+import { search } from '~/public/script/studySearch';
 
 //Setting variable to store which filter to use for which studies to display. Setting default to 'all' so all
 //studies are displayed as default. This is passed to "StudyBlock" with the :filter attr
 const filter = ref('all');
+
+const studies = ref();
+
+//to return array of studies to display saved in a reactive variable
+const computedStudies = computed(() => {
+	return user.studies;
+});
+
+studies.value = computedStudies.value;
 
 const emit = defineEmits(['newStudy', 'selectStudy', 'editStudy', 'deleteStudy']);
 
@@ -47,10 +58,14 @@ const mainTitle = computed(() => {
 	return `Viewing ${filter.value}`;
 });
 
-//to return array of studies to display saved in a reactive variable
-const studies = computed(() => {
-	return user.studies;
-});
+const searchStudy = (query) =>{
+	filter.value = 'all';
+	const results = search(studies.value, query);
+
+	if (query) studies.value = results;
+	else studies.value = computedStudies.value;
+}
+
 </script>
 
 <style scoped>
