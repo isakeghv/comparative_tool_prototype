@@ -1,5 +1,4 @@
 <template>
-
     <div class="drop_box" @mouseover="mouseover" @mouseleave="mouseleave" @mouseup="mouseup">
         <p class="drop_text">{{ box }}</p>
         <div class="drop_container">

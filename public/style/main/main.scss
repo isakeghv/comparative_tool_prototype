@@ -120,3 +120,7 @@ input[type="checkbox"] {
 .apexcharts-tooltip span {
 	color: c.$white;
 }
+
+.error {
+	outline: red solid 2px !important;
+}

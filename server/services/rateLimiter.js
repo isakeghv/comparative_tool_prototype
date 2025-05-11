@@ -31,6 +31,12 @@ export const checkRateLimit = async (ip, endpoint) => {
     return { allowed: true };
   }
 
-  await RateLimit.create({ ip, endpoint, attempts: 1 });
+  // Insert new record with upsert to avoid duplicate key errors
+  await RateLimit.updateOne(
+    { ip, endpoint },
+    { $set: { lastAttempt: now }, $setOnInsert: { attempts: 1 } },
+    { upsert: true }
+  );
+
   return { allowed: true };
 };

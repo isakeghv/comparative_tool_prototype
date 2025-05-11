@@ -3,6 +3,7 @@
 		<div class="aside__container">
 			<DashboardNewStudy @newStudy="(id) => emitNewStudy(id)" />
 			<DashboardFilter @filter="(study) => (filter = study)" :activeFilter="filter" />
+			<DashboardSearch @search="(query) => searchStudy(query)" />
 		</div>
 		<div class="aside__container aside__container--small">
 			<button class="aside__button font-normal">Settings</button>
@@ -17,7 +18,7 @@
 				@select="(study) => emitSelectStudy(study)"
 				@edit="(study) => emitEditStudy(study)"
 				@delete="(study) => emitDeleteStudy(study)"
-				@duplicate="(study) => console.log(study)" :study="study" :status="study.status" :filter="filter"
+				@duplicate="(study) => studyDuplicate(study)" :study="study" :status="study.status" :filter="filter"
 				@export="(study) => console.log(study)" :id="study.id" :title="study.title"
 				:startDate="study.created" />
 		</div>
@@ -26,10 +27,20 @@
 
 <script setup>
 import { user } from '~/public/script/reactive';
+import { search } from '~/public/script/studySearch';
 
 //Setting variable to store which filter to use for which studies to display. Setting default to 'all' so all
 //studies are displayed as default. This is passed to "StudyBlock" with the :filter attr
 const filter = ref('all');
+
+const studies = ref();
+
+//to return array of studies to display saved in a reactive variable
+const computedStudies = computed(() => {
+	return user.studies;
+});
+
+studies.value = computedStudies.value;
 
 const emit = defineEmits(['newStudy', 'selectStudy', 'editStudy', 'deleteStudy']);
 
@@ -51,6 +62,26 @@ const mainTitle = computed(() => {
 const studies = computed(() => {
 	return user.studies;
 });
+
+const studyDuplicate = (originalStudy) => {
+    const clone = JSON.parse(JSON.stringify(originalStudy));
+    clone.id = `${originalStudy.id}_copy_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+
+    const index = user.studies.findIndex(s => s.id === originalStudy.id);
+    if (index !== -1) {
+        user.studies.splice(index + 1, 0, clone);
+    } else {
+        user.studies.push(clone);
+    }
+};
+
+const searchStudy = (query) =>{
+	filter.value = 'all';
+	const results = search(studies.value, query);
+
+	if (query) studies.value = results;
+	else studies.value = computedStudies.value;
+}
 </script>
 
 <style scoped>

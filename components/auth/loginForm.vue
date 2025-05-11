@@ -90,13 +90,12 @@ onMounted(() => {
   }
 });
 
-
-
 const login = async () => {
 	const token = document.querySelector('[name="cf-turnstile-response"]')?.value;
 	if (!token) {
     loginStatus.value = "error";
     statusMsg.value = "CAPTCHA verification failed.";
+	window.turnstile?.reset();
     return;
   }
 	//calling backend function to login user
