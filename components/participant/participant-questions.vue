@@ -3,6 +3,9 @@
 		<div class="question__cont--top">
 			<div class="question__panel question__panel--left">
 				<h2 class="question__headline font-h5 font-semi">{{ currentQuestion.question }}</h2>
+				<p class="question__instructions font-body" v-if="instructionText">
+					{{ instructionText }}
+				</p>
 				<div class="question__list">
 
 					<!-- Radio buttons -->
@@ -38,6 +41,15 @@
 					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id" :responseType="responseType"
 						:artifact="artifact" @selectMedia="selectMedia" @moving="(artifact) => box_moving(artifact)"
 						v-if="responseType === 'drop'" />
+
+					<!-- range -->
+					<ArtifactRange
+						v-if="responseType === 'range'"
+						:question-id="currentQuestion.id"
+						:artifacts="artifactsArr"
+						@update:responses="val => updateResponses(currentQuestion.id, val)"
+					/>
+
 				</div>
 			</div>
 
@@ -66,9 +78,11 @@
 import ArtifactPreview from './artifact/artifact-preview.vue';
 import ArtifactDropLinear from './artifact/artifact-drop-linear.vue';
 import ArtifactDropBox from './artifact/artifact-drop-box.vue';
+import ArtifactRange from './artifact/artifact-range.vue';
 import { linear_moving, linear_artifactIsOver, linear_artifactOver, linear_drop, linear_orderUp, linear_orderDown, linear_insertAt } from './linearFunctionality'
 import { box_moving, box_mouseover, box_drop, box_mouseleave } from './dropboxFunctionality'
 import { participantAnswer } from '~/public/script/participant';
+import { ref, computed, watch, watchEffect } from 'vue';
 
 const props = defineProps({
 	questions: Array,
@@ -134,6 +148,26 @@ watch(selectedArtifact, (newValue) => {
 		participantAnswer[currentQuestion.value.id] = [];
 	}
 });
+
+// instructions to different question types
+const instructionText = computed(() => {
+	switch (responseType.value) {
+		case 'radio':
+			return 'Select one of the artifacts by clicking on it.';
+		case 'checkbox':
+			return 'Select one or more artifacts by checking the boxes.';
+		case 'linear':
+			return 'Drag and drop the artifacts to rank them in order.';
+		case 'drop':
+			return 'Drag the artifacts into the boxes that what you belive it belongs in';
+		case 'range':
+			return 'Adjust the slider to reflect your rating about the artifact';
+		default:
+			return '';
+	}
+});
+
+
 </script>
 
 <style scoped>

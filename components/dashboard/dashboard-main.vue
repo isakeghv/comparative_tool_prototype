@@ -18,7 +18,7 @@
 				@select="(study) => emitSelectStudy(study)"
 				@edit="(study) => emitEditStudy(study)"
 				@delete="(study) => emitDeleteStudy(study)"
-				@duplicate="(study) => console.log(study)" :study="study" :status="study.status" :filter="filter"
+				@duplicate="(study) => studyDuplicate(study)" :study="study" :status="study.status" :filter="filter"
 				@export="(study) => console.log(study)" :id="study.id" :title="study.title"
 				:startDate="study.created" />
 		</div>
@@ -58,6 +58,23 @@ const mainTitle = computed(() => {
 	return `Viewing ${filter.value}`;
 });
 
+//to return array of studies to display saved in a reactive variable
+const studies = computed(() => {
+	return user.studies;
+});
+
+const studyDuplicate = (originalStudy) => {
+    const clone = JSON.parse(JSON.stringify(originalStudy));
+    clone.id = `${originalStudy.id}_copy_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+
+    const index = user.studies.findIndex(s => s.id === originalStudy.id);
+    if (index !== -1) {
+        user.studies.splice(index + 1, 0, clone);
+    } else {
+        user.studies.push(clone);
+    }
+};
+
 const searchStudy = (query) =>{
 	filter.value = 'all';
 	const results = search(studies.value, query);
@@ -65,7 +82,6 @@ const searchStudy = (query) =>{
 	if (query) studies.value = results;
 	else studies.value = computedStudies.value;
 }
-
 </script>
 
 <style scoped>
