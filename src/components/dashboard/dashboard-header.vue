@@ -199,32 +199,30 @@ const saveStudy = async () => {
 
                 // first update the tracking of the initial and current study
                 updateSaveHistory();
-            } else {
-                console.log('Unable to save new study');
-                emit('unableSave');
-            }
-
+        } else {
+            console.log(updatedStudy, updatedStudy.study);
+            emit('unableSave');
+        }
             return;
-        } else if (study && !noChanges) {
-            // if changes have happened, send a PUT request with the study data as the body
-            const updatedStudy = await StudyService.updateStudy(study.id, study);
+    } else if (study && !noChanges) {
+        // if changes have happened, send a PUT request with the study data as the body
+        const updatedStudy = await StudyService.updateStudy(study.id, study);
 
-            if (updatedStudy && updatedStudy.study) {
-                // find index of the study that is currently in progress and display correct information if changes have happened to UI w/o reloading
-                const studyIndex = user.studies.findIndex(study => study.id === updatedStudy.study.id);
+        if (updatedStudy && updatedStudy.study) {
+            // find index of the study that is currently in progress and display correct information if changes have happened to UI w/o reloading
+            const studyIndex = user.studies.findIndex(study => study.id === updatedStudy.study.id);
 
-                // first update the tracking of the initial and current study
-                updateSaveHistory();
+            // first update the tracking of the initial and current study
+            updateSaveHistory();
 
-                // if updatedStudy id is found within user.studies
-                if (studyIndex !== -1) {
-                    user.studies[studyIndex] = JSON.parse(JSON.stringify(updatedStudy.study));
-                }
-            } else {
-                console.log('Unable to save updated study', updatedStudy, updatedStudy.study);
-                emit('unableSave');
+            // if updatedStudy id is found within user.studies
+            if (studyIndex !== -1) {
+                user.studies[studyIndex] = JSON.parse(JSON.stringify(updatedStudy.study));
             }
-
+        } else {
+            console.log('Unable to save updated study', updatedStudy, updatedStudy.study);
+            emit('unableSave');
+        }
             return;
         }
     } catch (error) {

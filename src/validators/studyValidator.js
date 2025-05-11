@@ -1,11 +1,22 @@
 import { errorMsgs, errorQuestions } from '~/public/script/reactive';
 
 const validateCheckbox = (q) => {
-    const min = parseInt(q.checkbox.selectionMin);
-    const max = parseInt(q.checkbox.selectionMax);
-    const artifactsLength = q.artifacts?.length || 0;
+    let min = Number(q.checkbox.selectionMin);
+    let max = Number(q.checkbox.selectionMax);
+    let artifactsLength = q.artifacts?.length || 0;
 
-    if (!(min >= 1 && max > 1 && min <= max && max <= artifactsLength)) {
+    // clamp values
+    min = Math.max(1, min || 0);
+
+    if (!max || max > artifactsLength) {
+        max = artifactsLength > 0 ? artifactsLength : 1;
+    }
+
+    q.checkbox.selectionMin = min;
+    q.checkbox.selectionMax = max;
+
+    // Validate
+    if (min > max || max < 1) {
         return 'checkbox';
     }
 
@@ -24,9 +35,9 @@ const validateRange = (q) => {
 };
 
 const validateDrop = (q) => {
-    if (!q.drop.dropBox.some(item => item.trim() !== '')) {
-        return 'drop';
-    }
+    // remove empty boxes
+    q.drop.dropBox.options = q.drop.dropBox.filter(item => item.trim() !== '');
+    if (q.drop.dropBox.options.length < 1) return 'drop';
 
     return null;
 };
@@ -81,20 +92,21 @@ export const validateDemographics = (study) => {
             return true;
         }
 
+        // need at least two multiple choice options
         if (field.responseType === 'radio') {
-            if (!field.radio.options.some(item => item.trim() !== '')) {
-                return true;
-            }
-        }
+            field.radio.options = field.radio.options.filter(item => item.trim() !== '');
+            if (field.radio.options.length < 2) return true;
+        }        
 
         if (field.responseType === 'number') {
             const min = parseInt(field.number?.min);
             const max = parseInt(field.number?.max);
-
-            if (!(min >= 1 && max <= 100 && min <= max)) {
+        
+            if (isNaN(min) || isNaN(max) || min > max) {
                 return true;
             }
         }
+        
     }
 
     return false;

@@ -87,7 +87,7 @@ const defaultQuestions = [
             maxChar: ''
         },
         radio: {
-            options: ['Male', 'Female']
+            options: ['Male', 'Female', 'Other']
         },
         number: {
             min: '',

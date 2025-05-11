@@ -79,7 +79,7 @@ const message = computed(() => {
         case 'noQuestions':
             return 'Your study must include at least one question.';
         case 'demographics':
-            return 'One or more demographic questions have missing title, options or invalid number ranges.';
+            return  'One or more demographic questions have a missing title, fewer than two options (Multiple choice), or invalid number range (Number).';
         default:
             return 'Some required fields are missing. Please review your study.';
     }

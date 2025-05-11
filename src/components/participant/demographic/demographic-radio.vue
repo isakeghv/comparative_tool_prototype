@@ -1,20 +1,26 @@
 <template>
-    <div v-for="(option, i) in question.radio.options" class="response__option">
+    <div v-for="(option, i) in filteredOptions" class="response__option">
         <input type="radio" :id="`option_${i}_${question.id}`" :name="`option_${question.id}`" :value=option v-model="optionModel" class="response__radio" :required="question.required" @change="input"/>
         <label :for="`option_${i}_${question.id}`" class="response__label font-small">{{ option }}</label>
     </div>
 </template>
 <script setup>
 const props = defineProps({
-    question: Object
+    question: Object,
+    value: String
 })
 
-const optionModel = ref('');
+const optionModel = ref(props.value || null);
 
 const emit = defineEmits(['update']);
 
+// filter out empty radio values
+const filteredOptions = computed(() => {
+    return props.question.radio.options.filter(option => option.trim() !== '');
+});
+
 const input = () =>{
-    emit('update', optionModel.value);
+    emit('update', { val: optionModel.value, isInvalid: false });
 }
 </script>
 

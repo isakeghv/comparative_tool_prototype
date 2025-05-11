@@ -26,10 +26,7 @@ const QuestionSchema = new Schema({
 		required: true,
 	},
 	checkbox: {
-		selectionMin: {
-			type: Number,
-			min: 1
-		},
+		selectionMin: { type: Number },
 		selectionMax: { type: Number },
 	},
 	range: {

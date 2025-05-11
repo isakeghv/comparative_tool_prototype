@@ -184,6 +184,11 @@ watch([textModel, optionsModel, minModel, maxModel], () => {
 
     if (!thisDemographic) return;
 
+    // clam if user has typed a nummber larger than max
+    if (textModel.value > 3000) {
+        textModel.value = 3000;
+    }
+
     thisDemographic.text.maxChar = textModel.value;
     thisDemographic.number.min = minModel.value;
     thisDemographic.number.max = maxModel.value;
