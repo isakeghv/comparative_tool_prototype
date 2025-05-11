@@ -127,6 +127,9 @@ const registerUser = async () => {
         }
     });
 
+    // Reset captcha after submit
+    if (window.turnstile) window.turnstile.reset();
+
     //collecting response from backend
     const success = await response.json();
 
@@ -135,56 +138,49 @@ const registerUser = async () => {
         registerStatus.value = 'success';
         statusMsg.value = success.message;
 
-
-        //if account was succesfully created, it logs the user in automatically
-        const loginRes = await fetch('/api/login', {
-            method: 'POST',
-            body: JSON.stringify({
-                email: email.value,
-                password: pwd.value
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        const login = await loginRes.json()
-
-        if (login.isValid) location.reload();
-    } else {
+        // If registration was successful the user is already authenticated via the JWT cookie
+        location.reload();
+        } else {
+        //  Registration failed and shows error
         registerStatus.value = 'error';
-        statusMsg.value = success.message
+        statusMsg.value = success.message;
+
+        // Reset Captcha so the user can try again
+        if (window.turnstile) {
+            window.turnstile.reset();
+        }
     }
-    
-    //returns from function to emit event which informs user with status and message
+
     return profileCreate(success.created, success.message);
 }
 
-// onMounted(() => {
-//     const containerId = 'turnstile-container';
-//     const el = document.getElementById(containerId);
-//     if (!el) return;
+onMounted(() => {
+    const containerId = 'turnstile-container';
+    const el = document.getElementById(containerId);
+    if (!el) return;
 
+    // Render the CAPTCHA using the site key
+    const renderCaptcha = () => {
+        window.turnstile?.render(`#${containerId}`, {
+            sitekey: '0x4AAAAAABDiqhbcAnsx6S1V',
+            theme: 'light'
+        });
+    };
+    // If the script is not loaded, inject it to the page
+    if (!window.turnstile) {
+        const script = document.createElement('script');
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+        script.async = true;
+        script.defer = true;
+        document.body.appendChild(script);
 
-//     const renderCaptcha = () => {
-//         window.turnstile?.render(`#${containerId}`, {
-//             sitekey: '0x4AAAAAABDiqhbcAnsx6S1V',
-//             theme: 'light'
-//         });
-//     };
-
-//     if (!window.turnstile) {
-//         const script = document.createElement('script');
-//         script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
-//         script.async = true;
-//         script.defer = true;
-//         document.body.appendChild(script);
-
-//         script.onload = renderCaptcha;
-//     } else {
-//         renderCaptcha();
-//     }
-// });
+        // Once the script has loaded, render the CAPTCHA
+        script.onload = renderCaptcha;
+    } else {
+        // If already loaded render it immediately
+        renderCaptcha();
+    }
+});
 </script>
 
 <style scoped>

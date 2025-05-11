@@ -95,6 +95,7 @@ const login = async () => {
 	if (!token) {
     loginStatus.value = "error";
     statusMsg.value = "CAPTCHA verification failed.";
+	window.turnstile?.reset();
     return;
   }
 	//calling backend function to login user
