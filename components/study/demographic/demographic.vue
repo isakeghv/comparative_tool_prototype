@@ -44,6 +44,7 @@
 
 <script setup>
 import { study, showResponses } from '~/public/script/reactive';
+import { validateDemographics, removeErr } from '~/validators/studyValidator';
 const isDisabled = inject('disabled');
 const studyResponses = inject('studyResponses');
 
@@ -86,7 +87,7 @@ const defaultQuestions = [
             maxChar: ''
         },
         radio: {
-            options: ['Male', 'Female']
+            options: ['Male', 'Female', 'Other']
         },
         number: {
             min: '',

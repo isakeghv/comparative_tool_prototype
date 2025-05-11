@@ -19,6 +19,5 @@ export default defineNuxtConfig({
     { path: "~/components/study/details", pathPrefix: false },
     { path: "~/components/participant", pathPrefix: false },
     { path: "~/components/participant/artifact", pathPrefix: false },
-
-  ],
+  ]
 })

@@ -16,7 +16,7 @@
         <div class="popup" v-if="showPopUp">
             <!-- only show 'edit' button if study is a draft -->
             <button v-if="status === 'draft'" class="popup__button font-normal" @click="studyEdit(id)">Edit</button>
-            <button class="popup__button font-normal" @click="studyDelete(id)">Delete</button>
+            <button class="popup__button font-normal" @click="studyDelete(id)" id="popup-delete-btn">Delete</button>
             <button class="popup__button font-normal" @click="studyDuplicate(study)">Duplicate</button>
             <button class="popup__button font-normal" @click="studyExport(id, 'json')">Export JSON</button>
             <button class="popup__button font-normal"  @click="studyExport(id, 'cvs')">Export CVS</button>

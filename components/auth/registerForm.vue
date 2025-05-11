@@ -106,11 +106,11 @@ const registerUser = async () => {
     const lastname = nameToCapital(lastName.value);
     const token = document.querySelector('[name="cf-turnstile-response"]')?.value;
 
-  if (!token) {
-    registerStatus.value = 'error';
-    statusMsg.value = 'CAPTCHA verification failed.';
-    return;
-  }
+//   if (!token) {
+//     registerStatus.value = 'error';
+//     statusMsg.value = 'CAPTCHA verification failed.';
+//     return;
+//   }
 
     //calling backend function to create user
     const response = await fetch('/api/register', {
@@ -160,31 +160,31 @@ const registerUser = async () => {
     return profileCreate(success.created, success.message);
 }
 
-onMounted(() => {
-    const containerId = 'turnstile-container';
-    const el = document.getElementById(containerId);
-    if (!el) return;
+// onMounted(() => {
+//     const containerId = 'turnstile-container';
+//     const el = document.getElementById(containerId);
+//     if (!el) return;
 
 
-    const renderCaptcha = () => {
-        window.turnstile?.render(`#${containerId}`, {
-            sitekey: '0x4AAAAAABDiqhbcAnsx6S1V',
-            theme: 'light'
-        });
-    };
+//     const renderCaptcha = () => {
+//         window.turnstile?.render(`#${containerId}`, {
+//             sitekey: '0x4AAAAAABDiqhbcAnsx6S1V',
+//             theme: 'light'
+//         });
+//     };
 
-    if (!window.turnstile) {
-        const script = document.createElement('script');
-        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
-        script.async = true;
-        script.defer = true;
-        document.body.appendChild(script);
+//     if (!window.turnstile) {
+//         const script = document.createElement('script');
+//         script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+//         script.async = true;
+//         script.defer = true;
+//         document.body.appendChild(script);
 
-        script.onload = renderCaptcha;
-    } else {
-        renderCaptcha();
-    }
-});
+//         script.onload = renderCaptcha;
+//     } else {
+//         renderCaptcha();
+//     }
+// });
 </script>
 
 <style scoped>

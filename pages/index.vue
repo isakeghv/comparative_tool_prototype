@@ -45,7 +45,7 @@
 
 <script setup>
 import register from './register.vue';
-import { form } from 'public/script/reactive';
+import { form } from '~/public/script/reactive';
 
 const selectedFormType = ref(false);
 

@@ -55,7 +55,7 @@
 		<div v-if="currentQuestion.responseType === 'drop'" class="drop__row">
 			<ArtifactDropBox @mouseover="box_mouseover()" @mouseleave="box_mouseleave()"
 				@dropped="box_drop(currentQuestion.id, index, box, currentQuestion.question)" :box="box" v-if="responseType === 'drop'"
-				v-for="(box, index) in currentQuestion.drop.dropBox" :key="index"
+				v-for="(box, index) in  currentQuestion.drop.dropBox.filter(box => box !== '')" :key="index"
 				:artifact="participantAnswer[currentQuestion.id]?.[index]"
 				@expand="(artifact) => selectMedia(artifact.source, artifact.id)" />
 		</div>

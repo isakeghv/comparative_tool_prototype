@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { study, showResponses } from '~/public/script/reactive';
+import { study, errorQuestions } from '~/public/script/reactive';
 const isDisabled = inject('disabled');
 
 const props = defineProps({
@@ -102,6 +102,11 @@ const deleteQuestion = () => {
     const i = study.questions.findIndex(q => q.id === props.id);
 
     emit('delete', props.id, i);
+
+    // delete tracking of errors
+    delete errorQuestions[props.id];
+
+    // emit('deleteQuestion', nextQuestion.id);
 }
 
 // similar to the child component, initialize required model when id changes

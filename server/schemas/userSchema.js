@@ -2,20 +2,34 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const UserCredentialSchema = new mongoose.Schema({
-    email: { type: String, required: true, unique: true },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        maxlength: [100, 'Email must not exceed 100 characters.']
+    },
     password: {
         type: String,
         required: true,
         // validate the password at the backend as well -> can send the message to the frontend
         minlength: [8, 'Password must be at least 8 characters long.'],
+        maxlength: [100, 'Email must not exceed 100 characters.']
     },
     // reference so a userCredential will always be linked to its userProfile document
     userProfile: { type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile', required: true }
 })
 
 const UserProfileSchema = new mongoose.Schema({
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
+    firstName: {
+        type: String,
+        required: true,
+        maxlength: [50, 'Email must not exceed 100 characters.']
+    },
+    lastName: {
+        type: String,
+        required: true,
+        maxlength: [100, 'Email must not exceed 100 characters.']
+    },
 });
 
 

@@ -5,15 +5,16 @@
 
 <script setup>
 const props = defineProps({
-    question: Object
+    question: Object,
+    value: String
 })
 
-const dateModel = ref('');
+const dateModel = ref(props.value || '');
 
 const emit = defineEmits(['update']);
 
 const input = () =>{
-    emit('update', dateModel.value)
+    emit('update', { val: dateModel.value, isInvalid: false })
 }
 
 // set date picker to no further than today's month

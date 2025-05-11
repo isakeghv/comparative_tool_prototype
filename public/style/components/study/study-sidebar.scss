@@ -95,6 +95,10 @@
         &:active {
             opacity: 1;
         }
+
+        &:disabled {
+            opacity: 0.6;
+        }
     }
 
     &__plus {
@@ -156,9 +160,9 @@
         height: 1.6rem;
     }
 
-    &__duplicate{
-        border: none;
-        background-color: transparent;
-        cursor: pointer;
+    &__duplicate {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
