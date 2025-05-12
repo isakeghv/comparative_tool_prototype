@@ -1,5 +1,6 @@
 services:
   app:
+    # image: chkyn/compara:latest # based on fork
     build:
       context: ./app
     container_name: app
