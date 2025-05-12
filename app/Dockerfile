@@ -18,4 +18,4 @@ EXPOSE 3000
 # CMD ["node", ".output/server/index.mjs"]
 
 # for development mode
-CMD ["npm", "run", "dev"]
+#CMD ["npm", "run", "dev"]
