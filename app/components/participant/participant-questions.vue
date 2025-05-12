@@ -88,6 +88,8 @@ const props = defineProps({
 	questionIndex: Number
 });
 
+const emit = defineEmits(['validated']);
+
 // ref for 'radio' option
 const selectedArtifact = ref('');
 
@@ -131,7 +133,31 @@ watch(() => props.questionIndex, () => {
 	selectedId.value = '';
 }, { deep: true, immediate: true });
 
+// check if the required question has been answered
+const validateRequiredQuestion = () => {
+	const isRequired = currentQuestion.value.required;
+	let unansweredQuestion = participantAnswer[currentQuestion.value.id];
 
+    // convert to Object.keys() if answers is stored as an object
+	if (unansweredQuestion && typeof unansweredQuestion === 'object') {
+		unansweredQuestion = Object.keys(unansweredQuestion);
+	}
+
+	// if all required answers has been answered, emit to parent to allow to click 'next'
+	if (!isRequired || (unansweredQuestion && unansweredQuestion.length > 0) /* && !isInvalid */) {
+		emit('validated', true);
+	} else {
+		emit('validated', false);
+	}
+};
+
+watch(
+	() => participantAnswer[currentQuestion.value.id],
+	(newValue) => {
+		validateRequiredQuestion();
+	},
+	{ deep: true, immediate: true }
+);
 
 // need to do do the randomization instantely to avoid bug delay
 watchEffect(() => {
@@ -158,9 +184,9 @@ const instructionText = computed(() => {
 		case 'linear':
 			return 'Drag and drop the artifacts to rank them in order.';
 		case 'drop':
-			return 'Drag the artifacts into the boxes that what you belive it belongs in';
+			return 'Drag the artifacts into the boxes where you believe they belong.';
 		case 'range':
-			return 'Adjust the slider to reflect your rating about the artifact';
+			return 'Adjust the slider to reflect your rating about the artifact.';
 		default:
 			return '';
 	}

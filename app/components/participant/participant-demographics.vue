@@ -92,7 +92,7 @@ watch(
 	(newValue) => {
 		validateDemographics();
 	},
-	{ deep: true }
+	{ deep: true, immediate: true }
 );
 </script>
 
