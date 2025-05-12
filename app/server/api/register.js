@@ -47,21 +47,21 @@ const createUser = async (fname, lname, email, pwd, e) => {
 
 		// Create a JWT token containing the user's id valid for 1 hour
 		const token = jwt.sign(
-		{ userId: newUserC._id },
-		config.private.secretJWT,
-		{ expiresIn: '1h' }
+			{ userId: newUserC._id },
+			config.private.secretJWT,
+			{ expiresIn: '1h' }
 		);
 
 		// Set the token as a secure, HTTP-only cookie to authenticate the user
 		setCookie(e, 'token', token, {
-		httpOnly: true,
-		secure: process.env.NODE_ENV === 'production',
-		sameSite: 'strict',
-		path: '/'
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production',
+			sameSite: 'strict',
+			path: '/'
 		});
 
 		setResponseStatus(e, 201);
-		
+
 		//return status and message that account has been created
 		return { created: true, message: "Account successfully created." };
 	} catch (err) {
@@ -81,11 +81,16 @@ export default defineEventHandler(async (e) => {
 
 	const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
 
+	if (!TURNSTILE_SECRET_KEY) {
+		setResponseStatus(e, 401);
+		return { created: false, message: 'Missing key' }
+	}
+
 	// RateLimiter
 	const ip = getRequestHeader(e, 'x-forwarded-for') || e.node.req.socket.remoteAddress;
 	const { allowed, retryAfter } = await checkRateLimit(ip, '/api/register');
 	if (!allowed) {
- 		setResponseStatus(e, 429);
+		setResponseStatus(e, 429);
 		return {
 			created: false,
 			message: `Too many registration attempts. Try again in ${Math.ceil(retryAfter / 60000)} minutes.`
@@ -98,8 +103,8 @@ export default defineEventHandler(async (e) => {
 		body: new URLSearchParams({
 			secret: TURNSTILE_SECRET_KEY,
 			response: turnstileToken
-			})
-		});
+		})
+	});
 
 	if (!captchaRes.success) {
 		setResponseStatus(e, 403);
@@ -109,12 +114,12 @@ export default defineEventHandler(async (e) => {
 	//validation
 	if (!firstname || !lastname || !email || !password) {
 		setResponseStatus(e, 400)
-		return { created: false, message: "All fields are required."}
+		return { created: false, message: "All fields are required." }
 	}
 	// Email validation
-	if (!validator.isEmail(email)){
+	if (!validator.isEmail(email)) {
 		setResponseStatus(e, 400)
-		return {created: false, message: "Invalid email format."}
+		return { created: false, message: "Invalid email format." }
 	}
 
 	// Trim password so there is no hidden characters like extra spaces
@@ -128,7 +133,7 @@ export default defineEventHandler(async (e) => {
 		minSymbols: 1
 	})) {
 		setResponseStatus(e, 400)
-		return { created:false, message: "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character like !, @, #, or $."}
+		return { created: false, message: "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character like !, @, #, or $." }
 	}
 
 	//Sanitize
@@ -139,10 +144,10 @@ export default defineEventHandler(async (e) => {
 
 	// if checkEmail returns a value, return and don't continue executing the rest of the code
 	const emailExist = await checkEmail(cleanEmail, e);
-	
-	if (emailExist) {		
+
+	if (emailExist) {
 		return emailExist;
-	}	
+	}
 
 	return await createUser(cleanFirstName, cleanLastName, cleanEmail, cleanPassword, e);
 });
