@@ -1,13 +1,13 @@
 services:
   app:
-    # image: chkyn/compara:latest # based on fork
-    build:
-      context: ./app
-    container_name: app
+    image: iseh/compara:latest # based on fork
+    #build:
+    #  context: ./app
+    #container_name: app
     volumes:
       - ./app:/app
     ports:
-      - "3000:3000"
+      - "8183:8183"
     depends_on:
       - db
 
