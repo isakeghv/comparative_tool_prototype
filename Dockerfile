@@ -9,11 +9,12 @@ RUN npm install
 
 COPY app/ /app
 
-RUN npm run generate
-# RUN npm run build
+# RUN npm run generate
+RUN npm run build
 
-EXPOSE 3000
+ENV NITRO_HOST=0.0.0.0
+ENV NITRO_PORT=8183
 
-# CMD ["npx", "serve", ".output/public"]
+EXPOSE 8183
+
 CMD ["node", ".output/server/index.mjs"]
-# npx erve ./public 
