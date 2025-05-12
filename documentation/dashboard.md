@@ -33,7 +33,7 @@ Relative: "public/style/pages/dashboard/dashboard.scss".
 Link "dashboard" (index.vue for now) page to .vue the css file with:
 
 <style scoped>
-    @import url('/style/pages/dashboard/dashboard.css');
+    @import url('public/style/pages/dashboard/dashboard.css');
 </style>
 
 ### NOTICE
@@ -72,5 +72,184 @@ File: dashboard-header.scss.
 Relative: "public/style/components/header/dashboard-header.scss".
 
 <style scoped>
-    @import url('/style/components/header/dashboard-header.css');
+    @import url('public/style/components/header/dashboard-header.css');
+</style>
+
+---
+
+---
+
+---
+
+## Dashboard-main-aside component - NO LONGER ITS OWN COMPONENT - NOW A PART OF DASHBOARD-MAIN
+Aside component to include in dashboard page. 
+
+### props
+None atm
+
+### Functionalities
+1. include reusable components for filtering studies (completed, all, ongoing, drafts), creating new study.
+2. include component for "settings"
+3. include component for logging out
+4. collecting and forwarding events to dashboard
+
+### Emits
+
+#### Filter study
+
+Event: filter
+Payload: filter-query
+Data-type: String
+
+To be used in order to select and display a study from the dash-board page
+
+#### Creating new study
+
+Event: newStudy
+Payload: id (temp-id: JSON.Stringify(Date.now()))
+Data-type: Number
+
+#### Open settings
+
+Event: open
+Payload: -
+Data-type: -
+
+#### Log out
+
+Event: logOut
+Payload: unknown atm
+Data-type: unknown atm
+
+### Usage
+include in page file with "<Dashboard-main-aside/>"
+
+
+### Styling
+Styling should be done in:
+File: dashboard-main-aside.scss.
+Relative: "public/style/components/aside/dashboard-main-aside.scss".
+
+<style scoped>
+    @import url('public/style/components/aside/dashboard-main-aside.css');
+</style>
+
+
+---
+
+---
+
+---
+
+## Dashboard-main component
+Main area in the researcher dashboard where the study blocks are displayed
+
+### props
+- studies: Array
+
+### Functionalities
+1. include the study-blocks and pass information to study blocks
+2. Collect event of study-block being opened/edit/delete etc and forward/continue emitting event for it
+3. Loop over studies and use to create each study-block, which gets id, title and start-date as props
+
+### Emits
+
+#### Open study
+
+Event: openStudy
+Payload: study-id
+Data-type: String
+
+#### Delete study
+
+Event: deleteStudy
+Payload: study-id
+Data-type: String
+
+### Usage
+include in page file with "<Dashboard-main studies="Array-place-holder"/>"
+
+
+### Styling
+Styling should be done in:
+File: dashboard.scss.
+Relative: "public/style/pages/dashboard/dashboard.scss".
+
+<style scoped>
+    @import url('public/style/pages/dashboard/dashboard.css');
+</style>
+
+---
+
+---
+
+---
+
+## Dashboard-newstudy component
+button and logic for creating new study
+
+### props
+- none atm
+
+### Functionalities
+1. Emit event to create new study
+2. Emit Date.now() as payload to use as temp-id
+
+### Emits
+
+#### New study
+
+Event: newStudy
+Payload: temp-study-id
+Data-type: String
+
+### Usage
+include in page file with "<Dashboard-newstudy />"
+
+
+### Styling
+Styling should be done in:
+File: dashboard.scss.
+Relative: "public/style/pages/dashboard/dashboard.scss".
+
+<style scoped>
+    @import url('public/style/pages/dashboard/dashboard.css');
+</style>
+
+
+---
+
+---
+
+---
+
+## Dashboard-filter component
+Buttons to use to toggle filter
+
+### props
+- filter        
+
+
+### Functionalities
+1. use to toggle which study-blocks to display - "completed", "ongoing", "drafts", "all"
+
+### Emits
+
+#### New study
+
+Event: filter
+Payload: filter-type : - "completed", "ongoing", "draft", "all"
+Data-type: String
+
+### Usage
+include in page file with "<Dashboard-filter />"
+
+
+### Styling
+Styling should be done in:
+File: dashboard.scss.
+Relative: "public/style/pages/dashboard/dashboard.scss".
+
+<style scoped>
+    @import url('public/style/pages/dashboard/dashboard.css');
 </style>

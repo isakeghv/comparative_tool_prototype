@@ -1,0 +1,108 @@
+@use './colors' as c;
+
+@mixin main-area {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 45%;
+    padding: $areaPadding;
+    margin: 0 1.2rem;
+}
+
+@mixin right-area {
+    display: flex;
+    flex-flow: column nowrap;
+    flex: 1 1 20%;
+    border-left: $borderSolid;
+}
+
+@mixin textArea($height) {
+    resize: none;
+    outline: none;
+    height: $height;
+    border: $borderSolid;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    
+    &:hover {
+        border: c.$gray 1px solid;
+    }
+}
+
+@mixin inputArea($width) {
+    outline: none;
+    width: $width;
+    height: 2.4rem;
+    border: $borderSolid;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    
+    &:hover {
+        border: c.$gray 1px solid;
+    }
+}
+
+@mixin blockContainer() {
+    padding: 2rem 1.4rem;
+    display: flex;
+    z-index: 1;
+    border-radius: 0.5rem;
+    gap: 0.6rem;
+    border: $borderSolid;
+    margin-bottom: 3rem;
+    justify-content: flex-end;
+    flex-direction: column;
+    box-shadow: 1px 1px 0px rgba(50, 50, 50, 0.1);
+}
+
+@mixin overlay {
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: none;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+}
+
+@mixin circleHover {
+    content: '';
+    position: absolute;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+@mixin tooltipBox {
+	position: absolute;
+	display: inline-block;
+	max-width: 12rem;
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+	background-color: white;
+	border: $borderSolid;
+	bottom: 100%;
+	left: 50%;
+	z-index: 1;
+	transform: translateX(-50%);
+	box-shadow: $hoverShadow;
+	min-height: 2.4rem;
+	white-space: normal;      
+	word-break: break-all;
+	width: max-content;
+}
+
+
+$mainAreaWidth: clamp(20rem, -4rem + 48vw, 50rem);
+$borderSolid: solid c.$lightGray 1px;
+$areaPadding: 2.4rem 2.2rem;
+$easeAnimation: all 0.3s ease-out;
+$hoverShadow: 0 0 15px 3px rgba(0, 0, 0, 0.2);
+
+
+

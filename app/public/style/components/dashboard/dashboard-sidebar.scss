@@ -1,0 +1,109 @@
+@use "../../variables/_colors.scss" as c;
+@use "../../variables/variables" as v;
+
+.study {
+  cursor: pointer;
+
+  &__plus {
+    height: 1.4rem;
+    width: 1.4rem;
+  }
+
+  &__new {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+
+    &:hover svg {
+      opacity: 0.8;
+    }
+  }
+
+  &__filter {
+    display: flex;
+    align-items: center;
+
+    &--active {
+      background-color: c.$blue-sidebar !important;
+    }
+
+    &--column {
+        gap: 0.5rem;
+      flex-direction: column;
+      position: relative;
+    }
+  }
+
+  &__new,
+  &__filter {
+    // width: clamp(14rem, calc(10rem + 8vw), 18rem);
+    width: 100%;
+    padding: 1rem 2rem;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: c.$white-active;
+    }
+  }
+}
+
+.search {
+  &__label {
+    display: block;
+    width: 100%;
+    flex: 1 0 100%;
+    text-align: left;
+  }
+  &__input {
+    width: 100%;
+    flex: 1 0 100%;
+    border: v.$borderSolid;
+    height: 2rem;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+
+    &:focus {
+      outline: v.$borderSolid;
+    }
+  }
+  &__information {
+    border: v.$borderSolid;
+    display: flex;
+    width: 1.5rem;
+    height: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    cursor: pointer;
+    position: absolute;
+    border-radius: 50%;
+    right: 2rem;
+    top: 0.75rem;
+  }
+
+  &__paragraph {
+    padding: 0.5rem;
+    border: v.$borderSolid;
+    border-radius: 0.25rem;
+    background-color: white;
+    position: absolute;
+    top: 2.5rem;
+    opacity: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 94%;
+    animation: paragraphAnimation 0.3s ease-in-out forwards 0.2s;
+  }
+}
+
+@keyframes paragraphAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
