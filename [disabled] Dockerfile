@@ -14,6 +14,6 @@ RUN npm run generate
 
 EXPOSE 3000
 
-CMD ["npx", "serve", ".output/public"]
-# CMD ["node", ".output/server/index.mjs"]
+# CMD ["npx", "serve", ".output/public"]
+CMD ["node", ".output/server/index.mjs"]
 # npx erve ./public 

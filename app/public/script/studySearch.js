@@ -8,8 +8,10 @@ export const search = (studies, query) =>{
         let found = false;
 
         const isQueryIncluded = (query, comparisment) =>{
-            const lowecase = comparisment.toLowerCase();
-            if (lowecase.includes(query)) found = true;
+            if (comparisment && typeof comparisment === 'string') {
+                const lowercase = comparisment.toLowerCase();
+                if (lowercase.includes(query)) found = true;
+            }
         }
 
         isQueryIncluded(lowercaseQuery, s.description);
