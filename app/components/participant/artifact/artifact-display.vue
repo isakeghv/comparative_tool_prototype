@@ -1,6 +1,6 @@
 <template>
     <div :class="{'artifact__container--fixed': dragging}" class="artifact__container artifact__borderless"
-        ref="artifactRef" @dragstart="dragStart($event, artifact)" :draggable="draggable" @drop="console.log('tester')">
+        ref="artifactRef" @dragstart="dragStart($event, artifact)" :draggable="draggable">
         <div class="wrapper wrapper--zero">
             <ExpandButton @expand="selectMedia(artifact.source, artifact.id)" />
         </div>
@@ -26,6 +26,8 @@ const draggable = computed(() => {
     return props.responseType === 'linear' || props.responseType === 'drop'
 })
 
+console.log(draggable.value);
+
 
 const emit = defineEmits(['selectMedia', 'moving', 'dropped']);
 
@@ -44,6 +46,8 @@ const dragStart = (e, artifact) => {
     const move = (event) =>{
         element.style.setProperty('--x-pos', `${event.pageX - (144 / 2)}px`)
         element.style.setProperty('--y-pos', `${event.pageY - (147.4 / 2)}px`)
+
+        console.log('moving')
 
         if (!emittedMove.value){
             emittedMove.value = true;

@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   ssr: false,
   runtimeConfig: {
     private: {
-      mongoURI: process.env.MONGO_URI || "mongodb://localhost:27017/project",
+      mongoURI: process.env.MONGO_URI || "mongodb://localhost:27017/compara_db",
       secretJWT: process.env.SECRET_JWT || "verysecretKey"
     }
   },

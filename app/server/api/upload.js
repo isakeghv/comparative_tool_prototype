@@ -1,11 +1,11 @@
 import { readMultipartFormData } from "#imports";
 import { writeFile } from "fs/promises";
-import { existsSync } from "fs";
+import { existsSync, mkdirSync } from "fs";
 import { join, extname } from "path";
 import { randomUUID } from 'crypto';
 import { fileTypeFromBuffer } from "file-type";
 
-const allowedExtensions = ["jpg", "jpeg", "png", "pdf", "mp3", "mp4"]; 
+const allowedExtensions = ["jpg", "jpeg", "png", "pdf", "mp3", "mp4"];
 // 10MB file limit
 const maxFileSize = 10 * 1024 * 1024;
 
@@ -15,8 +15,10 @@ export default defineEventHandler(async (e) => {
   //checks that it is able to locate the folder it should upload the file to
   const folderExists = existsSync(folderPath);
 
-  //returns error if unable to locate folder that file should be uploaded to
-  if (!folderExists) return { success: false, code: 404, message: "Unable to find directory" }
+  //created directory for artifacts if dir cannot be found
+  if (!folderExists) {
+    mkdirSync(folderPath, { recursive: true })
+  }
 
   //reading the uploaded content
   const body = await readMultipartFormData(e);
@@ -40,11 +42,11 @@ export default defineEventHandler(async (e) => {
     return { success: false, code: 400, message: "Invalid file type" };
   }
 
-    //Verify actual file type using MIME detection
-    const detectedType = await fileTypeFromBuffer(fileData.data);
-    if (!detectedType || !allowedExtensions.includes(detectedType.ext)) {
-      return { success: false, code: 400, message: "File content does not match its extension" };
-    }
+  //Verify actual file type using MIME detection
+  const detectedType = await fileTypeFromBuffer(fileData.data);
+  if (!detectedType || !allowedExtensions.includes(detectedType.ext)) {
+    return { success: false, code: 400, message: "File content does not match its extension" };
+  }
 
   //creating new completely unique file-name so no files have the same name by accident
   const newName = `${randomUUID()}.${extension}`
@@ -57,10 +59,10 @@ export default defineEventHandler(async (e) => {
     await writeFile(newPath, fileData.data);
 
     //returning success status, id (initial file-name as default) and the source to client
-    return { 
-      success: true, 
-      id: initialName, 
-      source: `/artifacts/${newName}` 
+    return {
+      success: true,
+      id: initialName,
+      source: `/artifacts/${newName}`
     }
   } catch (err) {
     return { success: false, code: 500, message: 'Unable to upload file', error: err.message }
