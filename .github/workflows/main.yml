@@ -22,4 +22,6 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/compara:latest
+          no-cache: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/compara_tool:latest
+        
