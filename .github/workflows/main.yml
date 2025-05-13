@@ -11,14 +11,6 @@ jobs:
     environment: production
     runs-on: ubuntu-latest
     steps:
-      - name: Setting enviroment variables
-        run: |
-          mkdir -p ./secrets
-          echo "${{secrets.MONGO_URI}}" > ./secrets/mongo_uri.txt
-          echo "${{secrets.SECRET_JWT}}" > ./secrets/secret_jwt.txt
-          echo "${{secrets.TURNSTILE_SECRET_KEY}}" > ./secrets/turnstile_secret_key.txt
-          echo "${{secrets.TURNSTILE_SITE_KEY}}" > ./secrets/turnstile_site_key.txt
-
       - uses: actions/checkout@v4
       - uses: docker/login-action@v3
         with:
@@ -31,8 +23,3 @@ jobs:
           file: Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/compara:latest
-          
-      - name: log the site-key to see if it has been set
-        run: |
-          echo "${{secrets.TURNSTILE_SITE_KEY}}"
-          echo ./secrets/turnstile_site_key.txt
