@@ -5,11 +5,16 @@ services:
       - ./app:/app
     ports:
       - "8183:8183"
+    secrets:
+      - mongo_uri
+      - secret_jwt
+      - turnstile_secret_key
+      - turnstile_site_key
     environment:
-      - MONGO_URI=${MONGO_URI}
-      - SECRET_JWT=${SECRET_JWT}
-      - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
-      - TURNSTILE_SITE_KEY=${TURNSTILE_SITE_KEY}
+      - MONGO_URI=/run/secrets/mongo_uri
+      - SECRET_JWT=/run/secrets/secret_jwt
+      - TURNSTILE_SECRET_KEY=/run/secrets/turnstile_secret_key
+      - TURNSTILE_SITE_KEY=/run/secrets/turnstile_site_key
     depends_on:
       - db
     networks:
@@ -21,11 +26,11 @@ services:
     restart: always
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=securepassword
+      - MONGO_INITDB_ROOT_PASSWORD=newUriPwdFordbMongodb
       - MONGO_INITDB_DATABASE=compara_db 
       - MONGO_LOGLEVEL=1
-    ports:
-      - "27017:27017"
+    expose:
+      - "27017"
     volumes:
       - mongo_data:/data/db
     networks:
@@ -37,3 +42,13 @@ volumes:
 networks:
   group3-network:
     driver: bridge
+
+secrets:
+  mongo_uri:
+    file: ./secrets/mongo_uri.txt
+  secret_jwt:
+    file: ./secrets/secret_jwt.txt
+  turnstile_secret_key:
+    file: ./secrets/turnstile_secret_key.txt
+  turnstile_site_key:
+    file: ./secrets/turnstile_site_key.txt
