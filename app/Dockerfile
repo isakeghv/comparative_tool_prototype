@@ -2,20 +2,16 @@
 
 FROM node:18
 
-WORKDIR /app
+#WORKDIR /app
 
-COPY package.json /app/
-COPY package-lock.json /app/
+#COPY package.json /app/
+#COPY package-lock.json /app/
 
-RUN npm install
+#RUN npm install
 
-COPY . /app
+#COPY . /app
 
-# RUN npm run build
-
-EXPOSE 3000
-
-# CMD ["node", ".output/server/index.mjs"]
+#EXPOSE 3000
 
 # for development mode
-CMD ["npm", "run", "dev"]
+#CMD ["npm", "run", "dev"]
