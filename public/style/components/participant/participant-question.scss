@@ -237,11 +237,23 @@
     z-index: 2;
 }
 
-.range-slider{
+.range {
+    &__labels, &__numbers{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        color: c.$black;
+        font-size: 0.85rem;
+    }
+    &__slider{
     display: flex;
-    align-items: left;
-    gap: 10px;
+    gap: 20px;
+    }
+    &__selected{
+        font-size: 0.85rem;
+    }
 }
+
 
 input[type="range"] {
     width: 100%;
