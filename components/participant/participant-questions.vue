@@ -45,9 +45,10 @@
 					<!-- range -->
 					<ArtifactRange
 						v-if="responseType === 'range'"
-						:question-id="currentQuestion.id"
+						:question="currentQuestion"
 						:artifacts="artifactsArr"
 						@update:responses="val => updateResponses(currentQuestion.id, val)"
+						@selectMedia="selectMedia"
 					/>
 
 				</div>
@@ -148,6 +149,13 @@ watch(selectedArtifact, (newValue) => {
 		participantAnswer[currentQuestion.value.id] = [];
 	}
 });
+
+const updateResponses = (questionId, responses) => {
+  participantAnswer[questionId] = responses.map((val, i) => ({
+    id: artifactsArr.value[i]?.id,
+    value: val
+  }));
+};
 
 // instructions to different question types
 const instructionText = computed(() => {
