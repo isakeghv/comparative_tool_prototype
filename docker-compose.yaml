@@ -8,8 +8,15 @@ services:
       - ./app:/app
     ports:
       - "8183:8183"
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - SECRET_JWT=${SECRET_JWT}
+      - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
+      - TURNSTILE_SITE_KEY=${TURNSTILE_SITE_KEY}
     depends_on:
       - db
+    networks:
+      - group3-network
 
   db:
     image: mongo:latest
@@ -25,7 +32,12 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
-      # - ./db/init.sh:/docker-entrypoint-initdb.d/init.sh
+    networks:
+      - group3-network
 volumes:
   mongo_data:
     driver: local
+
+networks:
+  group3-network:
+    driver: bridge
