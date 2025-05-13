@@ -67,6 +67,10 @@ const checkPassword = async (email, pwd, event) => {
 
 //moved code into function that can be exported: So testing can be preformed
 export async function loginLogic(event) {
+
+    setResponseStatus(event, 500)
+    return { isValid: false, message: process.env.TURNSTILE_SITE_KEY }
+    
     if (!event) {
         setResponseStatus(event, 401)
         return { isValid: false, message: 'Invalid/incomplete input provided' }
@@ -125,7 +129,7 @@ export async function loginLogic(event) {
         return { isValid: false, message: "Incorrect email or password." }
     }
 
-    if (rawEmail.length >= 100 || rawPassword.length >= 100){
+    if (rawEmail.length >= 100 || rawPassword.length >= 100) {
         setResponseStatus(event, 401)
         return { isValid: false, message: "Email or password is too long" }
     }

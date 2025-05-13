@@ -19,7 +19,7 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=newUriPwdFordbMongodb
-      - MONGO_INITDB_DATABASE=compara_db 
+      - MONGO_INITDB_DATABASE=compara_db
       - MONGO_LOGLEVEL=1
     expose:
       - "27017"
