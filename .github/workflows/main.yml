@@ -10,12 +10,14 @@ jobs:
   build:
     environment: production
     runs-on: ubuntu-latest
-    env:
-      MONGO_URI: ${{secrets.MONGO_URI}}
-      SECRET_JWT: ${{secrets.SECRET_JWT}}
-      TURNSTILE_SECRET_KEY: ${{secrets.TURNSTILE_SECRET_KEY}}
-      TURNSTILE_SITE_KEY: ${{secrets.TURNSTILE_SITE_KEY}}
     steps:
+      - name: Setting enviroment variables
+        run: |
+          echo "MONGO_URI=${{secrets.MONGO_URI}}" >> $GITHUB_ENV
+          echo "SECRET_JWT=${{secrets.SECRET_JWT}}" >> $GITHUB_ENV
+          echo "TURNSTILE_SECRET_KEY=${{secrets.TURNSTILE_SECRET_KEY}}" >> $GITHUB_ENV
+          echo "TURNSTILE_SITE_KEY=${{secrets.TURNSTILE_SITE_KEY}}" >> $GITHUB_ENV
+
       - uses: actions/checkout@v4
       - uses: docker/login-action@v3
         with:
