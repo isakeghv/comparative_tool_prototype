@@ -8,6 +8,8 @@ import { UserCredential } from '~/server/schemas/userSchema.js';
 import { checkRateLimit } from '~/server/services/rateLimiter.js';
 import { $fetch } from 'ofetch';
 
+console.log('Hello from login.js');
+
 // access runtime config variables
 const config = useRuntimeConfig();
 
