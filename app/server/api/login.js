@@ -8,8 +8,6 @@ import { UserCredential } from '~/server/schemas/userSchema.js';
 import { checkRateLimit } from '~/server/services/rateLimiter.js';
 import { $fetch } from 'ofetch';
 
-console.log('Hello from login.js');
-
 // access runtime config variables
 const config = useRuntimeConfig();
 
@@ -38,7 +36,7 @@ const checkPassword = async (email, pwd, event) => {
         const userId = user._id.toString();
 
         // have user_id as payload that will be stored in JWT token, and let the token expire after 5 hour (currently using 1h for test-purpose rn)
-        const token = jwt.sign({ userId: userId }, process.env.SECRET_JWT, { expiresIn: '1h' })
+        const token = jwt.sign({ userId: userId }, config.private.secretJWT, { expiresIn: '1h' })
 
         //setting token when logging in instead of setting to header. including jwt token in cookie for secure cookie.
         setCookie(event, 'token', token, {
@@ -74,16 +72,12 @@ export async function loginLogic(event) {
         return { isValid: false, message: 'Invalid/incomplete input provided' }
     }
 
-    console.log(process.env.TURNSTILE_SECRET_KEY, 'Turnstile sc key');
-    console.log(process.env.TURNSTILE_SITE_KEY, 'Turnstile si key');
-
     //updated to use try/catch for database, so errors can be caught and returned
     try {
         await connDb();
     } catch (err) {
         setResponseStatus(event, 500);
-        console.log(err);
-        return { isValid: false, message: process.env.MONGO_URI }
+        return { isValid: false, message: 'Unable to connect to database' }
     }
 
     const body = await readBody(event);
@@ -131,7 +125,7 @@ export async function loginLogic(event) {
         return { isValid: false, message: "Incorrect email or password." }
     }
 
-    if (rawEmail.length >= 100 || rawPassword.length >= 100) {
+    if (rawEmail.length >= 100 || rawPassword.length >= 100){
         setResponseStatus(event, 401)
         return { isValid: false, message: "Email or password is too long" }
     }

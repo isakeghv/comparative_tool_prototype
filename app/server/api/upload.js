@@ -1,6 +1,6 @@
 import { readMultipartFormData } from "#imports";
 import { writeFile } from "fs/promises";
-import { existsSync } from "fs";
+import { existsSync, mkdirSync } from "fs";
 import { join, extname } from "path";
 import { randomUUID } from 'crypto';
 import { fileTypeFromBuffer } from "file-type";
@@ -15,8 +15,10 @@ export default defineEventHandler(async (e) => {
   //checks that it is able to locate the folder it should upload the file to
   const folderExists = existsSync(folderPath);
 
-  //returns error if unable to locate folder that file should be uploaded to
-  if (!folderExists) return { success: false, code: 404, message: "Unable to find directory" }
+  //created directory for artifacts if dir cannot be found
+  if (!folderExists) {
+    mkdirSync(folderPath, { recursive: true })
+  }
 
   //reading the uploaded content
   const body = await readMultipartFormData(e);
