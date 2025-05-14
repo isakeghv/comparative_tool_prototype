@@ -74,6 +74,9 @@ export async function loginLogic(event) {
         return { isValid: false, message: 'Invalid/incomplete input provided' }
     }
 
+    console.log(process.env.TURNSTILE_SECRET_KEY, 'Turnstile sc key');
+    console.log(process.env.TURNSTILE_SITE_KEY, 'Turnstile si key');
+
     //updated to use try/catch for database, so errors can be caught and returned
     try {
         await connDb();
