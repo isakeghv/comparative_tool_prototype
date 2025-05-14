@@ -7,7 +7,7 @@ import { UserCredential, UserProfile } from '../schemas/userSchema.js';
 import { checkRateLimit } from '../services/rateLimiter';
 import jwt from "jsonwebtoken";
 
-const config = useRuntimeConfig();
+// const config = useRuntimeConfig();
 
 const checkEmail = async (email, e) => {
 	const existingUser = await UserCredential.findOne({ email });
@@ -48,7 +48,7 @@ const createUser = async (fname, lname, email, pwd, e) => {
 		// Create a JWT token containing the user's id valid for 1 hour
 		const token = jwt.sign(
 			{ userId: newUserC._id },
-			config.private.secretJWT,
+			process.env.SECRET_JWT,
 			{ expiresIn: '1h' }
 		);
 

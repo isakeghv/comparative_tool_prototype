@@ -4,10 +4,8 @@ import { useRuntimeConfig } from '#imports';
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
 export const connDb = async () => {
-    const config = useRuntimeConfig();
-    
-    console.log(config.private.mongoURI, 'config.private')
-    console.log(process.env.mongoURI, 'process.env')
+    // const config = useRuntimeConfig();    
+    console.log(process.env.MONGO_URI, 'process.env')
 
     // if a MongoDB connection already exists, reuse the connextion
     if (mongoose.connection.readyState >= 1) {
@@ -16,7 +14,7 @@ export const connDb = async () => {
 
     try {
         // use template from MongoDB with pre-defined client options and env variable defined in the nuxt config file
-        await mongoose.connect(config.private.mongoURI, clientOptions);
+        await mongoose.connect(process.env.SECRET_JWT, clientOptions);
         await mongoose.connection.db.admin().command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } catch (err) {

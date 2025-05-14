@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) =>{
 
     try {
         //try to decode to get user-info
-        const decoded = jwt.verify(token, config.private.secretJWT);
+        const decoded = jwt.verify(token, process.env.SECRET_JWT);
 
         //return user info
         return { userId: decoded.userId, error: null };

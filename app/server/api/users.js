@@ -15,7 +15,7 @@ export default defineEventHandler(async (e) => {
 	const config = useRuntimeConfig();
 
 	try {
-		const decoded = jwt.verify(token, config.private.secretJWT);
+		const decoded = jwt.verify(token, process.env.SECRET_JWT);
 		const userId = decoded.userId;
 		// get the userCredential account
 		const user = await UserCredential.findOne({ _id: userId }).lean();

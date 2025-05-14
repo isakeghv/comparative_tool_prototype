@@ -9,7 +9,7 @@ export const verifyToken = (e) => {
     if (!token) return { user: null, error: 401, message: "Unauthorized" };
 
     try {
-        const decoded = jwt.verify(token, config.private.secretJWT);
+        const decoded = jwt.verify(token, process.env.SECRET_JWT);
         return { valid: true, decoded };
     } catch (err) {
         return { valid: false, error: err.message };
