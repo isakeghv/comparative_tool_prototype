@@ -69,13 +69,6 @@ const checkPassword = async (email, pwd, event) => {
 
 //moved code into function that can be exported: So testing can be preformed
 export async function loginLogic(event) {
-
-    console.log('site key')
-    console.log(process.env.TURNSTILE_SITE_KEY)
-
-    console.log('login function mongo uri')
-    console.log(process.env.MONGO_URI)
-
     if (!event) {
         setResponseStatus(event, 401)
         return { isValid: false, message: 'Invalid/incomplete input provided' }
@@ -86,6 +79,7 @@ export async function loginLogic(event) {
         await connDb();
     } catch (err) {
         setResponseStatus(event, 500);
+        console.log(err);
         return { isValid: false, message: process.env.MONGO_URI }
     }
 
