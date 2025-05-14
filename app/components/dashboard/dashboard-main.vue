@@ -2,18 +2,24 @@
 	<aside class="aside">
 		<div class="aside__container">
 			<DashboardNewStudy @newStudy="(id) => emitNewStudy(id)" />
-			<DashboardFilter @filter="(study) => (filter = study)" :activeFilter="filter" />
+			<DashboardFilter @filter="(study) => { resetToStudies(); filter = study }" :activeFilter="filter" />
 			<DashboardSearch @search="(query) => searchStudy(query)" />
 		</div>
 		<div class="aside__container aside__container--small">
-			<button class="aside__button font-normal">Settings</button>
+			<button class="aside__button font-normal" @click="toggleSettings">Settings</button>
 			<DashboardLogout />
 		</div>
 	</aside>
 	<main class="main">
 		<h2 class="main__headline font-h5 font-semi">{{ mainTitle }}</h2>
 		<div class="main__grid">
+
+			<div v-if="showSettings" class="settings">
+				<button class="settings__button">Delete my account</button>
+			</div>
+
 			<!-- showing the create date instead of start date is temporary -->
+			<template v-else>
 			<StudyCard v-for="study in studies" :key="study.id"
 				@select="(study) => emitSelectStudy(study)"
 				@edit="(study) => emitEditStudy(study)"
@@ -21,6 +27,8 @@
 				@duplicate="(study) => studyDuplicate(study)" :study="study" :status="study.status" :filter="filter"
 				@export="(study) => console.log(study)" :id="study.id" :title="study.title"
 				:startDate="study.created" />
+			 </template>
+
 		</div>
 	</main>
 </template>
@@ -52,6 +60,7 @@ const emitDeleteStudy = (study) => emit('deleteStudy', study);
 
 //computed property being automatically update to display the correct title relative to the selected filter
 const mainTitle = computed(() => {
+	if (showSettings.value) return 'Settings'; // show settings title when settings are shown
 	if (['all', 'completed', 'ongoing', 'draft'].includes(filter.value))
 		return `Viewing ${filter.value} studies`;
 	return `Viewing ${filter.value}`;
@@ -81,6 +90,18 @@ const searchStudy = (query) =>{
 	if (query) studies.value = results;
 	else studies.value = computedStudies.value;
 }
+
+// showSettings
+const showSettings = ref(false);
+
+const toggleSettings = () => {
+	showSettings.value = true; // Only true when settings button is clicked
+};
+
+const resetToStudies = () => {
+	showSettings.value = false; // Reset to studyCard when false
+};
+
 </script>
 
 <style scoped>
