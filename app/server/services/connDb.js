@@ -14,7 +14,7 @@ export const connDb = async () => {
 
     try {
         // use template from MongoDB with pre-defined client options and env variable defined in the nuxt config file
-        await mongoose.connect(process.env.SECRET_JWT, clientOptions);
+        await mongoose.connect(process.env.MONGO_URI, clientOptions);
         await mongoose.connection.db.admin().command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } catch (err) {
