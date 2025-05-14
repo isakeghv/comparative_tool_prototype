@@ -1,12 +1,12 @@
 <template>
     <div class="artifact__expand" v-if="selectedSource">
-        <img :src="selectedSource" :alt="selectedId" class="artifact__expand--img" v-if="isImage(selectedSource)">
-        <embed :src="selectedSource" class="artifact__expand--embed" v-if="isPdf(selectedSource)">
-        <audio class="artifact__expand--audio" v-if="isAudioFile(selectedSource)" controls>
+        <img :src="selectedSource" :alt="selectedId" class="artifact__expand--img" v-if="isImage(selectedRawSource)">
+        <embed :src="selectedSource" class="artifact__expand--embed" v-if="isPdf(selectedRawSource)">
+        <audio class="artifact__expand--audio" v-if="isAudioFile(selectedRawSource)" controls>
             <source :src="selectedSource" type="audio/mpeg">
         </audio>
         <video :src="selectedSource" controls class="artifact__expand--video"
-            v-if="isVideoFile(selectedSource)"></video>
+            v-if="isVideoFile(selectedRawSource)"></video>
     </div>
 </template>
 
@@ -16,7 +16,10 @@ import { isImage, isPdf, isAudioFile, isVideoFile } from '/utils/fileUtils.js';
 const props = defineProps({
     selectedSource: String,
     selectedId: String,
+    selectedRawSource: String
 })
+
+console.log(props.selectedSource)
 
 </script>
 

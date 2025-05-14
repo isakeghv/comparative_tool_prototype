@@ -1,6 +1,6 @@
 <template>
     <div :class="{'artifact__container--fixed': dragging}" class="artifact__container artifact__borderless"
-        ref="artifactRef" @dragstart="dragStart($event, artifact)" :draggable="draggable" @drop="console.log('tester')">
+        ref="artifactRef" @dragstart="dragStart($event, artifact)" :draggable="draggable">
         <div class="wrapper wrapper--zero">
             <ExpandButton @expand="selectMedia(artifact.source, artifact.id)" />
         </div>

@@ -1,6 +1,6 @@
 <template>
     <div class="artifact__media" v-if="artifact">
-        <img :src="artifact.source" :alt="artifact.id" class="artifact__image artifact__border"
+        <img :src="filePath" :alt="artifact.id" class="artifact__image artifact__border"
             v-if="isImage(artifact.source)">
         <svg class="artifact__icon artifact__border" v-if="isAudioFile(artifact.source)" viewBox="0 0 88 72" fill="none"
             xmlns="http://www.w3.org/2000/svg">
@@ -17,9 +17,9 @@
         </svg>
         <div v-if="isPdf(artifact.source)">
             <div class="embed__handle"></div>
-            <iframe :src="artifact.source" class="artifact__embed artifact__border" type="application/pdf"></iframe>
+            <iframe :src="filePath" class="artifact__embed artifact__border" type="application/pdf"></iframe>
         </div>
-        <video :src="artifact.source" class="artifact__video artifact__border" preload="metadata" muted
+        <video :src="filePath" class="artifact__video artifact__border" preload="metadata" muted
             v-if="isVideoFile(artifact.source)"></video>
     </div>
 </template>
@@ -30,6 +30,27 @@ import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
 const props = defineProps({
     artifact: Object,
 })
+
+const filePath = ref('');
+
+const getFile = async () => {
+    const request = await fetch(`/api/serve-file?filename=${encodeURIComponent(props.artifact.source)}`);
+
+    if (!request.ok) return null;
+
+    const raw = await request.blob();
+
+    return URL.createObjectURL(raw);
+}
+
+onMounted(async () => {
+    const fileurl = await getFile();
+
+    if (!fileurl) filePath.value = '';
+
+    filePath.value = `${fileurl}`;
+})
+
 </script>
 
 <style scoped>

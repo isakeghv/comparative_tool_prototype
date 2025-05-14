@@ -11,7 +11,7 @@ export const isPdf = (file) =>{
 
 //returns true if file is audio-file
 export const isAudioFile = (file) => {
-    const extensions = ['.mp3', '.wav', '.ogg', '.flac', '.aac', '.m4a', '.wma']
+    const extensions = ['.mp3', '.wav', '.wave', '.aif', '.ogg', '.flac', '.aac', '.m4a', '.wma']
     const extension = file.slice(file.lastIndexOf('.')).toLowerCase();
     return extensions.includes(extension);
 }

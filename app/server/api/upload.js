@@ -5,25 +5,19 @@ import { join, extname } from "path";
 import { randomUUID } from 'crypto';
 import { fileTypeFromBuffer } from "file-type";
 
-const allowedExtensions = ["jpg", "jpeg", "png", "pdf", "mp3", "mp4"];
+const allowedExtensions = ["jpg", "jpeg", "png", "pdf", "mp3", "mp4",]; 
 // 10MB file limit
 const maxFileSize = 10 * 1024 * 1024;
 
 export default defineEventHandler(async (e) => {
   const folderPath = join(process.cwd(), "public", "artifacts");
-  const outputfolderPath = join(process.cwd(), ".output", "public", "artifacts");
 
   //checks that it is able to locate the folder it should upload the file to
   const folderExists = existsSync(folderPath);
-  const outputfolderExist = existsSync(outputfolderPath);
 
   //created directory for artifacts if dir cannot be found
   if (!folderExists) {
     mkdirSync(folderPath, { recursive: true })
-  }
-
-  if (!outputfolderExist) {
-    mkdirSync(outputfolderPath, { recursive: true })
   }
 
   //reading the uploaded content
@@ -34,6 +28,7 @@ export default defineEventHandler(async (e) => {
 
   //check if file is right
   if (fileData.data.length > maxFileSize) {
+    setResponseStatus(e, 400)
     return { success: false, code: 400, message: "File is too large" };
   }
 
@@ -45,34 +40,36 @@ export default defineEventHandler(async (e) => {
 
 
   if (!allowedExtensions.includes(extension)) {
+    setResponseStatus(e, 400)
     return { success: false, code: 400, message: "Invalid file type" };
   }
 
-  //Verify actual file type using MIME detection
-  const detectedType = await fileTypeFromBuffer(fileData.data);
-  if (!detectedType || !allowedExtensions.includes(detectedType.ext)) {
-    return { success: false, code: 400, message: "File content does not match its extension" };
-  }
+    //Verify actual file type using MIME detection
+    const detectedType = await fileTypeFromBuffer(fileData.data);
+    if (!detectedType || !allowedExtensions.includes(detectedType.ext)) {
+      setResponseStatus(e, 400)
+      return { success: false, code: 400, message: "File content does not match its extension" };
+    }
 
   //creating new completely unique file-name so no files have the same name by accident
   const newName = `${randomUUID()}.${extension}`
 
   //creating path for the uploaded file with correct, new, unique, file-name.
   const newPath = join(folderPath, newName)
-  const newOutputPath = join(outputfolderPath, newName)
 
   //uploading file to correct folder
   try {
     await writeFile(newPath, fileData.data);
-    await writeFile(newOutputPath, fileData.data);
 
     //returning success status, id (initial file-name as default) and the source to client
-    return {
-      success: true,
-      id: initialName,
-      source: `/artifacts/${newName}`
+    return { 
+      success: true, 
+      id: initialName, 
+      source: `/artifacts/${newName}` 
     }
   } catch (err) {
+    console.log(err);
+    setResponseStatus(e, 500);
     return { success: false, code: 500, message: 'Unable to upload file', error: err.message }
   }
 });
