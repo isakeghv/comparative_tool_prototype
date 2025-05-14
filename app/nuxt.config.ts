@@ -4,8 +4,8 @@ export default defineNuxtConfig({
   ssr: false,
   runtimeConfig: {
     private: {
-      mongoURI: '',
-      secretJWT: ''
+      mongoURI: process.env.NUXT_MONGO_URI || 'no db url for you',
+      secretJWT: process.env.NUXT_SECRET_JWT || 'justin w. thomas',
     }
   },
   compatibilityDate: '2024-11-01',
