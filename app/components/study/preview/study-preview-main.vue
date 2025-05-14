@@ -1,27 +1,35 @@
 <template>
-    <main v-if="!isSent" class="participant__cont">
+    <main class="participant__cont">
         <StudyPreviewDemographics v-if="showDemographics && adjustedQuestionIdx === -1" :study=study />
         <StudyPreviewQuestions  v-else-if="adjustedQuestionIdx >= 0 && adjustedQuestionIdx < questions.length" :questions="questions" :questionIndex="adjustedQuestionIdx" />
 
         <div class="participant__navigation">
-            <button @click="prevQuestion" v-if="questionIndex !== 0" class="participant__button participant__button--back font-small font-semi">Back</button>
+            <button @click="prevQuestion" v-if="questionIndex !== 0" class="participant__button participant__button--back font-small font-semi" id="participant-back-btn">Back</button>
             <!-- show 'send' button if question index is at the last step -->
-            <button @click="nextQuestion" v-else class="participant__button participant__button--next font-small font-semi">Next</button>
+            <button @click="closeForm"  v-if="questionIndex === totalSteps - 1" class="participant__button participant__button--send font-small font-semi" id="participant-send-btn">Close</button>
+            <button @click="nextQuestion"
+                v-else
+                class="participant__button participant__button--next
+                font-small font-semi"
+                id="participant-next-btn"
+            >
+                Next
+            </button>
+            <!-- <button @click="prevQuestion" v-if="questionIndex !== 0" class="participant__button participant__button--back font-small font-semi">Back</button>
+            <button @click="nextQuestion" v-else class="participant__button participant__button--next font-small font-semi">Next</button> -->
         </div>
     </main>
 </template>
 
 <script setup>
 // need to emit progress so progress bar know which question you're at, and to calculate the percentage of each step
-const emit = defineEmits(['updateProgress', 'totalSteps', 'participantDone']);
+const emit = defineEmits(['updateProgress', 'totalSteps', 'closePreview']);
 import StudyPreviewDemographics from './study-preview-demographics.vue';
 import StudyPreviewQuestions from './study-preview-questions.vue';
 
 const props = defineProps({
     study: Object
 });
-
-const isSent = ref(false);
 
 // store the questions array
 const questions = computed(() => props.study?.questions || []);
@@ -63,6 +71,9 @@ const prevQuestion = () => {
     }
 };
 
+const closeForm = () => {
+    emit('closePreview', true);
+}
 </script>
 
 <style scoped>
