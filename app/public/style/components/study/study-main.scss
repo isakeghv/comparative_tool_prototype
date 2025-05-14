@@ -2,409 +2,429 @@
 @use "../../variables/variables" as v;
 
 .study {
-	&__container {
-		@include v.main-area;
-		position: relative;
-		transition: flex 0.2s ease, padding 0.2s ease, margin 0.2s ease;
+  &__container {
+    @include v.main-area;
+    position: relative;
+    transition: flex 0.2s ease, padding 0.2s ease, margin 0.2s ease;
 
-		&--wide{
-			// width: auto;
-			// flex: 1 0 70%;
-			// padding: 2.4rem 0rem 2.4rem 2.2rem;
-			// margin: 0 0 0 1.2rem;
-		}
-	}
+    &--wide {
+      // width: auto;
+      // flex: 1 0 70%;
+      // padding: 2.4rem 0rem 2.4rem 2.2rem;
+      // margin: 0 0 0 1.2rem;
+    }
+  }
 
-	&__main {
-		width: 100%;
-	}
+  &__main {
+    width: 100%;
+  }
 
-	&__row {
-		display: flex;
-		justify-content: space-between;
-		// align-items: center;
-	}
-	
-	&__options {
-		gap: 0.4rem;
-		display: flex;
-		flex-direction: column;
-	}
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    // align-items: center;
+  }
 
-	&__titles {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-	}
+  &__options {
+    gap: 0.4rem;
+    display: flex;
+    flex-direction: column;
+  }
 
-	&__headline {
-		margin-bottom: 1.4rem;
-	}
+  &__titles {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 
-	&__header {
-		display: flex;
-		flex-direction: column;
-	}
+  &__headline {
+    margin-bottom: 1.4rem;
+  }
 
-	&__input {
-		margin-bottom: 3rem;
-		padding: 0.8rem;
-		border-radius: 0.5rem;
-		border: v.$borderSolid;
-		border-color: c.$lightGray;
-		transition: v.$easeAnimation;
-		letter-spacing: 0.02rem;
+  &__header {
+    display: flex;
+    flex-direction: column;
+  }
 
-		&:focus,
-		&:active {
-			border-color: c.$cyan;
-		}
-	}
+  &__input {
+    margin-bottom: 3rem;
+    padding: 0.8rem;
+    border-radius: 0.5rem;
+    border: v.$borderSolid;
+    border-color: c.$lightGray;
+    transition: v.$easeAnimation;
+    letter-spacing: 0.02rem;
+
+    &:focus,
+    &:active {
+      border-color: c.$cyan;
+    }
+  }
 }
 
 .wrapper {
-	position: absolute;
-	display: flex;
-	right: -1px;
-	top: -1px;
+  position: absolute;
+  display: flex;
+  right: -1px;
+  top: -1px;
 
-	&--zero{
-		right: 0;
-		top: 0;
-	}
+  &--zero {
+    right: 0;
+    top: 0;
+  }
 
-	&__button {
-		width: 2rem;
-		height: 2rem;
-		padding: 0.125rem;
-		background-color: white;
-		border: v.$borderSolid;
-		border-radius: 0;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		cursor: pointer;
+  &__button {
+    width: 2rem;
+    height: 2rem;
+    padding: 0.125rem;
+    background-color: white;
+    border: v.$borderSolid;
+    border-radius: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 
-		&--radius {
-			border-radius: 0 0.5rem 0 0;
-			transition: border-radius 0.1s ease-in-out;
-		}
-	}
+    &--radius {
+      border-radius: 0 0.5rem 0 0;
+      transition: border-radius 0.1s ease-in-out;
+    }
+  }
 
-	&__icon {
-		height: 90%;
-	}
+  &__icon {
+    height: 90%;
+  }
 }
 
 .overlay {
-	@include v.overlay;
+  @include v.overlay;
 }
 
 .expand {
-	position: absolute;
-	transform: translate(-50%, -50%);
-	top: calc(50% - 2rem);
-	left: 50%;
-	width: auto;
-	padding: 2.5rem 0.25rem 0.125rem;
-	background-color: white;
-	border: v.$borderSolid;
-	z-index: 12;
-	border-radius: 0.5rem;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: calc(50% - 2rem);
+  left: 50%;
+  width: auto;
+  padding: 2.5rem 0.25rem 0.125rem;
+  background-color: white;
+  border: v.$borderSolid;
+  z-index: 12;
+  border-radius: 0.5rem;
 
-	&__img {
-		width: auto;
-		border-radius: 0.25rem;
-		height: 40rem;
-		object-fit: contain;
-	}
+  &__img {
+    width: auto;
+    border-radius: 0.25rem;
+    height: 40rem;
+    object-fit: contain;
+  }
 
-	&__embed {
-		width: 75vw;
-		border-radius: 0.25rem;
-		height: 40rem;
-	}
-	
-	&__video {
-		width: auto;
-		border-radius: 0.25rem;
-		height: 40rem;
-	}
+  &__embed {
+    width: 75vw;
+    border-radius: 0.25rem;
+    height: 40rem;
+  }
 
-	&__audio {
-		display: block;
-		margin-top: 0.4rem;
-	}
+  &__video {
+    width: auto;
+    border-radius: 0.25rem;
+    height: 40rem;
+  }
 
-	&__button {
-		position: absolute;
-		right: 0.25rem;
-		top: 0.25rem;
-		height: 2rem;
-		color: white;
-		background-color: c.$red;
-		border: none;
-		padding: 0 2rem;
-		border-radius: 0.25rem;
-		cursor: pointer;
-		transition: background-color 0.1s ease-in-out;
+  &__audio {
+    display: block;
+    margin-top: 0.4rem;
+  }
 
-		&:hover {
-			background-color: c.$lightRed;
-		}
-	}
+  &__button {
+    position: absolute;
+    right: 0.25rem;
+    top: 0.25rem;
+    height: 2rem;
+    color: white;
+    background-color: c.$red;
+    border: none;
+    padding: 0 2rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.1s ease-in-out;
+
+    &:hover {
+      background-color: c.$lightRed;
+    }
+  }
 }
 
 .artifact {
-	display: flex;
-	width: 100%;
-	flex-flow: row wrap;
-	align-items: flex-start;
-	gap: 1rem;
+  display: flex;
+  width: 100%;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  gap: 1rem;
 
-	&__container {
-		border: v.$borderSolid;
-		flex: 1 0 19%;
-		width: 9rem;
-		max-width: 10rem;
-		border-radius: 0.5rem;
-		position: relative;
+  &__container {
+    border: v.$borderSolid;
+    flex: 1 0 19%;
+    width: 9rem;
+    max-width: 10rem;
+    border-radius: 0.5rem;
+    position: relative;
 
-		&--small {
-			max-width: 9rem;
-		}
-		
-		&--square {
-			aspect-ratio: 1 / 1;
-			display: block;
-			overflow: hidden;
-		}
+    &--small {
+      max-width: 9rem;
+    }
 
-		&--fixed{
-			position: absolute;
-			left: var(--x-pos);
-			top: var(--y-pos);
-		}
-	}
+    &--square {
+      aspect-ratio: 1 / 1;
+      display: block;
+      overflow: hidden;
+    }
 
-	&__headline {
-		flex: 1 0 100%;
-		margin-bottom: 1.4rem;
+    &--fixed {
+      position: absolute;
+      left: var(--x-pos);
+      top: var(--y-pos);
+    }
+  }
+  &__iframecontainer {
+    position: relative;
+  }
+  &__cover {
+    background-color: transparent;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+  }
 
-		&::after {
-			content: "";
-			border-bottom: v.$borderSolid;
-			width: 100%;
-			display: block;
-			margin-top: 0.8rem;
-		}
-	}
+  &__headline {
+    flex: 1 0 100%;
+    margin-bottom: 1.4rem;
 
-	&__add {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-bottom: v.$borderSolid;
-		cursor: pointer;
-	}
+    &::after {
+      content: "";
+      border-bottom: v.$borderSolid;
+      width: 100%;
+      display: block;
+      margin-top: 0.8rem;
+    }
+  }
 
-	&__image,
-	&__video,
-	&__embed {
-		border-bottom: v.$borderSolid;
-		border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px) 0 0;
-		width: 100%;
-		aspect-ratio: 1 / 1;
-		object-fit: cover;
-		max-height: 80vh;
-	}
+  &__add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: v.$borderSolid;
+    cursor: pointer;
+  }
 
-	&__embed--hoverable {
-		position: relative;
-		z-index: -2;
-	}
+  &__image,
+  &__video,
+  &__embed {
+    border-bottom: v.$borderSolid;
+    border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px) 0 0;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    max-height: 80vh;
+  }
 
-	&__image{
-		&--transition{
-			transition: border-radius 0.1s ease-in-out;
-		}
+  &__embed--hoverable {
+    position: relative;
+    z-index: -2;
+  }
 
-		&--round{
-			border: none;
-			border-radius: calc(0.5rem - 1px);
-		}
-	}
+  &__image {
+    &--transition {
+      transition: border-radius 0.1s ease-in-out;
+    }
 
-	&__video {
-		pointer-events: none;
-	}
+    &--round {
+      border: none;
+      border-radius: calc(0.5rem - 1px);
+    }
+  }
 
-	&__icon {
-		border-bottom: v.$borderSolid;
-		border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px) 0 0;
-		width: 100%;
-		padding: 30%;
-		aspect-ratio: 1 / 1;
-		object-fit: cover;
-	}
+  &__video {
+    pointer-events: none;
+  }
 
-	&__media {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		background-color: c.$white;
-	}
+  &__icon {
+    border-bottom: v.$borderSolid;
+    border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px) 0 0;
+    width: 100%;
+    padding: 30%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
 
-	&__border {
-		border: v.$borderSolid;
-		border-radius: calc(0.5rem - 1px);
+  &__media {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: c.$white;
+  }
 
-		&:hover, &:focus, &:active {
-			outline: c.$cyan 2px solid;
-		}
-	}
+  &__border {
+    border: v.$borderSolid;
+    border-radius: calc(0.5rem - 1px);
 
-	&__borderless {
-		cursor: move;
-		border: none;
-		flex: 0 0 6rem;
-		width: 6rem;
-		height: 6rem;
-	}
+    &:hover,
+    &:focus,
+    &:active {
+      outline: c.$cyan 2px solid;
+    }
+  }
 
-	&__input {
-		width: 100%;
-		text-overflow: ellipsis;
-	}
+  &__outline {
+    border: v.$borderSolid;
+    border-radius: calc(0.5rem - 1px);
+    &:hover {
+      border-radius: 0px;
+    }
+  }
 
-	&__plus {
-		width: 100%;
-		padding: 3rem;
-	}
+  &__borderless {
+    cursor: move;
+    border: none;
+    flex: 0 0 6rem;
+    width: 6rem;
+    height: 6rem;
+  }
 
-	&__footer {
-		position: relative;
-		padding: 0.5rem;
-		height: 3rem;
-		width: 100%;
+  &__input {
+    width: 100%;
+    text-overflow: ellipsis;
+  }
 
-		&--hidden {
-			display: none;
-		}
-	}
+  &__plus {
+    width: 100%;
+    padding: 3rem;
+  }
 
-	&__row {
-		width: 100%;
-		padding: 0 0.25rem;
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		position: relative;
-		border: v.$borderSolid;
-		border-radius: calc(0.5rem - 4px);
-	}
+  &__footer {
+    position: relative;
+    padding: 0.5rem;
+    height: 3rem;
+    width: 100%;
 
-	&__label {
-		width: 1.5rem;
-		display: inline-block;
-	}
+    &--hidden {
+      display: none;
+    }
+  }
 
-	&__input {
-		&--small {
-			height: 2rem;
-			display: flex;
-			align-items: center;
-			border: none;
-			padding: 0 0.25rem;
-			width: calc(100% - 3rem);
-			outline: none;
-		}
-	}
+  &__row {
+    width: 100%;
+    padding: 0 0.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    position: relative;
+    border: v.$borderSolid;
+    border-radius: calc(0.5rem - 4px);
+  }
 
-	&__info {
-		position: absolute;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 1.25rem;
-		height: 1.25rem;
-		border-radius: 50%;
-		border: v.$borderSolid;
-		right: 0.5rem;
-		top: 50%;
-		cursor: pointer;
-		transform: translateY(-50%);
-	}
+  &__label {
+    width: 1.5rem;
+    display: inline-block;
+  }
 
-	&__absolute {
-		position: absolute;
-		width: 15rem;
-		padding: 0.5rem;
-		border-radius: 0.5rem;
-		background-color: white;
-		border: v.$borderSolid;
-		bottom: 100%;
-		left: 100%;
-		z-index: 1;
-		transform: translateX(-50%);
-		box-shadow: v.$hoverShadow;
-	}
+  &__input {
+    &--small {
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      border: none;
+      padding: 0 0.25rem;
+      width: calc(100% - 3rem);
+      outline: none;
+    }
+  }
 
-	&__id {
-		@include v.tooltipBox;
-		animation: animateId 1s ease-in-out forwards;
-	}
-	
+  &__info {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    border: v.$borderSolid;
+    right: 0.5rem;
+    top: 50%;
+    cursor: pointer;
+    transform: translateY(-50%);
+  }
 
-	&__button {
-		width: calc(100% - 1rem);
-		margin: 0 0.5rem 0.5rem;
-		padding: 0.5rem 0.5rem;
-		border-radius: 0.25rem;
-		cursor: pointer;
-		border: none;
-		background-color: c.$blueSecondary;
-		color: white;
-		transition: background-color 0.1s ease-in-out;
-	}
+  &__absolute {
+    position: absolute;
+    width: 15rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: white;
+    border: v.$borderSolid;
+    bottom: 100%;
+    left: 100%;
+    z-index: 1;
+    transform: translateX(-50%);
+    box-shadow: v.$hoverShadow;
+  }
 
-	&__round {
-		border-radius: 0.5rem;
-	}
+  &__id {
+    @include v.tooltipBox;
+    animation: animateId 1s ease-in-out forwards;
+  }
+
+  &__button {
+    width: calc(100% - 1rem);
+    margin: 0 0.5rem 0.5rem;
+    padding: 0.5rem 0.5rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    border: none;
+    background-color: c.$blueSecondary;
+    color: white;
+    transition: background-color 0.1s ease-in-out;
+  }
+
+  &__round {
+    border-radius: 0.5rem;
+  }
 }
 
 @keyframes animateId {
-	0% {
-		opacity: 0;
-	}
+  0% {
+    opacity: 0;
+  }
 
-	80% {
-		opacity: 0;
-	}
+  80% {
+    opacity: 0;
+  }
 
-	100% {
-		opacity: 1;
-	}
+  100% {
+    opacity: 1;
+  }
 }
 
 .embed {
-	&__wrapper {
-		overflow: hidden;
-	}
+  &__wrapper {
+    overflow: hidden;
+  }
 
-	&__cont {
-		width: calc(100% + 17px);
-		// width: 100%;
-	}
+  &__cont {
+    width: calc(100% + 17px);
+    // width: 100%;
+  }
 }
 
 .center {
-	display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .aside-temp {
-	@include v.right-area;
-	visibility: hidden;
+  @include v.right-area;
+  visibility: hidden;
 }

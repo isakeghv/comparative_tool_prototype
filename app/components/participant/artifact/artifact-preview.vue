@@ -1,11 +1,11 @@
 <template>
-    <div class="artifact__expand" v-if="selectedSource">
-        <img :src="selectedSource" :alt="selectedId" class="artifact__expand--img" v-if="isImage(selectedRawSource)">
-        <embed :src="selectedSource" class="artifact__expand--embed" v-if="isPdf(selectedRawSource)">
-        <audio class="artifact__expand--audio" v-if="isAudioFile(selectedRawSource)" controls>
-            <source :src="selectedSource" type="audio/mpeg">
+    <div class="artifact__expand" v-if="selectedSource && selectedRawSource">
+        <img :src="file" :alt="selectedId" class="artifact__expand--img" v-if="isImage(selectedRawSource)">
+        <embed :src="file" class="artifact__expand--embed" v-if="isPdf(selectedRawSource)">
+        <audio class="artifact__expand--audio" v-if="isAudioFile(selectedRawSource) && file" controls>
+            <source :src="file" type="audio/mpeg">
         </audio>
-        <video :src="selectedSource" controls class="artifact__expand--video"
+        <video :src="file" controls class="artifact__expand--video"
             v-if="isVideoFile(selectedRawSource)"></video>
     </div>
 </template>
@@ -19,7 +19,22 @@ const props = defineProps({
     selectedRawSource: String
 })
 
-console.log(props.selectedSource)
+const file = ref('')
+
+const getFile = async () => {
+    const request = await fetch(`/api/serve-file?filename=${encodeURIComponent(props.selectedRawSource)}`);
+
+    if (!request.ok) return null;
+
+    const raw = await request.blob();
+
+    file.value = URL.createObjectURL(raw);
+}
+
+watch(
+    ()=>props.selectedRawSource,
+    (source) => getFile()
+)
 
 </script>
 

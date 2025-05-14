@@ -15,9 +15,9 @@
                 d="M50.4646 49.5113C53.8976 45.846 55.9997 40.9187 55.9997 35.5005C55.9997 31.4142 54.8041 27.6072 52.7437 24.4102L46.8649 30.289C47.5934 31.8754 47.9997 33.6405 47.9997 35.5005C47.9997 38.7095 46.7904 41.6361 44.8027 43.8495L50.4646 49.5113Z"
                 fill="black" />
         </svg>
-        <div v-if="isPdf(artifact.source)">
-            <div class="embed__handle"></div>
+        <div v-if="isPdf(artifact.source)" class="artifact__iframecontainer">
             <iframe :src="filePath" class="artifact__embed artifact__border" type="application/pdf"></iframe>
+            <div class="artifact__cover"></div>
         </div>
         <video :src="filePath" class="artifact__video artifact__border" preload="metadata" muted
             v-if="isVideoFile(artifact.source)"></video>

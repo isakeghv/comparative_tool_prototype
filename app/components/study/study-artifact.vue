@@ -17,8 +17,12 @@
         </svg>
         <embed v-else-if="isPdf(source)" :src="source" class="artifact__embed articfact__embed--hoverable"
             :class="{ 'artifact__round': isRounded }" type="application/pdf" />
-        <video v-else-if="isVideoFile(source)" :src="source" class="artifact__video"
-            :class="{ 'artifact__round': isRounded }" preload="metadata" muted></video>
+        <svg v-else-if="isVideoFile(source)" class="artifact__icon" :class="{ 'artifact__round': isRounded }"
+            viewBox="0 0 287 287" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="143.5" cy="143.5" r="134" stroke="black" stroke-width="19" />
+            <path d="M219.25 143.581L97 214.162L97 73L219.25 143.581Z" fill="black" />
+        </svg>
+
     </div>
 </template>
 

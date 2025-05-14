@@ -1,5 +1,5 @@
 <template>
-    <button class="wrapper__button wrapper__button--radius" @click="click()">
+    <button class="wrapper__button wrapper__button--radius" @click="click($event)">
         <svg class="wrapper__icon" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M13.1899 7.99435C12.9946 8.18961 12.9946 8.50619 13.1899 8.70145C13.3852 8.89672 13.7017 8.89672 13.897 8.70145L13.1899 7.99435ZM21.3914 0.999988C21.3914 0.723846 21.1675 0.499988 20.8914 0.499988L16.3914 0.499989C16.1152 0.499989 15.8914 0.723846 15.8914 0.999989C15.8914 1.27613 16.1152 1.49999 16.3914 1.49999L20.3914 1.49999L20.3914 5.49999C20.3914 5.77613 20.6152 5.99999 20.8914 5.99999C21.1675 5.99999 21.3914 5.77613 21.3914 5.49999L21.3914 0.999988ZM13.897 8.70145L21.2449 1.35354L20.5378 0.646435L13.1899 7.99435L13.897 8.70145Z"
@@ -21,7 +21,9 @@
 
 const emit = defineEmits(['expand']);
 
-const click = () => {
+const click = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
     emit('expand')
 }
 

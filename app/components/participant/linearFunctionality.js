@@ -61,6 +61,7 @@ export const linear_drop = (id, question) => {
         // number: linear_insertAt.value + 1,
         id: linear_draggedArtifact.value.id,
         source: linear_draggedArtifact.value.source,
+        file: linear_draggedArtifact.value.file
         // question: question
     }
 

@@ -1,10 +1,10 @@
 <template>
     <div :class="{'artifact__container--fixed': dragging}" class="artifact__container artifact__borderless"
         ref="artifactRef" @dragstart="dragStart($event, artifact)" :draggable="draggable">
+        <ArtifactMedia :artifact="artifact"  />
         <div class="wrapper wrapper--zero">
             <ExpandButton @expand="selectMedia(artifact.source, artifact.id)" />
         </div>
-        <ArtifactMedia :artifact="artifact"  />
     </div>
 
 </template>
@@ -26,12 +26,24 @@ const draggable = computed(() => {
     return props.responseType === 'linear' || props.responseType === 'drop'
 })
 
+const getFile = async (source) => {
+    const request = await fetch(`/api/serve-file?filename=${encodeURIComponent(source)}`);
+
+    if (!request.ok) return null;
+
+    const raw = await request.blob();
+
+    return URL.createObjectURL(raw);
+}
+
 
 const emit = defineEmits(['selectMedia', 'moving', 'dropped']);
 
 const selectMedia = (source, id) => {
     emit('selectMedia', source, id);
 };
+
+const file = ref('');
 
 
 // set artifact id and source, allow it to move, and emit to parent which artifact was moved
@@ -41,13 +53,15 @@ const dragStart = (e, artifact) => {
 
     const element = artifactRef.value;
 
-    const move = (event) =>{
+    const move = async (event) =>{
         element.style.setProperty('--x-pos', `${event.pageX - (144 / 2)}px`)
         element.style.setProperty('--y-pos', `${event.pageY - (147.4 / 2)}px`)
 
+        if (!file.value) file.value = await getFile(props.artifact.source)
+
         if (!emittedMove.value){
             emittedMove.value = true;
-            emit('moving', {id: props.artifact.id, source: props.artifact.source})
+            emit('moving', {id: props.artifact.id, source: props.artifact.source, file: file.value})
         }
     }
 
