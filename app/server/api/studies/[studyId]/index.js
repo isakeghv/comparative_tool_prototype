@@ -112,6 +112,10 @@ const deleteStudy = async (e) => {
 
 export default defineEventHandler(async (e) => {
     verifyToken(e);
+    await connDb();
+
+    // deconstruct the method and the url from the event request object
+    const { method } = e.node.req;
 
     if (method !== 'GET') {
         if (!auth(e)) {
@@ -119,10 +123,6 @@ export default defineEventHandler(async (e) => {
             return { message: 'Unauthorized' }
         }
     }
-    await connDb();
-
-    // deconstruct the method and the url from the event request object
-    const { method } = e.node.req;
 
     if (method === 'GET') {
         // only need to pass in path param (id)
