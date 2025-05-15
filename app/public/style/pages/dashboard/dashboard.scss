@@ -70,3 +70,15 @@ button {
         }
     }
 }
+
+.settings{
+    &__button{
+    background-color: c.$white-active;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    &:hover{
+        background-color: c.$lightRed;
+    }
+}
+
+}

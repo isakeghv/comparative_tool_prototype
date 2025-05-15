@@ -42,7 +42,7 @@
 			</div>
 
 			<div class="question__panel">
-				<ArtifactPreview :selectedSource="selectedSource" :selectedId="selectedId" />
+				<ArtifactPreview :selectedSource="selectedSource" :selectedId="selectedId" :selectedRawSource="selectedRawSource"/>
 			</div>
 		</div>
 
@@ -87,6 +87,7 @@ if (currentQuestion.value?.id) delete participantAnswer[currentQuestion.value?.i
 
 // store source and id of image to show it and make it expandable
 const selectedSource = ref('');
+const selectedRawSource = ref('')
 const selectedId = ref('');
 
 const artifactsArr = ref([]);
@@ -96,8 +97,19 @@ const randOrder = (arr) => {
 	return arr.sort(() => Math.random() - 0.5);
 }
 
-const selectMedia = (source, id) => {
-	selectedSource.value = source;
+const getFile = async (source) => {
+    const request = await fetch(`/api/serve-file?filename=${encodeURIComponent(source)}`);
+
+    if (!request.ok) return null;
+
+    const raw = await request.blob();
+
+    return URL.createObjectURL(raw);
+}
+
+const selectMedia = async (source, id) => {
+	selectedRawSource.value = source;
+	selectedSource.value = await getFile(source);
 	selectedId.value = id;
 };
 

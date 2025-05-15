@@ -22,15 +22,11 @@ export default defineEventHandler(async (e) => {
 
     //saving path to delete files from
     const filepath = join(process.cwd(), "public", "artifacts");
-    const outputFilepath = join(process.cwd(), '.output', "public", "artifacts");
 
     try{
         //deleting files from dir
         await Promise.allSettled(
             deleteArr.map(file => fs.unlink(path.join(filepath, file)))
-        )
-        await Promise.allSettled(
-            deleteArr.map(file => fs.unlink(path.join(outputFilepath, file)))
         )
 
         //setting status and returning success message

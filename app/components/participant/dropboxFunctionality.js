@@ -7,7 +7,7 @@ export const box_draggingArtifact = ref(false);
 
 //for when an artifact is being dragged
 export const box_moving = (artifact) => {
-    box_draggedArtifact.value = artifact
+    box_draggedArtifact.value = artifact;
     box_draggingArtifact.value = true;
 }
 
@@ -37,6 +37,7 @@ export const box_drop = (id, index, box) => {
     participantAnswer[id][index] = {
         id: itemID,
         source: itemSource,
+        file: box_draggedArtifact.value.file,
         label: boxLabel
     }
 

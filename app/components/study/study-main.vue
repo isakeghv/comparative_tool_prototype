@@ -88,16 +88,7 @@
                 </div>
             </div>
         </div>
-        <button class="overlay" v-if="selectedSource" @click="selectedSource = ''" aria-label="exit window"></button>
-        <div class="expand" v-if="selectedSource">
-            <button class="expand__button" @click="selectedSource = ''">Exit</button>
-            <img :src="selectedSource" :alt="selectedId" class="expand__img" v-if="isImage(selectedSource)">
-            <embed :src="selectedSource" class="expand__embed" v-if="isPdf(selectedSource)">
-            <audio class="expand__audio" v-if="isAudioFile(selectedSource)" controls>
-                <source :src="selectedSource" type="audio/mpeg">
-            </audio>
-            <video :src="selectedSource" controls class="expand__img" v-if="isVideoFile(selectedSource)"></video>
-        </div>
+        <ArtifactExpand :source="selectedSource" @exit="selectedSource = ''" :id="selectedId"/>
     </div>
     
     <aside class="aside no-border">

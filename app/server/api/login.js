@@ -55,6 +55,7 @@ const checkPassword = async (email, pwd, event) => {
 
         // set status to OK; return status and message that login operation was successful
         setResponseStatus(event, 200);
+        console.log('logged in correctly')
         return { isValid: true, message: "Login successfully.", token: token };
 
     } catch (err) {

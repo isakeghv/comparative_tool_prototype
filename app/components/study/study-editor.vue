@@ -62,7 +62,6 @@ const trackExistingArtifacts = () => {
             if (!isInArr) allUploadedArtifacts.value.push(a);
         });
     });
-    console.log(allUploadedArtifacts.value);
 }
 
 trackExistingArtifacts();
