@@ -6,7 +6,7 @@
         <div class="participant__navigation">
             <button @click="prevQuestion" v-if="questionIndex !== 0" class="participant__button participant__button--back font-small font-semi" id="participant-back-btn">Back</button>
             <!-- show 'send' button if question index is at the last step -->
-            <button @click="closeForm"  v-if="questionIndex === totalSteps - 1" class="participant__button participant__button--send font-small font-semi" id="participant-send-btn">Close</button>
+            <button @click="closeForm"  v-if="questionIndex === totalSteps - 1 || questions.length === 0" class="participant__button participant__button--send font-small font-semi" id="participant-send-btn">Close</button>
             <button @click="nextQuestion"
                 v-else
                 class="participant__button participant__button--next

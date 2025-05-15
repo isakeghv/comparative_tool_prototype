@@ -3,7 +3,7 @@
         This study did not request any demographic information.
     </div>
 
-    <div v-else-if="respondents === 0" class="demo__cont">
+    <div v-else-if="respondents === 0 || (Array.isArray(formattedDemoData) && formattedDemoData.length === 0)" class="demo__cont">
         No participant records available at the moment.
     </div>
 
@@ -47,9 +47,10 @@ const props = defineProps({
 // combine the `demographicData` object with `study.demographic` to show the participant response
 const formattedDemoData = computed(() => {
     if (!props.demographic || !props.demographicData) return [];
+    const requestedDemographicQ = props.demographic.filter(q => q.request);
 
     // map each answer of x participant to the relevan question of the study
-    return props.demographic.map((q) => {
+    return requestedDemographicQ.map((q) => {
         const response = props.demographicData[q.id];
             return {
                 title: q.question,

@@ -20,7 +20,9 @@
 				@delete="(study) => emitDeleteStudy(study)"
 				@duplicate="(study) => studyDuplicate(study)" :study="study" :status="study.status" :filter="filter"
 				@export="(study) => console.log(study)" :id="study.id" :title="study.title"
-				:startDate="study.created" />
+				:startDate="study.publishedAt"
+				:lastEdited="study.lastEdited"
+				/>
 		</div>
 	</main>
 </template>

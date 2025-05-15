@@ -44,7 +44,7 @@
 
 <script setup>
 import { study, showResponses } from '~/public/script/reactive';
-import { validateDemographics, removeErr } from '~/utils/studyValidator';
+
 const isDisabled = inject('disabled');
 const studyResponses = inject('studyResponses');
 
@@ -145,11 +145,12 @@ const configs = computed(()=>{
 
 // reset selectedId when not in 'individual' view
 watch(selectedView, (newValue) => {
-if (newValue !== 'individual') {
-    selectedId.value = ''; 
+    if (newValue !== 'individual') {
+        selectedId.value = ''; 
     }
 });
 </script>
+
 <style scoped>
     @import url('public/style/components/demographics/demographics.scss');
 

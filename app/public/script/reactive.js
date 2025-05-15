@@ -38,6 +38,9 @@ export const study = reactive({
         terms: ''
     },
     questions: [],
+    createdAt: null,
+    publishedAt: null,
+    lastEdited: null
 })
 
 //for keeping track of the configs for undo/redo functionality
@@ -66,6 +69,9 @@ export const initialStudy = reactive({
         terms: ''
     },
     questions: [],
+    createdAt: null,
+    publishedAt: null,
+    lastEdited: null
 })
 
 export const responses = ref(null);
