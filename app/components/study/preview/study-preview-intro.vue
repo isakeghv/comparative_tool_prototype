@@ -7,7 +7,7 @@
 			<p class="participant__desc">{{ study.description }}</p>
 		</section>
 
-		<section v-if="study.customTerms.request" class="participant__section participant__desc">
+		<section class="participant__section participant__desc">
 			<div class="terms__cont">
 				<input type="checkbox" id="terms__checkbox" class="terms__checkbox" v-model="isChecked" />
 				<label for="terms__checkbox" class="terms__label font-small">
@@ -25,13 +25,16 @@
 					</button>
 					<div class="terms__text">
 						<h3 class="participant__sub font-h5">User Agreement</h3>
+						<p class="font-small">
+							This study collects your IP address. All data is anonymized and securely stored.
+						</p>
 						<p>{{ study.customTerms.terms }}</p>
 					</div>
 				</div>
 			</div>
 		</section>
 		<div>
-			<button @click="handleStart" :disabled="!isChecked && study.customTerms.request" class="participant__button participant__button--start font-small font-semi">Start</button>
+			<button @click="handleStart" class="participant__button participant__button--start font-small font-semi">Start</button>
 			<div v-if="showPopup" class="overlay" @click="showPopup = false"></div>
 		</div>
 	</main>

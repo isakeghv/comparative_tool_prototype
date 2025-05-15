@@ -45,6 +45,7 @@
                     </div>
                 </div>
 
+                <span v-if="question.responseType === 'range'" class="font-small drop__label" style="margin-bottom: 0.4rem;">{{ answer.value }}</span>
                 <span v-if="question.responseType === 'drop'" class="font-small drop__label" style="margin-bottom: 0.4rem;">{{ answer.label }}</span>
             </div>
 

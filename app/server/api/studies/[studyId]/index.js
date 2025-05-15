@@ -43,10 +43,13 @@ const getStudy = async (e) => {
 // should make the parameters optional?
 const updateStudy = async (e, data) => {
     // deconstruct to seperate id from the other data that will be updated
+  
     const studyId = sanitizer(e.context.params?.studyId);
     const { id, ...updateFields } = sanitizer(data);
-
     try {
+        // update last modified date
+        updateFields.lastEdited = new Date();
+
         // find one with matching study id, update it, and return the updated version of the study
         // require to run the validators again (iin case 'title' has been removed)
         const study = await Study.findOneAndUpdate(

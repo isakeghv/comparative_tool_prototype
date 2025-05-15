@@ -27,6 +27,7 @@
 
 <script setup>
 import { user, study, initialStudy } from '~/public/script/reactive';
+import StudyService from '~/services/studyService';
 import ParticipantService from '~/services/participantService';
 import { deleteStudy } from '~/services/studyService';
 
@@ -107,7 +108,7 @@ const populateStudy = (id) => {
     if (selectedStudy) {
         study.id = selectedStudy.id;
 
-        // // use deep copy to avoid sharing references
+        // use deep copy to avoid sharing references
         const studyClone = JSON.parse(JSON.stringify(selectedStudy));
         const initialStudyClone = JSON.parse(JSON.stringify(selectedStudy));
         
@@ -163,7 +164,6 @@ onMounted(() => {
     sessionStorage.removeItem('participantNum');
     sessionStorage.removeItem('selectedView');
 });
-
 </script>
 
 <style scoped>

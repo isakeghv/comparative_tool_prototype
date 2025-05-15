@@ -36,6 +36,33 @@
             </table>
         </div>
 
+        <div v-if="question.responseType === 'range'">
+            <table class="table__cont">
+                <thead class="table__thead">
+                    <tr class="table__row table__row--head">
+                        <th class="table__cell table__cell--head table__cell--artifact">Artifact</th>
+                        <th class="table__cell table__cell--head">ID</th>
+                        <th class="table__cell table__cell--head table__cell--total">Avg. Points</th>
+                    </tr>
+                </thead>
+                <tbody class="table__tbody">
+                    <tr v-for="(average, option) in rangeAnswers" :key="option" class="table__row table">  
+                        <td class="table__cell">
+                            <div class="artifact__container artifact__small">
+                                <StudyArtifact
+                                    :source="question.artifacts.find(a => a.id === option).source"
+                                    :alt="option"
+                                    :isRounded="true"
+                                />
+                            </div>
+                        </td>
+                        <td class="table__cell">{{ option }}</td>
+                        <td class="table__cell">{{ average }}</td>
+                    </tr>    
+                </tbody>
+            </table>
+        </div>
+
         <div v-if="question.responseType === 'drop'">
             <table class="table__cont table__cont--matrix">
                 <thead class="table__thead table__thead--matrix">
@@ -89,17 +116,17 @@
                                 />
                             </div>
                         </td>
-                        <td class="table__cell table__cell--matrix">
-                            {{ calcPos[artifactId] || 0 }}
-                        </td>
-                        <td v-for="(val, idx) in artifact" :key="idx" class="table__cell table__cell--matrix">
-                            {{  artifact[idx] }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            <td class="table__cell table__cell--matrix">
+                                {{ calcPos[artifactId] || 0 }}
+                            </td>
+                            <td v-for="(val, idx) in artifact" :key="idx" class="table__cell table__cell--matrix">
+                                {{  artifact[idx] }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
     <div v-else-if="selectedView === 'graphs'" class="demo__cont demo__cont--compact">
         <div class="demo__header">
@@ -110,6 +137,17 @@
         <div v-if="['radio', 'checkbox'].includes(question.responseType)" class="charts__cont">
             <ChartsPie :dataObj="counts" />
         </div>
+
+        <div v-if="question.responseType === 'range'" class="charts__cont">
+            <ChartsBarLinear
+                :dataObj="rangeAnswers"
+                :startLabel="question.range.startLabel"
+                :endLabel="question.range.endLabel"
+                :min="question.range.min"
+                :max="question.range.max"
+            />
+        </div>
+
 
         <div v-if="question.responseType === 'drop'" class="charts__cont">
             <ChartsBarDrop :dataObj="dropAnswers" />
@@ -136,8 +174,6 @@ const props = defineProps({
     selectedView: String,
     studyResponses: Array
 });
-
-console.log('for linear', props.studyResponses);
 
 const formattedStudyQuestionData = computed(() => {
     const answers = [];
@@ -252,6 +288,37 @@ const calcPos = computed(() => {
     });
 
     return result;
+});
+
+console.log(answers.value);
+
+
+const rangeAnswers = computed(() => {
+    const totals = {};
+    const counts = {};
+
+    answers.value.forEach(({ id, value }) => {
+        // turn the string intp a float
+        const num = parseFloat(value);
+
+        // if number has a value...
+        if (!isNaN(num)) {
+            if (!totals[id]) {
+                totals[id] = 0;
+                counts[id] = 0;
+            }
+
+            totals[id] += num;
+            counts[id] += 1;
+        }
+    });
+
+    const averages = {};
+    Object.keys(totals).forEach((id) => {
+        averages[id] = counts[id] > 0 ? (totals[id] / counts[id]).toFixed(2) : 0;
+    });
+
+    return averages;
 });
 </script>
 

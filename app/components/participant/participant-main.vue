@@ -23,9 +23,9 @@
             <h2 class="participant__title font-h4 font-semi">Thank you for completing the study.</h2>
             <p>Your participation is greatly appreciated, and your input will help us move forward with our research.</p>
         </div>
-        <div class="participant__section">      
+        <!-- <div class="participant__section">      
             <button @click="downloadData" class="participant__button participant__button--start font-small font-semi">Download your answers</button>
-        </div>
+        </div> -->
     </main>
 </template>
 
@@ -114,7 +114,6 @@ const sendForm = async () => {
         //only inserting if it is not demographics
         participantResponse.questions[question.id] = question.value;
     })
-
 
     // also need to map the demographic queestions
     const demographic = Object.entries(participantAnswer.demographic).map(([id, demographicAnswer]) => {

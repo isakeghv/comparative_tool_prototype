@@ -14,6 +14,7 @@ const props = defineProps({
     },
 	startLabel: { type: String },
 	endLabel: { type: String },
+	min: { type: Number },
 	max: {
 		type: Number,
 		required: true
@@ -26,12 +27,18 @@ const series = computed(() => [{
 	data: Object.values(props.dataObj)
 }]);
 
+const colors = [
+	"#6062D6", "#bd7fc7", "#e87070", "#54C0D1",
+	"#4ece7d", "#8750bf", "#379b70"
+];
+
 const options = computed(() => ({
 	chart: {
 		type: 'bar',
 		toolbar: { show: false },
 		animations: { enabled: false }
 	},
+	colors: colors,
 	plotOptions: {
 		bar: {
 		horizontal: true,
@@ -45,7 +52,7 @@ const options = computed(() => ({
 	xaxis: {
 		categories: categories.value,
 		max: props.max,
-		min: 1
+		min: props.min || 1
 	},
 	yaxis: {
 		labels: {
@@ -80,7 +87,6 @@ const options = computed(() => ({
 	tooltip: {
 		enabled: true
 	},
-	colors: ['#6062D6'],
 	legend: {
 		show: false
 	}

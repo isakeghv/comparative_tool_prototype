@@ -10,8 +10,7 @@
             </button>
         </div>
         <StudyPreviewIntro v-if="study && showIntro" :study="study" :handleStart="handleStart" />
-
-        <StudyPreviewMain v-if="study && start" :study="study" />
+        <StudyPreviewMain v-if="study && start" :study="study" @closePreview="showPreview = false" />
     </div>
     <button class="preview-overlay" aria-label="Exit preview" @click="showPreview = false"></button>
 </template>
@@ -60,7 +59,7 @@ const handleStart = () => {
 
 .preview-exit{
     border: none;
-    background-color: rgb(40, 40, 40);
+    background-color: #4b4b4b;
     cursor: pointer;
     border-radius: 0.25rem;
     height: 2rem;
@@ -81,17 +80,17 @@ const handleStart = () => {
     z-index: 3;
     border-radius: 0.25rem;
     overflow-y: auto;
+    scrollbar-width: none;
 }
 
 .preview-overlay {
-    display: block;
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    left: 0;
-    top: 0;
-    z-index: 2;
-    background-color: rgba(0, 0, 0, 0.6);
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.3);
     border: none;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
 }
 </style>

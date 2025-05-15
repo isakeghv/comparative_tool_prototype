@@ -30,7 +30,7 @@
 
 
         <h3 class="card__title font-medium">{{ title }}</h3>
-        <p class="card__paragraph font-small">Started: {{ formattedStartDate }}</p>
+        <p class="card__paragraph font-small">Updated: {{ formattedStartDate }}</p>
         <button class="card__select" aria-label="Open study" @click="studyEdit(id)"></button>
 
         <div class="popup-container" ref="popupRef">
@@ -42,20 +42,20 @@
                     </svg>
                 </div>
             </button>
-            <div class="popup" v-if="showPopUp">
-                <!-- only show 'edit' button if study is a draft -->
-                <button v-if="status === 'draft'" class="popup__button font-normal" @click="studyEdit(id)">Edit</button>
-                <button class="popup__button font-normal" @click="studyDelete(id)" id="popup-delete-btn">Delete</button>
-                <button class="popup__button font-normal" @click="studyDuplicate(study)">Duplicate</button>
-                <button class="popup__button font-normal" @click="studyExport(id, 'json')">Export JSON</button>
-                <button class="popup__button font-normal" @click="studyExport(id, 'cvs')">Export CVS</button>
-            </div>
+        </button>
+        <div class="popup" v-if="showPopUp">
+            <!-- only show 'edit' button if study is a draft -->
+            <button v-if="status === 'draft'" class="popup__button font-normal" @click="studyEdit(id)">Edit</button>
+            <button class="popup__button font-normal" @click="studyDelete(id)" id="popup-delete-btn">Delete</button>
+            <button class="popup__button font-normal" @click="studyDuplicate(study)">Duplicate</button>
+            <button v-if="status !== 'draft'" class="popup__button font-normal" @click="studyExport(study.id, 'json')">Export JSON</button>
+            <button v-if="status !== 'draft'" class="popup__button font-normal"  @click="studyExport(study.id, 'csv')">Export CVS</button>
+         </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { study } from '~/public/script/reactive';
 import { user } from '~/public/script/reactive';
 
@@ -63,6 +63,7 @@ const props = defineProps({
     study: Object,
     title: String,
     startDate: String,
+    lastEdited: String,
     id: String,
     status: String,
     filter: String
@@ -120,9 +121,12 @@ const filterDisplay = computed(() => {
 
 // format the start date to be readable
 const formattedStartDate = computed(() => {
-    if (!props.startDate) return 'N/A';
+    let date = props.lastEdited;
 
-    return new Date(props.startDate).toLocaleDateString('en-US', {
+    // just set current date temporary
+    if (!props.lastEdited) date = Date.now();
+    
+    return new Date(date).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
         year: 'numeric'
@@ -152,11 +156,11 @@ const studyDuplicate = (study) => {
 
 
 //emitting study id and format with "export" event
-const studyExport = (id, format) => {
+const studyExport = (id, format) =>{
+    console.log(id, format)
     showPopUp.value = false
-    emit('export', { id, format });
+    emit('export', id, format);
 }
-
 </script>
 
 <style scoped>

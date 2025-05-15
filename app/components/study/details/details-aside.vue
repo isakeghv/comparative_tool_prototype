@@ -63,19 +63,30 @@
 import { study } from '~/public/script/reactive';
 const isDisabled = inject('disabled'); 
 
-const selectModel = ref('days');
-const durationModel = ref('')
+const selectModel = ref(study.closingLimit.duration['unit'] || 'days');
 
-const dateModel = ref('');
-const responseModel = ref('');
+const durationModel = ref(study.closingLimit.duration['number'] || '')
 
-const totalResModel = ref('');
+// convert it back to a YYYY-MM-DD to make it possible to display for Date input
+const dateModel = computed({
+    get() {
+        const raw = study.closingLimit.date;
+        return raw ? new Date(raw).toISOString().split('T')[0] : '';
+    },
+    set(value) {
+        study.closingLimit.date = value ? new Date(value).toISOString() : '';
+    }
+});
+
+const responseModel = ref(study.closingLimit.responses || '');
+
+const totalResModel = ref(study.desiredResponses || '');
 
 //array holding the closing-methods
-const closingMethods = ref([]);
+const closingMethods = ref(study.closingMethod || []);
 
 //updates the amount of desired responses
-const updateDesiredRes = ()=>{
+const updateDesiredRes = () =>{
     if (!totalResModel.value){
         study.desiredResponses = '';
         return;
@@ -95,31 +106,29 @@ const setResLimit = ()=>{
     study.closingLimit.responses = Number(responseModel.value);
 }
 
-
 //turns duration into milliseconds
 const durationToMs = ()=>{
     //checking that "duration" has been selected as an alternative for closing
     const stop = !closingMethods.value.includes("duration");
 
     if (stop || !durationModel.value) {
-        study.closingLimit.duration = '';
+        study.closingLimit.duration = {};
         return;
     }
 
     const unit = selectModel.value;
     const duration = Number(durationModel.value);
 
+    let closingTime = new Date();
 
-    const date = new Date();
+    if (unit === 'days') closingTime.setDate(closingTime.getDate() + duration);
+    if (unit === 'months') closingTime.setMonth(closingTime.getMonth() + duration);
+    if (unit === 'years') closingTime.setFullYear(closingTime.getFullYear() + duration);
 
-    let closingTime = date;
-
-    if (unit === 'days') closingTime = date.setDate(date.getDate() + duration);
-    if (unit === 'months') closingTime = date.setDate(date.getMonth() + duration);
-    if (unit === 'years') closingTime = date.setDate(date.getFullYear() + duration);
-
-    study.closingLimit.duration = closingTime;
-
+    // then convert to timestamp
+    study.closingLimit.duration['timestamp'] = closingTime.getTime();
+    study.closingLimit.duration['number'] = durationModel.value;
+    study.closingLimit.duration['unit'] = selectModel.value;
 }
 
 //updates the date that closing should be done at
@@ -148,7 +157,7 @@ const updateClosing = ()=> {
 
     //updating the duration in study variable, if it has value, or removing set date in case false
     if (updateDuration) durationToMs();
-    else if (study.closingLimit.duration) study.closingLimit.duration = '';
+    else if (study.closingLimit.duration) study.closingLimit.duration = {};
 
     //updating the date in study variable, if it has value, or removing set date in case false
     if (updateDateBool) updateDate();
@@ -163,9 +172,9 @@ const props = defineProps({
     id: String,
     disabled: { type: Boolean, default: false }
 })
-
 </script>
 
 <style scoped>
     @import url('public/style/components/study/study-aside.scss');
 </style>
+

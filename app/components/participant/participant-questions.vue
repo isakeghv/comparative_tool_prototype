@@ -6,7 +6,8 @@
 				<p class="question__instructions font-body" v-if="instructionText">
 					{{ instructionText }}
 				</p>
-				<div class="question__list">
+
+				<div class="question__list" :class="{ 'question__list--range': responseType === 'range' }">
 
 					<!-- Radio buttons -->
 					<label v-if="responseType === 'radio'" v-for="artifact in artifactsArr" :key="artifact.id"
@@ -49,8 +50,14 @@
 						v-if="responseType === 'drop'" />
 
 					<!-- range -->
-					<ArtifactRange v-if="responseType === 'range'" :question-id="currentQuestion.id"
-						:artifacts="artifactsArr" @update:responses="val => updateResponses(currentQuestion.id, val)" />
+
+					<ArtifactRange
+						v-if="responseType === 'range'"
+						:question="currentQuestion"
+						@selectMedia="selectMedia"
+						:artifacts="artifactsArr"
+						@update:responses="val => updateResponses(currentQuestion.id, val)"
+					/>
 
 				</div>
 			</div>
@@ -115,7 +122,6 @@ const randOrder = (arr) => {
 	return arr.sort(() => Math.random() - 0.5);
 }
 
-
 const getFile = async (source) => {
 	const request = await fetch(`/api/serve-file?filename=${encodeURIComponent(source)}`);
 	if (!request.ok) return null;
@@ -153,6 +159,14 @@ watch(() => props.questionIndex, () => {
 	selectedSource.value = '';
 	selectedId.value = '';
 }, { deep: true, immediate: true });
+
+const updateResponses = (questionId, responses) => {
+	participantAnswer[questionId] = responses.map(r => ({
+		id: r.id,
+		value: r.value,
+	}));
+};
+
 
 // check if the required question has been answered
 const validateRequiredQuestion = () => {
@@ -212,11 +226,9 @@ const instructionText = computed(() => {
 			return '';
 	}
 });
-
-
 </script>
 
 <style scoped>
-@import url('public/style/components/study/study-main.scss');
-@import url('public/style/components/participant/participant-question.scss');
+	@import url('public/style/components/study/study-main.scss');
+	@import url('public/style/components/participant/participant-question.scss');
 </style>
