@@ -1,6 +1,7 @@
 import { connDb } from '~/server/services/connDb.js';
 import { verifyToken } from '~/server/services/jwt.js';
 import { Participant } from "../../schemas/participantSchema";
+import { sanitizer } from '../../utils/sanitize'
 
 const updateParticipant = async (e, data) => {
     const participantId = e.context.params?.participantId;
@@ -8,8 +9,6 @@ const updateParticipant = async (e, data) => {
     if (!participantId) {
         return { updated: false, message: "Participant ID is missing or invalid." };
     }
-
-    console.log(JSON.stringify(data.questions, null, 2));
 
     try {
         // find session by id, and update with the answers
@@ -25,10 +24,9 @@ const updateParticipant = async (e, data) => {
         session.status = 'completed';
 
         // cannot use 'findByIdAndUpdate' due to relying on a pre-hook to save `timeTaken` field
-        await session.save(); 
- 
-        console.log(session);
-        setResponseStatus(200);
+        await session.save();
+
+        setResponseStatus(e, 200);
         return { updated: true, message: 'Participant session updated successfully.', result: session.toJSON() };
     } catch (err) {
         return { updated: false, message: 'Issue occurred while updating participant session.', error: err.message };
@@ -42,7 +40,8 @@ export default defineEventHandler(async (e) => {
     const { method } = e.node.req;
 
     if (method === 'PUT') {
-        const body = await readBody(e);
+        const rawBody = await readBody(e);
+        const body = sanitizer(rawBody)
         return await updateParticipant(e, body);
     }
 });

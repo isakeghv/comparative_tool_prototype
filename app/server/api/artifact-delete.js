@@ -3,6 +3,7 @@ import path from 'path';
 import { Study } from '../schemas/studySchema';
 import { join } from 'path'
 import { auth } from '../services/authenticated'
+import { sanitizer } from '../utils/sanitize';
 
 //make sure that an artifact that exists in other study cannot be deleted
 const artifactIsInOtherStudy = (artifacts, artifact) => {
@@ -18,7 +19,11 @@ export default defineEventHandler(async (e) => {
         return { success: false, code: 401, message: 'Not logged in' };
     }
 
-    const { artifacts, userID, studyID } = await readBody(e)
+    const rawBody = await readBody(e)
+
+    const body = sanitizer(rawBody);
+
+    const { artifacts, userID, studyID } = body;
 
     const otherStudies = await Study.find({ user: userID, id: {$ne: studyID} }).lean();
 

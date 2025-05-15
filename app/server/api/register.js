@@ -6,6 +6,7 @@ import { connDb } from '~/server/services/connDb.js';
 import { UserCredential, UserProfile } from '../schemas/userSchema.js';
 import { checkRateLimit } from '../services/rateLimiter';
 import jwt from "jsonwebtoken";
+import { sanitizer } from "../utils/sanitize.js";
 
 // const config = useRuntimeConfig();
 
@@ -76,7 +77,10 @@ const createUser = async (fname, lname, email, pwd, e) => {
 export default defineEventHandler(async (e) => {
 	// connect to db
 	await connDb();
-	const body = await readBody(e);
+	const rawBody = await readBody(e);
+
+	const body = sanitizer(rawBody);
+	
 	const { firstname, lastname, email, password, turnstileToken } = body;
 
 	const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;

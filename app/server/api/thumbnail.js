@@ -1,5 +1,6 @@
 import { Study } from '../schemas/studySchema';
 import { auth } from '../services/authenticated';
+import { sanitizer } from '../utils/sanitize';
 
 //function is setting which uploaded file should be set as thumbnail for study
 export default defineEventHandler(async (e) => {
@@ -10,7 +11,11 @@ export default defineEventHandler(async (e) => {
         return { success: false }
     }
 
-    const { artifact, studyID } = await readBody(e);
+    const rawBody = await readBody(e);
+
+    const body = sanitizer(rawBody)
+
+    const { artifact, studyID } = body;
 
     //return if invalid
     if (!artifact || !studyID) {

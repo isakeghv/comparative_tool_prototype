@@ -21,7 +21,6 @@ export default defineEventHandler(async (e) => {
         return file;
 
     } catch (err) {
-        console.log(`Unable to get image with path: ${filePath}`);
         console.log(err)
         setResponseStatus(e, 404)
         return { found: false, url: null, ok: false }

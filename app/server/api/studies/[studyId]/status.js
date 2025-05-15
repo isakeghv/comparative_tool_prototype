@@ -3,6 +3,7 @@ import { verifyToken } from '~/server/services/jwt.js';
 import { Study } from '../../../schemas/studySchema.js';
 import { defineEventHandler, readBody, setResponseStatus } from 'h3';
 import { auth } from '~/server/services/authenticated.js';
+import { sanitizer } from '~/server/utils/sanitize.js';
 
 
 const updateStudyStatus = async (e, data) => {
@@ -77,7 +78,8 @@ export default defineEventHandler(async (e) => {
 
     // check if the request is for status update (/studies/:id/publish), and chang the status to 'ongoing'
     if (method === 'PATCH' && url.endsWith('/status')) {
-        const body = await readBody(e);
+        const rawBody = await readBody(e)
+        const body = sanitizer(rawBody)
         return await updateStudyStatus(e, body);
     }
 });

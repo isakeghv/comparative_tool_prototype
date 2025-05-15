@@ -3,11 +3,14 @@ import { verifyToken } from '~/server/services/jwt.js';
 import { Study } from '../../../schemas/studySchema.js';
 import { auth } from '~/server/services/authenticated.js';
 import { deleteartifact } from '~/server/services/deleteartifacts.js';
+import { sanitizer } from '../../../utils/sanitize.js'
 
 // get study by its id, and populate the study with the retrieved data
 const getStudy = async (e) => {
     // get studyId from the parameter in the URL
-    const studyId = e.context.params?.studyId;
+    const rawID = e.context.params?.studyId;
+
+    const studyId = sanitizer(rawID);
 
     try {
         // find specific study, and use projection to specify which fields should be included
@@ -40,8 +43,8 @@ const getStudy = async (e) => {
 // should make the parameters optional?
 const updateStudy = async (e, data) => {
     // deconstruct to seperate id from the other data that will be updated
-    const studyId = e.context.params?.studyId;
-    const { id, ...updateFields } = data;
+    const studyId = sanitizer(e.context.params?.studyId);
+    const { id, ...updateFields } = sanitizer(data);
 
     try {
         // find one with matching study id, update it, and return the updated version of the study
@@ -77,7 +80,11 @@ const deleteArtifacts = async (study, e, studyId) => {
 }
 
 const deleteStudy = async (e) => {
-    const studyId = e.context.params?.studyId;
+
+    const rawId = e.context.params?.studyId;
+
+    const studyId = sanitizer(rawId);
+
     const study = await Study.findOne({ id: studyId });
 
     const deleteReq = await deleteArtifacts(study, e, studyId);
