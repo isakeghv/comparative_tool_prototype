@@ -43,7 +43,7 @@ const getStudy = async (e) => {
 // should make the parameters optional?
 const updateStudy = async (e, data) => {
     // deconstruct to seperate id from the other data that will be updated
-  
+
     const studyId = sanitizer(e.context.params?.studyId);
     const { id, ...updateFields } = sanitizer(data);
     try {
@@ -113,9 +113,11 @@ const deleteStudy = async (e) => {
 export default defineEventHandler(async (e) => {
     verifyToken(e);
 
-    if (!auth(e)) {
-        setResponseStatus(e, 401);
-        return { message: 'Unauthorized' }
+    if (method !== 'GET') {
+        if (!auth(e)) {
+            setResponseStatus(e, 401);
+            return { message: 'Unauthorized' }
+        }
     }
     await connDb();
 
