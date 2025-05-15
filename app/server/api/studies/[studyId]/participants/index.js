@@ -12,7 +12,7 @@ const getResponsesByStudyId = async (e) => {
             {
                 _id: 0,
                 study: 0,
-                _v: 0
+                __v: 0
             }
         ).sort({ startTime: 1 }).lean();
         
