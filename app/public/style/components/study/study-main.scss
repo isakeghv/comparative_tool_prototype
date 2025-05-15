@@ -186,9 +186,24 @@
       top: var(--y-pos);
     }
   }
+
+  &__iframecontainer,
+  &__videocontainer {
+    user-select: none;
+    flex: 0 0 6rem;
+    width: 6rem;
+    height: 6rem;
+    border-radius: calc(0.5rem - 1px);
+
+    &:hover {
+      outline: c.$cyan 2px solid;
+    }
+  }
+
   &__iframecontainer {
     position: relative;
   }
+
   &__cover {
     background-color: transparent;
     position: absolute;
@@ -251,6 +266,7 @@
   }
 
   &__icon {
+    user-select: none;
     border-bottom: v.$borderSolid;
     border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px) 0 0;
     width: 100%;
@@ -390,6 +406,18 @@
 
   &__round {
     border-radius: 0.5rem;
+  }
+  &__draggable {
+    touch-action: none;
+  }
+
+  &__placeholder {
+    z-index: 0;
+    background-color: transparent;
+    border: none;
+    flex: 0 0 6rem;
+    width: 6rem;
+    height: 6rem;
   }
 }
 

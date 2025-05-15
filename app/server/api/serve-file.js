@@ -14,8 +14,6 @@ export default defineEventHandler(async (e) => {
     const filePath = join(process.cwd(), 'public', ...file.split('/'));
     const filetype = mime.lookup(filePath) || 'application/octet-stream';
 
-    console.log(filetype);
-
     try {
         
         const file = await readFile(filePath);

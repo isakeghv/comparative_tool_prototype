@@ -1,5 +1,4 @@
 <template>
-    {{ selectedRawSource }}
     <div class="artifact__expand" v-if="selectedSource && selectedRawSource">
         <img :src="file" :alt="selectedId" class="artifact__expand--img" v-if="isImage(selectedRawSource)">
         <embed :src="file" class="artifact__expand--embed" v-if="isPdf(selectedRawSource)">

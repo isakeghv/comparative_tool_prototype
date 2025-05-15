@@ -55,7 +55,8 @@
 				</div>
 			</div>
 
-			<div class="question__panel">
+			<div :class="{'question__panel--display': selectedSource, 'question__panel--hidden': !selectedSource}">
+				<button class="question__button" @click="selectedSource = null">Exit</button>
 				<ArtifactPreview :selectedSource="selectedSource" :selectedId="selectedId"
 					:selectedRawSource="selectedRawSource" />
 			</div>
