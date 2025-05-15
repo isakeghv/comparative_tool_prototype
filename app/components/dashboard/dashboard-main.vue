@@ -30,6 +30,7 @@
 <script setup>
 import { user } from '~/public/script/reactive';
 import { search } from '~/public/script/studySearch';
+import StudyService from '~/services/studyService';
 
 //Setting variable to store which filter to use for which studies to display. Setting default to 'all' so all
 //studies are displayed as default. This is passed to "StudyBlock" with the :filter attr
@@ -66,11 +67,19 @@ const mainTitle = computed(() => {
 
 const noStudies = computed(() => !studies.value || studies.value.length === 0)
 
-const studyDuplicate = (originalStudy) => {
+const studyDuplicate = async (originalStudy) => {
 	const clone = JSON.parse(JSON.stringify(originalStudy));
-	clone.id = `${originalStudy.id}_copy_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+	clone.id = crypto.randomUUID();
+
+	//making sure it is always draft, so published/closed studies are not duplicated
+	clone.status = 'draft';
 
 	const index = user.studies.findIndex(s => s.id === originalStudy.id);
+
+	const createReq = await StudyService.createStudy(clone, user.info._id);
+
+	if (!createReq.created) return console.error('Unable to duplicate study');
+
 	if (index !== -1) {
 		user.studies.splice(index + 1, 0, clone);
 	} else {

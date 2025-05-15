@@ -60,11 +60,11 @@ const updateStudy = async (e, data) => {
     }
 }
 
-const deleteArtifacts = async (study, e) => {
+const deleteArtifacts = async (study, e, studyId) => {
     const artifacts = study.questions.flatMap(q => q.artifacts.filter(a => a.source).map(a => a.source));
 
     if (!artifacts || artifacts.length === 0) return { ok: true };
-    const request = await deleteartifact(e, artifacts);
+    const request = await deleteartifact(e, artifacts, studyId);
 
     if (!request.ok) {
         setResponseStatus(e, 500)
@@ -80,7 +80,7 @@ const deleteStudy = async (e) => {
     const studyId = e.context.params?.studyId;
     const study = await Study.findOne({ id: studyId });
 
-    const deleteReq = await deleteArtifacts(study, e);
+    const deleteReq = await deleteArtifacts(study, e, studyId);
 
     if (!deleteReq.ok) {
         setResponseStatus(e, 500)

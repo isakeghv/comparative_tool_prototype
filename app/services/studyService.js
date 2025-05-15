@@ -69,7 +69,8 @@ const updateStudy = async (studyId, data) => {
 export const deleteStudy = async (studyId) => {
     try {
         const response = await fetch(`/api/studies/${studyId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            credentials: 'include'
         })
 
 

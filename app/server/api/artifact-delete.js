@@ -1,8 +1,15 @@
 import { promises as fs } from 'fs'
-import path from 'path'
+import path from 'path';
+import { Study } from '../schemas/studySchema';
 import { join } from 'path'
 import { auth } from '../services/authenticated'
 
+//make sure that an artifact that exists in other study cannot be deleted
+const artifactIsInOtherStudy = (artifacts, artifact) => {
+    const isInOtherStudy = artifacts.some(a => a === artifact);
+
+    return isInOtherStudy;
+}
 
 export default defineEventHandler(async (e) => {
 
@@ -11,16 +18,20 @@ export default defineEventHandler(async (e) => {
         return { success: false, code: 401, message: 'Not logged in' };
     }
 
-    const artifacts = await readBody(e)
+    const { artifacts, userID, studyID } = await readBody(e)
+
+    const otherStudies = await Study.find({ user: userID, id: {$ne: studyID} }).lean();
 
     //array containing files that should be deleted
     const deleteArr = []
+
+    const allArtifacts = [...new Set(otherStudies.flatMap(s => s.questions.flatMap(q => q.artifacts.map(a => a.source))))]
 
     //getting the file names for each of the artifact paths provided
     artifacts.forEach(a => {
         const b = a.split('/')
         const i = b.length - 1;
-        deleteArr.push(b[i]);
+        if (!artifactIsInOtherStudy(allArtifacts, a)) deleteArr.push(b[i]);
     })
 
     if (deleteArr.length === 0) {
