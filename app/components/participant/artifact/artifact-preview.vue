@@ -1,4 +1,5 @@
 <template>
+    {{ selectedRawSource }}
     <div class="artifact__expand" v-if="selectedSource && selectedRawSource">
         <img :src="file" :alt="selectedId" class="artifact__expand--img" v-if="isImage(selectedRawSource)">
         <embed :src="file" class="artifact__expand--embed" v-if="isPdf(selectedRawSource)">
@@ -19,22 +20,7 @@ const props = defineProps({
     selectedRawSource: String
 })
 
-const file = ref('')
-
-const getFile = async () => {
-    const request = await fetch(`/api/serve-file?filename=${encodeURIComponent(props.selectedRawSource)}`);
-
-    if (!request.ok) return null;
-
-    const raw = await request.blob();
-
-    file.value = URL.createObjectURL(raw);
-}
-
-watch(
-    ()=>props.selectedRawSource,
-    (source) => getFile()
-)
+const file = computed(() =>{ return props.selectedSource})
 
 </script>
 

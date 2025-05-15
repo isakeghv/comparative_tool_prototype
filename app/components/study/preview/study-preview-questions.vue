@@ -6,11 +6,13 @@
 				<div class="question__list">
 
 					<!-- Radio buttons -->
-					<label v-if="responseType === 'radio'" v-for="artifact in artifactsArr" :key="artifact.id" class="question__option--radio">
+					<label v-if="responseType === 'radio'" v-for="artifact in artifactsArr" :key="artifact.id"
+						class="question__option--radio">
 						<div class="artifact-container artifact__borderless">
-							<input type="radio" :name="currentQuestion.id" :value="artifact.id" v-model="selectedArtifact"
-									class="input-overlay"/>
-							<ArtifactMedia :artifact="artifact" :responseType="responseType" @selectMedia="selectMedia" :class="{ 'artifact--selected': participantAnswer[currentQuestion.id]?.includes(artifact.id) }"/>
+							<input type="radio" :name="currentQuestion.id" :value="artifact.id"
+								v-model="selectedArtifact" class="input-overlay" />
+							<ArtifactMedia :artifact="artifact" :responseType="responseType" @selectMedia="selectMedia"
+								:class="{ 'artifact--selected': participantAnswer[currentQuestion.id]?.includes(artifact.id) }" />
 							<div class="wrapper wrapper--zero">
 								<ArtifactExpandButton @expand="() => selectMedia(artifact.source, artifact.id)" />
 							</div>
@@ -18,21 +20,25 @@
 					</label>
 
 					<!-- Checkbox -->
-					<label v-if="responseType === 'checkbox'"  v-for="artifact in artifactsArr" :key="artifact.id" class="question__options--horizontal">
-  						<div class="artifact-container artifact__borderless">
-							<input type="checkbox" :value="artifact.id" :checked="participantAnswer[currentQuestion.id]?.some(item => item.id === artifact.id)"
-								class="input-overlay"/>
-							<ArtifactMedia :artifact="artifact" :responseType="responseType" @selectMedia="selectMedia" :class="{ 'artifact--selected': participantAnswer[currentQuestion.id]?.some(item => item.id === artifact.id) }" />
+					<label v-if="responseType === 'checkbox'" v-for="artifact in artifactsArr" :key="artifact.id"
+						class="question__options--horizontal">
+						<div class="artifact-container artifact__borderless">
+							<input type="checkbox" :value="artifact.id"
+								:checked="participantAnswer[currentQuestion.id]?.some(item => item.id === artifact.id)"
+								class="input-overlay" />
+							<ArtifactMedia :artifact="artifact" :responseType="responseType" @selectMedia="selectMedia"
+								:class="{ 'artifact--selected': participantAnswer[currentQuestion.id]?.some(item => item.id === artifact.id) }" />
 							<div class="wrapper wrapper--zero">
 								<ArtifactExpandButton @expand="() => selectMedia(artifact.source, artifact.id)" />
 							</div>
-  						</div>
+						</div>
 					</label>
 
 					<!-- linear -->
 					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id" :responseType="responseType"
 						:artifact="artifact" @selectMedia="selectMedia" @moving="(artifact) => linear_moving(artifact)"
-						@dropped="linear_drop(currentQuestion.id, currentQuestion.question)" v-if="responseType === 'linear'" />
+						@dropped="linear_drop(currentQuestion.id, currentQuestion.question)"
+						v-if="responseType === 'linear'" />
 
 					<!-- drop -->
 					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id" :responseType="responseType"
@@ -42,7 +48,8 @@
 			</div>
 
 			<div class="question__panel">
-				<ArtifactPreview :selectedSource="selectedSource" :selectedId="selectedId" :selectedRawSource="selectedRawSource"/>
+				<ArtifactPreview :selectedSource="selectedSource" :selectedId="selectedId"
+					:selectedRawSource="selectedRawSource" />
 			</div>
 		</div>
 
@@ -50,12 +57,13 @@
 			:artifacts="participantAnswer[currentQuestion.id]" :questionid="currentQuestion.id"
 			v-if="responseType === 'linear'" :labels="currentQuestion.linear"
 			@moveup="(index) => linear_orderUp(currentQuestion.id, index)"
-			@movedown="(index) => linear_orderDown(currentQuestion.id, index)" @insertAt="(index) => linear_insertAt = index"
-			@expand="(artifact) => selectMedia(artifact.source, artifact.id)"/>
+			@movedown="(index) => linear_orderDown(currentQuestion.id, index)"
+			@insertAt="(index) => linear_insertAt = index"
+			@expand="(artifact) => selectMedia(artifact.source, artifact.id)" />
 		<div v-if="currentQuestion.responseType === 'drop'" class="drop__row">
 			<ArtifactDropBox @mouseover="box_mouseover()" @mouseleave="box_mouseleave()"
-				@dropped="box_drop(currentQuestion.id, index, box, currentQuestion.question)" :box="box" v-if="responseType === 'drop'"
-				v-for="(box, index) in currentQuestion.drop.dropBox" :key="index"
+				@dropped="box_drop(currentQuestion.id, index, box, currentQuestion.question)" :box="box"
+				v-if="responseType === 'drop'" v-for="(box, index) in currentQuestion.drop.dropBox" :key="index"
 				:artifact="participantAnswer[currentQuestion.id]?.[index]"
 				@expand="(artifact) => selectMedia(artifact.source, artifact.id)" />
 		</div>
@@ -98,18 +106,20 @@ const randOrder = (arr) => {
 }
 
 const getFile = async (source) => {
-    const request = await fetch(`/api/serve-file?filename=${encodeURIComponent(source)}`);
-
-    if (!request.ok) return null;
-
-    const raw = await request.blob();
-
-    return URL.createObjectURL(raw);
+	const request = await fetch(`/api/serve-file?filename=${encodeURIComponent(source)}`);
+	if (!request.ok) return null;
+	const raw = await request.blob();
+	return URL.createObjectURL(raw);
 }
 
 const selectMedia = async (source, id) => {
+
+	const newSource = await getFile(source);
+
+	if (!newSource) return alert("Sorry, we're experiencing issues fetching the requested data.");
+
 	selectedRawSource.value = source;
-	selectedSource.value = await getFile(source);
+	selectedSource.value = newSource;
 	selectedId.value = id;
 };
 
