@@ -16,7 +16,7 @@ const getResponsesByStudyId = async (e) => {
             }
         ).sort({ startTime: 1 }).lean();
         
-        setResponseStatus(200);
+        setResponseStatus(e, 200);
         return participants;
     } catch (err) {
         throw new Error('Error fetching participants');

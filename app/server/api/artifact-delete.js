@@ -1,7 +1,15 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import { join } from 'path'
+import { auth } from '../services/authenticated'
+
+
 export default defineEventHandler(async (e) => {
+
+    if (!auth(e)) {
+        setResponseStatus(e, 401);
+        return { success: false, code: 401, message: 'Not logged in' };
+    }
 
     const artifacts = await readBody(e)
 
@@ -9,21 +17,21 @@ export default defineEventHandler(async (e) => {
     const deleteArr = []
 
     //getting the file names for each of the artifact paths provided
-    artifacts.forEach(a =>{
+    artifacts.forEach(a => {
         const b = a.split('/')
         const i = b.length - 1;
         deleteArr.push(b[i]);
     })
 
-    if (deleteArr.length === 0){
+    if (deleteArr.length === 0) {
         setResponseStatus(e, 200);
-        return {success: true, message: 'No artifacts to delete'};
+        return { success: true, message: 'No artifacts to delete' };
     }
 
     //saving path to delete files from
     const filepath = join(process.cwd(), "public", "artifacts");
 
-    try{
+    try {
         //deleting files from dir
         await Promise.allSettled(
             deleteArr.map(file => fs.unlink(path.join(filepath, file)))
@@ -31,11 +39,11 @@ export default defineEventHandler(async (e) => {
 
         //setting status and returning success message
         setResponseStatus(e, 200);
-        return {success: true, deleteArr};
+        return { success: true, deleteArr };
 
         //catching error and returning err msg
-    } catch (err){
+    } catch (err) {
         setResponseStatus(e, 500);
-        return {success: false, error: 'Unable to delete artifacts', deleteArr}
+        return { success: false, error: 'Unable to delete artifacts', deleteArr }
     }
 })

@@ -49,6 +49,7 @@ import StudyService from '~/services/studyService';
 import { user, study, configs, currentConfigIndex, allUploadedArtifacts, initialStudy, showResponses, showPreview, errorQuestions, errorMsgs } from '~/public/script/reactive';
 import { compareStudies } from '~/utils/studyUtils';
 import { validateStudy, validateDemographics, removeErr } from '@/utils/studyValidator';
+import { updateStudyStatus } from '~/services/studyService';
 
 const isDisabled = inject('disabled', ref(false));
 
@@ -276,7 +277,11 @@ const setStudyStatus = async (status) => {
     }
 
     try {
-        const updatedStudy = await StudyService.updateStudyStatus(study.id, status);
+        const request = await updateStudyStatus(study.id, status);
+
+        if (!request.success) return console.error('unable publish study')
+
+        const updatedStudy = await request.result;
 
         // update status, set disabled to true; insert the status for the client-side as well
         if (updatedStudy.updated) {

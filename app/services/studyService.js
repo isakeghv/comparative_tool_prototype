@@ -30,11 +30,11 @@ const fetchStudy = async (studyId) => {
             method: "GET"
         });
 
-    if (!response.ok) {
-        throw new Error(`Failed to read study: ${response.statusText}`);
-    }
+        if (!response.ok) {
+            throw new Error(`Failed to read study: ${response.statusText}`);
+        }
 
-    return await response.json();
+        return await response.json();
     } catch (err) {
         console.error(err);
     }
@@ -43,7 +43,7 @@ const fetchStudy = async (studyId) => {
 // send a PUT request to update the existing resource by replacing it
 const updateStudy = async (studyId, data) => {
     // need to remove `_id` from the rest of the fields due to it being immutable
-    const { _id, ...studyData} = data;
+    const { _id, ...studyData } = data;
 
     try {
         const response = await fetch(`/api/studies/${studyId}`, {
@@ -66,21 +66,24 @@ const updateStudy = async (studyId, data) => {
     }
 }
 
-const deleteStudy = async (studyId) => {
+export const deleteStudy = async (studyId) => {
     try {
         const response = await fetch(`/api/studies/${studyId}`, {
             method: 'DELETE'
         })
 
+
         if (!response.ok) {
-            throw new Error(`Failed to delete study: ${response.statusText}`);
+            return { success: false, message: 'Unable to delete study' }
         }
+        return { success: true }
     } catch (err) {
         console.error(err);
+        return { success: false, message: 'Unable to delete study' }
     }
 }
 
-const updateStudyStatus = async (studyId, status) => {
+export const updateStudyStatus = async (studyId, status) => {
     try {
         const response = await fetch(`/api/studies/${studyId}/status`, {
             method: 'PATCH',
@@ -93,12 +96,15 @@ const updateStudyStatus = async (studyId, status) => {
         })
 
         if (!response.ok) {
-            throw new Error(`Failed to update study status: ${response.statusText}`);
+            return { success: false }
         }
 
-        return await response.json();
+        const result = await response.json();
+
+        return { success: true, result }
     } catch (err) {
         console.error(err);
+        return { success: false }
     }
 }
 
