@@ -26,8 +26,7 @@
 </template>
 
 <script setup>
-import { user, study, initialStudy, errorMsgs, errorQuestions } from '~/public/script/reactive';
-import StudyService from '~/services/studyService';
+import { user, study, initialStudy } from '~/public/script/reactive';
 import ParticipantService from '~/services/participantService';
 import { deleteStudy } from '~/services/studyService';
 

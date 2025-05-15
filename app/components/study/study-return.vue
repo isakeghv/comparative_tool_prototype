@@ -36,6 +36,7 @@ const resetVariables = () => {
     study.closingLimit.duration = '';
     study.closingLimit.responses = '';
     study.desiredResponses = '';
+    study.thumbnail = '';
  
     initialStudy.title = null;
     initialStudy.description = null;
