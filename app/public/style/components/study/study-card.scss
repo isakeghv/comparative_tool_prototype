@@ -72,6 +72,17 @@
 		border-radius: 0.5rem 0.5rem 0 0;
 		width: 100%;
 	}
+	&__background{
+		height: 9rem;
+		width: 100%;
+		background-color: #9BD5FF;
+		border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px) 0 0;
+	}
+	&__svg{
+		height: 100%;
+		border-radius: 0.5rem 0.5rem 0 0;
+		width: 100%;
+	}
 }
 
 .popup {

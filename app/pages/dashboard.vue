@@ -29,6 +29,7 @@
 import { user, study, initialStudy } from '~/public/script/reactive';
 import StudyService from '~/services/studyService';
 import ParticipantService from '~/services/participantService';
+import { deleteStudy } from '~/services/studyService';
 
 const showMain = ref(true);
 const displayName = ref('');
@@ -138,8 +139,10 @@ const onEditStudy = async (id) => {
     isCreatingStudy.value = false;
 }
 
-const onDeleteStudy = (id) => {
-    StudyService.deleteStudy(id);
+const onDeleteStudy = async (id) => {
+    const request = await deleteStudy(id);
+
+    if (!request.success) return console.error('Unable to delete study');
     // find index of the study in the array
     const studyIndex = user.studies.findIndex(study => study.id === id);
 

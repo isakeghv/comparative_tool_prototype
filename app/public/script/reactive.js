@@ -25,6 +25,7 @@ export const study = reactive({
     title: null,
     description: null,
     closingMethod: [],
+    thumbnail: null,
     closingLimit: {
         date: '',
         duration: '',

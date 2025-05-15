@@ -18,7 +18,6 @@
 				<button class="settings__button">Delete my account</button>
 			</div>
 
-			<!-- showing the create date instead of start date is temporary -->
 			<template v-else>
 			<StudyCard v-for="study in studies" :key="study.id"
 				@select="(study) => emitSelectStudy(study)"
@@ -33,12 +32,17 @@
 				/>
 			</template>
 		</div>
+		<p class="main__paragraph font-normal" v-if="noStudies">
+			You currently have no studies. <button class="main__button font-normal"
+				@click="createNewStudy()">Get started now!</button>
+		</p>
 	</main>
 </template>
 
 <script setup>
 import { user } from '~/public/script/reactive';
 import { search } from '~/public/script/studySearch';
+import StudyService from '~/services/studyService';
 import ParticipantService from '~/services/participantService';
 import { formatResponses } from '~/utils/responseUtils';
 
@@ -57,6 +61,11 @@ studies.value = computedStudies.value;
 
 const emit = defineEmits(['newStudy', 'selectStudy', 'editStudy', 'deleteStudy']);
 
+const createNewStudy = () =>{
+	const studyID= crypto.randomUUID();
+	emitNewStudy(studyID);
+}
+
 // emit them again to reach `Dashboard` component that handles the showing of dashboard and study editor
 const emitNewStudy = (id) => emit('newStudy', id);
 const emitSelectStudy = (study) => emit('selectStudy', study);
@@ -71,24 +80,29 @@ const mainTitle = computed(() => {
 	return `Viewing ${filter.value}`;
 });
 
-//to return array of studies to display saved in a reactive variable
-// const studies = computed(() => {
-// 	return user.studies;
-// });
+const noStudies = computed(() => !studies.value || studies.value.length === 0)
 
-const studyDuplicate = (originalStudy) => {
-    const clone = JSON.parse(JSON.stringify(originalStudy));
-    clone.id = `${originalStudy.id}_copy_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+const studyDuplicate = async (originalStudy) => {
+	const clone = JSON.parse(JSON.stringify(originalStudy));
+	clone.id = crypto.randomUUID();
 
-    const index = user.studies.findIndex(s => s.id === originalStudy.id);
-    if (index !== -1) {
-        user.studies.splice(index + 1, 0, clone);
-    } else {
-        user.studies.push(clone);
-    }
+	//making sure it is always draft, so published/closed studies are not duplicated
+	clone.status = 'draft';
+
+	const index = user.studies.findIndex(s => s.id === originalStudy.id);
+
+	const createReq = await StudyService.createStudy(clone, user.info._id);
+
+	if (!createReq.created) return console.error('Unable to duplicate study');
+
+	if (index !== -1) {
+		user.studies.splice(index + 1, 0, clone);
+	} else {
+		user.studies.push(clone);
+	}
 };
 
-const searchStudy = (query) =>{
+const searchStudy = (query) => {
 	filter.value = 'all';
 	const results = search(studies.value, query);
 
@@ -130,5 +144,5 @@ const handleExport = async (id, variant) => {
 </script>
 
 <style scoped>
-	@import url("public/style/pages/dashboard/dashboard.scss");
+@import url("public/style/pages/dashboard/dashboard.scss");
 </style>

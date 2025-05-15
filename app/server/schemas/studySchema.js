@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import thumbnail from '../api/thumbnail';
 const { Schema } = mongoose;
 
 // each schema below will be embedded directly into the 'StudySchema' document
@@ -121,13 +122,14 @@ const DemographicSchema = new Schema({
 const StudySchema = new Schema({
 	// new data-generated id
 	id: { type: String, required: true },
+	thumbnail: { type: String },
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'UserProfile',
 		required: true,
 	},
 	customTerms: {
-		request: { type: Boolean, default: false},
+		request: { type: Boolean, default: false },
 		terms: {
 			type: String,
 			maxlength: [10000, 'Consent form exceeds 10000 characters.']
@@ -163,7 +165,7 @@ const StudySchema = new Schema({
 		type: [QuestionSchema],
 		default: [],
 		validate: {
-			validator: function(val) {
+			validator: function (val) {
 				return val.length <= 40;
 			},
 			message: 'A study cannot have more than 40 questions.'
@@ -174,7 +176,7 @@ const StudySchema = new Schema({
 		type: [DemographicSchema],
 		default: [],
 		validate: {
-			validator: function(val) {
+			validator: function (val) {
 				return val.length <= 20;
 			},
 			message: 'Demographics cannot have more than 20 questions'
@@ -193,6 +195,6 @@ const StudySchema = new Schema({
 		type: Date,
 		default: null, // will set when study has been published
 	},
-}); 
+});
 
 export const Study = mongoose.model('Study', StudySchema);

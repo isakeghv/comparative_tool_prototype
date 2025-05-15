@@ -2,58 +2,69 @@
 @use "../../variables/variables" as v;
 
 .participant {
-    &__cont {
-        display: flex;
-        flex-direction: column;
-        min-height: calc(100vh - 4rem);
-        width: 100%;
-        padding: 3rem 5rem;
+  &__cont {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 4rem);
+    width: 100%;
+    padding: 3rem 5rem;
 
-        &--alt {
-            padding: 3rem 5rem 0 5rem;
-        }
+    &--alt {
+      padding: 3rem 5rem 0 5rem;
     }
+  }
 }
 
 .question {
+  width: 100%;
+  height: 100%;
+
+  &__cont {
     width: 100%;
     height: 100%;
 
-    &__cont {
-        width: 100%;
-        height: 100%;
+    &--top {
+      display: flex;
+      flex: 1;
+      height: 75%;
+      border-bottom: v.$borderSolid;
 
-        &--top {
-            display: flex;
-            flex: 1;
-            height: 75%;
-            border-bottom: v.$borderSolid;
-        }
-
-        &--btm {
-            border: v.$borderSolid;
-            flex: 2;
-            height: 25%;
-            padding: 1rem 0;
-            border-right: none;
-            border-left: none;
-        }
+      @media screen and (max-width: 768px) {
+        flex-direction: column-reverse;
+      }
     }
 
-    &__headline {
-        margin-bottom: 0.8rem;
+    &--btm {
+      border: v.$borderSolid;
+      flex: 2;
+      height: 25%;
+      padding: 1rem 0;
+      border-right: none;
+      border-left: none;
+    }
+  }
+
+  &__headline {
+    margin-bottom: 0.8rem;
+  }
+
+  &__button {
+    height: 1.5rem;
+    color: white;
+    background-color: #e61046;
+    border: none;
+    padding: 0 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.1s ease-in-out;
+
+    @media screen and (max-width: 768px) {
+      display: none;
     }
 
-    &__panel {
-        padding: 0.5rem;
-        width: 50%;
-
-        &--left {
-            border-right: v.$borderSolid;
-            padding: 1.5rem 2.5rem;
-        }
+    &:hover {
+      background-color: #f8cece;
     }
-
     &__list {
         display: flex;
         gap: 0.8rem;
@@ -68,6 +79,19 @@
         }
     }
 
+  &__panel {
+    flex: 0 0 0;
+    width: 0;
+    padding: 0.5rem 0;
+    transition: width 0.15s ease-in-out, flex 0.15s ease-in-out,
+      padding 0.15s ease-in-out;
+
+    @media screen and (min-width: 768px) {
+      &--hidden {
+        overflow: hidden;
+      }
+    }
+    }
     
 
     &__instructions{
@@ -75,127 +99,159 @@
             margin-bottom: 1rem;
             font-size: 0.95rem;
     }
+
+    &--display {
+      padding: 0.5rem;
+      flex: 1 0 45%;
+      width: 50%;
+
+      @media screen and (max-width: 768px) {
+        flex: 0 0 50%;
+        width: 100%;
+      }
+    }
+
+    &--wide {
+      flex: 1 0 45%;
+    }
+
+    &--left {
+      padding: 0.5rem;
+      flex: 1 0 45%;
+      border-right: v.$borderSolid;
+      padding: 1.5rem 2.5rem;
+      width: 50%;
+
+      @media screen and (max-width: 768px) {
+        flex: 0 0 50%;
+        padding: 1rem;
+        width: 100%;
+      }
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  &__instructions {
+    color: c.$darkGray;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
 }
 
 .artifact {
-    &__expand {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        aspect-ratio: 16 / 9;
+  &__expand {
+    width: 100%;
+    height: calc(100% - 1.5rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 16 / 9;
 
-        &--img, &--video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        &--embed {
-            width: 100%;
-            height: 100%;
-        }
-
-        &--audio {
-            display: block;
-            width: 80%;
-        } 
+    &--img,
+    &--video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
+
+    &--embed {
+      width: 100%;
+      height: 100%;
+    }
+
+    &--audio {
+      display: block;
+      width: 80%;
+    }
+  }
 }
 
 .drop {
-    &_zone {
-        width: 100%;
-        padding: 0;
-        display: flex;
-        align-items: flex-start;
-        position: relative;
+  &_zone {
+    width: 100%;
+    padding: 0;
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  &__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  &_box {
+    height: 100%;
+    flex: 0 0 10rem;
+    position: relative;
+    padding: 0;
+    border: v.$borderSolid;
+    border-radius: 0.4rem;
+  }
+
+  &_text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    background-color: rgb(235, 235, 235);
+    border-radius: 0.4rem 0.4rem 0 0;
+  }
+
+  &_relative {
+    position: relative;
+    cursor: default;
+    transition: margin 0.1s ease-in-out;
+
+    &:hover {
+      margin: 0 2rem;
+      border-radius: 0;
+      & .artifact__image {
+        border-radius: 0;
+      }
+
+      & .drop__button {
+        width: 2rem;
+        visibility: visible;
+      }
+      & .wrapper__button--radius {
+        border-radius: 0;
+      }
     }
+  }
 
-    &__row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        padding: 1rem;
+  &_container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem;
+
+    &--linear {
+      overflow-x: auto;
+      gap: 0.5rem;
+      height: 100%;
+      top: 0;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      padding: 2.5rem 0 0;
+      left: 0;
+      top: 0;
     }
-
-    &_box {
-        height: 100%;
-        flex: 0 0 10rem;
-        position: relative;
-        padding: 0;
-        border: v.$borderSolid;
-        border-radius: 0.4rem;
-    }
-
-    &_text{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 2rem;
-        background-color: rgb(235, 235, 235);
-        border-radius: 0.4rem 0.4rem 0 0;
-    }
-
-    &_relative{
-        position: relative;
-        cursor: default;
-        transition: margin 0.1s ease-in-out;
-
-        &:hover{
-            margin: 0 2rem;
-            border-radius: 0;
-            & .artifact__image{
-                border-radius: 0;
-            }
-
-            & .drop__button{
-                width: 2rem;
-                visibility: visible;
-            }
-            & .wrapper__button--radius{
-                border-radius: 0;
-            }
-        }
-    }
-
-    &_container {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        height: 100%;
-        align-items: center;
-        justify-content: center;
-        padding: 0.4rem;
-        
-        &--linear{
-            overflow-x: auto;
-            gap: 0.5rem;
-            height: 100%;
-            top: 0;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            padding: 2.5rem 0 0;
-            left: 0;
-            top: 0;
-        }
-
-        &--text{
-            padding: 0.25rem 1rem;
-            justify-content: space-between;
-            height: 2rem;
-        }
-
-        .wrapper {
-            display: none;
-        }
-    }
-
+  }
     &__instruction{
         position: absolute;
         width: 80%;
@@ -207,48 +263,68 @@
         color: c.$gray;
     }
 
-    &__button{
-        position: absolute;
-        height: 100%;
-        top: 0;
-        width: 2rem;
-        background-color: transparent;
-        border: none;
-        visibility: hidden;
-        overflow: hidden;
-        cursor: pointer;
-        transition: width 0.1s ease-in-out, background-color 0.1s ease-in-out;
-        width: 0;
+    &--text {
+      padding: 0.25rem 1rem;
+      justify-content: space-between;
+      height: 2rem;
+    }
 
-        &--left{
-            right: 100%;
-            border-radius: 0.5rem 0 0 0.5rem;
-        }
-        &--right{
-            left: 100%;
-            border-radius: 0 0.5rem 0.5rem 0;
-        }
+    .wrapper {
+      display: none;
     }
-    &_arrow{
-        height: 2rem;
+  }
+
+  &__instruction {
+    position: absolute;
+    width: 80%;
+    transform: translate(-50%, 0);
+    top: 40%;
+    text-align: center;
+    left: 50%;
+  }
+
+  &__button {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    width: 2rem;
+    background-color: transparent;
+    border: none;
+    visibility: hidden;
+    overflow: hidden;
+    cursor: pointer;
+    transition: width 0.1s ease-in-out, background-color 0.1s ease-in-out;
+    width: 0;
+
+    &--left {
+      right: 100%;
+      border-radius: 0.5rem 0 0 0.5rem;
     }
+    &--right {
+      left: 100%;
+      border-radius: 0 0.5rem 0.5rem 0;
+    }
+  }
+  &_arrow {
+    height: 2rem;
+  }
 }
 
 .artifact-container {
-    position: relative;
+  position: relative;
 }
 
 .artifact--selected {
-    outline: c.$cyan 2px solid;
-    border-radius: calc(0.5rem - 1px);
+  outline: c.$cyan 2px solid;
+  border-radius: calc(0.5rem - 1px);
 }
-  
+
 .input-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin: 0.2rem;
-    z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0.2rem;
+  z-index: 2;
 }
 
 .range-slider{
@@ -279,8 +355,8 @@
 }
 
 input[type="range"] {
-    width: 100%;
-  }
+  width: 100%;
+}
 
 // .embed__handle {
 //     width: 100%;

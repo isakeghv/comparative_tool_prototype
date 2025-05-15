@@ -1,5 +1,5 @@
 <template>
-    <div class="preview">
+    <div class="preview" @pointerdown="preventScroll">
         <div class="preview-header">
             <button class="preview-exit" aria-label="Exit preview" @click="showPreview = false">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"

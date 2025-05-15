@@ -14,8 +14,6 @@ export default defineEventHandler(async (e) => {
     const filePath = join(process.cwd(), 'public', ...file.split('/'));
     const filetype = mime.lookup(filePath) || 'application/octet-stream';
 
-    console.log(filetype);
-
     try {
         
         const file = await readFile(filePath);
@@ -23,7 +21,6 @@ export default defineEventHandler(async (e) => {
         return file;
 
     } catch (err) {
-        console.log(`Unable to get image with path: ${filePath}`);
         console.log(err)
         setResponseStatus(e, 404)
         return { found: false, url: null, ok: false }

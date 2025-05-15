@@ -2,9 +2,12 @@
 import { connDb } from '~/server/services/connDb.js';
 import { verifyToken } from '~/server/services/jwt.js';
 import { Participant } from '~/server/schemas/participantSchema';
+import { sanitizer } from '../../../../utils/sanitize';
 
 const getResponsesByStudyId = async (e) => {
-    const studyId = e.context.params?.studyId;
+    const rawID = e.context.params?.studyId;
+
+    const studyId = sanitizer(rawID)
     try {
         // find all participants that answered the study in anscending order, and exclude uneccessary fields
         const participants = await Participant.find(
@@ -15,8 +18,8 @@ const getResponsesByStudyId = async (e) => {
                 __v: 0
             }
         ).sort({ startTime: 1 }).lean();
-        
-        setResponseStatus(200);
+
+        setResponseStatus(e, 200);
         return participants;
     } catch (err) {
         throw new Error('Error fetching participants');

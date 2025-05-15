@@ -2,6 +2,8 @@ import { connDb } from '~/server/services/connDb.js';
 import { verifyToken } from '~/server/services/jwt.js';
 import { Study } from '../../../schemas/studySchema.js';
 import { defineEventHandler, readBody, setResponseStatus } from 'h3';
+import { auth } from '~/server/services/authenticated.js';
+import { sanitizer } from '~/server/utils/sanitize.js';
 
 
 const updateStudyStatus = async (e, data) => {
@@ -17,7 +19,7 @@ const updateStudyStatus = async (e, data) => {
         // validate in the backend as well; first check if the study itself has more than zero questions
         const currentStudy = await Study.findOne({ id: studyId });
         if (!currentStudy) return { updated: false, message: "Study not found." };
-        
+
         if (status === 'ongoing' && currentStudy.questions.length === 0) {
             return {
                 updated: false,
@@ -34,7 +36,7 @@ const updateStudyStatus = async (e, data) => {
         // find study, check if is not equal to 'ongoing', and update status
         const updatedStudy = await Study.findOneAndUpdate(
             { id: studyId, status: { $ne: status } },
-            updateFields, 
+            updateFields,
             { new: true }
         );
 
@@ -58,9 +60,14 @@ const updateStudyStatus = async (e, data) => {
 }
 
 export default defineEventHandler(async (e) => {
+    if (!auth(e)) {
+        setResponseStatus(e, 401)
+        return { message: 'Unauthorized' }
+    }
     try {
         verifyToken(e);
     } catch (err) {
+        setResponseStatus(e, 401)
         return { updated: false, message: "Invalid or missing token.", error: err.message };
     }
 
@@ -71,7 +78,8 @@ export default defineEventHandler(async (e) => {
 
     // check if the request is for status update (/studies/:id/publish), and chang the status to 'ongoing'
     if (method === 'PATCH' && url.endsWith('/status')) {
-        const body = await readBody(e);
+        const rawBody = await readBody(e)
+        const body = sanitizer(rawBody)
         return await updateStudyStatus(e, body);
     }
 });

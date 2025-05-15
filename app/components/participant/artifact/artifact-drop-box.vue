@@ -1,5 +1,5 @@
 <template>
-    <div class="drop_box" @mouseover="mouseover" @mouseleave="mouseleave" @mouseup="mouseup">
+    <div class="drop_box" @mouseover="mouseover" @mouseleave="mouseleave" @mouseup="mouseup" ref="dropboxRef">
         <p class="drop_text">{{ box }}</p>
         <div class="drop_container">
             <p class="drop__instruction font-normal" v-if="!hasArtifact">
@@ -44,6 +44,8 @@ const props = defineProps({
     box: String,
 })
 
+const dropboxRef = ref('');
+
 const classname = ref('artifact__image artifact__image--round')
 
 const hasArtifact = computed(() => {
@@ -51,12 +53,50 @@ const hasArtifact = computed(() => {
 })
 
 const emit = defineEmits(['mouseover', 'mouseleave', 'dropped', 'expand'])
-
-const mouseover = () => emit('mouseover');
-const mouseleave = () => emit('mouseleave');
-const mouseup = () => emit('dropped');
+ 
+const mouseover = () => {
+    emit('mouseover');
+}
+const mouseleave = () => {
+    emit('mouseleave');
+}
+const mouseup = () => {
+    emit('dropped');
+}
 
 const expand = (source, id) => emit('expand', { source, id })
+
+//logic below is for fixing so the drop-box functions on phone (with cursor)
+onMounted(()=>{
+    const pointerup = (e) =>{
+
+        //gets the x and y position of the pointer
+        const x = e.clientX;
+        const y = e.clientY;
+
+        //return if the ref is null: avoid issues
+        if (!dropboxRef.value) return;
+
+        //get rects of drop-box area
+        const rect = dropboxRef.value.getBoundingClientRect();
+
+        //return if rect is null: avoid issues
+        if (!rect) return;
+
+        //get dimensions of drop-box
+        const top = rect.top;
+        const bottom = top + rect.height;
+        const left = rect.left;
+        const right = left + rect.width;
+
+        //collision detection: to make sure pointer is inside the box
+        if (y >= top && y <= bottom && x >= left && x <= right){
+            mouseup();
+        }
+    }
+
+    document.addEventListener('pointerup', pointerup);
+})
 
 </script>
 
