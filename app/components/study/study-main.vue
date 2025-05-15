@@ -120,9 +120,18 @@ const formatResponses = () =>{
     const allResponses = studyResponses.value;
 
     //iterating over each response
-    allResponses.forEach(r => {
+    allResponses.forEach((r, index) => {
+        const allDemoQuestions = r.demographic;
         const allQuestions = r.questions;
+        // add participant numbering for each one
+        r.participant = `${index + 1}`;
 
+        // iterating over each demographic quest to add title
+        allDemoQuestions.forEach(q => {
+            const text = study.demographic.find(sq => sq.id == q.id)?.question;
+            q.question = text;
+        })
+        
         //iterating over each question
         allQuestions.forEach(q =>{
 

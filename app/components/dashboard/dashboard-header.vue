@@ -105,7 +105,6 @@ const trackCurrentArtifacts = () => {
 
 //create logic here to delete from server
 const deleteUploads = async (unused) => {
-
     if (unused && unused.length > 0) {
         const request = await fetch('/api/artifact-delete', {
             method: 'DELETE',

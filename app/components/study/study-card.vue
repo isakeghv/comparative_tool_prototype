@@ -4,7 +4,7 @@
         <!-- just for now -->
         <div alt="thumbnail of study" class="card__img"></div>
         <h3 class="card__title font-medium">{{ title }}</h3>
-        <p class="card__paragraph font-small">Started: {{ formattedStartDate }}</p>
+        <p class="card__paragraph font-small">Updated: {{ formattedStartDate }}</p>
         <button class="card__select" aria-label="Open study" @click="studyEdit(id)"></button>
 
         <div class="popup-container" ref="popupRef">
@@ -28,12 +28,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
-
 const props = defineProps({
     study: Object,
     title: String,
     startDate: String,
+    lastEdited: String,
     id: String,
     status: String,
     filter: String
@@ -70,9 +69,12 @@ const filterDisplay = computed(()=>{
 
 // format the start date to be readable
 const formattedStartDate = computed(() => {
-    if (!props.startDate) return 'N/A';
+    let date = props.lastEdited;
+
+    // just set current date temporary
+    if (!props.lastEdited) date = Date.now();
     
-    return new Date(props.startDate).toLocaleDateString('en-US', {
+    return new Date(date).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
         year: 'numeric'
@@ -106,7 +108,6 @@ const studyExport = (id, format) =>{
     showPopUp.value = false
     emit('export', {id, format});
 }
-
 </script>
 
 <style scoped>

@@ -142,7 +142,6 @@ const StudySchema = new Schema({
 		type: String,
 		maxlength: [3000, 'Description exceeds 3000 characters.']
 	},
-	currentReplies: { type: Number, default: 0 },
 	status: {
 		type: String,
 		enum: ['ongoing', 'completed', 'draft'],
@@ -152,7 +151,11 @@ const StudySchema = new Schema({
 	closingMethod: { type: Array },
 	closingLimit: {
 		date: { type: Date },
-		duration: { type: String },
+		duration: {
+			timestamp: Number,
+			number: Number,
+			unit: String
+		},
 		responses: { type: Number },
 	},
 	desiredResponses: { type: Number },

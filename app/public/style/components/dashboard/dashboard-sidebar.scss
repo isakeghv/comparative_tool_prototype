@@ -29,7 +29,7 @@
     }
 
     &--column {
-        gap: 0.5rem;
+      gap: 0.8rem;
       flex-direction: column;
       position: relative;
     }
@@ -87,7 +87,7 @@
   &__paragraph {
     padding: 0.5rem;
     border: v.$borderSolid;
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
     background-color: white;
     position: absolute;
     top: 2.5rem;
@@ -96,6 +96,7 @@
     transform: translateX(-50%);
     width: 94%;
     animation: paragraphAnimation 0.3s ease-in-out forwards 0.2s;
+    box-shadow: v.$hoverShadow;
   }
 }
 
