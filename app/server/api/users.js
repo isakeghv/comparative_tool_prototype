@@ -3,6 +3,7 @@ import { getCookie, useRuntimeConfig } from "#imports";
 import { UserCredential, UserProfile } from "../schemas/userSchema.js";
 import { Study } from "../schemas/studySchema.js";
 import jwt from "jsonwebtoken";
+import { sanitizer } from '../utils/sanitize.js';
 
 export default defineEventHandler(async (e) => {
 	const token = getCookie(e, "token");
@@ -16,7 +17,9 @@ export default defineEventHandler(async (e) => {
 
 	try {
 		const decoded = jwt.verify(token, process.env.SECRET_JWT);
-		const userId = decoded.userId;
+		const rawID = decoded.userId;
+
+		const userId = sanitizer(rawID);
 		// get the userCredential account
 		const user = await UserCredential.findOne({ _id: userId }).lean();
 

@@ -4,6 +4,7 @@ import { existsSync, mkdirSync } from "fs";
 import { join, extname } from "path";
 import { randomUUID } from 'crypto';
 import { fileTypeFromBuffer } from "file-type";
+import { auth } from "../services/authenticated";
 
 const allowedExtensions = ["jpg", "jpeg", "png", "pdf", "mp3", "mp4",]; 
 // 10MB file limit
@@ -11,6 +12,11 @@ const maxFileSize = 10 * 1024 * 1024;
 
 export default defineEventHandler(async (e) => {
   const folderPath = join(process.cwd(), "public", "artifacts");
+
+  if (!auth(e)) {
+    setResponseStatus(e, 401);
+    return {success: false, code: 401, message: 'Not logged in'};
+  }
 
   //checks that it is able to locate the folder it should upload the file to
   const folderExists = existsSync(folderPath);

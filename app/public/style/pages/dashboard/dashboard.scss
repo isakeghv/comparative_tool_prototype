@@ -5,7 +5,7 @@
     display: flex;
 }
 
-button{
+button {
     cursor: pointer;
 }
 
@@ -27,6 +27,24 @@ button{
 
     &__headline {
         margin-bottom: 1.4rem;
+    }
+
+    &__paragraph{
+
+    }
+    &__button{
+        border: none;
+        background-color: transparent;
+        color: c.$blueSecondary-active;
+        text-decoration: underline;
+        transition: color 0.15s ease-in-out;
+
+        &:hover{
+            color: c.$blueSecondary-hover;
+        }
+        &:active{
+            color: c.$blueSecondary;
+        }
     }
 }
 
@@ -69,4 +87,16 @@ button{
             cursor: pointer;
         }
     }
+}
+
+.settings{
+    &__button{
+    background-color: c.$white-active;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    &:hover{
+        background-color: c.$lightRed;
+    }
+}
+
 }

@@ -1,19 +1,22 @@
 <template>
 	<section class="question__cont">
 		<div class="question__cont--top">
-			<div class="question__panel question__panel--left">
+			<div class="question__panel question__panel--left" :class="{'question__panel--wide': !selectedSource}">
 				<h2 class="question__headline font-h5 font-semi">{{ currentQuestion.question }}</h2>
 				<p class="question__instructions font-body" v-if="instructionText">
 					{{ instructionText }}
 				</p>
-				<div class="question__list">
+
+				<div class="question__list" :class="{ 'question__list--range': responseType === 'range' }">
 
 					<!-- Radio buttons -->
-					<label v-if="responseType === 'radio'" v-for="artifact in artifactsArr" :key="artifact.id" class="question__option--radio">
+					<label v-if="responseType === 'radio'" v-for="artifact in artifactsArr" :key="artifact.id"
+						class="question__option--radio">
 						<div class="artifact-container artifact__borderless">
-							<input type="radio" :name="currentQuestion.id" :value="artifact.id" v-model="selectedArtifact"
-									class="input-overlay"/>
-							<ArtifactMedia :artifact="artifact" :responseType="responseType" @selectMedia="selectMedia" :class="{ 'artifact--selected': participantAnswer[currentQuestion.id]?.includes(artifact.id) }"/>
+							<input type="radio" :name="currentQuestion.id" :value="artifact.id"
+								v-model="selectedArtifact" class="input-overlay" />
+							<ArtifactMedia :artifact="artifact" :responseType="responseType" @selectMedia="selectMedia"
+								:class="{ 'artifact--selected': participantAnswer[currentQuestion.id]?.includes(artifact.id) }" />
 							<div class="wrapper wrapper--zero">
 								<ArtifactExpandButton @expand="() => selectMedia(artifact.source, artifact.id)" />
 							</div>
@@ -21,21 +24,25 @@
 					</label>
 
 					<!-- Checkbox -->
-					<label v-if="responseType === 'checkbox'"  v-for="artifact in artifactsArr" :key="artifact.id" class="question__options--horizontal">
-  						<div class="artifact-container artifact__borderless">
-							<input type="checkbox" :value="artifact.id" :checked="participantAnswer[currentQuestion.id]?.some(item => item.id === artifact.id)"
-								@change="toggleCheckbox(currentQuestion.id, artifact.id)" class="input-overlay"/>
-							<ArtifactMedia :artifact="artifact" :responseType="responseType" @selectMedia="selectMedia" :class="{ 'artifact--selected': participantAnswer[currentQuestion.id]?.some(item => item.id === artifact.id) }" />
+					<label v-if="responseType === 'checkbox'" v-for="artifact in artifactsArr" :key="artifact.id"
+						class="question__options--horizontal">
+						<div class="artifact-container artifact__borderless">
+							<input type="checkbox" :value="artifact.id"
+								:checked="participantAnswer[currentQuestion.id]?.some(item => item.id === artifact.id)"
+								@change="toggleCheckbox(currentQuestion.id, artifact.id)" class="input-overlay" />
+							<ArtifactMedia :artifact="artifact" :responseType="responseType" @selectMedia="selectMedia"
+								:class="{ 'artifact--selected': participantAnswer[currentQuestion.id]?.some(item => item.id === artifact.id) }" />
 							<div class="wrapper wrapper--zero">
 								<ArtifactExpandButton @expand="() => selectMedia(artifact.source, artifact.id)" />
 							</div>
-  						</div>
+						</div>
 					</label>
 
 					<!-- linear -->
 					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id" :responseType="responseType"
 						:artifact="artifact" @selectMedia="selectMedia" @moving="(artifact) => linear_moving(artifact)"
-						@dropped="linear_drop(currentQuestion.id, currentQuestion.question)" v-if="responseType === 'linear'" />
+						@dropped="linear_drop(currentQuestion.id, currentQuestion.question)"
+						v-if="responseType === 'linear'" />
 
 					<!-- drop -->
 					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id" :responseType="responseType"
@@ -43,9 +50,11 @@
 						v-if="responseType === 'drop'" />
 
 					<!-- range -->
+
 					<ArtifactRange
 						v-if="responseType === 'range'"
-						:question-id="currentQuestion.id"
+						:question="currentQuestion"
+						@selectMedia="selectMedia"
 						:artifacts="artifactsArr"
 						@update:responses="val => updateResponses(currentQuestion.id, val)"
 					/>
@@ -53,8 +62,10 @@
 				</div>
 			</div>
 
-			<div class="question__panel">
-				<ArtifactPreview :selectedSource="selectedSource" :selectedId="selectedId" :selectedRawSource="selectedRawSource"/>
+			<div class="question__panel" :class="{'question__panel--display': selectedSource, 'question__panel--hidden': !selectedSource}">
+				<button class="question__button" @click="selectedSource = null">Exit</button>
+				<ArtifactPreview :selectedSource="selectedSource" :selectedId="selectedId"
+					:selectedRawSource="selectedRawSource" />
 			</div>
 		</div>
 
@@ -62,12 +73,14 @@
 			:artifacts="participantAnswer[currentQuestion.id]" :questionid="currentQuestion.id"
 			v-if="responseType === 'linear'" :labels="currentQuestion.linear"
 			@moveup="(index) => linear_orderUp(currentQuestion.id, index)"
-			@movedown="(index) => linear_orderDown(currentQuestion.id, index)" @insertAt="(index) => linear_insertAt = index"
-			@expand="(artifact) => selectMedia(artifact.source, artifact.id)"/>
+			@movedown="(index) => linear_orderDown(currentQuestion.id, index)"
+			@insertAt="(index) => linear_insertAt = index"
+			@expand="(artifact) => selectMedia(artifact.source, artifact.id)" />
 		<div v-if="currentQuestion.responseType === 'drop'" class="drop__row">
 			<ArtifactDropBox @mouseover="box_mouseover()" @mouseleave="box_mouseleave()"
-				@dropped="box_drop(currentQuestion.id, index, box, currentQuestion.question)" :box="box" v-if="responseType === 'drop'"
-				v-for="(box, index) in  currentQuestion.drop.dropBox.filter(box => box !== '')" :key="index"
+				@dropped="box_drop(currentQuestion.id, index, box, currentQuestion.question)" :box="box"
+				v-if="responseType === 'drop'"
+				v-for="(box, index) in currentQuestion.drop.dropBox.filter(box => box !== '')" :key="index"
 				:artifact="participantAnswer[currentQuestion.id]?.[index]"
 				@expand="(artifact) => selectMedia(artifact.source, artifact.id)" />
 		</div>
@@ -109,28 +122,29 @@ const randOrder = (arr) => {
 	return arr.sort(() => Math.random() - 0.5);
 }
 
-
 const getFile = async (source) => {
-    const request = await fetch(`/api/serve-file?filename=${encodeURIComponent(source)}`);
-
-    if (!request.ok) return null;
-
-    const raw = await request.blob();
-
-    return URL.createObjectURL(raw);
+	const request = await fetch(`/api/serve-file?filename=${encodeURIComponent(source)}`);
+	if (!request.ok) return null;
+	const raw = await request.blob();
+	return URL.createObjectURL(raw);
 }
 
 const selectMedia = async (source, id) => {
+
+	const newSource = await getFile(source);
+
+	if (!newSource) return alert("Sorry, we're experiencing issues fetching the requested data.");
+
 	selectedRawSource.value = source;
-	selectedSource.value = await getFile(source);
+	selectedSource.value = newSource;
 	selectedId.value = id;
 };
 
 const toggleCheckbox = (questionId, artifactId) => {
-  const current = participantAnswer[questionId] || [];
-  
-  // check if the artifact already exists in the current selection
-  const artifactExists = current.some(item => item.id === artifactId);
+	const current = participantAnswer[questionId] || [];
+
+	// check if the artifact already exists in the current selection
+	const artifactExists = current.some(item => item.id === artifactId);
 
 	if (artifactExists) {
 		// remove if unchecked to avoid adding the same artifact
@@ -146,12 +160,20 @@ watch(() => props.questionIndex, () => {
 	selectedId.value = '';
 }, { deep: true, immediate: true });
 
+const updateResponses = (questionId, responses) => {
+	participantAnswer[questionId] = responses.map(r => ({
+		id: r.id,
+		value: r.value,
+	}));
+};
+
+
 // check if the required question has been answered
 const validateRequiredQuestion = () => {
 	const isRequired = currentQuestion.value.required;
 	let unansweredQuestion = participantAnswer[currentQuestion.value.id];
 
-    // convert to Object.keys() if answers is stored as an object
+	// convert to Object.keys() if answers is stored as an object
 	if (unansweredQuestion && typeof unansweredQuestion === 'object') {
 		unansweredQuestion = Object.keys(unansweredQuestion);
 	}
@@ -204,11 +226,9 @@ const instructionText = computed(() => {
 			return '';
 	}
 });
-
-
 </script>
 
 <style scoped>
-@import url('public/style/components/study/study-main.scss');
-@import url('public/style/components/participant/participant-question.scss');
+	@import url('public/style/components/study/study-main.scss');
+	@import url('public/style/components/participant/participant-question.scss');
 </style>

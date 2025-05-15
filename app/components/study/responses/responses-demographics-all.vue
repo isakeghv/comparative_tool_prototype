@@ -134,9 +134,10 @@ const demoAnswerCounts = computed(() => {
     const counts = {};
     formattedDemoData.value.forEach((q) => {
         // remove empty radio options
-        const filteredOptions = q.responseFormat.options.filter(option => option.trim() !== '');
+        // if (!q.responseFormat.options)
 
         if (q.responseType === 'radio') {
+            const filteredOptions = q.responseFormat.options.filter(option => option.trim() !== '');
             counts[q.id] = countAnswers(q.answers, filteredOptions);
         }
     });

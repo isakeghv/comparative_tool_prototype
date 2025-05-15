@@ -7,6 +7,7 @@ import { connDb } from '~/server/services/connDb.js';
 import { UserCredential } from '~/server/schemas/userSchema.js';
 import { checkRateLimit } from '~/server/services/rateLimiter.js';
 import { $fetch } from 'ofetch';
+import { sanitizer } from '../utils/sanitize'
 
 // access runtime config variables
 const config = useRuntimeConfig();
@@ -81,7 +82,9 @@ export async function loginLogic(event) {
         return { isValid: false, message: 'Unable to connect to database' }
     }
 
-    const body = await readBody(event);
+    const rawBody = await readBody(event);
+
+    const body = sanitizer(rawBody);
 
     if (!body) {
         setResponseStatus(event, 401)
@@ -126,7 +129,7 @@ export async function loginLogic(event) {
         return { isValid: false, message: "Incorrect email or password." }
     }
 
-    if (rawEmail.length >= 100 || rawPassword.length >= 100){
+    if (rawEmail.length >= 100 || rawPassword.length >= 100) {
         setResponseStatus(event, 401)
         return { isValid: false, message: "Email or password is too long" }
     }

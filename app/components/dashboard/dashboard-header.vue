@@ -6,18 +6,23 @@
         </p>
         <div class="header__container" v-if="study.id">
             <div class="header__buttons">
-                <button v-if="!isDisabled" class="header__button" data-tooltip="Save" @click="saveStudy()" id="header-save-btn">
+                <button v-if="!isDisabled" class="header__button" data-tooltip="Save" @click="saveStudy()"
+                    id="header-save-btn">
                     <svg class="header__icon" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Z" />
                     </svg>
                 </button>
-                <button v-if="isDisabled" class="header__button" data-tooltip="Export">
+                <button v-if="isDisabled" class="header__button" data-tooltip="Export" @click="showExports = !showExports">
                     <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path
                             d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
                     </svg>
                 </button>
+                <div class="header__absolute" v-if="showExports">
+                    <button class="export__button" @click="exportResponses('json')">Export JSON</button>
+                    <button class="export__button" @click="exportResponses('csv')">Export CSV</button>
+                </div>
                 <button class="header__button" data-tooltip="Preview" @click="showPreview = true">
                     <svg class="header__icon" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -27,16 +32,16 @@
                 <DashboardUndoRedo v-if="!isDisabled" />
                 <DashboardLink :study="study" />
             </div>
-            <button v-if="!isDisabled" class="header__btn header__btn--publish font-semi font-normal" id="header-publish-btn"
-                @click="setStudyStatus('ongoing')" :disabled="isCreatingStudy && !isEditingStudy">Publish</button>
+            <button v-if="!isDisabled" class="header__btn header__btn--publish font-semi font-normal"
+                id="header-publish-btn" @click="setStudyStatus('ongoing')"
+                :disabled="isCreatingStudy && !isEditingStudy">Publish</button>
             <button v-if="study && (study.status === 'ongoing' || study.status === 'completed')"
                 class="header__btn header__btn--publish header__btn--toggle font-semi font-normal"
-                id="header-btn-responses"
-                @click="showResponses = !showResponses">{{ showResponses ? 'Hide' : 'Show' }} responses
+                id="header-btn-responses" @click="showResponses = !showResponses">{{ showResponses ? 'Hide' : 'Show' }}
+                responses
             </button>
             <button v-if="study && study.status === 'ongoing'"
-                class="header__btn header__btn--close font-semi font-normal"
-                @click="setStudyStatus('completed')">Close
+                class="header__btn header__btn--close font-semi font-normal" @click="setStudyStatus('completed')">Close
             </button>
         </div>
         <slot></slot>
@@ -49,6 +54,8 @@ import StudyService from '~/services/studyService';
 import { user, study, configs, currentConfigIndex, allUploadedArtifacts, initialStudy, showResponses, showPreview, errorQuestions, errorMsgs } from '~/public/script/reactive';
 import { compareStudies } from '~/utils/studyUtils';
 import { validateStudy, validateDemographics, removeErr } from '@/utils/studyValidator';
+import { updateStudyStatus } from '~/services/studyService';
+import ParticipantService from '~/services/participantService';
 
 const isDisabled = inject('disabled', ref(false));
 
@@ -58,6 +65,7 @@ const props = defineProps({
     isCreatingStudy: Boolean
 })
 
+const showExports = ref(false);
 //event to emit in case the study was unable to save
 const emit = defineEmits(['unableSave', 'update:isCreatingStudy']);
 // need to check if publish button should be disabled or not
@@ -85,6 +93,26 @@ const updateSaveHistory = () => {
     });
 };
 
+const exportResponses = async (variant) => {
+    showExports.value = false;
+
+    const id = study.id;
+
+    const responses = await ParticipantService.getParticipants(id);
+	//console.log(study)
+	const formatedRes = formatResponses(study, responses)
+
+	if (!formatedRes) return alert("Unable to export responses");
+
+	// console.log(formatedRes)
+
+
+	// console.log(responses);
+	if (variant === 'json') downloadJson(study, formatedRes);
+
+	if (variant === 'csv') downloadCsv(study, formatedRes);
+}
+
 const trackCurrentArtifacts = () => {
     const currentUsedArtifacts = [];
     const unusedArtifact = []
@@ -105,12 +133,11 @@ const trackCurrentArtifacts = () => {
 
 //create logic here to delete from server
 const deleteUploads = async (unused) => {
-
     if (unused && unused.length > 0) {
         const request = await fetch('/api/artifact-delete', {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(unused)
+            body: JSON.stringify({ artifacts: unused, studyID: study.id, userID: user.info._id })
         })
 
         if (!request.ok) return console.error('Unable to delete unused artifacts');
@@ -126,7 +153,6 @@ const localStorageCleanup = () => {
 const saveStudy = async () => {
     // compare the two study states to see if there has been no changes
     const noChanges = compareStudies(study, initialStudy);
-    console.log('has no changes happened?', noChanges);
 
     //So when "configs" is saved, used cannot undo/redo again: 
     // - because artifacts might get deleted when saving
@@ -136,10 +162,9 @@ const saveStudy = async () => {
     //this has to be above returning if "noChanges", because someone might upload, then remove an image.
     // - If returning before this runs, it wont delete from the server
     deleteUploads(trackCurrentArtifacts())
-    
+
     // returning if no changes have been made
     if (noChanges) return;
-    console.log('props.icCreatingStudy', props.isCreatingStudy);
 
     //checks if user already has a study with the selected id
     const studyAlreadyExists = user.studies.find(us => us.id === study.id)
@@ -172,8 +197,6 @@ const saveStudy = async () => {
             // pass in the data from the `study` reactive variable and the user id as a ref
             const newStudy = await StudyService.createStudy(study, user.info._id);
 
-            console.log(newStudy);
-
             if (newStudy && newStudy.study) {
                 localStorageCleanup();
                 user.studies.push(JSON.parse(JSON.stringify(newStudy.study)));
@@ -181,17 +204,17 @@ const saveStudy = async () => {
                 // toggle it off by emiting the updated boolean to parent
                 emit('update:isCreatingStudy', false);
 
-            // first update the tracking of the initial and current study
-            updateSaveHistory();
+                // first update the tracking of the initial and current study
+                updateSaveHistory();
 
-        } else emit('unableSave');
+            } else emit('unableSave');
 
-        return;
-    } else if (!noChanges) {
-        // if changes have happened, send a PUT request with the study data as the body
-        const updatedStudy = await StudyService.updateStudy(study.id, study);
+            return;
+        } else if (!noChanges) {
+            // if changes have happened, send a PUT request with the study data as the body
+            const updatedStudy = await StudyService.updateStudy(study.id, study);
 
-        if (updatedStudy && updatedStudy.study) {
+            if (updatedStudy && updatedStudy.study) {
                 localStorageCleanup();
 
                 // find index of the study that is currently in progress and display correct information if changes have happened to UI w/o reloading
@@ -199,30 +222,29 @@ const saveStudy = async () => {
 
                 // first update the tracking of the initial and current study
                 updateSaveHistory();
-        } else {
-            console.log(updatedStudy, updatedStudy.study);
-            emit('unableSave');
-        }
-            return;
-    } else if (study && !noChanges) {
-        // if changes have happened, send a PUT request with the study data as the body
-        const updatedStudy = await StudyService.updateStudy(study.id, study);
-
-        if (updatedStudy && updatedStudy.study) {
-            // find index of the study that is currently in progress and display correct information if changes have happened to UI w/o reloading
-            const studyIndex = user.studies.findIndex(study => study.id === updatedStudy.study.id);
-
-            // first update the tracking of the initial and current study
-            updateSaveHistory();
-
-            // if updatedStudy id is found within user.studies
-            if (studyIndex !== -1) {
-                user.studies[studyIndex] = JSON.parse(JSON.stringify(updatedStudy.study));
+            } else {
+                emit('unableSave');
             }
-        } else {
-            console.log('Unable to save updated study', updatedStudy, updatedStudy.study);
-            emit('unableSave');
-        }
+            return;
+        } else if (study && !noChanges) {
+            // if changes have happened, send a PUT request with the study data as the body
+            const updatedStudy = await StudyService.updateStudy(study.id, study);
+
+            if (updatedStudy && updatedStudy.study) {
+                // find index of the study that is currently in progress and display correct information if changes have happened to UI w/o reloading
+                const studyIndex = user.studies.findIndex(study => study.id === updatedStudy.study.id);
+
+                // first update the tracking of the initial and current study
+                updateSaveHistory();
+
+                // if updatedStudy id is found within user.studies
+                if (studyIndex !== -1) {
+                    user.studies[studyIndex] = JSON.parse(JSON.stringify(updatedStudy.study));
+                }
+            } else {
+                console.error('Unable to save updated study');
+                emit('unableSave');
+            }
             return;
         }
     } catch (error) {
@@ -257,7 +279,7 @@ const setStudyStatus = async (status) => {
     // if study has zero question, emit reason and return
     if (study.questions.length === 0) {
         return emit('unableSave', { reason: 'noQuestions' });
-    }  
+    }
 
     // call the validation functions that only validate before publishing a study
     const invalidDemo = validateDemographics(study);
@@ -267,7 +289,7 @@ const setStudyStatus = async (status) => {
         // check here due to the check is part of the 'publish' validation        
         if (invalidDemo) {
             errorMsgs.push('demographics');
-            return emit('unableSave', { reason: 'demographics'});
+            return emit('unableSave', { reason: 'demographics' });
         } else {
             removeErr(true, 'demographics');
         }
@@ -276,7 +298,11 @@ const setStudyStatus = async (status) => {
     }
 
     try {
-        const updatedStudy = await StudyService.updateStudyStatus(study.id, status);
+        const request = await updateStudyStatus(study.id, status);
+
+        if (!request.success) return console.error('unable publish study')
+
+        const updatedStudy = await request.result;
 
         // update status, set disabled to true; insert the status for the client-side as well
         if (updatedStudy.updated) {
@@ -296,5 +322,5 @@ const setStudyStatus = async (status) => {
 </script>
 
 <style scoped>
-    @import url('public/style/components/dashboard/dashboard-header.scss');
+@import url('public/style/components/dashboard/dashboard-header.scss');
 </style>

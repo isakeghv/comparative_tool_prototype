@@ -1,16 +1,17 @@
 import { connDb } from '~/server/services/connDb.js';
 import { verifyToken } from '~/server/services/jwt.js';
 import { Participant } from "../../schemas/participantSchema";
+import { sanitizer } from '../../utils/sanitize';
 
-const createParticipant = async (studyId) => {
+const createParticipant = async (studyId, e) => {
     try {
         const session = new Participant({
             study: studyId,
         });
-        
+
         await session.save();
- 
-        setResponseStatus(201);
+
+        setResponseStatus(e, 201);
         return { found: true, message: 'Participant session created successfully.', id: session._id };
     } catch (err) {
         return { found: false, message: 'Issue occurred while creating participant session.', error: err.message };
@@ -26,6 +27,7 @@ export default defineEventHandler(async (e) => {
 
     if (method === 'POST') {
         const { study } = await readBody(e);
-        return await createParticipant(study);
+        const cleanedStudy = sanitizer(study);
+        return await createParticipant(cleanedStudy, e);
     }
 });

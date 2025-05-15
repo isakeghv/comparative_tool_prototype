@@ -8,7 +8,7 @@
         </span>
         <p class="search__paragraph font-normal" v-if="showInfo">
             Search to find a specific study. You can search by study title, description, status
-            (draft, ongoing, completed), question and artifact id.
+            (draft, ongoing, completed), question and artifact ID.
         </p>
         <input type="search" name="" id="study_search_inp" class="search__input font-normal" v-model="inputmodel"
             @input="search()">

@@ -8,39 +8,9 @@
                 </svg>
             </button>
         </div>
-        <div v-if="isDisabled" class="exports__cont no-border">
-            <div class="exports__options">
-                <a href="#" @click="downloadJson()">Export JSON</a>
-                <a href="#" @click="exportData()">Export CSV</a>
-            </div>
-        </div>
     </div>
 </template>
 
-<script setup>
-import { showResponses, responses, study } from '~/public/script/reactive';
-const isDisabled = inject('disabled');
-const props = defineProps({
-});
-
-const emit = defineEmits(['toggle']);
-
-const downloadJson = () => {
-    if (!responses.value) return console.error('No data to download')
-    const filename = `${study.title} - responses.json`;
-
-    const blob = new Blob([JSON.stringify(responses.value, null, 2)], { type: 'application/json' })
-    const anchor = document.createElement('a');
-    anchor.href = URL.createObjectURL(blob);
-    anchor.download = `${filename}`;
-    anchor.click();
-}
-
-const exportData = (downloadMethod) => {
-    console.log('am exporting to mars!!!')
-}
-</script>
-
 <style scoped>
-@import url('public/style/components/study/study-aside.scss');
+    @import url('public/style/components/study/study-aside.scss');
 </style>
