@@ -42,15 +42,16 @@
                     </svg>
                 </div>
             </button>
-        </button>
+        </div>
         <div class="popup" v-if="showPopUp">
             <!-- only show 'edit' button if study is a draft -->
             <button v-if="status === 'draft'" class="popup__button font-normal" @click="studyEdit(id)">Edit</button>
             <button class="popup__button font-normal" @click="studyDelete(id)" id="popup-delete-btn">Delete</button>
             <button class="popup__button font-normal" @click="studyDuplicate(study)">Duplicate</button>
-            <button v-if="status !== 'draft'" class="popup__button font-normal" @click="studyExport(study.id, 'json')">Export JSON</button>
-            <button v-if="status !== 'draft'" class="popup__button font-normal"  @click="studyExport(study.id, 'csv')">Export CVS</button>
-         </div>
+            <button v-if="status !== 'draft'" class="popup__button font-normal"
+                @click="studyExport(study.id, 'json')">Export JSON</button>
+            <button v-if="status !== 'draft'" class="popup__button font-normal"
+                @click="studyExport(study.id, 'csv')">Export CVS</button>
         </div>
     </div>
 </template>
@@ -125,7 +126,7 @@ const formattedStartDate = computed(() => {
 
     // just set current date temporary
     if (!props.lastEdited) date = Date.now();
-    
+
     return new Date(date).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
@@ -156,7 +157,7 @@ const studyDuplicate = (study) => {
 
 
 //emitting study id and format with "export" event
-const studyExport = (id, format) =>{
+const studyExport = (id, format) => {
     console.log(id, format)
     showPopUp.value = false
     emit('export', id, format);

@@ -24,6 +24,7 @@
     height: 100%;
 
     &--top {
+      width: 100%;
       display: flex;
       flex: 1;
       height: 75%;
@@ -65,19 +66,26 @@
     &:hover {
       background-color: #f8cece;
     }
-    &__list {
-        display: flex;
-        gap: 0.8rem;
-        flex-wrap: wrap;
+  }
+  &__list {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
 
-        &--range {
-            display: flex;
-            gap: 0.8rem;
-            max-height: 420px;
-            overflow-y: auto;
-            flex: 1;
-        }
+    &--range {
+      display: flex;
+      gap: 0.8rem;
+      max-height: 420px;
+      overflow-y: auto;
+      flex: 1;
     }
+  }
+
+  &__instructions {
+    color: c.$darkGray;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
 
   &__panel {
     flex: 0 0 0;
@@ -90,14 +98,6 @@
       &--hidden {
         overflow: hidden;
       }
-    }
-    }
-    
-
-    &__instructions{
-            color: c.$darkGray;
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
     }
 
     &--display {
@@ -112,6 +112,7 @@
     }
 
     &--wide {
+      width: 50%;
       flex: 1 0 45%;
     }
 
@@ -252,27 +253,28 @@
       top: 0;
     }
   }
-    &__instruction{
-        position: absolute;
-        width: 80%;
-        transform: translate(-50%, 0);
-        top: 40%;
-        text-align: center;
-        left: 50%;
-        z-index: -1;
-        color: c.$gray;
-    }
-
-    &--text {
-      padding: 0.25rem 1rem;
-      justify-content: space-between;
-      height: 2rem;
-    }
-
-    .wrapper {
-      display: none;
-    }
+  &__instruction {
+    position: absolute;
+    width: 80%;
+    transform: translate(-50%, 0);
+    top: 40%;
+    text-align: center;
+    left: 50%;
+    z-index: -1;
+    color: c.$gray;
   }
+
+  &--text {
+    padding: 0.25rem 1rem;
+    justify-content: space-between;
+    height: 2rem;
+  }
+}
+
+.wrapper {
+  z-index: 2;
+  height: 2rem;
+  width: 2rem;
 
   &__instruction {
     position: absolute;
@@ -290,11 +292,10 @@
     width: 2rem;
     background-color: transparent;
     border: none;
-    visibility: hidden;
     overflow: hidden;
     cursor: pointer;
+    background-color: c.$white;
     transition: width 0.1s ease-in-out, background-color 0.1s ease-in-out;
-    width: 0;
 
     &--left {
       right: 100%;
@@ -327,31 +328,32 @@
   z-index: 2;
 }
 
-.range-slider{
-    display: flex;
-    // align-items: left;
-    gap: 10px;
-    width: 100%;
-    padding-inline-end: 1.6rem;
+.range-slider {
+  display: flex;
+  // align-items: left;
+  gap: 10px;
+  width: 100%;
+  padding-inline-end: 1.6rem;
 }
 
 .range {
-    &__labels, &__numbers{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        color: c.$black;
-        font-size: 0.85rem;
-    }
+  &__labels,
+  &__numbers {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: c.$black;
+    font-size: 0.85rem;
+  }
 
-    &__slider{
-        display: flex;
-        gap: 20px;
-    }
+  &__slider {
+    display: flex;
+    gap: 20px;
+  }
 
-    &__selected{
-        font-size: 0.85rem;
-    }
+  &__selected {
+    font-size: 0.85rem;
+  }
 }
 
 input[type="range"] {

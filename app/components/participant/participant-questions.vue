@@ -1,7 +1,7 @@
 <template>
 	<section class="question__cont">
 		<div class="question__cont--top">
-			<div class="question__panel question__panel--left">
+			<div class="question__panel question__panel--left" :class="{'question__panel--wide': !selectedSource}">
 				<h2 class="question__headline font-h5 font-semi">{{ currentQuestion.question }}</h2>
 				<p class="question__instructions font-body" v-if="instructionText">
 					{{ instructionText }}
@@ -62,7 +62,7 @@
 				</div>
 			</div>
 
-			<div :class="{'question__panel--display': selectedSource, 'question__panel--hidden': !selectedSource}">
+			<div class="question__panel" :class="{'question__panel--display': selectedSource, 'question__panel--hidden': !selectedSource}">
 				<button class="question__button" @click="selectedSource = null">Exit</button>
 				<ArtifactPreview :selectedSource="selectedSource" :selectedId="selectedId"
 					:selectedRawSource="selectedRawSource" />
