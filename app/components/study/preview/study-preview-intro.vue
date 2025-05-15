@@ -34,7 +34,7 @@
 			</div>
 		</section>
 		<div>
-			<button @click="handleStart" :disabled="!isChecked" class="participant__button participant__button--start font-small font-semi">Start</button>
+			<button @click="handleStart" class="participant__button participant__button--start font-small font-semi">Start</button>
 			<div v-if="showPopup" class="overlay" @click="showPopup = false"></div>
 		</div>
 	</main>

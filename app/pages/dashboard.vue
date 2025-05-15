@@ -161,7 +161,6 @@ onMounted(() => {
     sessionStorage.removeItem('participantNum');
     sessionStorage.removeItem('selectedView');
 });
-
 </script>
 
 <style scoped>

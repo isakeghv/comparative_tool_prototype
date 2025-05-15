@@ -25,12 +25,13 @@
 				@edit="(study) => emitEditStudy(study)"
 				@delete="(study) => emitDeleteStudy(study)"
 				@duplicate="(study) => studyDuplicate(study)" :study="study" :status="study.status" :filter="filter"
-				@export="(study) => console.log(study)"
+				@export="(id, format) => handleExport(id, format)"
 				:id="study.id"
 				:title="study.title"
 				:startDate="study.publishedAt"
 				:lastEdited="study.lastEdited"
 				/>
+			</template>
 		</div>
 	</main>
 </template>
@@ -38,6 +39,8 @@
 <script setup>
 import { user } from '~/public/script/reactive';
 import { search } from '~/public/script/studySearch';
+import ParticipantService from '~/services/participantService';
+import { formatResponses } from '~/utils/responseUtils';
 
 //Setting variable to store which filter to use for which studies to display. Setting default to 'all' so all
 //studies are displayed as default. This is passed to "StudyBlock" with the :filter attr
@@ -104,6 +107,26 @@ const resetToStudies = () => {
 	showSettings.value = false; // Reset to studyCard when false
 };
 
+const handleExport = async (id, variant) => {
+	// console.log(variant);
+	// console.log(study);
+
+	// fetch all responses, and store in `studyResponses` ref
+	const responses = await ParticipantService.getParticipants(id);
+	const study = user.studies.find(s => s.id === id);
+	//console.log(study)
+	const formatedRes = formatResponses(study, responses)
+
+	if (!formatedRes) return alert("Unable to export responses");
+
+	// console.log(formatedRes)
+
+
+	// console.log(responses);
+	if (variant === 'json') downloadJson(study, formatedRes);
+
+	if (variant === 'csv') downloadCsv(study, formatedRes);
+}
 </script>
 
 <style scoped>

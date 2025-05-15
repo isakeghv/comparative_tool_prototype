@@ -29,6 +29,14 @@
   						</div>
 					</label>
 
+					<!-- range -->
+					<ArtifactRange
+						v-if="responseType === 'range'"
+						:question="currentQuestion"
+						@selectMedia="selectMedia"
+						:artifacts="artifactsArr"
+					/>
+
 					<!-- linear -->
 					<ArtifactDisplay v-for="artifact in artifactsArr" :key="artifact.id" :responseType="responseType"
 						:artifact="artifact" @selectMedia="selectMedia" @moving="(artifact) => linear_moving(artifact)"

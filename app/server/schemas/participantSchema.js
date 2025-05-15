@@ -15,6 +15,9 @@ const QuestionSchema = new Schema({
             },
             label: {
                 type: String
+            },
+            value: {
+                type: String
             }
         }
     ]

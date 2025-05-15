@@ -115,7 +115,6 @@ const sendForm = async () => {
         participantResponse.questions[question.id] = question.value;
     })
 
-
     // also need to map the demographic queestions
     const demographic = Object.entries(participantAnswer.demographic).map(([id, demographicAnswer]) => {
         return { id: id, answer: toRaw(demographicAnswer) };
