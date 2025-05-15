@@ -2,6 +2,7 @@ import { connDb } from '~/server/services/connDb.js';
 import { verifyToken } from '~/server/services/jwt.js';
 import { Study } from '../../../schemas/studySchema.js';
 import { auth } from '~/server/services/authenticated.js';
+import { deleteartifact } from '~/server/services/deleteartifacts.js';
 
 // get study by its id, and populate the study with the retrieved data
 const getStudy = async (e) => {
@@ -59,10 +60,35 @@ const updateStudy = async (e, data) => {
     }
 }
 
+const deleteArtifacts = async (study, e) => {
+    const artifacts = study.questions.flatMap(q => q.artifacts.filter(a => a.source).map(a => a.source));
+
+    if (!artifacts || artifacts.length === 0) return { ok: true };
+    const request = await deleteartifact(e, artifacts);
+
+    if (!request.ok) {
+        setResponseStatus(e, 500)
+        throw new Error('Unable to delete artifacts')
+    }
+
+    setResponseStatus(e, 204)
+    return { ok: true }
+
+}
+
 const deleteStudy = async (e) => {
     const studyId = e.context.params?.studyId;
+    const study = await Study.findOne({ id: studyId });
+
+    const deleteReq = await deleteArtifacts(study, e);
+
+    if (!deleteReq.ok) {
+        setResponseStatus(e, 500)
+        return { found: false, message: 'Issue occured while deleting study' }
+    }
 
     try {
+
         // use one of MongoDB's CRUD functions to delete a study by its id
         await Study.findOneAndDelete({ id: studyId });
 
