@@ -50,7 +50,6 @@
 						v-if="responseType === 'drop'" />
 
 					<!-- range -->
-
 					<ArtifactRange
 						v-if="responseType === 'range'"
 						:question="currentQuestion"
@@ -63,19 +62,22 @@
 			</div>
 
 			<div class="question__panel" :class="{'question__panel--display': selectedSource, 'question__panel--hidden': !selectedSource}">
-				<button class="question__button" @click="selectedSource = null">Exit</button>
+				<button class="question__button font-semi font-small" @click="selectedSource = null">Exit</button>
 				<ArtifactPreview :selectedSource="selectedSource" :selectedId="selectedId"
 					:selectedRawSource="selectedRawSource" />
 			</div>
 		</div>
 
-		<ArtifactDropLinear @mouseover="linear_artifactOver()" @mouseleave="linear_artifactIsOver = false"
-			:artifacts="participantAnswer[currentQuestion.id]" :questionid="currentQuestion.id"
+		<ArtifactDropLinear 
 			v-if="responseType === 'linear'" :labels="currentQuestion.linear"
+			@mouseover="linear_artifactOver()" @mouseleave="linear_artifactIsOver = false"
+			:artifacts="participantAnswer[currentQuestion.id]"
+			:questionid="currentQuestion.id"
 			@moveup="(index) => linear_orderUp(currentQuestion.id, index)"
 			@movedown="(index) => linear_orderDown(currentQuestion.id, index)"
 			@insertAt="(index) => linear_insertAt = index"
 			@expand="(artifact) => selectMedia(artifact.source, artifact.id)" />
+
 		<div v-if="currentQuestion.responseType === 'drop'" class="drop__row">
 			<ArtifactDropBox @mouseover="box_mouseover()" @mouseleave="box_mouseleave()"
 				@dropped="box_drop(currentQuestion.id, index, box, currentQuestion.question)" :box="box"

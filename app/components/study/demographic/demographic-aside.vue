@@ -1,5 +1,5 @@
 <template>
-    <aside class="aside" v-if="id">
+    <aside class="aside" v-if="id ">
         <div class="aside__container aside__container--borderless">
             <label for="demographic_question" class="aside__label aside__headline font-large font-semi">
                 Question
@@ -74,7 +74,7 @@
             </div>
         </div>
         <div class="aside__container aside__container--borderless">
-            <button v-if="!isDisabled" class="aside__button aside__button--delete" @click="deleteQuestion()">
+            <button v-if="!isDisabled" class="aside__button aside__button--delete font-semi font-small" @click="deleteQuestion()">
                 Delete question
             </button>
         </div>
@@ -89,6 +89,8 @@ const isDisabled = inject('disabled');
 const props = defineProps({
     id: String
 })
+
+const emit = defineEmits(['deletedQuestion']);
 
 const selectedQuestion = ref('')
 const requiredModel = ref('');
@@ -109,6 +111,8 @@ const returnDemographic = (id) => study.demographic.find(demographic => demograp
 const deleteQuestion = ()=>{
     const thisDemographic = returnDemographic(props.id);
     study.demographic = study.demographic.filter(e => e !== thisDemographic);
+
+    emit('deletedQuestion');
 }
 
 //updating required status for the question
@@ -122,7 +126,6 @@ const updateQuestion = ()=>{
     const thisDemographic = returnDemographic(props.id)
     thisDemographic.question = questionModel.value;
 }
-
 
 //initiating. So the correct radio-button is checked, and the question is included in the text-area
 const initiateConfig = (id)=>{
@@ -184,7 +187,7 @@ watch([textModel, optionsModel, minModel, maxModel], () => {
 
     if (!thisDemographic) return;
 
-    // clam if user has typed a nummber larger than max
+    // clamp if user has typed a nummber larger than max
     if (textModel.value > 3000) {
         textModel.value = 3000;
     }

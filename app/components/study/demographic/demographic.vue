@@ -39,7 +39,7 @@
         </div>
         
     <div class="aside-temp" v-if="selectedId === ''"></div>
-    <DemographicAside :id="selectedId" v-if="requestModel && !showResponses" />
+    <DemographicAside :id="selectedId" v-if="requestModel && !showResponses" @deletedQuestion="handleDeletedQuestion"/>
 </template>
 
 <script setup>
@@ -143,6 +143,10 @@ const configs = computed(()=>{
     return study.demographic;
 })
 
+// clear `selectedId` ref on question deletion to remove aside
+const handleDeletedQuestion = () => {
+    selectedId.value = null; 
+}
 // reset selectedId when not in 'individual' view
 watch(selectedView, (newValue) => {
     if (newValue !== 'individual') {

@@ -55,6 +55,11 @@ onMounted(async () => {
     filePath.value = `${fileurl}`;
 })
 
+onBeforeUnmount(() => {
+  if (filePath.value) {
+    URL.revokeObjectURL(filePath.value);
+  }
+});
 </script>
 
 <style scoped>

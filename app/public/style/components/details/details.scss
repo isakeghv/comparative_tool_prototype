@@ -38,9 +38,8 @@
     @include v.textArea(10rem);
   }
   &__section {
-    padding: 1rem 0;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     grid-auto-rows: auto;
     gap: 1rem;
     max-height: 28rem;
@@ -88,11 +87,21 @@
       right: 0.95rem;
     }
   }
+
   &__radio {
     display: none;
 
     &:checked + .details__checkbox::after {
       background-color: c.$bluePrimary;
     }
+  }
+
+  &__upload {
+    margin: 2.4rem 0 1.4rem 0;
+    line-height: 1.5;
+  }
+
+  &__info {
+    color: gray;
   }
 }

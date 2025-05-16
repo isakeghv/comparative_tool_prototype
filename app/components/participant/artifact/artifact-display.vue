@@ -1,7 +1,7 @@
 <template>
     <div class="artifact__container artifact__placeholder" v-if="dragging"></div>
     <div :class="{ 'artifact__container--fixed': dragging }"
-        class="artifact__container artifact__borderless artifact__draggable" ref="artifactRef" draggable="false">
+        class="artifact__container artifact__borderless artifact__draggable move-pointer" ref="artifactRef" draggable="false">
         <div class="artifact__borderless artifact__undraggable" @dragstart="dragStart($event, artifact)"
             draggable="false" @pointerdown="dragStart($event, artifact)">
             <ArtifactMedia :artifact="artifact" />
@@ -105,6 +105,10 @@ const dragStart = (e, artifact) => {
 </script>
 
 <style scoped>
-@import url('public/style/components/study/study-main.scss');
-@import url('public/style/components/participant/participant-question.scss');
+    @import url('public/style/components/study/study-main.scss');
+    @import url('public/style/components/participant/participant-question.scss');
+
+    .move-pointer {
+        cursor: move;
+    }
 </style>

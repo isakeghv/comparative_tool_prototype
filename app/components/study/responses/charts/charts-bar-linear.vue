@@ -41,8 +41,9 @@ const options = computed(() => ({
 	colors: colors,
 	plotOptions: {
 		bar: {
-		horizontal: true,
-		barHeight: '60%'
+			horizontal: true,
+			barHeight: '60%',
+			distributed: true
 		}
 	},
 	dataLabels: {

@@ -2,7 +2,7 @@
     <div class="drop_box" @mouseover="mouseover" @mouseleave="mouseleave" @mouseup="mouseup" ref="dropboxRef">
         <p class="drop_text">{{ box }}</p>
         <div class="drop_container">
-            <p class="drop__instruction font-normal" v-if="!hasArtifact">
+            <p class="drop__instruction font-small" v-if="!hasArtifact">
                 Drag and drop an artifact here
             </p>
             <div class="artifact__container artifact__container--small artifact__borderless">
@@ -101,6 +101,6 @@ onMounted(()=>{
 </script>
 
 <style scoped>
-@import url('public/style/components/study/study-main.scss');
-@import url('public/style/components/participant/participant-question.scss');
+    @import url('public/style/components/study/study-main.scss');
+    @import url('public/style/components/participant/participant-question.scss');
 </style>

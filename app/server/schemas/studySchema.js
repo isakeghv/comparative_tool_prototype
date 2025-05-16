@@ -31,14 +31,10 @@ const QuestionSchema = new Schema({
 	},
 	range: {
 		min: {
-			type: Number,
-			min: 1,
-			max: 100
+			type: Number
 		},
 		max: {
-			type: Number,
-			min: 1,
-			max: 100
+			type: Number
 		},
 		startLabel: {
 			type: String,

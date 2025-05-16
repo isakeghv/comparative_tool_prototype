@@ -83,7 +83,10 @@ const mainTitle = computed(() => {
 const noStudies = computed(() => !studies.value || studies.value.length === 0)
 
 const studyDuplicate = async (originalStudy) => {
+	console.log('original study', originalStudy);
 	const clone = JSON.parse(JSON.stringify(originalStudy));
+
+	// console.log(clone);
 	clone.id = crypto.randomUUID();
 
 	//making sure it is always draft, so published/closed studies are not duplicated

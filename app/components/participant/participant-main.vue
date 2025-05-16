@@ -134,26 +134,6 @@ const sendForm = async () => {
         emit('participantDone');
     }
 }
-
-const downloadData = () => {
-    // const answers = Object.entries(participantAnswer);
-    // console.log(answers);
-    // exportAsJson(answers);    
-
-    const rawData = toRaw(participantResult.value); 
-    const str = JSON.stringify(rawData, null, 2);
-    const blob = new Blob([str], { type: 'application/json' });
-    const element = document.createElement('a');
-      
-    element.href = URL.createObjectURL(blob);
-    element.download = "answers.json";
-  
-    // trigger the download, then remove the element after downloading
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-}
-
 </script>
 
 <style scoped>

@@ -13,16 +13,7 @@
                             d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Z" />
                     </svg>
                 </button>
-                <button v-if="isDisabled" class="header__button" data-tooltip="Export" @click="showExports = !showExports">
-                    <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                        <path
-                            d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
-                    </svg>
-                </button>
-                <div class="header__absolute" v-if="showExports">
-                    <button class="export__button" @click="exportResponses('json')">Export JSON</button>
-                    <button class="export__button" @click="exportResponses('csv')">Export CSV</button>
-                </div>
+                <DashboardExport v-if="isDisabled" :study="study"/>
                 <button class="header__button" data-tooltip="Preview" @click="showPreview = true">
                     <svg class="header__icon" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -55,7 +46,6 @@ import { user, study, configs, currentConfigIndex, allUploadedArtifacts, initial
 import { compareStudies } from '~/utils/studyUtils';
 import { validateStudy, validateDemographics, removeErr } from '@/utils/studyValidator';
 import { updateStudyStatus } from '~/services/studyService';
-import ParticipantService from '~/services/participantService';
 
 const isDisabled = inject('disabled', ref(false));
 
@@ -65,7 +55,6 @@ const props = defineProps({
     isCreatingStudy: Boolean
 })
 
-const showExports = ref(false);
 //event to emit in case the study was unable to save
 const emit = defineEmits(['unableSave', 'update:isCreatingStudy']);
 // need to check if publish button should be disabled or not
@@ -92,26 +81,6 @@ const updateSaveHistory = () => {
         initialStudy[property] = JSON.parse(JSON.stringify(study[property]));
     });
 };
-
-const exportResponses = async (variant) => {
-    showExports.value = false;
-
-    const id = study.id;
-
-    const responses = await ParticipantService.getParticipants(id);
-	//console.log(study)
-	const formatedRes = formatResponses(study, responses)
-
-	if (!formatedRes) return alert("Unable to export responses");
-
-	// console.log(formatedRes)
-
-
-	// console.log(responses);
-	if (variant === 'json') downloadJson(study, formatedRes);
-
-	if (variant === 'csv') downloadCsv(study, formatedRes);
-}
 
 const trackCurrentArtifacts = () => {
     const currentUsedArtifacts = [];

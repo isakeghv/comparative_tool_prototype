@@ -1,6 +1,6 @@
 <template>
     <div class="question__cont--btm drop_zone">
-        <div class="drop_container drop_container--text font-medium font-large">
+        <div class="drop_container--text font-medium font-large">
             <p class="drop__label">{{ labels.startLabel }}</p>
             <p class="drop__label">{{ labels.endLabel }}</p>
         </div>
@@ -11,7 +11,7 @@
             </p>
             <div v-for="(artifact, index) in participantAnswer[questionid]" :key="artifact.id"
                 :ref="element => setRef(element, index)"
-                class="artifact__container artifact__container--small artifact__borderless drop_relative">
+                class="artifact__container artifact__container--small artifact__borderless drop_relative move-pointer">
                 <div class="wrapper wrapper--zero">
                     <ExpandButton @expand="expand(artifact.source, artifact.id)" />
                 </div>
@@ -109,4 +109,15 @@ const down = (index) => emit('movedown', index);
 <style scoped>
 @import url('public/style/components/study/study-main.scss');
 @import url('public/style/components/participant/participant-question.scss');
+
+.drop__label {
+    display: block;
+    margin: 0.8rem 1.4rem;
+}
+
+.drop_container--text {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
 </style>

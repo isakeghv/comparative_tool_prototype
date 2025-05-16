@@ -26,9 +26,6 @@
             </svg>
         </div>
 
-
-
-
         <h3 class="card__title font-medium">{{ title }}</h3>
         <p class="card__paragraph font-small">Updated: {{ formattedStartDate }}</p>
         <button class="card__select" aria-label="Open study" @click="studyEdit(id)"></button>
@@ -149,10 +146,9 @@ const studyEdit = (id) => {
     emit('edit', id);
 }
 
-//emitting study id with "duplicate" event
 const studyDuplicate = (study) => {
     showPopUp.value = false;
-    emit('duplicate', study);
+    emit('duplicate', props.study);
 };
 
 

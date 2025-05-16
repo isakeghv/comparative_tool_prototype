@@ -7,17 +7,19 @@
             <label for="details__textarea" class="details__label font-h6 font-medium">Description</label>
             <textarea id="details__textarea" class="details__textarea font-normal" v-model="descrModel"
                 :disabled=isDisabled maxlength="3000"></textarea>
-        </div>
-        <div class="details__section">
-            <p class="details__paragraph font-h6 font-medium">
-                Set a thumbnail for your study
-            </p>
-            <div class="details__thumbnail" v-for="(artifact, i) in allArtifacts">
-                <input type="radio" name="thumbnail_select_radio" :id="`thumbnail_${i}_radio`" class="details__radio"
-                    @click.prevent="setThumbnail(artifact.source)"
-                    :checked="study.thumbnail === artifact.source">
-                <label :for="`thumbnail_${i}_radio`" class="details__checkbox" aria-label="Select"></label>
-                <ArtifactMedia :artifact="artifact" />
+
+            <div class="details__upload">
+                <p class="details__paragraph font-h6 font-medium">Thumbnail</p>
+                <p class="details__info font-normal">Use an uploaded artifact as a thumbnail for you study.</p>
+            </div>
+            <div class="details__section">
+                <div class="details__thumbnail" v-for="(artifact, i) in allArtifacts">
+                    <input type="radio" name="thumbnail_select_radio" :id="`thumbnail_${i}_radio`" class="details__radio"
+                        @click.prevent="setThumbnail(artifact.source)"
+                        :checked="study.thumbnail === artifact.source">
+                    <label :for="`thumbnail_${i}_radio`" class="details__checkbox" aria-label="Select"></label>
+                    <ArtifactMedia :artifact="artifact" />
+                </div>
             </div>
         </div>
     </div>

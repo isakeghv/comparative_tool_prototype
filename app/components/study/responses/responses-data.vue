@@ -10,7 +10,7 @@
                     <div class="row"><span>Total</span> {{ studyResponses.length || 0 }}</div>
                     <div class="row"><span>Completed</span> {{ completed.length || 0 }}</div>
                     <div class="row"><span>Partial</span> {{ partialCount || 0 }}</div>
-                    <div class="row"><span>Desired</span> {{ studyResponses.length || 0 }} / {{ study.desiredResponses || '-' }}</div>
+                    <div class="row"><span>Desired</span> {{ completed.length || 0 }} / {{ study.desiredResponses || '-' }}</div>
                     <div class="row"><span>Completion rate</span> {{ studyResponses.length > 0 ? completionRate : 'N/A' }}</div>
                     <div class="row"><span>Completion time</span> {{ studyResponses.length > 0 ? avgCompletionTime : 'N/A' }}</div>
                 </div>

@@ -13,6 +13,7 @@ const createStudy = async (data, userId) => {
             },
         });
 
+
         if (!response.ok) {
             throw new Error(`Failed to create study: ${response.statusText}`);
         }

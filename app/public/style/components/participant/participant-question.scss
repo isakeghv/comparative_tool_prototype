@@ -36,7 +36,7 @@
     }
 
     &--btm {
-      border: v.$borderSolid;
+      border-bottom: v.$borderSolid;
       flex: 2;
       height: 25%;
       padding: 1rem 0;
@@ -50,7 +50,7 @@
   }
 
   &__button {
-    height: 1.5rem;
+    height: 1.8rem;
     color: white;
     background-color: #e61046;
     border: none;
@@ -58,6 +58,9 @@
     border-radius: 0.25rem;
     cursor: pointer;
     transition: background-color 0.1s ease-in-out;
+    position: fixed;
+    z-index: 5;
+    margin: 0.8rem;
 
     @media screen and (max-width: 768px) {
       display: none;
@@ -91,8 +94,8 @@
     flex: 0 0 0;
     width: 0;
     padding: 0.5rem 0;
-    transition: width 0.15s ease-in-out, flex 0.15s ease-in-out,
-      padding 0.15s ease-in-out;
+    transition: width 0.4s ease-in-out, flex 0.2s ease-in-out,
+      padding 0.2s ease-in-out;
 
     @media screen and (min-width: 768px) {
       &--hidden {
@@ -131,12 +134,6 @@
     }
   }
 
-  &__list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
-  }
-
   &__instructions {
     color: c.$darkGray;
     margin-bottom: 1rem;
@@ -147,7 +144,8 @@
 .artifact {
   &__expand {
     width: 100%;
-    height: calc(100% - 1.5rem);
+    // height: calc(100% - 1.5rem);
+    height: calc(100%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -198,6 +196,7 @@
     padding: 0;
     border: v.$borderSolid;
     border-radius: 0.4rem;
+    z-index: -1;
   }
 
   &_text {
@@ -207,12 +206,14 @@
     height: 2rem;
     background-color: rgb(235, 235, 235);
     border-radius: 0.4rem 0.4rem 0 0;
+    width: 100%;
   }
 
   &_relative {
     position: relative;
     cursor: default;
     transition: margin 0.1s ease-in-out;
+    // display: flex;
 
     &:hover {
       margin: 0 2rem;
@@ -221,12 +222,13 @@
         border-radius: 0;
       }
 
-      & .drop__button {
+      & .drop__button{
         width: 2rem;
         visibility: visible;
       }
-      & .wrapper__button--radius {
-        border-radius: 0;
+
+      & .wrapper__button--radius{
+          border-radius: 0;
       }
     }
   }
@@ -253,11 +255,12 @@
       top: 0;
     }
   }
+
   &__instruction {
     position: absolute;
     width: 80%;
     transform: translate(-50%, 0);
-    top: 40%;
+    top: 50%;
     text-align: center;
     left: 50%;
     z-index: -1;
@@ -268,6 +271,40 @@
     padding: 0.25rem 1rem;
     justify-content: space-between;
     height: 2rem;
+  }
+
+  &__button {
+      position: absolute;
+      height: 100%;
+      top: 0;
+      width: 2rem;
+      background-color: rgba(0, 0, 0, 0.1);
+      border: none;
+      visibility: hidden;
+      overflow: hidden;
+      cursor: pointer;
+      transition: width 0.1s ease-in-out, background-color 0.1s ease-in-out;
+      width: 0;
+
+      &:hover{
+          background-color: rgba(0, 0, 0, 0.2);
+      }
+      &:active{
+          background-color: rgba(0, 0, 0, 0.3);
+      }
+
+      &--left{
+          right: 100%;
+          border-radius: 0.5rem 0 0 0.5rem;
+      }
+      &--right{
+          left: 100%;
+          border-radius: 0 0.5rem 0.5rem 0;
+      }
+  }
+
+  &_arrow{
+      height: 2rem;
   }
 }
 
@@ -296,6 +333,7 @@
     cursor: pointer;
     background-color: c.$white;
     transition: width 0.1s ease-in-out, background-color 0.1s ease-in-out;
+    border: v.$borderSolid;
 
     &--left {
       right: 100%;
