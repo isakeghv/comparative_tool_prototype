@@ -19,6 +19,10 @@
 			</div>
 
 			<template v-else>
+			<p class="main__paragraph font-normal" v-if="noStudies">
+				You currently have no studies. <button class="main__button font-normal"
+					@click="createNewStudy()">Get started now!</button>
+			</p>
 			<StudyCard v-for="study in studies" :key="study.id"
 				@select="(study) => emitSelectStudy(study)"
 				@edit="(study) => emitEditStudy(study)"
@@ -32,10 +36,6 @@
 				/>
 			</template>
 		</div>
-		<p class="main__paragraph font-normal" v-if="noStudies">
-			You currently have no studies. <button class="main__button font-normal"
-				@click="createNewStudy()">Get started now!</button>
-		</p>
 	</main>
 </template>
 

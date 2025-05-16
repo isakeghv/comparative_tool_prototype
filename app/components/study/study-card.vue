@@ -47,9 +47,9 @@
             <button class="popup__button font-normal" @click="studyDelete(id)" id="popup-delete-btn">Delete</button>
             <button class="popup__button font-normal" @click="studyDuplicate(study)">Duplicate</button>
             <button v-if="status !== 'draft'" class="popup__button font-normal"
-                @click="studyExport(study.id, 'json')">Export JSON</button>
+                @click="studyExport(id, 'json')">Export JSON</button>
             <button v-if="status !== 'draft'" class="popup__button font-normal"
-                @click="studyExport(study.id, 'csv')">Export CVS</button>
+                @click="studyExport(id, 'csv')">Export CVS</button>
         </div>
     </div>
 </template>
@@ -152,7 +152,6 @@ const studyDuplicate = (study) => {
 
 //emitting study id and format with "export" event
 const studyExport = (id, format) => {
-    console.log(id, format)
     showPopUp.value = false
     emit('export', id, format);
 }

@@ -33,7 +33,7 @@
 
         <div class="artifact" v-if="!showResponses">
             <h3 class="artifact__headline font-h5 font-medium">Artifacts</h3>
-            <div class="artifact__container" v-for="(artifact, i) in config.artifacts">
+            <div class="artifact__container base__normal" v-for="(artifact, i) in config.artifacts">
                 <div class="wrapper">
                     <button class="wrapper__button" :class="{'wrapper__button--radius': isDisabled}" @click="selectMedia(artifact.source, artifact.id)">
                         <svg class="wrapper__icon" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -212,10 +212,6 @@ const uploadFile = async (e) => {
     })
 
     e.target.value = '';
-};
-
-const switchQuestion = (nextQuestionId) => {
-    // should switch to next question when deleting a question
 };
 </script>
 

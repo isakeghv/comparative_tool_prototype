@@ -24,6 +24,7 @@
                         v-if="question.artifacts.find(a => a.id === answer.id)"
                         :source="question.artifacts.find(a => a.id === answer.id).source"
                         :alt="answer.id"
+                        class="base__normal"
                     />
 
                     <div class="artifact__footer">

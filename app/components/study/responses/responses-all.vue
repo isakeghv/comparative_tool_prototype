@@ -21,7 +21,7 @@
                 <tbody class="table__tbody">
                     <tr v-for="(count, option) in counts" :key="option" class="table__row table">  
                         <td class="table__cell">
-                            <div class="artifact__container artifact__small">
+                            <div class="artifact__container artifact__small base__small">
                                 <StudyArtifact
                                     :source="question.artifacts.find(a => a.id === option).source"
                                     :alt="option"

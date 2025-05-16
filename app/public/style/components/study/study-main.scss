@@ -443,10 +443,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 5rem;
 }
 
 .aside-temp {
   @include v.right-area;
   visibility: hidden;
+}
+
+.base {
+  &__small {
+    min-height: 5rem;
+  }
+
+  &__normal {
+    min-height: 9rem;
+  }
 }
