@@ -16,7 +16,7 @@
                 fill="black" />
         </svg>
         <div v-if="isPdf(artifact.source)" class="artifact__iframecontainer" draggable="false">
-            <iframe :src="filePath" class="artifact__embed artifact__border" type="application/pdf"
+            <iframe :src="filePath" class="artifact__embed artifact__border"
                 draggable="false"></iframe>
             <div class="artifact__cover" draggable="false"></div>
         </div>
@@ -40,9 +40,7 @@ const getFile = async () => {
     const request = await fetch(`/api/serve-file?filename=${encodeURIComponent(props.artifact.source)}`);
 
     if (!request.ok) return null;
-
     const raw = await request.blob();
-
     return URL.createObjectURL(raw);
 }
 

@@ -1,20 +1,14 @@
-// middleware that will run on every API request ot check that our website is the one requesting resources
-export default defineEventHandler((e) => {
-    const origin = getRequestHeader(e, 'origin') || '';
-  
-    // only share resources with our main domain
-    const allowedOrigin = 'https://group3.sustainability.it.ntnu.no';
-  
-    if (origin === allowedOrigin) {
-      setResponseHeader(e, 'Access-Control-Allow-Origin', origin);
-      setResponseHeader(e, 'Access-Control-Allow-Credentials', 'true');
-      setResponseHeader(e, 'Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-      setResponseHeader(e, 'Access-Control-Allow-Headers', 'Content-Type,Authorization');
+export default defineEventHandler((event) => {
+    setResponseHeaders(event, {
+        "Access-Control-Allow-Methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+        "Access-Control-Allow-Origin": 'https://group3.sustainability.it.ntnu.no',
+        'Access-Control-Allow-Credentials': 'true',
+        "Access-Control-Allow-Headers": '*',
+        "Access-Control-Expose-Headers": '*'
+    })
+    if (event.method === 'OPTIONS') {
+        event.node.res.statusCode = 204
+        event.node.res.statusMessage = "No Content."
+        return 'OK'
     }
-  
-    if (e.node.req.method === 'OPTIONS') {
-        e.node.res.statusCode = 204;
-        return '';
-    }
-});
-  
+})

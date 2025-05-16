@@ -85,9 +85,7 @@ const getFile = async () => {
     const request = await fetch(`/api/serve-file?filename=${encodeURIComponent(props.study.thumbnail)}`);
 
     if (!request.ok) return null;
-
     const raw = await request.blob();
-
     return URL.createObjectURL(raw);
 }
 

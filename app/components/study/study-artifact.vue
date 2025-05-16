@@ -1,8 +1,8 @@
 <template>
     <div class="center">
-        <img v-if="isImage(source)" :src="filePath" :alt="id" :class="{ 'artifact__round': isRounded }"
+        <img v-if="isImage(source) && filePath" :src="filePath" :alt="id" :class="{ 'artifact__round': isRounded }"
             class="artifact__image" />
-        <svg v-else-if="isAudioFile(source)" class="artifact__icon" :class="{ 'artifact__round': isRounded }"
+        <svg v-else-if="isAudioFile(source) && filePath" class="artifact__icon" :class="{ 'artifact__round': isRounded }"
             viewBox="0 0 88 72" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M16 24L40 0V72L16 48H7C3.13401 48 0 44.866 0 41V36V31C0 27.134 3.13401 24 7 24H16Z" fill="black" />
             <path
@@ -15,14 +15,14 @@
                 d="M50.4646 49.5113C53.8976 45.846 55.9997 40.9187 55.9997 35.5005C55.9997 31.4142 54.8041 27.6072 52.7437 24.4102L46.8649 30.289C47.5934 31.8754 47.9997 33.6405 47.9997 35.5005C47.9997 38.7095 46.7904 41.6361 44.8027 43.8495L50.4646 49.5113Z"
                 fill="black" />
         </svg>
-        <iframe v-else-if="isPdf(source)" :src="filePath" class="artifact__embed articfact__embed--hoverable"
-            :class="{ 'artifact__round': isRounded }" type="application/pdf"></iframe>
+        <iframe v-else-if="isPdf(source) && filePath" :src="filePath" class="artifact__embed articfact__embed--hoverable"
+            :class="{ 'artifact__round': isRounded }"></iframe>
         <!-- <svg v-else-if="isVideoFile(source)" class="artifact__icon" :class="{ 'artifact__round': isRounded }"
             viewBox="0 0 287 287" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="143.5" cy="143.5" r="134" stroke="black" stroke-width="19" />
             <path d="M219.25 143.581L97 214.162L97 73L219.25 143.581Z" fill="black" />
         </svg> -->
-        <video v-else-if="isVideoFile(source)" :src="filePath" class="artifact__video"
+        <video v-else-if="isVideoFile(source) && filePath" :src="filePath" class="artifact__video"
             :class="{ 'artifact__round': isRounded }" preload="metadata" muted></video>
         </div>
 </template>
