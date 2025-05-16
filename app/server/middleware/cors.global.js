@@ -1,5 +1,5 @@
 // middleware that will run on every API request ot check that our website is the one requesting resources
-export default defineEventHandler((e) => {
+export default defineNuxtRouteMiddleware((e) => {
     const origin = getRequestHeader(e, 'origin') || '';
   
     // only share resources with our main domain

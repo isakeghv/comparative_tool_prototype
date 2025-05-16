@@ -11,8 +11,8 @@
                 </div>
                 <img :src="artifact.file" :alt="artifact.id" :class="classname"
                     v-if="hasArtifact && isImage(artifact.source)" />
-                <embed :src="artifact.file" :alt="artifact.id" :class="classname"
-                    v-if="hasArtifact && isPdf(artifact.source)" />
+                <iframe :src="artifact.file" :alt="artifact.id" :class="classname"
+                    v-if="hasArtifact && isPdf(artifact.source)"></iframe>
                 <svg class="artifact__icon artifact__outline artifact__image--transition"
                     v-if="hasArtifact && isAudioFile(artifact.source)" viewBox="0 0 88 72" fill="none"
                     xmlns="http://www.w3.org/2000/svg">

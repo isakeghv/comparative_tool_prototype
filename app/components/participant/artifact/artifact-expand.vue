@@ -3,7 +3,7 @@
     <div class="expand" v-if="source && filePath">
         <button class="expand__button" @click="exit()">Exit</button>
         <img :src="filePath" :alt="id" class="expand__img" v-if="isImage(source)">
-        <embed :src="filePath" class="expand__embed" v-if="isPdf(source)">
+        <iframe :src="filePath" class="expand__embed" v-if="isPdf(source)"></iframe>
         <audio class="expand__audio" v-if="isAudioFile(source) && filePath !== ''" controls>
             <source :src="filePath" type="audio/mpeg">
         </audio>
