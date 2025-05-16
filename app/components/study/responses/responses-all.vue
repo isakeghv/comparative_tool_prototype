@@ -325,5 +325,9 @@ const rangeAnswers = computed(() => {
 <style scoped>
     @import url('public/style/components/responses/responses-template.scss');
     @import url('public/style/components/responses/responses-demographics.scss');
+
+    .base__small {
+        min-width: 5.2rem;
+    }
 </style>
     
