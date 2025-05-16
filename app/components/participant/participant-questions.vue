@@ -1,7 +1,7 @@
 <template>
 	<section class="question__cont">
 		<div class="question__cont--top">
-			<div class="question__panel question__panel--left" :class="{'question__panel--wide': !selectedSource}">
+			<div class="question__panel question__panel--left" :class="{'question__panel--wide': !selectedSource, 'right-border-none': !selectedSource}">
 				<h2 class="question__headline font-h5 font-semi">{{ currentQuestion.question }}</h2>
 				<p class="question__instructions font-body" v-if="instructionText">
 					{{ instructionText }}

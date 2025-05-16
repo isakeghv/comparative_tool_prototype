@@ -99,7 +99,6 @@
 
 <script setup>
 import { study, showResponses, allUploadedArtifacts, responses } from '~/public/script/reactive';
-import { isImage, isPdf, isAudioFile, isVideoFile } from '~/utils/fileUtils.js';
 
 const isDisabled = inject('disabled');
 const studyResponses = inject('studyResponses');

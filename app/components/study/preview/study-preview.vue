@@ -81,6 +81,7 @@ const handleStart = () => {
     border-radius: 0.25rem;
     overflow-y: auto;
     scrollbar-width: none;
+    overflow-x: hidden;
 }
 
 .preview-overlay {

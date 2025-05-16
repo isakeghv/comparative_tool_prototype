@@ -81,6 +81,7 @@ const emitResponse = () => {
 	width: 100%;
 	max-width: 40rem;
 	margin: 0 0.8rem;
+	justify-content: center;
 }
 
 .instructions {

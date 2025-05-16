@@ -15,8 +15,6 @@
             >
                 Next
             </button>
-            <!-- <button @click="prevQuestion" v-if="questionIndex !== 0" class="participant__button participant__button--back font-small font-semi">Back</button>
-            <button @click="nextQuestion" v-else class="participant__button participant__button--next font-small font-semi">Next</button> -->
         </div>
     </main>
 </template>

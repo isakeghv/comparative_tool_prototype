@@ -1,7 +1,8 @@
 <template>
     <div class="card" v-if="filterDisplay">
         <img alt="thumbnail of study" class="card__img" :src="filePath"
-            v-if="props.study.thumbnail && props.study.thumbnail !== null" />
+            v-if="props.study.thumbnail && props.study.thumbnail !== null" @error="onImageError" />
+            
         <div class="card__background" v-if="!props.study.thumbnail || props.study.thumbnail === null">
             <svg class="card__svg" viewBox="0 0 365 365" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="365" height="365" fill="#9BD5FF" />
@@ -55,7 +56,6 @@
 
 <script setup>
 import { study } from '~/public/script/reactive';
-import { user } from '~/public/script/reactive';
 
 const props = defineProps({
     study: Object,

@@ -1,10 +1,9 @@
 <template>
 	<section class="question__cont">
 		<div class="question__cont--top">
-			<div class="question__panel question__panel--left" :class="{'question__panel--wide': !selectedSource}">
+			<div class="question__panel question__panel--left" :class="{'question__panel--wide': !selectedSource, 'right-border-none': !selectedSource}">
 				<h2 class="question__headline font-h5 font-semi">{{ currentQuestion.question }}</h2>
-				<div class="question__list">
-
+				<div class="question__list" :class="{ 'question__list--range': responseType === 'range' }">
 					<!-- Radio buttons -->
 					<label v-if="responseType === 'radio'" v-for="artifact in artifactsArr" :key="artifact.id"
 						class="question__option--radio">

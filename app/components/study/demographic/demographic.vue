@@ -115,13 +115,20 @@ const defaultQuestions = [
         id: crypto.randomUUID(),
         question: 'Request level of education',
         request: false,
-        responseType: 'text',
+        responseType: 'radio',
         required: true,
         text: {
-            maxChar: 200
+            maxChar: ''
         },
         radio: {
-            options: ['']
+            options: [
+            'High School',
+            'Associate Degree',
+            'Bachelor\'s Degree',
+            'Master\'s Degree',
+            'Doctorate',
+            'Other'
+            ]
         },
         number: {
             min: '',

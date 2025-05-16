@@ -1,12 +1,13 @@
 <template>
     <div class="artifact__expand" v-if="selectedSource && selectedRawSource">
-        <img :src="file" :alt="selectedId" class="artifact__expand--img" v-if="isImage(selectedRawSource)">
-        <iframe :src="file" class="artifact__expand--embed" v-if="isPdf(selectedRawSource)"></iframe>
-        <audio class="artifact__expand--audio" v-if="isAudioFile(selectedRawSource) && file" controls>
+        <div v-if="!file" class="artifact__expand--image"></div>
+        <img :src="file" :alt="selectedId" class="artifact__expand--img" v-else-if="isImage(selectedRawSource)">
+        <iframe :src="file" class="artifact__expand--embed" v-else-if="isPdf(selectedRawSource)"></iframe>
+        <audio class="artifact__expand--audio" v-else-if="isAudioFile(selectedRawSource) && file" controls>
             <source :src="file" type="audio/mpeg">
         </audio>
         <video :src="file" controls class="artifact__expand--video"
-            v-if="isVideoFile(selectedRawSource)"></video>
+            v-else-if="isVideoFile(selectedRawSource)"></video>
     </div>
 </template>
 
