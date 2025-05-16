@@ -33,11 +33,8 @@ const exit = () => {
 const getFile = async () => {
     if (!props.source) return console.log('Missing source');
     const request = await fetch(`/api/serve-file?filename=${encodeURIComponent(props.source)}`);
-
     if (!request.ok) return null;
-
     const raw = await request.blob();
-
     return URL.createObjectURL(raw);
 }
 

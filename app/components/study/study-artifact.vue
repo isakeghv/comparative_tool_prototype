@@ -15,15 +15,16 @@
                 d="M50.4646 49.5113C53.8976 45.846 55.9997 40.9187 55.9997 35.5005C55.9997 31.4142 54.8041 27.6072 52.7437 24.4102L46.8649 30.289C47.5934 31.8754 47.9997 33.6405 47.9997 35.5005C47.9997 38.7095 46.7904 41.6361 44.8027 43.8495L50.4646 49.5113Z"
                 fill="black" />
         </svg>
-        <iframe v-else-if="isPdf(source)" :src="source" class="artifact__embed articfact__embed--hoverable"
+        <iframe v-else-if="isPdf(source)" :src="filePath" class="artifact__embed articfact__embed--hoverable"
             :class="{ 'artifact__round': isRounded }" type="application/pdf"></iframe>
-        <svg v-else-if="isVideoFile(source)" class="artifact__icon" :class="{ 'artifact__round': isRounded }"
+        <!-- <svg v-else-if="isVideoFile(source)" class="artifact__icon" :class="{ 'artifact__round': isRounded }"
             viewBox="0 0 287 287" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="143.5" cy="143.5" r="134" stroke="black" stroke-width="19" />
             <path d="M219.25 143.581L97 214.162L97 73L219.25 143.581Z" fill="black" />
-        </svg>
-
-    </div>
+        </svg> -->
+        <video v-else-if="isVideoFile(source)" :src="filePath" class="artifact__video"
+            :class="{ 'artifact__round': isRounded }" preload="metadata" muted></video>
+        </div>
 </template>
 
 <script setup>
