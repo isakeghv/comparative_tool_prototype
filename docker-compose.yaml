@@ -16,11 +16,6 @@ services:
     image: mongo:latest
     container_name: compara_db
     restart: always
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=newUriPwdFordbMongodb
-      - MONGO_INITDB_DATABASE=compara_database
-      - MONGO_LOGLEVEL=1
     expose:
       - "27017"
     volumes:
