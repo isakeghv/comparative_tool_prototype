@@ -24,7 +24,7 @@
                 Min
             </label>
             <input type="number" id="question_range_min" class="aside__input--number font-small"
-                name="question_range_min" step="1" v-model="minModel" @input="updateMinRange(minModel)" min="1" :disabled="isDisabled" />
+                name="question_range_min" step="1" v-model="minModel" @input="updateMinRange(minModel)" min="1" max="99" :disabled="isDisabled" />
             <label for="question_range_start" class="hide">Start label</label>
             <input type="text" id="question_range_start" class="aside__input--wide" name="question_range_start"
                 placeholder="Start label (optional)" v-model="rangeStartModel" @input="updateMinRangeLabel(rangeStartModel)" maxlength="20" :disabled="isDisabled">
@@ -34,7 +34,7 @@
                 Max
             </label>
             <input type="number" id="question_range_max" class="aside__input--number font-small"
-                name="question_range_max" step="1" v-model="maxModel" @input="updateMaxRange(maxModel)" max="100" :disabled="isDisabled" />
+                name="question_range_max" step="1" v-model="maxModel" @input="updateMaxRange(maxModel)" min="2" max="100" :disabled="isDisabled" />
             <label for="question_range_end" class="hide">End label</label>
             <input type="text" id="question_range_end" class="aside__input--wide" name="question_range_end"
                 placeholder="End label (optional)" v-model="rangeEndModel" @input="updateMaxRangeLabel(rangeEndModel)" maxlength="20" :disabled="isDisabled">

@@ -14,7 +14,7 @@
                 </div>
 
                 <label for="study_question_input" class="study__headline font-h5 font-semi" :class="{'hide': showResponses}">Question</label>
-                <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" v-model="config.question" :class="{'hide': showResponses}" :disabled="isDisabled">
+                <input type="text" class="study__input study__input--text font-h5 font-medium" id="study_question_input" max-length="100" v-model="config.question" :class="{'hide': showResponses}" :disabled="isDisabled">
             </div>
             
             <div v-if="showResponses">
