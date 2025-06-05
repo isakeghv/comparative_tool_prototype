@@ -15,8 +15,17 @@
                 <path
                     d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Z" />
             </svg>
-            <input type="text" name="firstname" v-model="firstName" id="register_nameFirst_inp"
-                placeholder="First name" pattern="[A-Za-z\s'\-]+" class="font-normal form__input" required>
+            <input
+                type="text"
+                name="firstname"
+                v-model="firstName"
+                id="register_nameFirst_inp"
+                placeholder="First name"
+                pattern="[A-Za-z\s'\-]+"
+                class="font-normal form__input"
+                maxlength="50"
+                required
+            >
         </div>
         <label for="register_nameLast_inp" class="form__label font-normal font-semi">
             Last name
@@ -26,8 +35,16 @@
                 <path
                     d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Z" />
             </svg>
-            <input type="text" name="lastname" v-model="lastName" id="register_nameLast_inp"
-                placeholder="Last name" pattern="[A-Za-z\s'\-]+" class="font-normal form__input" required>
+            <input type="text"
+                name="lastname"
+                v-model="lastName"
+                id="register_nameLast_inp"
+                placeholder="Last name"
+                pattern="[A-Za-z\s'\-]+"
+                class="font-normal form__input"
+                maxlength="50"
+                required
+            >
         </div>
         <label for="register_email_inp" class="form__label font-normal font-semi">
             Email
