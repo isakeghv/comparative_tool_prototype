@@ -1,6 +1,16 @@
 <template>
 	<label :for="`response_date_${question.id}`" class="response__label hide">Date</label>
-    <input type="date" :id="`response_date_${question.id}`" :name="`response_date_${question.id}`" v-model="dateModel" min="1920-01-01" :max="today" class="response__date font-small" :required="question.required" @input="input"/>
+    <input
+        type="date"
+        :id="`response_date_${question.id}`"
+        :name="`response_date_${question.id}`"
+        v-model="dateModel"
+        min="1920-01-01"
+        :max="today"
+        class="response__date font-small"
+        :required="question.required"
+        @input="input"
+    />
 </template>
 
 <script setup>
