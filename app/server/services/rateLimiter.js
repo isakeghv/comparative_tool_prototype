@@ -4,7 +4,9 @@ import RateLimit from '../schemas/rateLimit';
 const LIMIT = 10;
 const WINDOW_MINUTES = 45;
 
-export const checkRateLimit = async (ip, endpoint) => {
+export const checkRateLimit = async (event, endpoint) => {
+
+  const ip = getRequestHeader(event, 'x-forwarded-for') || event.node.req.socket.remoteAddress;
   const windowMs = WINDOW_MINUTES * 60 * 1000;
   const now = new Date();
 
@@ -15,7 +17,7 @@ export const checkRateLimit = async (ip, endpoint) => {
 
     if (timePassed < windowMs) {
       if (record.attempts >= LIMIT) {
-        return { allowed: false, retryAfter: windowMs - timePassed };
+        return { allowed: false, retryAfter: Math.ceil((windowMs - timePassed) / 60000) };
       }
 
       record.attempts += 1;

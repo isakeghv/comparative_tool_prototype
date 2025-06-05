@@ -1,9 +1,10 @@
 import { promises as fs } from 'fs'
 import path from 'path';
-import { Study } from '../schemas/studySchema';
+import { Study } from '~/server/schemas/studySchema';
 import { join } from 'path'
-import { auth } from '../services/authenticated'
-import { sanitizer } from '../utils/sanitize';
+import { auth } from '~/server/services/authenticated';
+import {sanitizer} from '~/server/utils/sanitize'
+import validate from '~/server/validation/validator';
 
 //make sure that an artifact that exists in other study cannot be deleted
 const artifactIsInOtherStudy = (artifacts, artifact) => {
@@ -22,6 +23,13 @@ export default defineEventHandler(async (e) => {
     const rawBody = await readBody(e)
 
     const body = sanitizer(rawBody);
+
+    const bodyIsValid = validate.deleteArtifact(body);
+
+    if (!bodyIsValid) {
+        setResponseStatus(e, 400)
+        return {success: false, message: 'Invalid input provided'}
+    }
 
     const { artifacts, userID, studyID } = body;
 
