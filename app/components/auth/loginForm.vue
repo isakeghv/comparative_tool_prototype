@@ -30,7 +30,7 @@
 					v-model="pwd" placeholder="Enter password"
 					class="font-normal form__input"
 					minlength="8"
-					maxlength="99"
+					maxlength="100"
 				/>
                 <button type="button" @click="showPassword = !showPassword" class="form__toggle-password">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="eye-icon">
