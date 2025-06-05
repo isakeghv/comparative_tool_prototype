@@ -97,7 +97,7 @@ export default defineEventHandler(async (e) => {
 		setResponseStatus(e, 429);
 		return {
 			created: false,
-			message: `Too many registration attempts. Try again in ${Math.ceil(retryAfter / 60000)} minutes.`
+			message: `Too many registration attempts. Try again in ${retryAfter} minutes.`
 		};
 	}
 
